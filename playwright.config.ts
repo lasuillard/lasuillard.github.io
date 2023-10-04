@@ -7,6 +7,9 @@ const config: PlaywrightTestConfig = {
 	},
 	testDir: 'e2e',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+	use: {
+		screenshot: 'only-on-failure'
+	},
 	reporter: [['list'], ['html', { open: process.env.CI ? 'never' : 'on-failure' }]]
 };
 
