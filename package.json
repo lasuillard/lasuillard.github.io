@@ -3,20 +3,19 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"postinstall": "svelte-kit sync",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "vite preview",
-		"test": "npm run test:integration && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write .",
-		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test": "vitest --coverage --run",
+		"test:watch": "vitest --coverage --watch --ui",
+		"e2e": "playwright test",
+		"e2e:watch": "playwright open"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
-		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/adapter-static": "^2.0.3",
 		"@sveltejs/kit": "^1.20.4",
 		"@typescript-eslint/eslint-plugin": "^6.0.0",
