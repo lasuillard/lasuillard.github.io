@@ -33,7 +33,7 @@ init:  ## Initialize project repository
 .PHONY: init
 
 run:  ## Run development application
-	pnpm run dev
+	pnpm run dev $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
 .PHONY: run
 
 
