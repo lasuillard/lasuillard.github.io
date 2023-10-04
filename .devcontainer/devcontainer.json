@@ -19,14 +19,15 @@
 				"gruntfuggly.todo-tree",
 				"redhat.vscode-yaml",
 				"streetsidesoftware.code-spell-checker",
-				"EditorConfig.EditorConfig",
+				"editorconfig.editorconfig",
 				"vivaxy.vscode-conventional-commits",
 				"svelte.svelte-vscode",
 				"jock.svg",
 				"bradlc.vscode-tailwindcss",
-				"ZixuanChen.vitest-explorer",
+				"zixuanchen.vitest-explorer",
 				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode"
+				"esbenp.prettier-vscode",
+				"ms-playwright.playwright"
 			]
 		}
 	}
