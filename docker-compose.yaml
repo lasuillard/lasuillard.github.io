@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  workspace:
+    image: localhost:5000/lasuillard/lasuillard.github.io:local
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      target: workspace
+    ports:
+      - 127.0.0.1:4173:4173 # Vite preview
+      - 127.0.0.1:5173:5173 # Vite dev
+      - 127.0.0.1:51204:51204
+    extra_hosts:
+      - host.docker.internal:host-gateway
+    environment:
+      CONTAINER: 1
+    command: sleep infinity
+    init: true

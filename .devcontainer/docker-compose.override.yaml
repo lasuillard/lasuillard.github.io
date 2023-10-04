@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  workspace:
+    build:
+      args:
+        WORKSPACE: /workspaces/lasuillard.github.io
+    volumes:
+      - .:/workspaces/lasuillard.github.io
+    healthcheck:
+      disable: true
