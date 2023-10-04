@@ -88,6 +88,6 @@ docs:  ## Generate dev documents
 # Handy Scripts
 # =============================================================================
 clean:  ## Remove temporary files
-	rm -rf .svelte-kit/ build/ coverage/
+	rm -rf .svelte-kit/ build/ coverage/ playwright-report/
 	find . -path '*.log*' -delete
 .PHONY: clean

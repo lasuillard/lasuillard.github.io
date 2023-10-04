@@ -10,6 +10,7 @@ services:
     ports:
       - 127.0.0.1:4173:4173 # Vite preview
       - 127.0.0.1:5173:5173 # Vite dev
+      - 127.0.0.1:9323 # Playwright HTML report
       - 127.0.0.1:51204:51204
     extra_hosts:
       - host.docker.internal:host-gateway
