@@ -13,7 +13,7 @@ export default defineConfig({
 			all: true,
 			include: ['src/**'],
 			exclude: ['src/**/__mocks__/*', 'src/**.d.ts'],
-			reporter: ['clover', 'html']
+			reporter: ['text', 'clover', 'html']
 		},
 		api: {
 			host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1',
