@@ -1,15 +1,25 @@
 <script lang="ts">
 	import { persisted } from '$lib/store';
 
-	const currentTheme = persisted('theme', 'dark');
+	// Detect default theme from OS preference
+	const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (preferDark) {
+		console.debug('Detected color scheme preference is dark');
+	}
+	const themeDefault = preferDark ? 'dark' : 'light';
+	console.debug(`Theme will be default to ${themeDefault} if no previous decision exists`);
 
+	// Subscribe to theme changes
+	const currentTheme = persisted('theme', themeDefault);
 	currentTheme.subscribe((value) => {
-		document.documentElement.setAttribute('data-theme', value || 'dark');
+		document.documentElement.setAttribute('data-theme', value || themeDefault);
 	});
 
 	function toggleTheme() {
 		currentTheme.update((value) => {
-			return value === 'dark' ? 'light' : 'dark';
+			const newTheme = value === 'dark' ? 'light' : 'dark';
+			console.debug(`Theme changed to ${newTheme}`);
+			return newTheme;
 		});
 	}
 </script>
