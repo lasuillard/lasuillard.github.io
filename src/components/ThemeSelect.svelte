@@ -14,6 +14,7 @@
 		setTheme(theme);
 	});
 
+	/** Toggle theme between dark and light. */
 	function toggleTheme() {
 		currentTheme.update((theme) => {
 			const newTheme = theme === Theme.Dark ? Theme.Light : Theme.Dark;
