@@ -1,12 +1,18 @@
 import { cleanup } from '@testing-library/svelte';
 import { afterEach, beforeEach, vi } from 'vitest';
 
-// jsdom does not have this
-globalThis.matchMedia = globalThis.matchMedia || (() => ({ matches: true }));
-
-beforeEach(() => {});
+beforeEach(() => {
+	// Stub default color scheme preference to dark
+	vi.stubGlobal(
+		'matchMedia',
+		vi.fn((query: string) => {
+			return { matches: query === '(prefers-color-scheme: dark)' };
+		})
+	);
+});
 
 afterEach(() => {
+	vi.unstubAllGlobals();
 	vi.resetAllMocks();
 	cleanup();
 });

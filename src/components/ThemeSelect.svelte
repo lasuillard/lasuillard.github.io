@@ -1,29 +1,29 @@
 <script lang="ts">
 	import { persisted } from '$lib/store';
+	import { Theme, setTheme } from '$lib/theme';
 
 	// Detect default theme from OS preference
 	const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-	if (preferDark) {
-		console.debug('Detected color scheme preference is dark');
-	}
-	const themeDefault = preferDark ? 'dark' : 'light';
+	const themeDefault = preferDark ? Theme.Dark : Theme.Light;
+	console.debug(`Detected color scheme preference is ${themeDefault}`);
 	console.debug(`Theme will be default to ${themeDefault} if no previous decision exists`);
 
 	// Subscribe to theme changes
 	const currentTheme = persisted('theme', themeDefault);
-	currentTheme.subscribe((value) => {
-		document.documentElement.setAttribute('data-theme', value || themeDefault);
+	currentTheme.subscribe((theme) => {
+		setTheme(theme);
 	});
 
 	function toggleTheme() {
-		currentTheme.update((value) => {
-			const newTheme = value === 'dark' ? 'light' : 'dark';
+		currentTheme.update((theme) => {
+			const newTheme = theme === Theme.Dark ? Theme.Light : Theme.Dark;
 			console.debug(`Theme changed to ${newTheme}`);
 			return newTheme;
 		});
 	}
 </script>
 
+<!-- BUG: False-positive uncovered branch; https://github.com/vitest-dev/vitest/issues/1893 -->
 <div {...$$restProps}>
 	<div class="join space-x-1">
 		<span
