@@ -3,6 +3,6 @@
 	import '../app.css';
 </script>
 
-<ThemeSelect class="m-2" />
+<ThemeSelect data-testid="theme-select" class="m-2" />
 
 <slot />

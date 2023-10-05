@@ -35,6 +35,7 @@
 			</svg>
 		</span>
 		<input
+			data-testid="toggle-input"
 			type="checkbox"
 			class="toggle"
 			checked={currentTheme === 'dark'}
