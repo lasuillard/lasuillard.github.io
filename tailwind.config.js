@@ -1,3 +1,4 @@
+// eslint-disable-next-line jsdoc/check-tag-names
 /** @type {import('tailwindcss').Config} */
 export default {
 	plugins: [require('daisyui')],
