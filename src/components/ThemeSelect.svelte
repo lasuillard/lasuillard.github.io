@@ -1,18 +1,16 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { themeChange } from 'theme-change';
+	import { persisted } from '$lib/store';
 
-	let currentTheme: string | null;
+	const currentTheme = persisted('theme', 'dark');
 
-	onMount(() => {
-		themeChange(false);
-		currentTheme = document.documentElement.getAttribute('data-theme');
+	currentTheme.subscribe((value) => {
+		document.documentElement.setAttribute('data-theme', value || 'dark');
 	});
 
-	$: document.documentElement.setAttribute('data-theme', currentTheme || 'dark');
-
 	function toggleTheme() {
-		currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+		currentTheme.update((value) => {
+			return value === 'dark' ? 'light' : 'dark';
+		});
 	}
 </script>
 
@@ -38,7 +36,7 @@
 			data-testid="toggle-input"
 			type="checkbox"
 			class="toggle"
-			checked={currentTheme === 'dark'}
+			checked={$currentTheme === 'dark'}
 			on:click={toggleTheme}
 		/>
 		<span>
