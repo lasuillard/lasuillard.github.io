@@ -10,3 +10,8 @@ describe('index', () => {
 		expect(heading).toBeTruthy();
 	});
 });
+
+describe('posts', () => {
+	it.todo('have all required metadata');
+	it.todo('are reachable via slug');
+});
