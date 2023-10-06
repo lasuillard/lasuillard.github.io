@@ -8,7 +8,7 @@
 <div data-testid="sidebar" {...$$restProps}>
 	<aside>
 		<!-- Avatar -->
-		<div class="avatar ml-3 mt-3 mb-5 md:ml-2 md:mt-2 md:mb-6 w-full">
+		<div data-testid="profile" class="avatar ml-3 mt-3 mb-5 md:ml-2 md:mt-2 md:mb-6 w-full">
 			<div class="w-1/3 md:w-3/5 rounded-full ring-2 ring-primary bg-primary">
 				<!-- svelte-ignore a11y-img-redundant-alt -->
 				<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->

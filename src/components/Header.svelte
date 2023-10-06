@@ -6,7 +6,7 @@
 
 <div data-testid="header" {...$$restProps}>
 	<header class="navbar">
-		<div class="flex-1 items-center">
+		<div data-testid="home-link" class="flex-1 items-center">
 			<a href="/">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

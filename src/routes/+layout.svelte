@@ -5,7 +5,7 @@
 	import '../app.css';
 </script>
 
-<div class="min-h-screen">
+<div data-testid="layout" class="min-h-screen">
 	<Header class="px-6 border-b border-b-slate-200" />
 
 	<div class="flex flex-wrap h-full">
