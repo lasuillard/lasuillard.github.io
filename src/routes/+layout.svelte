@@ -11,7 +11,7 @@
 	<div class="flex flex-wrap h-full">
 		<Sidebar class="ml-4 mt-4 p-3 w-full md:w-1/4 lg:w-1/5" />
 
-		<main class="flex flex-1 pt-4 px-3 pb-4 min-h-[50vh] md:min-h-[80vh]">
+		<main class="pt-8 px-6 pb-4 min-h-[50vh] md:min-h-[80vh] grow">
 			<slot />
 		</main>
 	</div>

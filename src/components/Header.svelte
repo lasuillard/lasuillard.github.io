@@ -6,8 +6,8 @@
 
 <div data-testid="header" {...$$restProps}>
 	<header class="navbar">
-		<div class="flex-1 items-center">
-			<a href="/">
+		<div class="navbar-start">
+			<a href="/" class="btn btn-ghost">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -24,8 +24,16 @@
 				</svg>
 			</a>
 		</div>
-		<Search class="flex-none mr-3" />
-		<ThemeSelect class="flex-none" />
-		<LanguageSelect class="flex-none" />
+		<div class="navbar-center">
+			<ul class="menu menu-horizontal">
+				<li><a href="/about">About</a></li>
+				<li><a href="/blog">Blog</a></li>
+			</ul>
+		</div>
+		<div class="navbar-end">
+			<Search class="mr-4" />
+			<ThemeSelect />
+			<LanguageSelect />
+		</div>
 	</header>
 </div>
