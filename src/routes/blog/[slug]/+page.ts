@@ -1,3 +1,4 @@
+import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
 /** Expected and required metadata for posts. */
@@ -8,8 +9,15 @@ interface Metadata {
 }
 
 export const load: PageLoad = async ({ params }) => {
-	// TODO: Error handling if post not exists; on error it creates page with "500 Internal Error"
-	const post = await import(`../${params.slug}.md`);
+	// FIXME: Proper type annotation for imported components?
+	let post;
+
+	try {
+		post = await import(`../${params.slug}.md`);
+	} catch (err) {
+		console.error(`Matching post not found: ${err}`);
+		throw error(404, { message: 'Not Found' });
+	}
 
 	// TODO: Derive date using Git; publication date from creation time + last modified time
 	const metadata: Metadata = {
