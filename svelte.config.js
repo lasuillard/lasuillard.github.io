@@ -6,7 +6,10 @@ import { mdsvex } from 'mdsvex';
 // eslint-disable-next-line jsdoc/check-tag-names
 /** @type {import("mdsvex").MdsvexOptions} */
 const mdsvexConfig = {
-	extensions: ['.md']
+	extensions: ['.md'],
+	layout: {
+		_: 'src/components/Markdown.svelte' // NOTE: You can't use alias here
+	}
 };
 
 // https://kit.svelte.dev/docs/configuration
