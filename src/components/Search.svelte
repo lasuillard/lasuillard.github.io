@@ -1,6 +1,10 @@
 <script lang="ts">
 	let searchText: string;
 
+	/**
+	 * Search posts.
+	 * @param text Search text.
+	 */
 	function search(text: string) {
 		console.debug(`Searching ${text}`);
 	}
