@@ -8,4 +8,7 @@ describe('Search', () => {
 		const { getByTestId } = render(Search);
 		expect(getByTestId('search')).toBeTruthy();
 	});
+
+	it.todo('has a text input with placeholder');
+	it.todo('shows matching results for given query');
 });

@@ -9,7 +9,7 @@ describe('Sidebar', () => {
 		expect(getByTestId('sidebar')).toBeTruthy();
 	});
 
-	it('should contain profile', () => {
+	it('contains profile', () => {
 		const { queryByTestId } = render(Sidebar);
 		const profile = queryByTestId('profile') as HTMLInputElement;
 		expect(profile).toBeTruthy();

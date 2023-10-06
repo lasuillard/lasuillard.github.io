@@ -9,6 +9,6 @@ describe('LanguageSelect', () => {
 		expect(getByTestId('language-select')).toBeTruthy();
 	});
 
-	it.todo('should autodetect language from browser');
-	it.todo('should fallback to english if user language not supported');
+	it.todo('init with language autodetect from browser');
+	it.todo('fallbacks to english if user language not supported');
 });

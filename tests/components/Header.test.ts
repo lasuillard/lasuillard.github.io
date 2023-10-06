@@ -9,25 +9,25 @@ describe('Header', () => {
 		expect(getByTestId('header')).toBeTruthy();
 	});
 
-	it('should have a link to home', () => {
+	it('has a link to home', () => {
 		const { container } = render(Header);
 		const homeLink = container.querySelector('a[href="/"]') as HTMLElement;
 		expect(homeLink).toBeTruthy();
 	});
 
-	it('should contain search bar', () => {
+	it('contains search bar', () => {
 		const { queryByTestId } = render(Header);
 		const search = queryByTestId('search') as HTMLInputElement;
 		expect(search).toBeTruthy();
 	});
 
-	it('should contain theme selector', () => {
+	it('contains theme selector', () => {
 		const { queryByTestId } = render(Header);
 		const themeSelect = queryByTestId('theme-select') as HTMLElement;
 		expect(themeSelect).toBeTruthy();
 	});
 
-	it('should contain language selector', () => {
+	it('contains language selector', () => {
 		const { queryByTestId } = render(Header);
 		const languageSelect = queryByTestId('language-select') as HTMLElement;
 		expect(languageSelect).toBeTruthy();
