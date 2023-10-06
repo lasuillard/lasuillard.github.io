@@ -4,6 +4,11 @@ import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 
 describe('Header', () => {
+	it('has a valid locator', () => {
+		const { getByTestId } = render(Header);
+		expect(getByTestId('header')).toBeTruthy();
+	});
+
 	it('should have a link to home', () => {
 		const { container } = render(Header);
 		const homeLink = container.querySelector('a[href="/"]') as HTMLElement;
@@ -16,13 +21,13 @@ describe('Header', () => {
 		expect(search).toBeTruthy();
 	});
 
-	it.todo('should contain theme selector', () => {
+	it('should contain theme selector', () => {
 		const { queryByTestId } = render(Header);
 		const themeSelect = queryByTestId('theme-select') as HTMLElement;
 		expect(themeSelect).toBeTruthy();
 	});
 
-	it.todo('should contain language selector', () => {
+	it('should contain language selector', () => {
 		const { queryByTestId } = render(Header);
 		const languageSelect = queryByTestId('language-select') as HTMLElement;
 		expect(languageSelect).toBeTruthy();

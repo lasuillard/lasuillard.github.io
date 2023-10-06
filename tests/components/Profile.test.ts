@@ -4,8 +4,11 @@ import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 
 describe('Profile', () => {
-	// TODO: Default theme from OS media preference
-	//       https://stackoverflow.com/questions/50840168/how-to-detect-if-the-os-is-in-dark-mode-in-browsers
+	it('has a valid locator', () => {
+		const { getByTestId } = render(Profile);
+		expect(getByTestId('profile')).toBeTruthy();
+	});
+
 	describe('avatar', () => {
 		it('should have a avatar', () => {
 			const { container } = render(Profile);

@@ -5,6 +5,11 @@ import { tick } from 'svelte';
 import { describe, expect, it } from 'vitest';
 
 describe('ThemeSelect', () => {
+	it('has a valid locator', () => {
+		const { getByTestId } = render(ThemeSelect);
+		expect(getByTestId('theme-select')).toBeTruthy();
+	});
+
 	// TODO: Default theme from OS media preference
 	//       https://stackoverflow.com/questions/50840168/how-to-detect-if-the-os-is-in-dark-mode-in-browsers
 	it('should start with dark theme by default', () => {

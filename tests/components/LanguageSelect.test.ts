@@ -4,9 +4,9 @@ import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 
 describe('LanguageSelect', () => {
-	it('nothing to test yet, just render it', () => {
-		const { container } = render(LanguageSelect);
-		expect(container).toBeTruthy();
+	it('has a valid locator', () => {
+		const { getByTestId } = render(LanguageSelect);
+		expect(getByTestId('language-select')).toBeTruthy();
 	});
 
 	it.todo('should autodetect language from browser');
