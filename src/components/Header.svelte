@@ -1,6 +1,6 @@
 <script lang="ts">
 	import LanguageSelect from './LanguageSelect.svelte';
-	import Search from './Search.svelte';
+	import SearchBar from './SearchBar.svelte';
 	import ThemeSelect from './ThemeSelect.svelte';
 </script>
 
@@ -24,7 +24,7 @@
 				</svg>
 			</a>
 		</div>
-		<Search class="flex-none mr-3" />
+		<SearchBar class="flex-none mr-3" />
 		<ThemeSelect class="flex-none" />
 		<LanguageSelect class="flex-none" />
 	</header>

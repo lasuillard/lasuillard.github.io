@@ -6,7 +6,7 @@
 	}
 </script>
 
-<div data-testid="search" {...$$restProps}>
+<div data-testid="search-bar" {...$$restProps}>
 	<div class="flex items-center space-x-2">
 		<form class="flex" on:submit|preventDefault>
 			<!-- TODO: Should show the search results then user select which page to go, not by button -->
