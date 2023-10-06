@@ -1,22 +1,30 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { themeChange } from 'theme-change';
+	import { persisted } from '$lib/store';
+	import { Theme, setTheme } from '$lib/theme';
 
-	// TODO: Store previous theme selection to browser local storage
-	let currentTheme: string | null;
+	// Detect default theme from OS preference
+	const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	const themeDefault = preferDark ? Theme.Dark : Theme.Light;
+	console.debug(`Detected color scheme preference is ${themeDefault}`);
+	console.debug(`Theme will be default to ${themeDefault} if no previous decision exists`);
 
-	onMount(() => {
-		themeChange(false);
-		currentTheme = document.documentElement.getAttribute('data-theme');
+	// Subscribe to theme changes
+	const currentTheme = persisted('theme', themeDefault);
+	currentTheme.subscribe((theme) => {
+		setTheme(theme);
 	});
 
-	$: document.documentElement.setAttribute('data-theme', currentTheme || 'dark');
-
+	/** Toggle theme between dark and light. */
 	function toggleTheme() {
-		currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+		currentTheme.update((theme) => {
+			const newTheme = theme === Theme.Dark ? Theme.Light : Theme.Dark;
+			console.debug(`Theme changed to ${newTheme}`);
+			return newTheme;
+		});
 	}
 </script>
 
+<!-- BUG: False-positive uncovered branch; https://github.com/vitest-dev/vitest/issues/1893 -->
 <div data-testid="theme-select" {...$$restProps}>
 	<div class="flex items-center space-x-2">
 		<div class="join">
@@ -40,7 +48,7 @@
 				data-testid="toggle-input"
 				type="checkbox"
 				class="toggle"
-				checked={currentTheme === 'dark'}
+				checked={$currentTheme === 'dark'}
 				on:click={toggleTheme}
 			/>
 		</div>

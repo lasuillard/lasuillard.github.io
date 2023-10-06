@@ -13,6 +13,10 @@
 
 	let currentLanguage = 'ko';
 
+	/**
+	 * Set current language.
+	 * @param code ISO-639 language code.
+	 */
 	function setLanguage(code: string) {
 		currentLanguage = code;
 		console.debug(`Set language to ${code}`);

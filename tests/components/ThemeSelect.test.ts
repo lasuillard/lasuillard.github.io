@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import ThemeSelect from '$components/ThemeSelect.svelte';
+import { Theme, getTheme } from '$lib/theme';
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 describe('ThemeSelect', () => {
 	it('has a valid locator', () => {
@@ -10,27 +11,37 @@ describe('ThemeSelect', () => {
 		expect(getByTestId('theme-select')).toBeTruthy();
 	});
 
-	// TODO: Default theme from OS media preference
-	//       https://stackoverflow.com/questions/50840168/how-to-detect-if-the-os-is-in-dark-mode-in-browsers
-	it('init with dark theme by default', () => {
-		const { queryByTestId } = render(ThemeSelect);
-		expect(document.documentElement.getAttribute('data-theme')).toEqual('dark');
+	it('init default from browser preference: dark', () => {
+		const { queryByTestId } = render(ThemeSelect, {});
+		expect(getTheme()).toEqual(Theme.Dark);
 		const toggle = queryByTestId('toggle-input') as HTMLInputElement;
 		expect(toggle.checked).toBeTruthy();
 	});
 
+	it('init default from browser preference: light', () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore: TS2375
+		vi.mocked(window.matchMedia).mockImplementationOnce((query: string) => {
+			return { matches: query === '(prefers-color-scheme: light)' };
+		});
+		const { queryByTestId } = render(ThemeSelect, {});
+		expect(getTheme()).toEqual(Theme.Light);
+		const toggle = queryByTestId('toggle-input') as HTMLInputElement;
+		expect(toggle.checked).toBeFalsy();
+	});
+
 	it('toggles between light and dark themes', async () => {
-		const { queryByTestId } = render(ThemeSelect);
-		expect(document.documentElement.getAttribute('data-theme')).toEqual('dark');
+		const { queryByTestId } = render(ThemeSelect, {});
+		expect(getTheme()).toEqual(Theme.Dark);
 		const toggle = queryByTestId('toggle-input') as HTMLInputElement;
 		expect(toggle.checked).toBeTruthy();
 		toggle.click();
 		expect(toggle.checked).toBeFalsy();
 		await tick();
-		expect(document.documentElement.getAttribute('data-theme')).toEqual('light');
+		expect(getTheme()).toEqual(Theme.Light);
 		toggle.click();
 		expect(toggle.checked).toBeTruthy();
 		await tick();
-		expect(document.documentElement.getAttribute('data-theme')).toEqual('dark');
+		expect(getTheme()).toEqual(Theme.Dark);
 	});
 });
