@@ -8,10 +8,10 @@
 <div class="min-h-screen">
 	<Header class="px-6 border-b border-b-slate-200" />
 
-	<div class="flex flex-wrap h-full">
-		<Sidebar class="ml-4 mt-4 p-3 w-full md:w-1/4 lg:w-1/5" />
+	<div class="flex flex-wrap lg:flex-nowrap h-full">
+		<Sidebar class="ml-4 mt-4 p-3 w-full md:w-1/4 lg:w-1/5 shrink-0" />
 
-		<main class="pt-8 px-6 pb-4 min-h-[50vh] md:min-h-[80vh] grow">
+		<main class="py-24 px-12 min-h-[50vh] md:min-h-[80vh] grow">
 			<slot />
 		</main>
 	</div>
