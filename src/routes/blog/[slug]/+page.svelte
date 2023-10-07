@@ -1,20 +1,10 @@
 <script lang="ts">
+	import { formatDate } from '$lib/time';
+
 	export let data;
 
 	const { metadata, content } = data;
 	const { title, publicationDate, tags } = metadata;
-
-	/**
-	 * Format given date in format of "YYYY.MM.DD".
-	 * @param date Date to format.
-	 * @returns Formatted string.
-	 */
-	function formatDate(date: Date): string {
-		const fullMonth = (date.getMonth() + 1).toString().padStart(2, '0');
-		const fullDay = (date.getDay() + 1).toString().padStart(2, '0');
-
-		return `${date.getFullYear()}.${fullMonth}.${fullDay}`;
-	}
 </script>
 
 <div {...$$restProps}>

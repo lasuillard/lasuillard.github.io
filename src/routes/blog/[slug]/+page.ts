@@ -1,15 +1,9 @@
+import type { Metadata } from '$lib/post';
 import { error } from '@sveltejs/kit';
+import type { SvelteComponent } from 'svelte';
 import type { PageLoad } from './$types';
 
-/** Expected and required metadata for posts. */
-interface Metadata {
-	title: string;
-	publicationDate: Date;
-	tags: string[];
-}
-
 export const load: PageLoad = async ({ params }) => {
-	// FIXME: Proper type annotation for imported components?
 	let post;
 
 	try {
@@ -24,10 +18,7 @@ export const load: PageLoad = async ({ params }) => {
 		...post.metadata,
 		publicationDate: new Date(post.metadata.publicationDate)
 	};
-
-	// FIXME: Proper type annotation for mdsvex components?
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const content: any = post.default;
+	const content: typeof SvelteComponent = post.default;
 
 	return {
 		metadata,

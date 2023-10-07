@@ -1,6 +1,6 @@
 ---
 title: Lorem Ipsum
-publicationDate: 2023-10-06
+publicationDate: 2020-04-13T00:00:00.000+09:00
 tags:
     [
         Apple,

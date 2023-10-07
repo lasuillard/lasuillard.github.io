@@ -1,3 +1,5 @@
+import { browser } from '$app/environment';
+
 // https://daisyui.com/docs/themes/
 export enum Theme {
 	Light = 'light',
@@ -18,7 +20,7 @@ export function isTheme(value: string): value is Theme {
  * @returns Current theme.
  */
 export function getTheme(): Theme {
-	const currentTheme = document.documentElement.getAttribute('data-theme');
+	const currentTheme = browser ? document.documentElement.getAttribute('data-theme') : Theme.Light;
 	if (currentTheme && isTheme(currentTheme)) {
 		return currentTheme;
 	}
@@ -33,5 +35,7 @@ export function setTheme(theme: Theme) {
 	if (!isTheme(theme)) {
 		throw new Error(`Invalid theme: ${theme}`);
 	}
-	document.documentElement.setAttribute('data-theme', theme);
+	if (browser) {
+		document.documentElement.setAttribute('data-theme', theme);
+	}
 }

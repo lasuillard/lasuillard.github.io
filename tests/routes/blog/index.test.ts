@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 describe('blog index', () => {
 	it('should render', () => {
-		const { container } = render(Page);
+		const { container } = render(Page, { data: { allPosts: [] } }); // TODO: Pass more data
 		expect(container).toBeTruthy();
 	});
 });

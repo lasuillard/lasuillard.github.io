@@ -12,6 +12,7 @@
 		<Sidebar class="ml-4 mt-4 p-3 md:basis-1/4 lg:basis-1/5 grow lg:grow-0 md:shrink-0" />
 
 		<main class="py-24 px-12 min-h-[50vh] md:min-h-[80vh] grow">
+			<!-- TODO: Breadcrumbs -->
 			<slot />
 		</main>
 	</div>
