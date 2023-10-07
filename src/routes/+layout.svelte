@@ -6,10 +6,10 @@
 </script>
 
 <div class="min-h-screen">
-	<Header class="px-6 border-b border-b-slate-200" />
+	<Header class="px-2 border-b border-b-slate-200" />
 
 	<div class="flex flex-wrap lg:flex-nowrap h-full">
-		<Sidebar class="ml-4 mt-4 p-3 w-full md:w-1/4 lg:w-1/5 shrink-0" />
+		<Sidebar class="ml-4 mt-4 p-3 md:basis-1/4 lg:basis-1/5 grow lg:grow-0 md:shrink-0" />
 
 		<main class="py-24 px-12 min-h-[50vh] md:min-h-[80vh] grow">
 			<slot />
