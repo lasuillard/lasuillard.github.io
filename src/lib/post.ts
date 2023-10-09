@@ -24,7 +24,7 @@ export async function getPost(
 	let post;
 
 	try {
-		post = await import(`../routes/blog/${slug}.md`);
+		post = await import(`$routes/blog/${slug}.md`);
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);
 		return null;

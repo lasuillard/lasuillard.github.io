@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import Page from '$lib/../routes/+page.svelte';
+import Page from '$routes/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 

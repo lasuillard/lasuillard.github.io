@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import * as Endpoint from '$lib/../routes/api/posts/+server.js';
+import * as Endpoint from '$routes/api/posts/+server.js';
 import { describe, expect, it } from 'vitest';
 
 describe('GET /api/posts', () => {

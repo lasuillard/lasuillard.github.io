@@ -1,8 +1,8 @@
 // @vitest-environment jsdom
-import Page from '$lib/../routes/blog/+page.svelte';
+import { load } from '$routes/blog/+page';
+import Page from '$routes/blog/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
-import { load } from '../../../src/routes/blog/+page';
 
 describe('blog index', () => {
 	it('list posts', async () => {

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import '$lib/../routes/+layout';
-import Layout from '$lib/../routes/+layout.svelte';
+import '$routes/+layout';
+import Layout from '$routes/+layout.svelte';
 import { render } from '@testing-library/svelte';
 import { describe, expect, it } from 'vitest';
 

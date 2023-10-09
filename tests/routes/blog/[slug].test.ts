@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @vitest-environment jsdom
 import * as post from '$lib/post';
+import { load } from '$routes/blog/[slug]/+page';
+import Page from '$routes/blog/[slug]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { describe, expect, it, vi } from 'vitest';
-import { load } from '../../../src/routes/blog/[slug]/+page';
-import Page from '../../../src/routes/blog/[slug]/+page.svelte';
 
 describe('blog posts', async () => {
 	it('renders a post', async () => {
