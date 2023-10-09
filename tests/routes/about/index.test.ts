@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import Footer from '$components/Footer.svelte';
+import Page from '$routes/about/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
-it('nothing to test yet, just render it', () => {
-	const { container } = render(Footer);
+it('should render', () => {
+	const { container } = render(Page);
 	expect(container).toBeTruthy();
 });
