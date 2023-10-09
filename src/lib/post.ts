@@ -1,4 +1,5 @@
 import path from 'path';
+import type { SvelteComponent } from 'svelte';
 
 /** Expected and required metadata for posts. */
 export interface Metadata {
@@ -10,6 +11,32 @@ export interface Metadata {
 export interface Post {
 	slug: string;
 	metadata: Metadata;
+}
+
+/**
+ * Return post matching slug.
+ * @param slug Slug of post.
+ * @returns Post if exists, otherwise `null`.
+ */
+export async function getPost(
+	slug: string
+): Promise<{ metadata: Metadata; content: typeof SvelteComponent } | null> {
+	let post;
+
+	try {
+		post = await import(`../routes/blog/${slug}.md`);
+	} catch (err) {
+		console.error(`Matching post not found: ${err}`);
+		return null;
+	}
+
+	return {
+		metadata: {
+			...post.metadata,
+			publicationDate: new Date(post.metadata.publicationDate)
+		},
+		content: post.default
+	};
 }
 
 /**
