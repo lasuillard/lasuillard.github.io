@@ -11,12 +11,14 @@ interface Options {
 	storage?: Storage;
 }
 
-// NOTE: No-op storage for pre-rendered SSR build
-const nullStorage = {
-	getItem(): string | null {
+// NOTE: No-op storage for non-browser env (SSR prerendering)
+export const nullStorage = {
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	getItem(key: string): string | null {
 		return null;
 	},
-	setItem(): void {},
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	setItem(key: string, value: string): void {},
 	clear() {}
 };
 

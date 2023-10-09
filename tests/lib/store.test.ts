@@ -1,7 +1,16 @@
 // @vitest-environment jsdom
-import { persisted } from '$lib/store';
+import { nullStorage, persisted } from '$lib/store';
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
+
+describe('null storage', () => {
+	it('should satisfy to browser storage API interface', () => {
+		const key = Math.random().toString();
+		expect(nullStorage.getItem(key)).toEqual(null);
+		expect(() => nullStorage.setItem(key, 'hello world')).not.toThrow();
+		expect(() => nullStorage.clear()).not.toThrow();
+	});
+});
 
 describe('persisted store', () => {
 	it('should conform to store interface and use browser local storage by default', () => {
@@ -43,4 +52,6 @@ describe('persisted store', () => {
 		expect(changed).toEqual('hello world, done');
 		expect(sessionStorage.getItem(key)).toEqual('"hello world, done"');
 	});
+
+	it.todo('should default to null storage if current environment is not a browser');
 });
