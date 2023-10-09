@@ -1,11 +1,33 @@
 // @vitest-environment jsdom
 import Page from '$lib/../routes/blog/+page.svelte';
 import { render } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { load } from '../../../src/routes/blog/+page';
 
 describe('blog index', () => {
-	it('should render', () => {
-		const { container } = render(Page, { data: { allPosts: [] } }); // TODO: Pass more data
-		expect(container).toBeTruthy();
+	it('list posts', async () => {
+		// FIXME: Write global fetch stub for later reuse
+		const fetch = vi.fn(() => ({
+			json: vi.fn(() => [
+				// TODO: More items for testing
+				{
+					slug: 'lorem-ipsum',
+					metadata: {
+						title: 'Lorem Ipsum',
+						publicationDate: new Date('2020-04-13T13:09:28.333+09:00'),
+						tags: ['Apple', 'Watermelon', 'Orange']
+					}
+				}
+			])
+		}));
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
+		const { getByText } = render(Page, { data: await load({ fetch }) });
+		expect(getByText('Lorem Ipsum')).toBeTruthy();
+		// TODO: Find date string
+		// TODO: Find tags via loops, assert it links to tag page
+		expect(getByText('Apple')).toBeTruthy();
+		expect(getByText('Watermelon')).toBeTruthy();
+		expect(getByText('Orange')).toBeTruthy();
 	});
 });
