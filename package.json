@@ -16,7 +16,7 @@
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest --coverage --run",
-		"test:watch": "vitest --coverage --watch --ui",
+		"test:watch": "vitest --coverage --watch --ui --silent",
 		"e2e": "playwright test",
 		"e2e:watch": "playwright open"
 	},
