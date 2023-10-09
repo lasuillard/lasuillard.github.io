@@ -1,9 +1,14 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import { persisted } from '$lib/store';
 	import { Theme, setTheme } from '$lib/theme';
 
+	let preferDark;
+
 	// Detect default theme from OS preference
-	const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (browser) {
+		preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	}
 	const themeDefault = preferDark ? Theme.Dark : Theme.Light;
 	console.debug(`Detected color scheme preference is ${themeDefault}`);
 	console.debug(`Theme will be default to ${themeDefault} if no previous decision exists`);

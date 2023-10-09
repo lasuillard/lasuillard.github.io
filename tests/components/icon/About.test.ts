@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import Home from '$components/icon/Home.svelte';
+import About from '$components/icon/About.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
 it('has a valid locator', () => {
-	const { getByTestId } = render(Home);
-	expect(getByTestId('icon/home')).toBeTruthy();
+	const { getByTestId } = render(About);
+	expect(getByTestId('icon/about')).toBeTruthy();
 });
