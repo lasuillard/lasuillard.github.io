@@ -3,7 +3,7 @@ import { nullStorage, persisted } from '$lib/store';
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
 
-describe('null storage', () => {
+describe('nullStorage', () => {
 	it('should satisfy to browser storage API interface', () => {
 		const key = Math.random().toString();
 		expect(nullStorage.getItem(key)).toEqual(null);
@@ -12,7 +12,7 @@ describe('null storage', () => {
 	});
 });
 
-describe('persisted store', () => {
+describe('persisted', () => {
 	it('should conform to store interface and use browser local storage by default', () => {
 		const key = Math.random().toString();
 		const store = persisted(key, 'default-value');
