@@ -42,4 +42,6 @@ VOLUME ["${WORKSPACE}/node_modules"]
 # Remove existing GPG as it interrupts GPG injection by devcontainer
 RUN rm -rf ~/.gnupg
 
+RUN git config --system --add safe.directory "${WORKSPACE}"
+
 HEALTHCHECK NONE
