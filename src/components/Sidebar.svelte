@@ -6,9 +6,9 @@
 </script>
 
 <div data-testid="sidebar" {...$$restProps}>
-	<aside>
+	<aside class="grid grid-cols-1">
 		<!-- Avatar -->
-		<div class="avatar ml-3 mt-3 mb-5 md:ml-2 md:mt-2 md:mb-6 w-full">
+		<div class="avatar ml-3 mt-3 mb-5 md:ml-2 md:mt-2 md:mb-6">
 			<div class="w-1/3 lg:w-3/5 rounded-full ring-2 ring-primary bg-primary">
 				<!-- svelte-ignore a11y-img-redundant-alt -->
 				<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->
@@ -72,6 +72,9 @@
 
 		<div class="divider" />
 
-		<!-- TODO: List recent posts, categories -->
+		<div>
+			<!-- TODO: Recent activities (posts, tags, etc.) -->
+			<p class="font-semibold text-lg">Recent Posts</p>
+		</div>
 	</aside>
 </div>

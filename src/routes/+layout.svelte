@@ -6,17 +6,19 @@
 </script>
 
 <!-- TODO: Re-design overall layout with grids -->
-<div class="min-h-screen">
-	<Header class="px-2 border-b border-b-slate-200" />
+<div class="min-h-screen grid grid-cols-1">
+	<Header class="px-2 border-b border-b-slate-200 flex" />
 
-	<div class="flex flex-wrap lg:flex-nowrap h-full">
-		<Sidebar class="ml-4 mt-4 p-3 md:basis-1/4 lg:basis-1/5 grow lg:grow-0 md:shrink-0" />
+	<div class="grid grid-cols-none md:grid-cols-4 xl:grid-cols-6 p-3">
+		<Sidebar class="p-3 col-span-1" />
 
-		<main class="py-24 px-12 min-h-[50vh] md:min-h-[80vh] grow">
+		<main
+			class="px-3 py-6 lg:py-24 lg:px-12 min-h-[50vh] md:min-h-[80vh] md:col-span-3 xl:col-span-5"
+		>
 			<!-- TODO: Breadcrumbs -->
 			<slot />
 		</main>
 	</div>
 
-	<Footer class="p-6 flex border-t border-t-slate-200" />
+	<Footer class="py-4 px-2 border-t border-t-slate-200" />
 </div>

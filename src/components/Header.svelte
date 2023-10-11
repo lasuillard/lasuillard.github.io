@@ -5,7 +5,7 @@
 </script>
 
 <div data-testid="header" {...$$restProps}>
-	<header class="navbar flex-wrap md:flex-nowrap">
+	<header class="navbar flex-wrap">
 		<div class="md:navbar-start">
 			<ul class="menu menu-horizontal flex-nowrap items-center">
 				<li>
@@ -64,7 +64,7 @@
 				</li>
 			</ul>
 		</div>
-		<div class="md:navbar-end">
+		<div class="md:navbar-end flex-wrap">
 			<Search class="mr-4" />
 			<ThemeSelect />
 			<LanguageSelect />
