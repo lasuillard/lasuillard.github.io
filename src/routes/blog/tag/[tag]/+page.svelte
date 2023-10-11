@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { formatDate } from '$lib/time.js';
+	import { format } from 'date-fns';
 
 	export let data;
 
@@ -9,14 +9,16 @@
 <div>
 	<div class="flex flex-col">
 		{#if posts.length > 0}
-			<p class="text-2xl mb-2">
+			<p class="text-3xl mb-4">
 				There are {posts.length} posts with tag <span class="tag">#{tag}</span>
 			</p>
-			<ul class="space-y-1">
+			<ul class="space-y-2">
 				{#each posts as post}
 					<li>
-						<p class="text-lg"><a href="/blog/{post.slug}">{post.metadata.title}</a></p>
-						<p>{formatDate(post.metadata.publicationDate)}</p>
+						<p class="text-xl mb-1"><a href="/blog/{post.slug}">{post.metadata.title}</a></p>
+						<p class="font-light">
+							Published at {format(post.metadata.publicationDate, 'yyyy. MM. dd')}
+						</p>
 					</li>
 				{/each}
 			</ul>

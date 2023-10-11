@@ -1,5 +1,5 @@
 <script>
-	import { formatDate } from '$lib/time';
+	import { formatDistance } from 'date-fns';
 
 	export let data;
 </script>
@@ -21,7 +21,11 @@
 				<div class="card-body">
 					<a href={`blog/${post.slug}`}>
 						<h2 class="card-title">{post.metadata.title}</h2>
-						<p class="mb-2">Published at {formatDate(post.metadata.publicationDate)}</p>
+						<p class="mb-2 text-right">
+							{formatDistance(post.metadata.publicationDate, new Date(), {
+								addSuffix: true
+							})}
+						</p>
 					</a>
 					<div class="space-y-1">
 						{#each post.metadata.tags as tag}
