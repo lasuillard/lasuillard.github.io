@@ -29,7 +29,9 @@
 					</a>
 					<div class="space-y-1">
 						{#each post.metadata.tags as tag}
-							<div class="badge badge-neutral text-xs mr-1">{tag}</div>
+							<div class="badge badge-neutral text-xs mr-1">
+								<a href="/blog/tag/{tag}">{tag}</a>
+							</div>
 						{/each}
 					</div>
 				</div>

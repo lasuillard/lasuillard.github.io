@@ -13,9 +13,12 @@
 		Published at {format(publicationDate, 'yyyy.MM.dd')}
 	</p>
 	<div class="space-x-1 space-y-1 ml-2 mt-6">
-		<!-- TODO: Attach link to tag -->
 		{#each tags as tag}
-			<div class="badge badge-neutral p-3 font-semibold">{tag}</div>
+			<div class="badge badge-neutral p-3 font-semibold">
+				<a href="/blog/tag/{tag}">
+					{tag}
+				</a>
+			</div>
 		{/each}
 	</div>
 	<div class="divider mb-8" />
