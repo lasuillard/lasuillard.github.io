@@ -5,6 +5,7 @@
 	import '../app.css';
 </script>
 
+<!-- TODO: Re-design overall layout with grids -->
 <div class="min-h-screen">
 	<Header class="px-2 border-b border-b-slate-200" />
 
