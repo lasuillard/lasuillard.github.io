@@ -14,7 +14,7 @@
 	<div class="flex items-center space-x-2">
 		<form class="flex" on:submit|preventDefault>
 			<!-- TODO: Should show the search results then user select which page to go, not by button -->
-			<button class="absolute ml-2 mt-2" on:click={() => search(searchText)}>
+			<button class="absolute ml-[11px] mt-[9px]" on:click={() => search(searchText)}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -33,7 +33,7 @@
 				type="text"
 				placeholder="Search"
 				bind:value={searchText}
-				class="input input-bordered w-32 h-8 md:w-auto pl-8"
+				class="input input-bordered w-full h-8 md:w-auto pl-8 placeholder:font-light"
 			/>
 		</form>
 	</div>

@@ -9,7 +9,7 @@
 	<aside class="grid grid-cols-1">
 		<!-- Avatar -->
 		<div class="avatar ml-3 mt-3 mb-5 md:ml-2 md:mt-2 md:mb-6">
-			<div class="w-1/3 lg:w-3/5 rounded-full ring-2 ring-primary bg-primary">
+			<div class="w-24 lg:w-32 rounded-full ring-2 ring-primary bg-primary">
 				<!-- svelte-ignore a11y-img-redundant-alt -->
 				<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->
 				<img
@@ -21,15 +21,16 @@
 		</div>
 
 		<!-- Introduction -->
-		<h1 class="font-semibold text-3xl md:text-2xl">Yuchan Lee</h1>
-		<p class="font-light text-xl md:text-md">A lazy developer.</p>
+		<h1 class="font-semibold text-2xl lg:text-3xl md:text-2xl">Yuchan Lee</h1>
+		<p class="font-light text-base lg:text-xl md:text-md">A lazy developer.</p>
 
 		<!-- Contacts -->
 		<div class="mt-8 pr-4 flex justify-end">
-			<div class="flex space-x-3 rounded-lg p-2 px-3 dark:bg-white">
+			<div class="flex space-x-4 rounded-lg p-2 px-3 dark:bg-white">
+				<!-- TODO: Consider moving contacts to footer -->
 				<!-- GitHub -->
 				<a href="https://github.com/lasuillard">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98 96" class="w-9 h-9 md:w-7 md:h-7">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 98 96" class="w-7 h-7 lg:w-9 lg:h-9">
 						<path
 							fill-rule="evenodd"
 							clip-rule="evenodd"
@@ -41,7 +42,7 @@
 
 				<!-- LinkedIn -->
 				<a href="https://www.linkedin.com/in/%EC%9C%A0%EC%B0%AC-%EC%9D%B4-67751020b/">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" class="w-9 h-9 md:w-7 md:h-7">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" class="w-7 h-7 lg:w-9 lg:h-9">
 						<path
 							d="M8,72 L64,72 C68.418278,72 72,68.418278 72,64 L72,8 C72,3.581722 68.418278,-8.11624501e-16 64,0 L8,0 C3.581722,8.11624501e-16 -5.41083001e-16,3.581722 0,8 L0,64 C5.41083001e-16,68.418278 3.581722,72 8,72 Z"
 							fill="#007EBB"
@@ -58,7 +59,7 @@
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="52 42 88 66"
-						class="w-9 h-9 md:w-7 md:h-7"
+						class="w-7 h-7 lg:w-9 lg:h-9"
 					>
 						<path fill="#4285f4" d="M58 108h14V74L52 59v43c0 3.32 2.69 6 6 6" />
 						<path fill="#34a853" d="M120 108h14c3.32 0 6-2.69 6-6V59l-20 15" />
@@ -74,7 +75,8 @@
 
 		<div>
 			<!-- TODO: Recent activities (posts, tags, etc.) -->
-			<p class="font-semibold text-lg">Recent Posts</p>
+			<h2 class="font-semibold text-lg">Recent Posts</h2>
+			<p class="font-light text-base mt-1">There is no post yet.</p>
 		</div>
 	</aside>
 </div>

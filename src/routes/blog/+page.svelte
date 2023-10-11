@@ -11,15 +11,19 @@
 	<div class="grid grid-cols-1">
 		<!-- TODO: Pagination -->
 		<!-- TODO: Search posts -->
-		<div class="space-x-1 space-y-1">
+		<div>
 			<h2 class="text-3xl mb-3">Tags</h2>
-			{#each allTags as tag}
-				<div class="badge badge-neutral p-3 font-semibold">
-					<a href="/blog/tag/{tag}">
-						{tag}
-					</a>
-				</div>
-			{/each}
+			<div
+				class="space-x-1 md:space-y-1 max-sm:flex max-sm:flex-cols max-sm:overflow-x-scroll max-sm:pb-2"
+			>
+				{#each allTags as tag}
+					<div class="badge badge-neutral p-3 font-semibold badge-sm md:badge-md">
+						<a href="/blog/tag/{tag}">
+							{tag}
+						</a>
+					</div>
+				{/each}
+			</div>
 		</div>
 		<div class="mt-7">
 			<h2 class="text-3xl mb-3">Posts</h2>
