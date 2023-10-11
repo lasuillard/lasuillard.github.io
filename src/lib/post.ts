@@ -8,9 +8,29 @@ export interface Metadata {
 	tags: string[];
 }
 
-export interface Post {
+export class Post {
 	slug: string;
 	metadata: Metadata;
+
+	constructor(slug: string, metadata: Metadata) {
+		this.slug = slug;
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Parse given JSON object into post.
+	 * @param obj Object to parse.
+	 * @returns Converted post object.
+	 */
+	// FIXME: Assert given object attributes in more precise way
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static parseObj(obj: any): Post {
+		return new Post(obj.slug, {
+			title: obj.metadata.title,
+			publicationDate: new Date(obj.metadata.publicationDate),
+			tags: obj.metadata.tags
+		});
+	}
 }
 
 /**
