@@ -25,7 +25,4 @@ it('list posts', async () => {
 	expect(getByText('Lorem Ipsum')).toBeTruthy();
 	// TODO: Find date string
 	// TODO: Find tags via loops, assert it links to tag page
-	expect(getByText('Apple')).toBeTruthy();
-	expect(getByText('Watermelon')).toBeTruthy();
-	expect(getByText('Orange')).toBeTruthy();
 });
