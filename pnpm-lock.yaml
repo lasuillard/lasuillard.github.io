@@ -62,6 +62,9 @@ devDependencies:
   mdsvex:
     specifier: ^0.11.0
     version: 0.11.0(svelte@4.2.1)
+  minisearch:
+    specifier: ^6.1.0
+    version: 6.1.0
   postcss:
     specifier: ^8.4.31
     version: 8.4.31
@@ -2478,6 +2481,10 @@ packages:
   /minipass@7.0.4:
     resolution: {integrity: sha512-jYofLM5Dam9279rdkWzqHozUo4ybjdZmCsDHePy5V/PbBcVMiSZR97gmAy45aqi8CK1lG2ECd356FU86avfwUQ==}
     engines: {node: '>=16 || 14 >=14.17'}
+    dev: true
+
+  /minisearch@6.1.0:
+    resolution: {integrity: sha512-PNxA/X8pWk+TiqPbsoIYH0GQ5Di7m6326/lwU/S4mlo4wGQddIcf/V//1f9TB0V4j59b57b+HZxt8h3iMROGvg==}
     dev: true
 
   /mkdirp@0.5.6:
