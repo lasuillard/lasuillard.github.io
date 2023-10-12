@@ -1,11 +1,15 @@
+<script lang="ts">
+	const currentYear = new Date().getFullYear();
+</script>
+
 <div data-testid="footer" {...$$restProps}>
 	<div class="flex flex-col">
 		<footer class="footer px-3 py-2 md:px-12 md:py-4">
 			<aside class="items-center">
 				<p class="text-sm font-light leading-6 md:text-base md:leading-8">
-					Copyright © 2023 - All rights reserved<br />
-					Made with <a href="https://kit.svelte.dev/" class="link">SvelteKit</a>, hosted on GitHub
-					Pages.
+					© 2023 - {currentYear} Yuchan Lee. All rights reserved.<br />
+					Made with <a href="https://kit.svelte.dev/" class="link">SvelteKit</a>, hosted on
+					<a href="https://pages.github.com/" class="link">GitHub Pages</a>.
 				</p>
 			</aside>
 			<nav class="place-self-end pb-1 md:place-self-center">

@@ -3,7 +3,7 @@ import LanguageSelect from '$components/LanguageSelect.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
-it('nothing to test yet, just render it', () => {
+it('renders', () => {
 	const { container } = render(LanguageSelect);
 	expect(container).toBeTruthy();
 });

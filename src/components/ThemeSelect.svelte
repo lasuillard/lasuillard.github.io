@@ -6,6 +6,7 @@
 	let preferDark;
 
 	// Detect default theme from OS preference
+	// BUG: This runs multiple times if component used multiple times; may move to `hooks.client.ts`
 	if (browser) {
 		preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 	}
