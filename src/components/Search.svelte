@@ -14,13 +14,13 @@
 	<div class="flex items-center space-x-2">
 		<form class="flex" on:submit|preventDefault>
 			<!-- TODO: Should show the search results then user select which page to go, not by button -->
-			<button class="absolute ml-2 mt-2" on:click={() => search(searchText)}>
+			<button class="absolute ml-[11px] mt-[9px]" on:click={() => search(searchText)}>
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
-					class="w-4 h-4 stroke-gray-400"
+					class="h-4 w-4 stroke-gray-400"
 				>
 					<path
 						stroke-linecap="round"
@@ -33,7 +33,7 @@
 				type="text"
 				placeholder="Search"
 				bind:value={searchText}
-				class="input input-bordered w-32 h-8 md:w-auto pl-8"
+				class="input input-bordered h-8 w-full pl-8 placeholder:font-light md:w-auto"
 			/>
 		</form>
 	</div>

@@ -6,6 +6,7 @@
 	let preferDark;
 
 	// Detect default theme from OS preference
+	// BUG: This runs multiple times if component used multiple times; may move to `hooks.client.ts`
 	if (browser) {
 		preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 	}
@@ -39,7 +40,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="w-6 h-6"
+				class="h-6 w-6"
 			>
 				<path
 					stroke-linecap="round"
@@ -64,7 +65,7 @@
 				viewBox="0 0 24 24"
 				stroke-width="1.5"
 				stroke="currentColor"
-				class="w-6 h-6"
+				class="h-6 w-6"
 			>
 				<path
 					stroke-linecap="round"

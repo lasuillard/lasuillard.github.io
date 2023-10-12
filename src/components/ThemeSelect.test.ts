@@ -5,14 +5,14 @@ import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { expect, it, vi } from 'vitest';
 
-it('should default from browser preference: dark', () => {
+it('init default from browser preference (dark)', () => {
 	const { queryByTestId } = render(ThemeSelect, {});
 	expect(getTheme()).toEqual(Theme.Dark);
 	const toggle = queryByTestId('toggle-input') as HTMLInputElement;
 	expect(toggle.checked).toBeTruthy();
 });
 
-it('should default from browser preference: light', () => {
+it('init default from browser preference (light)', () => {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore: TS2375
 	vi.mocked(window.matchMedia).mockImplementationOnce((query: string) => {
@@ -24,7 +24,7 @@ it('should default from browser preference: light', () => {
 	expect(toggle.checked).toBeFalsy();
 });
 
-it('should toggle between light and dark themes', async () => {
+it('toggles between light and dark themes', async () => {
 	const { queryByTestId } = render(ThemeSelect, {});
 	expect(getTheme()).toEqual(Theme.Dark);
 	const toggle = queryByTestId('toggle-input') as HTMLInputElement;
