@@ -14,8 +14,8 @@ describe('Header', () => {
 
 	it('should contain search bar', () => {
 		const { queryByTestId } = render(Header);
-		const searchBar = queryByTestId('search-bar') as HTMLInputElement;
-		expect(searchBar).toBeTruthy();
+		const search = queryByTestId('search') as HTMLInputElement;
+		expect(search).toBeTruthy();
 	});
 
 	it.todo('should contain theme selector', () => {
