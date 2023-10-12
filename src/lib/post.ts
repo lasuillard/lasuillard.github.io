@@ -22,9 +22,27 @@ export class Post {
 	 * @param obj Object to parse.
 	 * @returns Converted post object.
 	 */
-	// FIXME: Assert given object attributes in more precise way
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	static parseObj(obj: any): Post {
+		// FIXME: Assert given object attributes in more precise way
+		if (typeof obj.slug !== 'string') {
+			throw new Error('Failed to parse object: `slug` is not a string');
+		}
+		if (typeof obj.metadata.title !== 'string') {
+			throw new Error('Failed to parse object: `metadata.title` is not a string');
+		}
+		if (typeof obj.metadata.publicationDate !== 'string') {
+			throw new Error('Failed to parse object: `metadata.publicationDate` is not a string');
+		}
+		if (
+			!(
+				Array.isArray(obj.metadata.tags) &&
+				(obj.metadata.tags as Array<unknown>).every((v) => typeof v === 'string')
+			)
+		) {
+			throw new Error('Failed to parse object: `metadata.tags` is not a list of string');
+		}
+
 		return new Post(obj.slug, {
 			title: obj.metadata.title,
 			publicationDate: new Date(obj.metadata.publicationDate),

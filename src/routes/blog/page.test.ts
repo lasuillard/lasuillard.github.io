@@ -13,7 +13,7 @@ it('list posts', async () => {
 				slug: 'lorem-ipsum',
 				metadata: {
 					title: 'Lorem Ipsum',
-					publicationDate: new Date('2020-04-13T13:09:28.333+09:00'),
+					publicationDate: '2020-04-13T13:09:28.333+09:00',
 					tags: ['Apple', 'Watermelon', 'Orange']
 				}
 			}
