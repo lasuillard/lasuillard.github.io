@@ -10,14 +10,14 @@ it('has a valid locator', () => {
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
 
-it('init default from browser preference: dark', () => {
+it('init default from browser preference (dark)', () => {
 	const { queryByTestId } = render(ThemeSelect, {});
 	expect(getTheme()).toEqual(Theme.Dark);
 	const toggle = queryByTestId('toggle-input') as HTMLInputElement;
 	expect(toggle.checked).toBeTruthy();
 });
 
-it('init default from browser preference: light', () => {
+it('init default from browser preference (light)', () => {
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore: TS2375
 	vi.mocked(window.matchMedia).mockImplementationOnce((query: string) => {

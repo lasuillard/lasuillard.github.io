@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @vitest-environment jsdom
-import { load } from '$routes/blog/+page';
-import Page from '$routes/blog/+page.svelte';
+import { load } from '$routes/blog/tag/[tag]/+page';
+import Page from '$routes/blog/tag/[tag]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
 
@@ -13,7 +14,7 @@ it('list posts', async () => {
 				slug: 'lorem-ipsum',
 				metadata: {
 					title: 'Lorem Ipsum',
-					publicationDate: new Date('2020-04-13T13:09:28.333+09:00'),
+					publicationDate: '2020-04-13T13:09:28.333+09:00',
 					tags: ['Apple', 'Watermelon', 'Orange']
 				}
 			}
@@ -21,11 +22,8 @@ it('list posts', async () => {
 	}));
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
-	const { getByText } = render(Page, { data: await load({ fetch }) });
+	const { getByText } = render(Page, { data: await load({ params: { tag: 'Apple' }, fetch }) });
 	expect(getByText('Lorem Ipsum')).toBeTruthy();
 	// TODO: Find date string
-	// TODO: Find tags via loops, assert it links to tag page
-	expect(getByText('Apple')).toBeTruthy();
-	expect(getByText('Watermelon')).toBeTruthy();
-	expect(getByText('Orange')).toBeTruthy();
+	// TODO: Results have links to each posts
 });

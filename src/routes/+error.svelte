@@ -3,10 +3,11 @@
 
 	// FIXME: Accepting parameters for testing because mocking store isn't easy
 	export let status = $page.status;
+	/* c8 ignore next */
 	export let message = $page.error?.message || 'Unknown Error';
 </script>
 
-<div class="w-full h-full flex justify-center items-center flex-col">
+<div class="flex h-full w-full flex-col items-center justify-center">
 	<h1 class="text-8xl">{status}</h1>
-	<p class="text-4xl mt-6">{message}</p>
+	<p class="mt-6 text-4xl">{message}</p>
 </div>

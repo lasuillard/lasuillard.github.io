@@ -8,9 +8,48 @@ export interface Metadata {
 	tags: string[];
 }
 
-export interface Post {
+export class Post {
 	slug: string;
 	metadata: Metadata;
+
+	constructor(slug: string, metadata: Metadata) {
+		this.slug = slug;
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Parse given JSON object into post.
+	 * @param obj Object to parse.
+	 * @returns Converted post object.
+	 */
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	static parseObj(obj: any): Post {
+		// FIXME: Assert given object attributes in more precise way
+		//        Consider validation library like Pydantic in Python
+		if (typeof obj.slug !== 'string') {
+			throw new Error('Failed to parse object: `slug` is not a string');
+		}
+		if (typeof obj.metadata.title !== 'string') {
+			throw new Error('Failed to parse object: `metadata.title` is not a string');
+		}
+		if (typeof obj.metadata.publicationDate !== 'string') {
+			throw new Error('Failed to parse object: `metadata.publicationDate` is not a string');
+		}
+		if (
+			!(
+				Array.isArray(obj.metadata.tags) &&
+				(obj.metadata.tags as Array<unknown>).every((v) => typeof v === 'string')
+			)
+		) {
+			throw new Error('Failed to parse object: `metadata.tags` is not a list of string');
+		}
+
+		return new Post(obj.slug, {
+			title: obj.metadata.title,
+			publicationDate: new Date(obj.metadata.publicationDate),
+			tags: obj.metadata.tags
+		});
+	}
 }
 
 /**
@@ -24,6 +63,8 @@ export async function getPost(
 	let post;
 
 	try {
+		// False-positive uncovered line
+		/* c8 ignore next */
 		post = await import(`$routes/blog/${slug}.md`);
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);

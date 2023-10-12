@@ -3,11 +3,15 @@
 </script>
 
 <div data-testid="sidebar" {...$$restProps}>
-	<aside>
-		<Profile class="ml-3 mt-3 mb-5 md:ml-2 md:mt-2 md:mb-6" />
+	<aside class="grid grid-cols-1">
+		<Profile />
 
 		<div class="divider" />
 
-		<!-- TODO: List recent posts, categories -->
+		<div>
+			<!-- TODO: Recent activities (posts, tags, etc.) -->
+			<h2 class="text-lg font-semibold">Recent Posts</h2>
+			<p class="mt-1 text-base font-light">There is no post yet.</p>
+		</div>
 	</aside>
 </div>

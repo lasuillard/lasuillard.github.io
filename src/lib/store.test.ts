@@ -1,9 +1,10 @@
 // @vitest-environment jsdom
 import { nullStorage, persisted } from '$lib/store';
+import { getVarName } from '$lib/utils';
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
 
-describe('nullStorage', () => {
+describe(getVarName({ nullStorage }), () => {
 	it('should satisfy to browser storage API interface', () => {
 		const key = Math.random().toString();
 		expect(nullStorage.getItem(key)).toEqual(null);
@@ -12,7 +13,7 @@ describe('nullStorage', () => {
 	});
 });
 
-describe('persisted', () => {
+describe(getVarName({ persisted }), () => {
 	it('should conform to store interface and use browser local storage by default', () => {
 		const key = Math.random().toString();
 		const store = persisted(key, 'default-value');
