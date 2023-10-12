@@ -132,7 +132,7 @@ This is really **_very_** important text.
 
 At the command prompt, type `nano`.
 
-`` Use `code` in your Markdown file. ``
+``Use `code` in your Markdown file.``
 
 ---
 

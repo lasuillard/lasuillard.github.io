@@ -20,7 +20,7 @@
 					fill="none"
 					viewBox="0 0 24 24"
 					stroke-width="1.5"
-					class="w-4 h-4 stroke-gray-400"
+					class="h-4 w-4 stroke-gray-400"
 				>
 					<path
 						stroke-linecap="round"
@@ -33,7 +33,7 @@
 				type="text"
 				placeholder="Search"
 				bind:value={searchText}
-				class="input input-bordered w-full h-8 md:w-auto pl-8 placeholder:font-light"
+				class="input input-bordered h-8 w-full pl-8 placeholder:font-light md:w-auto"
 			/>
 		</form>
 	</div>

@@ -8,11 +8,11 @@
 </script>
 
 <div {...$$restProps}>
-	<h1 class="font-bold text-5xl text-center">{title}</h1>
-	<p class="font-light text-xl text-end mt-10">
+	<h1 class="text-center text-5xl font-bold">{title}</h1>
+	<p class="mt-10 text-end text-xl font-light">
 		Published at {format(publicationDate, 'yyyy.MM.dd')}
 	</p>
-	<div class="space-x-1 space-y-1 ml-2 mt-6">
+	<div class="ml-2 mt-6 space-x-1 space-y-1">
 		{#each tags as tag}
 			<div class="badge badge-neutral p-3 font-semibold">
 				<a href="/blog/tag/{tag}">

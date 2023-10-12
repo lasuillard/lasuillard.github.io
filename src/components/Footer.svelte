@@ -1,23 +1,23 @@
 <div data-testid="footer" {...$$restProps}>
 	<div class="flex flex-col">
-		<footer class="footer px-3 md:px-12 py-2 md:py-4">
+		<footer class="footer px-3 py-2 md:px-12 md:py-4">
 			<aside class="items-center">
-				<p class="text-sm md:text-base font-light leading-6 md:leading-8">
+				<p class="text-sm font-light leading-6 md:text-base md:leading-8">
 					Copyright © 2023 - All rights reserved<br />
 					Made with <a href="https://kit.svelte.dev/" class="link">SvelteKit</a>, hosted on GitHub
 					Pages.
 				</p>
 			</aside>
-			<nav class="place-self-end md:place-self-center pb-1">
+			<nav class="place-self-end pb-1 md:place-self-center">
 				<div class="grid grid-flow-col">
-					<a href="/rss" class="btn btn-ghost btn-circle">
+					<a href="/rss" class="btn btn-circle btn-ghost">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke-width="1.5"
 							stroke="currentColor"
-							class="w-7 h-7"
+							class="h-7 w-7"
 						>
 							<path
 								stroke-linecap="round"

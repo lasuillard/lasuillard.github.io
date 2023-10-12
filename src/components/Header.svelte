@@ -27,22 +27,22 @@
 					/>
 				</svg>
 			</label>
-			<ul class="menu menu-md dropdown-content bg-base-300 z-[1] rounded-box shadow">
+			<ul class="menu dropdown-content rounded-box menu-md z-[1] bg-base-300 shadow">
 				<li>
-					<a href="/" class="font-light text-base">Home</a>
+					<a href="/" class="text-base font-light">Home</a>
 				</li>
 				<li>
-					<a href="/about" class="font-light text-base">About</a>
+					<a href="/about" class="text-base font-light">About</a>
 				</li>
 				<li>
-					<a href="/blog" class="font-light text-base">Blog</a>
+					<a href="/blog" class="text-base font-light">Blog</a>
 				</li>
 				<li>
-					<Search class="mr-2 lg:mr-4 w-64" />
+					<Search class="mr-2 w-64 lg:mr-4" />
 				</li>
 			</ul>
 		</div>
-		<div class="flex-none lg:navbar-end flex-wrap">
+		<div class="flex-none flex-wrap lg:navbar-end">
 			<ThemeSelect />
 			<LanguageSelect class="ml-2 lg:ml-4" />
 		</div>
@@ -52,17 +52,17 @@
 		<div class="flex-1 lg:navbar-start">
 			<ul class="menu menu-horizontal items-center">
 				<li>
-					<a href="/" class="font-light text-base">Home</a>
+					<a href="/" class="text-base font-light">Home</a>
 				</li>
 				<li>
-					<a href="/about" class="font-light text-base">About</a>
+					<a href="/about" class="text-base font-light">About</a>
 				</li>
 				<li>
-					<a href="/blog" class="font-light text-base">Blog</a>
+					<a href="/blog" class="text-base font-light">Blog</a>
 				</li>
 			</ul>
 		</div>
-		<div class="flex-none lg:navbar-end flex-wrap">
+		<div class="flex-none flex-wrap lg:navbar-end">
 			<Search class="mr-2 lg:mr-4" />
 			<ThemeSelect />
 			<LanguageSelect class="ml-2 lg:ml-4" />

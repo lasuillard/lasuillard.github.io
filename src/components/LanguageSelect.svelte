@@ -24,17 +24,17 @@
 </script>
 
 <div data-testid="language-select" {...$$restProps}>
-	<ul class="menu menu-horizontal z-[1] rounded-box">
+	<ul class="menu rounded-box menu-horizontal z-[1]">
 		<li>
 			<details>
-				<summary class="font-light text-base">
+				<summary class="text-base font-light">
 					{supportedLanguages.find((lang) => lang.code == currentLanguage)?.name || 'Unknown'}
 				</summary>
 				<ul class="bg-base-300">
 					{#each supportedLanguages as lang}
 						<li>
 							<button on:click={() => setLanguage(lang.code)}>
-								<span class="font-light text-base">{lang.name}</span>
+								<span class="text-base font-light">{lang.name}</span>
 							</button>
 						</li>
 					{/each}
