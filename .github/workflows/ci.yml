@@ -49,7 +49,7 @@ jobs:
       - name: Install PNPM deps
         run: pnpm install
 
-      - name: Install Playwright Browsers
+      - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps
 
       - name: Check code formatting

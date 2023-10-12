@@ -26,7 +26,7 @@
 				"bradlc.vscode-tailwindcss",
 				"zixuanchen.vitest-explorer",
 				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode",
+				"esbenp.prettier-vscode@9.20.0", // BUG: Extension not working for 10.2.0
 				"ms-playwright.playwright"
 			]
 		}

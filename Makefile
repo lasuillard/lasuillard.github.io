@@ -59,7 +59,7 @@ lint: generate  ## Run linters
 .PHONY: lint
 
 scan:  ## Run scans
-	checkov --directory .
+	checkov --quiet --directory .
 .PHONY: scan
 
 test: generate ## Run tests
@@ -71,7 +71,6 @@ benchmark:  ## Run benchmarks
 .PHONY: benchmark
 
 e2e-test:  ## Run e2e tests
-	# xvfb-run pnpm run e2e
 	pnpm run e2e
 .PHONY: e2e-test
 

@@ -5,16 +5,22 @@
 	import '../app.css';
 </script>
 
-<div class="min-h-screen">
-	<Header class="px-6 border-b border-b-slate-200" />
+<div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
+	<Header class="bg-base-200" />
 
-	<div class="flex flex-wrap h-full">
-		<Sidebar class="ml-4 mt-4 p-3 w-full md:w-1/4 lg:w-1/5" />
+	<div class="grid grid-cols-1 p-3 md:grid-cols-4 xl:grid-cols-6">
+		<!--
+      TODO: Collapsible sidebar, 100% for small, otherwise col-span-1
+            Because menu button current being used by header, consider floating action button
+            in side to click or slide right to open menu
+    -->
+		<Sidebar class="col-span-1 p-3" />
 
-		<main class="flex flex-1 pt-4 px-3 pb-4 min-h-[50vh] md:min-h-[80vh]">
+		<main class="px-3 py-6 md:col-span-3 lg:px-12 lg:py-24 xl:col-span-5">
+			<!-- TODO: Breadcrumbs -->
 			<slot />
 		</main>
 	</div>
 
-	<Footer class="p-6 flex border-t border-t-slate-200" />
+	<Footer class="sticky top-[100vh] bg-base-200 px-2 py-4" />
 </div>
