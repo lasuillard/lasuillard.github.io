@@ -18,7 +18,7 @@
 		"test": "vitest --coverage --run",
 		"test:watch": "vitest --coverage --watch --ui --silent",
 		"e2e": "playwright test",
-		"e2e:watch": "playwright open"
+		"e2e:watch": "playwright test --ui"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -37,6 +37,7 @@
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-jsdoc": "^46.8.2",
 		"eslint-plugin-svelte": "^2.34.0",
+		"glob": "^10.3.10",
 		"jsdom": "^22.1.0",
 		"mdsvex": "^0.11.0",
 		"postcss": "^8.4.31",

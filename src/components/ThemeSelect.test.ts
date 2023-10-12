@@ -5,6 +5,11 @@ import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { expect, it, vi } from 'vitest';
 
+it('has a valid locator', () => {
+	const { getByTestId } = render(ThemeSelect);
+	expect(getByTestId('theme-select')).toBeTruthy();
+});
+
 it('init default from browser preference (dark)', () => {
 	const { queryByTestId } = render(ThemeSelect, {});
 	expect(getTheme()).toEqual(Theme.Dark);

@@ -71,7 +71,6 @@ benchmark:  ## Run benchmarks
 .PHONY: benchmark
 
 e2e-test:  ## Run e2e tests
-	# xvfb-run pnpm run e2e
 	pnpm run e2e
 .PHONY: e2e-test
 

@@ -3,10 +3,10 @@ import LanguageSelect from '$components/LanguageSelect.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
-it('renders', () => {
-	const { container } = render(LanguageSelect);
-	expect(container).toBeTruthy();
+it('has a valid locator', () => {
+	const { getByTestId } = render(LanguageSelect);
+	expect(getByTestId('language-select')).toBeTruthy();
 });
 
-it.todo('should autodetect language from browser');
-it.todo('should fallback to english if user language not supported');
+it.todo('init with language autodetect from browser');
+it.todo('fallbacks to english if user language not supported');

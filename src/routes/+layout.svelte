@@ -5,7 +5,7 @@
 	import '../app.css';
 </script>
 
-<div class="grid min-h-screen auto-rows-min grid-cols-1">
+<div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
 	<Header class="bg-base-200" />
 
 	<div class="grid grid-cols-1 p-3 md:grid-cols-4 xl:grid-cols-6">

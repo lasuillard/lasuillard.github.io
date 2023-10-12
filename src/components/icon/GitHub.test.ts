@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import Markdown from '$components/Markdown.svelte';
+import GitHub from '$components/icon/GitHub.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
 it('has a valid locator', () => {
-	const { getByTestId } = render(Markdown);
-	expect(getByTestId('markdown')).toBeTruthy();
+	const { getByTestId } = render(GitHub);
+	expect(getByTestId('icon/github')).toBeTruthy();
 });

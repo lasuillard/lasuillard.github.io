@@ -4,9 +4,8 @@
 	import ThemeSelect from './ThemeSelect.svelte';
 </script>
 
-<!-- TODO: Responsive menu: squash into dropdown if small, otherwise spread it -->
-<div data-testid="header" {...$$restProps}>
-	<header class="navbar flex-wrap md:hidden" data-testid="header:sm">
+<div data-testid="header-wrapper" {...$$restProps}>
+	<header class="navbar flex-wrap md:hidden" data-testid="header">
 		<!-- Dropdown menu for small screen -->
 		<div class="dropdown flex-1">
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -48,7 +47,7 @@
 		</div>
 	</header>
 	<!-- Full horizontal menu -->
-	<header class="navbar max-sm:hidden" data-testid="header:md">
+	<header class="navbar max-md:hidden" data-testid="header">
 		<div class="flex-1 lg:navbar-start">
 			<ul class="menu menu-horizontal items-center">
 				<li>

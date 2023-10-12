@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import Markdown from '$components/Markdown.svelte';
+import LinkedIn from '$components/icon/LinkedIn.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
 it('has a valid locator', () => {
-	const { getByTestId } = render(Markdown);
-	expect(getByTestId('markdown')).toBeTruthy();
+	const { getByTestId } = render(LinkedIn);
+	expect(getByTestId('icon/linkedin')).toBeTruthy();
 });
