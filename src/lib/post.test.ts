@@ -26,12 +26,10 @@ describe(Post, () => {
 			['no slug', [omitKeys(sample, ['slug'])]],
 			[
 				'lacking metadata field',
-				[
-					['title', 'publicationDate', 'tags'].map((key) => ({
-						...sample,
-						metadata: omitKeys(sample.metadata, [key])
-					}))
-				]
+				['title', 'publicationDate', 'tags'].map((key) => ({
+					...sample,
+					metadata: omitKeys(sample.metadata, [key])
+				}))
 			]
 		])('throws an error if unable to parse (%s)', (_, input) => {
 			input.forEach((item) => {

@@ -25,6 +25,7 @@ export class Post {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	static parseObj(obj: any): Post {
 		// FIXME: Assert given object attributes in more precise way
+		//        Consider validation library like Pydantic in Python
 		if (typeof obj.slug !== 'string') {
 			throw new Error('Failed to parse object: `slug` is not a string');
 		}
@@ -62,6 +63,8 @@ export async function getPost(
 	let post;
 
 	try {
+		// False-positive uncovered line
+		/* c8 ignore next */
 		post = await import(`$routes/blog/${slug}.md`);
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);

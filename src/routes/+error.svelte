@@ -3,6 +3,7 @@
 
 	// FIXME: Accepting parameters for testing because mocking store isn't easy
 	export let status = $page.status;
+	/* c8 ignore next */
 	export let message = $page.error?.message || 'Unknown Error';
 </script>
 

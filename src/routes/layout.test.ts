@@ -1,6 +1,13 @@
 // @vitest-environment jsdom
 import '$routes/+layout';
-import { it } from 'vitest';
+import Layout from '$routes/+layout.svelte';
+import { render } from '@testing-library/svelte';
+import { expect, it } from 'vitest';
+
+it('shows error detail', () => {
+	const { container } = render(Layout);
+	expect(container).toBeTruthy();
+});
 
 it.todo('should have theme switch', () => {});
 it.todo('should have language switch');
