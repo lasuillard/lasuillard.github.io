@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Search from '$components/icon/Search.svelte';
+
 	let searchText: string;
 
 	/**
@@ -15,19 +17,7 @@
 		<form class="flex" on:submit|preventDefault>
 			<!-- TODO: Should show the search results then user select which page to go, not by button -->
 			<button class="absolute ml-[11px] mt-[9px]" on:click={() => search(searchText)}>
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					class="h-4 w-4 stroke-gray-400"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-					/>
-				</svg>
+				<Search class="h-4 w-4 stroke-gray-400" />
 			</button>
 			<input
 				type="text"

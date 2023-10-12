@@ -1,7 +1,8 @@
 <script lang="ts">
-	import LanguageSelect from './LanguageSelect.svelte';
-	import Search from './Search.svelte';
-	import ThemeSelect from './ThemeSelect.svelte';
+	import LanguageSelect from '$components/LanguageSelect.svelte';
+	import Search from '$components/Search.svelte';
+	import ThemeSelect from '$components/ThemeSelect.svelte';
+	import Menu from '$components/icon/Menu.svelte';
 </script>
 
 <div data-testid="header-wrapper" {...$$restProps}>
@@ -11,20 +12,7 @@
 			<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 			<!-- svelte-ignore a11y-label-has-associated-control -->
 			<label tabindex="0" class="btn btn-ghost">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					class="h-5 w-5"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke="currentColor"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="2"
-						d="M4 6h16M4 12h16M4 18h7"
-					/>
-				</svg>
+				<Menu class="h-6 w-6" />
 			</label>
 			<ul class="menu dropdown-content rounded-box menu-md z-[1] bg-base-300 shadow">
 				<li>

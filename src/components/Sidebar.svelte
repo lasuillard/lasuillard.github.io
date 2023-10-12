@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Profile from './Profile.svelte';
+	import Profile from '$components/Profile.svelte';
 </script>
 
 <div data-testid="sidebar" {...$$restProps}>

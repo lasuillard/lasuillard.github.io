@@ -1,7 +1,7 @@
 <script lang="ts">
-	import GitHub from './icon/GitHub.svelte';
-	import Gmail from './icon/Gmail.svelte';
-	import LinkedIn from './icon/LinkedIn.svelte';
+	import GitHub from '$components/icon/GitHub.svelte';
+	import Gmail from '$components/icon/Gmail.svelte';
+	import LinkedIn from '$components/icon/LinkedIn.svelte';
 
 	// TODO: Automate generating profile image (hash email by md5)
 	// https://gravatar.com/site/implement/images/
