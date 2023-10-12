@@ -4,13 +4,14 @@ const { beforeAll, fixme } = test;
 const it = test;
 
 let page: Page;
-let themeSelect: Locator;
+let searchBar: Locator;
 
 beforeAll('go to index page', async ({ browser }) => {
 	page = await browser.newPage();
 	await page.goto('/');
-	themeSelect = page.getByTestId('theme-select');
-	await expect(themeSelect).toBeVisible();
+	const header = page.locator('header').locator('visible = true');
+	searchBar = header.getByTestId('search');
+	await expect(searchBar).toBeVisible();
 });
 
 it('todo', () => fixme());

@@ -9,7 +9,8 @@ let languageSelect: Locator;
 beforeAll('go to index page', async ({ browser }) => {
 	page = await browser.newPage();
 	await page.goto('/');
-	languageSelect = page.getByTestId('language-select');
+	const header = page.locator('header').locator('visible = true');
+	languageSelect = header.getByTestId('language-select');
 	await expect(languageSelect).toBeVisible();
 });
 

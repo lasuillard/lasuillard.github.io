@@ -14,7 +14,7 @@ beforeAll('go to index page', async ({ browser }) => {
 });
 
 it('has a header', async () => {
-	await expect(layout.getByTestId('header')).toBeVisible();
+	await expect(layout.locator('header >> visible = true')).toBeVisible();
 });
 
 it('has a sidebar', async () => {

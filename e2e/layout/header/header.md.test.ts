@@ -9,25 +9,22 @@ let header: Locator;
 beforeAll('go to index page', async ({ browser }) => {
 	page = await browser.newPage();
 	await page.goto('/');
-	header = page.getByTestId('header');
-	await expect(header).toBeVisible();
+	header = page.locator('header').locator('visible = true');
 });
 
 it('has a link to home', async () => {
-	const link = header.getByTestId('home-link');
-	expect(await link.getByRole('link').getAttribute('href')).toEqual('/');
+	expect(await header.getByRole('link', { name: 'Home' }).getAttribute('href')).toEqual('/');
 });
 
 it('has a link to about', async () => {
-	const link = header.getByTestId('about-link');
-	expect(await link.getByRole('link').getAttribute('href')).toEqual('/about');
+	expect(await header.getByRole('link', { name: 'About' }).getAttribute('href')).toEqual('/about');
 });
 
 it('has a link to blog', async () => {
-	const link = header.getByTestId('blog-link');
-	expect(await link.getByRole('link').getAttribute('href')).toEqual('/blog');
+	expect(await header.getByRole('link', { name: 'Blog' }).getAttribute('href')).toEqual('/blog');
 });
 
+// Responsive headers mutually exclusive
 it('has a search bar', async () => {
 	await expect(header.getByTestId('search')).toBeVisible();
 });
