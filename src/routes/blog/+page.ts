@@ -3,7 +3,8 @@ import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch }) => {
 	const response = await fetch('/api/posts');
-	const allPosts: unknown[] = await response.json();
+	const data: unknown[] = await response.json();
+	const allPosts = data.map(Post.parseObj);
 
-	return { allPosts: allPosts.map(Post.parseObj) };
+	return { allPosts };
 };
