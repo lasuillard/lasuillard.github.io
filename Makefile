@@ -59,7 +59,7 @@ lint: generate  ## Run linters
 .PHONY: lint
 
 scan:  ## Run scans
-	checkov --directory .
+	checkov --quiet --directory .
 .PHONY: scan
 
 test: generate ## Run tests
