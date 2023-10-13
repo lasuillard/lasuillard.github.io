@@ -1,6 +1,15 @@
 // @vitest-environment jsdom
-import { Theme, getTheme, isTheme, setTheme } from '$lib/theme';
+import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from '$lib/theme';
 import { describe, expect, it } from 'vitest';
+import { getVarName } from './utils';
+
+describe(initTheme, () => {
+	it(`store ${getVarName({ currentTheme })} become available once initialized`, () => {
+		expect(currentTheme).toBeUndefined();
+		initTheme();
+		expect(currentTheme).toBeDefined();
+	});
+});
 
 describe(isTheme, () => {
 	it('should return `true` for known enums', () => {
@@ -18,7 +27,8 @@ describe(isTheme, () => {
 
 describe(getTheme, () => {
 	it('should return `data-theme` attribute of document root', () => {
-		expect(getTheme()).toEqual(Theme.Light);
+		const themeAttr = document.documentElement.getAttribute('data-theme');
+		expect(getTheme()).toEqual(themeAttr);
 	});
 });
 

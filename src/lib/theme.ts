@@ -1,9 +1,39 @@
 import { browser } from '$app/environment';
+import { persisted } from '$lib/store';
+import type { Writable } from 'svelte/store';
 
 // https://daisyui.com/docs/themes/
+/**
+ * Available themes for current website.
+ */
 export enum Theme {
 	Light = 'light',
 	Dark = 'dark'
+}
+
+/**
+ * Persistent store for current theme.
+ *
+ * Store is `undefined` at first and will be available after calling {@link initTheme}.
+ */
+export let currentTheme: Writable<Theme> | undefined = undefined;
+
+/**
+ * Init theme with default from browser preferences.
+ */
+export function initTheme() {
+	const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	console.debug(`Detected preferred color scheme is "${preferDark ? 'dark' : 'light'}"`);
+
+	const themeDefault = preferDark ? Theme.Dark : Theme.Light;
+	console.debug(`Theme "${themeDefault}" will be used as default`);
+
+	currentTheme = persisted('theme', themeDefault);
+
+	// Bind store to actual theme
+	currentTheme.subscribe((newTheme) => {
+		setTheme(newTheme);
+	});
 }
 
 /**
@@ -17,18 +47,24 @@ export function isTheme(value: string): value is Theme {
 
 /**
  * Returns current theme.
+ *
+ * This is different from store {@link currentTheme}, it loads the actual theme applied to pages.
  * @returns Current theme.
  */
 export function getTheme(): Theme {
-	const currentTheme = browser ? document.documentElement.getAttribute('data-theme') : Theme.Light;
-	if (currentTheme && isTheme(currentTheme)) {
-		return currentTheme;
+	if (browser) {
+		const currentTheme = document.documentElement.getAttribute('data-theme');
+		if (currentTheme && isTheme(currentTheme)) {
+			return currentTheme;
+		}
 	}
 	return Theme.Light;
 }
 
 /**
  * Set current theme.
+ *
+ * This is different from updating store {@link currentTheme} as it updates actual theme applied to pages.
  * @param theme New theme.
  */
 export function setTheme(theme: Theme) {
