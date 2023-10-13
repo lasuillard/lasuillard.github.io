@@ -1,30 +1,15 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import Moon from '$components/icon/Moon.svelte';
 	import Sun from '$components/icon/Sun.svelte';
-	import { persisted } from '$lib/store';
-	import { Theme, setTheme } from '$lib/theme';
-
-	let preferDark;
-
-	// Detect default theme from OS preference
-	// BUG: This runs multiple times if component used multiple times; may move to `hooks.client.ts`
-	if (browser) {
-		preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-	}
-	const themeDefault = preferDark ? Theme.Dark : Theme.Light;
-	console.debug(`Detected color scheme preference is ${themeDefault}`);
-	console.debug(`Theme will be default to ${themeDefault} if no previous decision exists`);
-
-	// Subscribe to theme changes
-	const currentTheme = persisted('theme', themeDefault);
-	currentTheme.subscribe((theme) => {
-		setTheme(theme);
-	});
+	import { Theme, currentTheme } from '$lib/theme';
 
 	/** Toggle theme between dark and light. */
 	function toggleTheme() {
-		currentTheme.update((theme) => {
+		if (!currentTheme) {
+			console.error("Trying to update theme while it's not initailized");
+			return;
+		}
+		currentTheme?.update((theme) => {
 			const newTheme = theme === Theme.Dark ? Theme.Light : Theme.Dark;
 			console.debug(`Theme changed to ${newTheme}`);
 			return newTheme;
@@ -43,7 +28,7 @@
 				data-testid="toggle-input"
 				type="checkbox"
 				class="toggle"
-				checked={$currentTheme === 'dark'}
+				checked={$currentTheme === Theme.Dark}
 				on:click={toggleTheme}
 			/>
 		</div>
