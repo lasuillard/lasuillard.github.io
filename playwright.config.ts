@@ -3,6 +3,7 @@ import * as glob from 'glob';
 
 const testDir = 'e2e';
 
+// TODO: Default group should included in all matrix rather than standalone
 const groupTests = (keys: string[]) => {
 	const pattern = new RegExp(/.*?\.((.+)\.)?test\.ts/);
 	const testFiles = glob.sync(`${testDir}/**/*.{test,spec}.ts`);

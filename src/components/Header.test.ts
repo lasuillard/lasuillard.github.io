@@ -22,13 +22,6 @@ it('has a link to blog', () => {
 	expect(container.querySelectorAll(`[data-testid="${headerId}"] a[href="/blog"]`)).toHaveLength(2);
 });
 
-it('contains search bar', () => {
-	const { container } = render(Header);
-	expect(
-		container.querySelectorAll(`[data-testid="${headerId}"] [data-testid="search"]`)
-	).toHaveLength(2);
-});
-
 it('contains theme selector', () => {
 	const { container } = render(Header);
 	expect(

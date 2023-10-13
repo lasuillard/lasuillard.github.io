@@ -12,3 +12,8 @@ it('contains profile', () => {
 	const { getByTestId } = render(Sidebar);
 	expect(getByTestId('profile')).toBeTruthy();
 });
+
+it('contains search bar', () => {
+	const { getByTestId } = render(Sidebar);
+	expect(getByTestId('search')).toBeTruthy();
+});

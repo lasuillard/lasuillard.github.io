@@ -45,9 +45,12 @@
 </script>
 
 <!-- FIXME: Search bar starts open for small screen -->
+<!-- TODO: Add button to clear search text -->
+<!-- TODO: Auto-fill suggestion (tab key?) -->
+<!-- TODO: Browsing search results via keyboard-->
 <div data-testid="search" {...$$restProps}>
 	<div class="group relative flex items-center space-x-2">
-		<form class=" flex" autocomplete="off" on:submit|preventDefault>
+		<form class="w-full" autocomplete="off" on:submit|preventDefault>
 			<div class="absolute ml-[11px] mt-[9px]">
 				<Search class="h-4 w-4 stroke-gray-400" />
 			</div>
@@ -55,9 +58,9 @@
 				type="text"
 				placeholder="Search"
 				bind:value={$searchText}
-				class="peer input input-bordered h-8 pl-8 placeholder:font-light md:w-auto"
+				class="peer input input-bordered h-8 w-full pl-8 placeholder:font-light"
 			/>
-			<div class="dropdown absolute top-[135%] z-[1] w-full peer-[:focus]:dropdown-open">
+			<div class="dropdown absolute right-0 top-[135%] z-[1] w-full peer-[:focus]:dropdown-open">
 				{#if searchResults.length > 0}
 					<ol
 						class="menu dropdown-content rounded-box w-full space-y-2 bg-base-300 shadow hover:!visible"
@@ -69,7 +72,7 @@
 						{/each}
 					</ol>
 				{:else}
-					<div class=" card dropdown-content compact rounded-box z-[1] w-full bg-base-300 shadow">
+					<div class="card dropdown-content compact rounded-box z-[1] w-full bg-base-300 shadow">
 						<div class="card-body items-center">
 							<h2 class="card-title">No results found</h2>
 							<p>Suggestions:</p>

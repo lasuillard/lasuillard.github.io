@@ -9,8 +9,8 @@ let searchBar: Locator;
 beforeAll('go to index page', async ({ browser }) => {
 	page = await browser.newPage();
 	await page.goto('/');
-	const header = page.locator('header').locator('visible = true');
-	searchBar = header.getByTestId('search');
+	const sidebar = page.getByTestId('sidebar');
+	searchBar = sidebar.getByTestId('search');
 	await expect(searchBar).toBeVisible();
 });
 
