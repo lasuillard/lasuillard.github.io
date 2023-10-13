@@ -1,4 +1,4 @@
-import { getVarName, omitKeys } from '$lib/utils';
+import { getVarName, omitKeys, quoteJoin } from '$lib/utils';
 import { describe, expect, it } from 'vitest';
 
 describe(getVarName, () => {
@@ -11,5 +11,11 @@ describe(getVarName, () => {
 describe(omitKeys, () => {
 	it('omits some properties', () => {
 		expect(omitKeys({ a: 1, b: 3, c: 2 }, ['b'])).toEqual({ a: 1, c: 2 });
+	});
+});
+
+describe(quoteJoin, () => {
+	it('joins given items into single text', () => {
+		expect(quoteJoin([13, 2.7, 'abDg'])).toEqual('"13", "2.7", "abDg"');
 	});
 });

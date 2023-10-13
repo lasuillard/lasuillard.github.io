@@ -24,3 +24,15 @@ export function getVarName(obj: { [_: string]: unknown }): string {
 export function omitKeys(obj: any, keys: string[]): any {
 	return Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)));
 }
+
+/**
+ * Returns join of items stringified and quoted.
+ * @example
+ * // returns '"13", "2.7", "abDg"'
+ * quoteJoin([13, 2.7, "abDg"])
+ * @param values Items to join.
+ * @returns Joined text.
+ */
+export function quoteJoin(values: unknown[]): string {
+	return values.map((value) => `"${value}"`).join(', ');
+}
