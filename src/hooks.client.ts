@@ -1,4 +1,4 @@
-import { initEngine } from '$lib/client/search';
+import { initEngine } from '$lib/search';
 import { initTheme } from '$lib/theme';
 
 initTheme();

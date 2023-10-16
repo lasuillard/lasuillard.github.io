@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Search from '$components/icon/Search.svelte';
-	import { getEngine } from '$lib/client/search';
+	import { getEngine } from '$lib/search';
 	import { quoteJoin } from '$lib/utils';
 	import type { SearchResult, Suggestion } from 'minisearch';
 	import { writable } from 'svelte/store';
@@ -50,7 +50,7 @@
 <!-- TODO: Browsing search results via keyboard-->
 <div data-testid="search" {...$$restProps}>
 	<div class="group relative flex items-center space-x-2">
-		<form class="w-full" autocomplete="off" on:submit|preventDefault>
+		<form class="w-full" autocomplete="off" on:submit|preventDefault role="search">
 			<div class="absolute ml-[11px] mt-[9px]">
 				<Search class="h-4 w-4 stroke-gray-400" />
 			</div>
@@ -62,17 +62,22 @@
 			/>
 			<div class="dropdown absolute right-0 top-[135%] z-[1] w-full peer-[:focus]:dropdown-open">
 				{#if searchResults.length > 0}
-					<ol
-						class="menu dropdown-content rounded-box w-full space-y-2 bg-base-300 shadow hover:!visible"
-					>
-						{#each searchResults as result}
-							<li class="font-bold">
-								<a href="/blog/{result.id}">{result['metadata.title']} ({result.id})</a>
-							</li>
-						{/each}
-					</ol>
+					<div role="searchbox">
+						<ol
+							class="menu dropdown-content rounded-box w-full space-y-2 bg-base-300 shadow hover:!visible"
+						>
+							{#each searchResults as result}
+								<li class="font-bold">
+									<a href="/blog/{result.id}">{result['metadata.title']} ({result.id})</a>
+								</li>
+							{/each}
+						</ol>
+					</div>
 				{:else}
-					<div class="card dropdown-content compact rounded-box z-[1] w-full bg-base-300 shadow">
+					<div
+						class="card dropdown-content compact rounded-box z-[1] w-full bg-base-300 shadow"
+						role="searchbox"
+					>
 						<div class="card-body items-center">
 							<h2 class="card-title">No results found</h2>
 							<p>Suggestions:</p>
