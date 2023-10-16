@@ -32,13 +32,6 @@ it('has a link to blog', async () => {
 	await header.click();
 });
 
-// Responsive headers mutually exclusive
-it('has a search bar', async () => {
-	await menu.getByRole('img').click();
-	await expect(header.getByTestId('search')).toBeVisible();
-	await header.click();
-});
-
 it('has a theme select', async () => {
 	await expect(header.getByTestId('theme-select')).toBeVisible();
 });

@@ -16,3 +16,7 @@ beforeAll('go to index page', async ({ browser }) => {
 it('has a profile', async () => {
 	await expect(sidebar.getByTestId('profile')).toBeVisible();
 });
+
+it('has a search bar', async () => {
+	await expect(sidebar.getByTestId('search')).toBeVisible();
+});

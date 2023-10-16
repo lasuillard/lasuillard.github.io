@@ -6,15 +6,16 @@ const testDir = 'e2e';
 const groupTests = (keys: string[]) => {
 	const pattern = new RegExp(/.*?\.((.+)\.)?test\.ts/);
 	const testFiles = glob.sync(`${testDir}/**/*.{test,spec}.ts`);
-	const grouped = {
-		default: [],
-		...Object.fromEntries(keys.map((size) => [size, []]))
-	};
+	const grouped: { [size: string]: string[] } = Object.fromEntries(keys.map((size) => [size, []]));
 
 	for (const filename of testFiles) {
 		const match = filename.match(pattern) || [];
-		const size = match[2] || 'default';
-		grouped[size].push(filename);
+		const size: string | undefined = match[2];
+		if (size) {
+			grouped[size].push(filename);
+		} else {
+			Object.values(grouped).forEach((arr) => arr.push(filename));
+		}
 	}
 
 	return grouped;
@@ -22,6 +23,7 @@ const groupTests = (keys: string[]) => {
 
 const testGroups = groupTests(['sm', 'md', 'lg']);
 
+// BUG: Playwright seems not detecting file changes (create / delete)
 export default {
 	webServer: {
 		command: 'pnpm run build && pnpm run preview',
@@ -30,7 +32,7 @@ export default {
 	use: {
 		screenshot: 'only-on-failure'
 	},
-	testDir: 'e2e',
+	testDir,
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
 	reporter: [['list'], ['html', { open: process.env.CI ? 'never' : 'on-failure' }]],
 	projects: [
@@ -57,10 +59,6 @@ export default {
 			use: {
 				viewport: { width: 1024, height: 1366 }
 			}
-		},
-		{
-			name: 'Default',
-			testMatch: testGroups['default']
 		}
 	],
 	expect: {

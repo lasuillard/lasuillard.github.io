@@ -24,11 +24,6 @@ it('has a link to blog', async () => {
 	expect(await header.getByRole('link', { name: 'Blog' }).getAttribute('href')).toEqual('/blog');
 });
 
-// Responsive headers mutually exclusive
-it('has a search bar', async () => {
-	await expect(header.getByTestId('search')).toBeVisible();
-});
-
 it('has a theme select', async () => {
 	await expect(header.getByTestId('theme-select')).toBeVisible();
 });

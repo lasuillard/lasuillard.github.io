@@ -1,6 +1,5 @@
 <script lang="ts">
 	import LanguageSelect from '$components/LanguageSelect.svelte';
-	import Search from '$components/Search.svelte';
 	import ThemeSelect from '$components/ThemeSelect.svelte';
 	import Menu from '$components/icon/Menu.svelte';
 </script>
@@ -23,9 +22,6 @@
 				</li>
 				<li>
 					<a href="/blog" class="text-base font-light">Blog</a>
-				</li>
-				<li>
-					<Search class="mr-2 w-64 lg:mr-4" />
 				</li>
 			</ul>
 		</div>
@@ -50,7 +46,6 @@
 			</ul>
 		</div>
 		<div class="flex-none flex-wrap lg:navbar-end">
-			<Search class="mr-2 lg:mr-4" />
 			<ThemeSelect />
 			<LanguageSelect class="ml-2 lg:ml-4" />
 		</div>
