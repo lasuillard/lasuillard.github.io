@@ -3,35 +3,29 @@ import Header from '$components/Header.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
-const headerId = 'header';
-
-it('has a link to home', () => {
-	const { container } = render(Header);
-	expect(container.querySelectorAll(`[data-testid="${headerId}"] a[href="/"]`)).toHaveLength(2);
+it('has a valid locator', () => {
+	const { getByTestId } = render(Header);
+	expect(getByTestId('header')).toBeTruthy();
 });
 
-it('has a link to about', () => {
-	const { container } = render(Header);
-	expect(container.querySelectorAll(`[data-testid="${headerId}"] a[href="/about"]`)).toHaveLength(
-		2
-	);
-});
-
-it('has a link to blog', () => {
-	const { container } = render(Header);
-	expect(container.querySelectorAll(`[data-testid="${headerId}"] a[href="/blog"]`)).toHaveLength(2);
+// NOTE: Further reading for 2-way binding: https://github.com/testing-library/svelte-testing-library/issues/117
+it('has a button to toggle sidebar', async () => {
+	const openSidebar = false;
+	const { getByTestId, component: _component } = render(Header, { openSidebar });
+	const component = _component.$$;
+	const sidebarToggle = getByTestId('sidebar-toggle');
+	expect(sidebarToggle).toBeTruthy();
+	expect(component.ctx[component.props['openSidebar']]).toBe(false);
+	sidebarToggle.click();
+	expect(component.ctx[component.props['openSidebar']]).toBe(true);
 });
 
 it('contains theme selector', () => {
-	const { container } = render(Header);
-	expect(
-		container.querySelectorAll(`[data-testid="${headerId}"] [data-testid="theme-select"]`)
-	).toHaveLength(2);
+	const { getByTestId } = render(Header);
+	expect(getByTestId('theme-select')).toBeTruthy();
 });
 
 it('contains language selector', () => {
-	const { container } = render(Header);
-	expect(
-		container.querySelectorAll(`[data-testid="${headerId}"] [data-testid="language-select"]`)
-	).toHaveLength(2);
+	const { getByTestId } = render(Header);
+	expect(getByTestId('language-select')).toBeTruthy();
 });

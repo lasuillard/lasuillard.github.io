@@ -13,14 +13,17 @@ beforeAll('go to index page', async ({ browser }) => {
 	await expect(layout).toBeVisible();
 });
 
-it('has a header', async () => {
-	await expect(layout.locator('header >> visible = true')).toBeVisible();
-});
-
-it('has a sidebar', async () => {
+it('has header, sidebar, main and footer @layout @header @sidebar @main @footer', async () => {
+	await expect(layout.getByTestId('header')).toBeVisible();
 	await expect(layout.getByTestId('sidebar')).toBeVisible();
+	await expect(layout.getByTestId('main')).toBeVisible();
+	await expect(layout.getByTestId('footer')).toBeVisible();
 });
 
-it('has a footer', async () => {
-	await expect(layout.getByTestId('footer')).toBeVisible();
+it('sidebar can be hidden with button in the header @layout @header @sidebar', async () => {
+	await expect(layout.getByTestId('sidebar')).toBeVisible();
+	await layout.getByTestId('sidebar-toggle').click();
+	await expect(layout.getByTestId('sidebar')).not.toBeVisible();
+	await layout.getByTestId('sidebar-toggle').click();
+	await expect(layout.getByTestId('sidebar')).toBeVisible();
 });
