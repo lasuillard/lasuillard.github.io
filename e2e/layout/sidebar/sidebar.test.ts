@@ -17,6 +17,18 @@ it('has a profile', async () => {
 	await expect(sidebar.getByTestId('profile')).toBeVisible();
 });
 
+it('has a link to home', async () => {
+	expect(await sidebar.getByRole('link', { name: 'Home' }).getAttribute('href')).toEqual('/');
+});
+
+it('has a link to about', async () => {
+	expect(await sidebar.getByRole('link', { name: 'About' }).getAttribute('href')).toEqual('/about');
+});
+
+it('has a link to blog', async () => {
+	expect(await sidebar.getByRole('link', { name: 'Blog' }).getAttribute('href')).toEqual('/blog');
+});
+
 it('has a search bar', async () => {
 	await expect(sidebar.getByTestId('search')).toBeVisible();
 });
