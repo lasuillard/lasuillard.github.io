@@ -9,8 +9,7 @@ it('renders', () => {
 	expect(container).toBeTruthy();
 });
 
-it.todo('contains language switch');
-it.todo('contains search input to find posts');
-it.todo('contains left sidebar to present profile');
-it.todo('contains main content slot');
-it.todo('contains right sidebar to browse posts');
+it.todo('contains a header');
+it.todo('contains a left sidebar');
+it.todo('contains a main content slot');
+it.todo('contains a footer');

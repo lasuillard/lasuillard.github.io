@@ -3,20 +3,19 @@
 	import Header from '$components/Header.svelte';
 	import Sidebar from '$components/Sidebar.svelte';
 	import '../app.css';
+
+	let openSidebar = false;
 </script>
 
 <div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
-	<Header class="sticky top-0 z-[1] bg-base-200" />
+	<Header class="sticky top-0 z-[1] bg-base-200" bind:openSidebar />
 
-	<div class="grid grid-cols-1 p-3 md:grid-cols-4 xl:grid-cols-6">
-		<!--
-      TODO: Collapsible sidebar, 100% for small, otherwise col-span-1
-            Because menu button current being used by header, consider floating action button
-            in side to click or slide right to open menu
-    -->
-		<Sidebar class="col-span-1 p-3" />
+	<div class="grid grid-flow-row p-3 md:grid-flow-col">
+		<!-- NOTE: Bind to internal checkbox to apply CSS with Tailwind CSS easily -->
+		<input type="checkbox" bind:checked={openSidebar} class="peer hidden" />
+		<Sidebar class="col-span-1 p-3 peer-checked:hidden" />
 
-		<main class="px-3 py-6 md:col-span-3 lg:px-12 lg:py-24 xl:col-span-5">
+		<main class="px-3 py-6 md:col-span-3 lg:px-12 lg:py-24 xl:col-span-5" data-testid="main">
 			<!-- TODO: Breadcrumbs -->
 			<slot />
 		</main>

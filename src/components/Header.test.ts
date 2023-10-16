@@ -11,8 +11,13 @@ it('has a valid locator', () => {
 // NOTE: Further reading for 2-way binding: https://github.com/testing-library/svelte-testing-library/issues/117
 it('has a button to toggle sidebar', async () => {
 	const openSidebar = false;
-	const { getByTestId } = render(Header, { openSidebar });
-	expect(getByTestId('sidebar-toggle')).toBeTruthy();
+	const { getByTestId, component: _component } = render(Header, { openSidebar });
+	const component = _component.$$;
+	const sidebarToggle = getByTestId('sidebar-toggle');
+	expect(sidebarToggle).toBeTruthy();
+	expect(component.ctx[component.props['openSidebar']]).toBe(false);
+	sidebarToggle.click();
+	expect(component.ctx[component.props['openSidebar']]).toBe(true);
 });
 
 it('contains theme selector', () => {
