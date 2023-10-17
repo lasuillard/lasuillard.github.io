@@ -20,7 +20,7 @@
 
 		{#key data.current}
 			<main
-				class="peer-checked:xl-col-span-6 col-span-3 px-3 py-6 peer-checked:md:col-span-4 lg:py-24 lg:pl-6 xl:col-span-5"
+				class="col-span-3 px-3 py-6 peer-checked:col-span-full lg:py-24 lg:pl-6 xl:col-span-5"
 				data-testid="main"
 				in:fade={{ duration: 150, delay: 150 }}
 				out:fade={{ duration: 150 }}
