@@ -40,11 +40,5 @@
 		<div class="divider" />
 
 		<Search class="mb-4" />
-
-		<div>
-			<!-- TODO: Recent activities (posts, tags, etc.) -->
-			<h2 class="text-lg font-semibold">Recent Posts</h2>
-			<p class="mt-1 text-base font-light">There is no post yet.</p>
-		</div>
 	</aside>
 </div>
