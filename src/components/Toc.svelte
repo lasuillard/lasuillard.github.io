@@ -25,7 +25,6 @@
 			compare(other: TreeSource<HTMLElement, HTMLElement>): number {
 				const left = this.data.tagName;
 				const right = other.data.tagName;
-				console.log(this, other, left, right, left < right);
 				return left < right ? -1 : left == right ? 0 : 1;
 			},
 			toNode() {

@@ -1,6 +1,8 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { mdsvex } from 'mdsvex';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
 
 // https://mdsvex.com/docs
 // eslint-disable-next-line jsdoc/check-tag-names
@@ -9,7 +11,8 @@ const mdsvexConfig = {
 	extensions: ['.md'],
 	layout: {
 		_: 'src/components/Markdown.svelte' // NOTE: You can't use alias here
-	}
+	},
+	rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]]
 };
 
 // https://kit.svelte.dev/docs/configuration
