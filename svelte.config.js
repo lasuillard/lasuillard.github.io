@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
+import hljs from 'highlight.js';
 import { mdsvex } from 'mdsvex';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
@@ -12,7 +13,15 @@ const mdsvexConfig = {
 	layout: {
 		_: 'src/components/Markdown.svelte' // NOTE: You can't use alias here
 	},
-	rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]]
+	rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'wrap' }]],
+	highlight: {
+		// https://github.com/pngwn/MDsveX/issues/514
+		highlighter(code, lang) {
+			const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+			const html = hljs.highlight(code, { language }).value;
+			return `<pre class="language-${lang}">{@html \`<code class="language-${lang}">${html}</code>\`}</pre>`;
+		}
+	}
 };
 
 // https://kit.svelte.dev/docs/configuration

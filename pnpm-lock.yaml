@@ -56,6 +56,9 @@ devDependencies:
   glob:
     specifier: ^10.3.10
     version: 10.3.10
+  highlight.js:
+    specifier: ^11.9.0
+    version: 11.9.0
   jsdom:
     specifier: ^22.1.0
     version: 22.1.0
@@ -1997,6 +2000,11 @@ packages:
     resolution: {integrity: sha512-OGkAxX1Ua3cbcW6EJ5pT/tslVb90uViVkcJ4ZZIMW/R33DX/AkcJcRrPebPwJkHYwlDHXz4aIwvAAaAdtrACFA==}
     dependencies:
       '@types/hast': 3.0.1
+    dev: true
+
+  /highlight.js@11.9.0:
+    resolution: {integrity: sha512-fJ7cW7fQGCYAkgv4CPfwFHrfd/cLS4Hau96JuJ+ZTOWhjnhoeN1ub1tFmALm/+lW5z4WCAuAV9bm05AP0mS6Gw==}
+    engines: {node: '>=12.0.0'}
     dev: true
 
   /html-encoding-sniffer@3.0.0:
