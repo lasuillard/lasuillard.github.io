@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import Header from '$components/Header.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';

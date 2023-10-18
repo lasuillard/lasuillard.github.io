@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import '$routes/+layout';
 import Layout from '$routes/+layout.svelte';
 import { render } from '@testing-library/svelte';

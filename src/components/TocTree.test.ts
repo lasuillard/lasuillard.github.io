@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import TocTree from '$components/TocTree.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';

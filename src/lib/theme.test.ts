@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from '$lib/theme';
 import { describe, expect, it } from 'vitest';
 import { getVarName } from './utils';

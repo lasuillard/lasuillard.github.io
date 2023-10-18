@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import * as post from '$lib/post';
 import { load } from '$routes/blog/[slug]/+page';
 import Page from '$routes/blog/[slug]/+page.svelte';

@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import Moon from '$components/icon/Moon.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';

@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { nullStorage, persisted } from '$lib/store';
 import { getVarName } from '$lib/utils';
 import { get } from 'svelte/store';

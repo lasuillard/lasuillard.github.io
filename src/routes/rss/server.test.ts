@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import * as Endpoint from '$routes/rss/+server';
 import { describe, expect, it } from 'vitest';
 
