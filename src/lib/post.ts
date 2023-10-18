@@ -34,7 +34,7 @@ export async function getPost(
 	try {
 		post = import.meta.env.DEV
 			? await import(`/tests/fixtures/posts/${slug}.md` /* @vite-ignore */)
-			: await import(`$routes/blog/${slug}.md`);
+			: await import(`/posts/${slug}.md`);
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);
 		return null;
@@ -53,7 +53,7 @@ export async function getPost(
 export async function getAllPosts(): Promise<Post[]> {
 	const allPostFiles = import.meta.env.DEV
 		? import.meta.glob('/tests/fixtures/posts/*.md')
-		: import.meta.glob(`$routes/blog/*.md`);
+		: import.meta.glob(`/posts/*.md`);
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 			// FIXME: How to annotate type for this line?

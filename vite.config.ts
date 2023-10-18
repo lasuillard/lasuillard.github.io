@@ -5,7 +5,7 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
 		fs: {
-			allow: process.env.NODE_ENV === 'development' ? ['tests/fixtures/posts'] : []
+			allow: process.env.NODE_ENV === 'development' ? ['tests/fixtures/posts'] : ['posts']
 		}
 	},
 	test: {
