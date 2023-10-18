@@ -1,56 +1,26 @@
 import path from 'path';
 import type { SvelteComponent } from 'svelte';
+import { z } from 'zod';
 
 /** Expected and required metadata for posts. */
-export interface Metadata {
-	title: string;
-	publicationDate: Date;
-	tags: string[];
-}
+export const Metadata = z
+	.object({
+		title: z.string(),
+		publicationDate: z.coerce.date(),
+		tags: z.array(z.string())
+	})
+	.strict();
 
-export class Post {
-	slug: string;
-	metadata: Metadata;
+export type Metadata = z.infer<typeof Metadata>;
 
-	constructor(slug: string, metadata: Metadata) {
-		this.slug = slug;
-		this.metadata = metadata;
-	}
+export const Post = z
+	.object({
+		slug: z.string(),
+		metadata: Metadata
+	})
+	.strict();
 
-	/**
-	 * Parse given JSON object into post.
-	 * @param obj Object to parse.
-	 * @returns Converted post object.
-	 */
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	static parseObj(obj: any): Post {
-		// FIXME: Assert given object attributes in more precise way
-		//        Consider validation library like Pydantic in Python
-		if (typeof obj.slug !== 'string') {
-			throw new Error('Failed to parse object: `slug` is not a string');
-		}
-		if (typeof obj.metadata.title !== 'string') {
-			throw new Error('Failed to parse object: `metadata.title` is not a string');
-		}
-		if (typeof obj.metadata.publicationDate !== 'string') {
-			throw new Error('Failed to parse object: `metadata.publicationDate` is not a string');
-		}
-		if (
-			!(
-				Array.isArray(obj.metadata.tags) &&
-				(obj.metadata.tags as Array<unknown>).every((v) => typeof v === 'string')
-			)
-		) {
-			throw new Error('Failed to parse object: `metadata.tags` is not a list of string');
-		}
-
-		return new Post(obj.slug, {
-			title: obj.metadata.title,
-			publicationDate: new Date(obj.metadata.publicationDate),
-			tags: obj.metadata.tags
-		});
-	}
-}
+export type Post = z.infer<typeof Post>;
 
 /**
  * Return post matching slug.
@@ -71,10 +41,7 @@ export async function getPost(
 	}
 
 	return {
-		metadata: {
-			...post.metadata,
-			publicationDate: new Date(post.metadata.publicationDate)
-		},
+		metadata: Metadata.parse(post.metadata),
 		content: post.default
 	};
 }
