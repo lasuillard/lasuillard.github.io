@@ -41,7 +41,7 @@ describe(Post, () => {
 
 describe(getPost, () => {
 	it('returns post', () => {
-		expect(getPost('lorem-ipsum')).resolves.toBeTruthy();
+		expect(getPost('puppis-artus-attoniti-haud')).resolves.toBeTruthy();
 	});
 
 	it('should return null if not exists', () => {

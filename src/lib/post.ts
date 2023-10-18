@@ -61,11 +61,10 @@ export async function getPost(
 	slug: string
 ): Promise<{ metadata: Metadata; content: typeof SvelteComponent } | null> {
 	let post;
-
 	try {
-		// False-positive uncovered line
-		/* c8 ignore next */
-		post = await import(`$routes/blog/${slug}.md`);
+		post = import.meta.env.DEV
+			? await import(`/tests/fixtures/posts/${slug}.md` /* @vite-ignore */)
+			: await import(`$routes/blog/${slug}.md`);
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);
 		return null;
@@ -85,8 +84,9 @@ export async function getPost(
  * @returns Array of posts. If none found, will be empty.
  */
 export async function getAllPosts(): Promise<Post[]> {
-	// TODO: Manage post path at config
-	const allPostFiles = import.meta.glob('/src/routes/blog/*.md');
+	const allPostFiles = import.meta.env.DEV
+		? import.meta.glob('/tests/fixtures/posts/*.md')
+		: import.meta.glob(`$routes/blog/*.md`);
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 			// FIXME: How to annotate type for this line?
