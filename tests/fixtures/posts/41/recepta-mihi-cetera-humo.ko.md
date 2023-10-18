@@ -1,36 +1,7 @@
 ---
 title: Recepta mihi cetera humo
 publicationDate: 2010-08-21T03:08:11.719+09:00
-tags:
-    [
-        Apple,
-        Watermelon,
-        Orange,
-        Pear,
-        Cherry,
-        Strawberry,
-        Nectarine,
-        Grape,
-        Mango,
-        Blueberry,
-        Pomegranate,
-        Plum,
-        Banana,
-        Raspberry,
-        Mandarin,
-        Jackfruit,
-        Papaya,
-        Kiwi,
-        Pineapple,
-        Lime,
-        Lemon,
-        Apricot,
-        Grapefruit,
-        Melon,
-        Coconut,
-        Avocado,
-        Peach
-    ]
+tags: [Coconut, Banana, Raspberry, Strawberry, Blueberry]
 ---
 
 # Recepta mihi cetera humo

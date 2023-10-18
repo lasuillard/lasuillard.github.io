@@ -4,26 +4,25 @@ import { load } from '$routes/blog/tag/[tag]/+page';
 import Page from '$routes/blog/tag/[tag]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
+import postsFixture from '~/tests/fixtures/posts.json';
 
-it('list posts', async () => {
-	// FIXME: Write global fetch stub for later reuse
+it('list posts with matching tag', async () => {
 	const fetch = vi.fn(() => ({
-		json: vi.fn(() => [
-			// TODO: More items for testing
-			{
-				slug: 'lorem-ipsum',
-				metadata: {
-					title: 'Lorem Ipsum',
-					publicationDate: '2020-04-13T13:09:28.333+09:00',
-					tags: ['Apple', 'Watermelon', 'Orange']
-				}
-			}
-		])
+		json: vi.fn(() => postsFixture)
 	}));
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+
 	// @ts-ignore
-	const { getByText } = render(Page, { data: await load({ params: { tag: 'Apple' }, fetch }) });
-	expect(getByText('Lorem Ipsum')).toBeTruthy();
-	// TODO: Find date string
-	// TODO: Results have links to each posts
+	const { getByText } = render(Page, { data: await load({ params: { tag: 'Coconut' }, fetch }) });
+	expect(getByText('Puppis artus attoniti haud')).toBeTruthy();
+	expect(getByText('Recepta mihi cetera humo')).toBeTruthy();
+});
+
+it('informative text should be shown if matching found none', async () => {
+	const fetch = vi.fn(() => ({
+		json: vi.fn(() => [])
+	}));
+
+	// @ts-ignore
+	const { getByText } = render(Page, { data: await load({ params: { tag: 'Coconut' }, fetch }) });
+	expect(getByText('There is no post with').textContent).toEqual('There is no post with #Coconut');
 });

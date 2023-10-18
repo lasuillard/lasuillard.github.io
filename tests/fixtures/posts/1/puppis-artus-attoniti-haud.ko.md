@@ -1,36 +1,7 @@
 ---
 title: Puppis artus attoniti haud
 publicationDate: 2020-04-13T00:00:00.000+09:00
-tags:
-    [
-        Apple,
-        Watermelon,
-        Orange,
-        Pear,
-        Cherry,
-        Strawberry,
-        Nectarine,
-        Grape,
-        Mango,
-        Blueberry,
-        Pomegranate,
-        Plum,
-        Banana,
-        Raspberry,
-        Mandarin,
-        Jackfruit,
-        Papaya,
-        Kiwi,
-        Pineapple,
-        Lime,
-        Lemon,
-        Apricot,
-        Grapefruit,
-        Melon,
-        Coconut,
-        Avocado,
-        Peach
-    ]
+tags: [Coconut, Banana, Papaya, Strawberry, Blueberry]
 ---
 
 # Puppis artus attoniti haud

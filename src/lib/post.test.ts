@@ -5,7 +5,9 @@ import { describe, expect, it } from 'vitest';
 
 describe(getVarName({ Post }), () => {
 	const sample = {
+		id: 'non-numeric-id',
 		slug: 'coke-and-cider',
+		lang: 'ko',
 		metadata: {
 			title: 'Coke and Cider',
 			publicationDate: '2020-04-13T00:00:00.000+09:00',
@@ -41,22 +43,18 @@ describe(getVarName({ Post }), () => {
 });
 
 describe(getPost, () => {
-	it('returns post', () => {
-		expect(getPost('puppis-artus-attoniti-haud')).resolves.toBeTruthy();
+	it('lookup post by ID', () => {
+		expect(getPost('1')).resolves.toBeTruthy();
 	});
 
 	it('should return null if not exists', () => {
 		expect(getPost('polar-bear-drinking-cider')).resolves.toBeNull();
 	});
-
-	it.todo('throws an error if post metadata schema not satisfactory');
 });
 
 describe(getAllPosts, () => {
 	it('loads all posts successfully', async () => {
 		const allPosts = await getAllPosts();
-		expect(allPosts.length).greaterThan(0);
+		expect(allPosts).toHaveLength(3);
 	});
-
-	it.todo("throws an error if any of posts' metadata unsatisfying");
 });

@@ -1,36 +1,7 @@
 ---
 title: Uno terra errat
 publicationDate: 2022-11-23T18:22:31.008+09:00
-tags:
-    [
-        Apple,
-        Watermelon,
-        Orange,
-        Pear,
-        Cherry,
-        Strawberry,
-        Nectarine,
-        Grape,
-        Mango,
-        Blueberry,
-        Pomegranate,
-        Plum,
-        Banana,
-        Raspberry,
-        Mandarin,
-        Jackfruit,
-        Papaya,
-        Kiwi,
-        Pineapple,
-        Lime,
-        Lemon,
-        Apricot,
-        Grapefruit,
-        Melon,
-        Coconut,
-        Avocado,
-        Peach
-    ]
+tags: [Melon, Papaya, Grape, Pomegranate, Watermelon]
 ---
 
 # Uno terra errat

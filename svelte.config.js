@@ -38,7 +38,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			'$components/*': './src/components/*',
-			'$routes/*': './src/routes/*'
+			'$routes/*': './src/routes/*',
+			'~/*': './*'
 		}
 	}
 };

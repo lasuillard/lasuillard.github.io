@@ -1,5 +1,6 @@
 import type { SvelteComponent } from 'svelte';
 import { z } from 'zod';
+import { defaultLanguage } from './i18n';
 
 /** Expected and required metadata for posts. */
 export const Metadata = z
@@ -14,8 +15,11 @@ export type Metadata = z.infer<typeof Metadata>;
 
 export const Post = z
 	.object({
+		id: z.string(),
 		slug: z.string(),
-		metadata: Metadata
+		lang: z.string(), // TODO: Validate language code listed in ISO639
+		metadata: Metadata,
+		content: z.custom<typeof SvelteComponent>()
 	})
 	.strict();
 
@@ -23,52 +27,69 @@ export type Post = z.infer<typeof Post>;
 
 /**
  * Return post matching slug.
- * @param slug Slug of post.
- * @returns Post if exists, otherwise `null`.
+ * @param id Post identifier.
+ * @param lang Preferred language.
+ * @returns Post if (preferred language or fallback) exists, otherwise `null`.
  */
 export async function getPost(
-	slug: string
-): Promise<{ metadata: Metadata; content: typeof SvelteComponent } | null> {
-	let post;
-	try {
-		post = import.meta.env.DEV
-			? await import(`../../tests/fixtures/posts/${slug}.md`)
-			: await import(`../../posts/${slug}.md`);
-	} catch (err) {
-		console.error(`Matching post not found: ${err}`);
+	id: string,
+	lang?: string // TODO: Language code type
+): Promise<Post | null> {
+	const posts = (await getAllPosts()).filter((post) => post.id == id);
+	if (!posts.length) {
 		return null;
 	}
 
-	return {
-		metadata: Metadata.parse(post.metadata),
-		content: post.default
-	};
+	// If there is any post for given ID, post for default language MUST exist
+	const fallback = posts.find((p) => p.lang == defaultLanguage);
+	if (posts.length && !fallback) {
+		throw new Error(`${posts.length} posts found for id ${id} but fallback not exists`);
+	}
+
+	// BUG: False-positive warning; `fallback` can't be `undefined`
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-expect-error
+	return lang ? posts.find((p) => p.lang == lang) : fallback;
 }
 
 /**
  * Find and return all posts.
  * @returns Array of posts. If none found, will be empty.
  */
+// FIXME: Return never changes but repeatedly called; cache it
 export async function getAllPosts(): Promise<Post[]> {
-	const pattern = /^.*\/(.+?)\.md$/;
+	// Expects .../[id]/[slug].[lang].md
+	const pattern = /^.*\/(.+?)\/(.+?)(?:\.([a-z]{2}))\.md/;
+
 	const allPostFiles = import.meta.env.DEV
-		? import.meta.glob('../../tests/fixtures/posts/*.md')
-		: import.meta.glob(`../../posts/*.md`);
+		? import.meta.glob('../../tests/fixtures/posts/**/*.md')
+		: import.meta.glob('../../posts/**/*.md');
+
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
-			// FIXME: How to annotate type for this line?
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			const { metadata } = await resolver();
-			const [, slug] = filepath.match(pattern) ?? [];
+			// @ts-expect-error
+			const post: {
+				metadata: unknown;
+				default: typeof SvelteComponent;
+			} = await resolver();
 
-			return {
+			const { metadata } = post;
+			const content = post.default;
+
+			const match = filepath.match(pattern);
+			if (!match) {
+				throw new Error(`Path not matching pattern: ${filepath}`);
+			}
+			const [, id, slug, lang] = match;
+
+			return Post.parse({
+				id,
 				slug,
-				metadata: {
-					...metadata,
-					publicationDate: new Date(metadata.publicationDate)
-				}
-			};
+				lang,
+				metadata,
+				content
+			});
 		})
 	);
 
