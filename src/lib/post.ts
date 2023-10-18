@@ -1,4 +1,3 @@
-import path from 'path';
 import type { SvelteComponent } from 'svelte';
 import { z } from 'zod';
 
@@ -33,8 +32,8 @@ export async function getPost(
 	let post;
 	try {
 		post = import.meta.env.DEV
-			? await import(`/tests/fixtures/posts/${slug}.md` /* @vite-ignore */)
-			: await import(`/posts/${slug}.md`);
+			? await import(`../../tests/fixtures/posts/${slug}.md`)
+			: await import(`../../posts/${slug}.md`);
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);
 		return null;
@@ -51,16 +50,17 @@ export async function getPost(
  * @returns Array of posts. If none found, will be empty.
  */
 export async function getAllPosts(): Promise<Post[]> {
+	const pattern = /^.*\/(.+?)\.md$/;
 	const allPostFiles = import.meta.env.DEV
-		? import.meta.glob('/tests/fixtures/posts/*.md')
-		: import.meta.glob(`/posts/*.md`);
+		? import.meta.glob('../../tests/fixtures/posts/*.md')
+		: import.meta.glob(`../../posts/*.md`);
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 			// FIXME: How to annotate type for this line?
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
 			const { metadata } = await resolver();
-			const slug = path.parse(filepath).name; // TODO: Path relative to from `POSTS_DIR`
+			const [, slug] = filepath.match(pattern) ?? [];
 
 			return {
 				slug,
