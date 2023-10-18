@@ -19,6 +19,8 @@ export default defineConfig({
 			host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1',
 			port: 51204,
 			strictPort: true
-		}
+		},
+		// NOTE: Browser testing via Playwright
+		css: false
 	}
 });
