@@ -1,47 +1,48 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Post, getAllPosts, getPost } from '$lib/post';
-import { omitKeys } from '$lib/utils';
+import { getVarName, omitKeys } from '$lib/utils';
 import { describe, expect, it } from 'vitest';
 
-describe(Post, () => {
-	describe(Post.parseObj, () => {
-		const sample = {
-			slug: 'coke-and-cider',
+describe(getVarName({ Post }), () => {
+	const sample = {
+		slug: 'coke-and-cider',
+		metadata: {
+			title: 'Coke and Cider',
+			publicationDate: '2020-04-13T00:00:00.000+09:00',
+			tags: ['beverage', 'review']
+		}
+	};
+
+	it('parses given JSON object class', () => {
+		expect(Post.parse(sample)).toEqual({
+			...sample,
 			metadata: {
-				title: 'Coke and Cider',
-				publicationDate: '2023-10-12',
-				tags: ['beverage', 'review']
+				...sample.metadata,
+				publicationDate: new Date('2020-04-13T00:00:00.000+09:00')
 			}
-		};
-
-		it('parses given JSON object class', () => {
-			expect(Post.parseObj(sample)).toBeInstanceOf(Post);
 		});
+	});
 
-		// TODO: More strict interface checking
-		//       ['extra fields', { ...sample, tasty: 'sparkling' }],
-		//       ['extra metadata provided', { ...sample, metadata: { ...sample.metadata, whales: false } }]
-		it.each([
-			// Each for case description, input data
-			['no slug', [omitKeys(sample, ['slug'])]],
-			[
-				'lacking metadata field',
-				['title', 'publicationDate', 'tags'].map((key) => ({
-					...sample,
-					metadata: omitKeys(sample.metadata, [key])
-				}))
-			]
-		])('throws an error if unable to parse (%s)', (_, input) => {
-			input.forEach((item) => {
-				expect(() => Post.parseObj(item)).toThrowError(/^Failed to parse object: (.+)$/);
-			});
+	it.each([
+		// Each for case description, input data
+		['no slug', [omitKeys(sample, ['slug'])]],
+		[
+			'lacking metadata field',
+			['title', 'publicationDate', 'tags'].map((key) => ({
+				...sample,
+				metadata: omitKeys(sample.metadata, [key])
+			}))
+		]
+	])('throws an error if unable to parse (%s)', (_, input) => {
+		input.forEach((item) => {
+			expect(() => Post.parse(item)).toThrow();
 		});
 	});
 });
 
 describe(getPost, () => {
 	it('returns post', () => {
-		expect(getPost('lorem-ipsum')).resolves.toBeTruthy();
+		expect(getPost('puppis-artus-attoniti-haud')).resolves.toBeTruthy();
 	});
 
 	it('should return null if not exists', () => {

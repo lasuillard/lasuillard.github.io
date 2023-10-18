@@ -3,6 +3,11 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	server: {
+		fs: {
+			allow: process.env.NODE_ENV === 'development' ? ['tests/fixtures/posts'] : []
+		}
+	},
 	test: {
 		alias: [
 			{ find: /^svelte$/, replacement: 'svelte/internal' } // BUG: https://github.com/vitest-dev/vitest/issues/2834
