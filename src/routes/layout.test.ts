@@ -5,7 +5,7 @@ import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
 it('renders', () => {
-	const { container } = render(Layout);
+	const { container } = render(Layout, { data: { current: '' } });
 	expect(container).toBeTruthy();
 });
 
