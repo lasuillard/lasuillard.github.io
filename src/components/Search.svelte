@@ -44,16 +44,14 @@
 	});
 </script>
 
-<!-- FIXME: Search bar starts open for small screen -->
-<!-- TODO: Add button to clear search text -->
-<!-- TODO: Auto-fill suggestion (tab key?) -->
-<!-- TODO: Browsing search results via keyboard-->
 <div data-testid="search" {...$$restProps}>
 	<div class="group relative flex items-center space-x-2">
 		<form class="w-full" autocomplete="off" on:submit|preventDefault role="search">
 			<div class="absolute ml-[11px] mt-[9px]">
 				<Search class="h-4 w-4 stroke-gray-400" />
 			</div>
+			<!-- TODO: Add button to clear search text -->
+			<!-- TODO: Auto-fill suggestion (tab key?) -->
 			<input
 				type="text"
 				placeholder="Search"
@@ -62,6 +60,7 @@
 			/>
 			<div class="dropdown absolute right-0 top-[135%] z-[1] w-full peer-[:focus]:dropdown-open">
 				{#if searchResults.length > 0}
+					<!-- TODO: Browsing search results via keyboard-->
 					<div role="searchbox">
 						<ol
 							class="menu dropdown-content rounded-box w-full space-y-2 bg-base-300 shadow hover:!visible"

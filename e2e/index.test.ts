@@ -10,7 +10,6 @@ beforeAll('go to index page', async ({ browser }) => {
 	await page.goto('/');
 });
 
-// TODO: This should be common test case for all routes
 it('has a layout', async () => {
 	await expect(page.getByTestId('layout')).toBeVisible();
 });

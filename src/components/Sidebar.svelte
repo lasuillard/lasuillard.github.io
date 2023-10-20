@@ -18,7 +18,6 @@
 	];
 </script>
 
-<!-- TODO: Integrate into header menu (responsive) -->
 <div data-testid="sidebar" {...$$restProps}>
 	<aside class="grid grid-cols-1">
 		<Profile />
