@@ -16,7 +16,7 @@
 		<!-- Side TOC for large screen -->
 		<div class="class ml-6 hidden lg:order-last lg:col-span-2 lg:block">
 			{#if contentWrapper}
-				<Toc bind:content={contentWrapper} class="sticky top-1/3" />
+				<Toc bind:content={contentWrapper} class="sticky top-1/4" />
 			{/if}
 		</div>
 		<div class="lg:col-span-5">
