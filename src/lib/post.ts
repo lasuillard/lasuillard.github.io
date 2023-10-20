@@ -1,5 +1,5 @@
+import { parse } from '$lib/markdown';
 import { z } from 'zod';
-import { parse } from './markdown';
 
 /** Expected and required metadata for posts. */
 export const Metadata = z

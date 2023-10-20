@@ -1,5 +1,5 @@
+import { getEngine, initEngine } from '$lib/search';
 import { describe, expect, it, vi } from 'vitest';
-import { getEngine, initEngine } from './search';
 
 describe(initEngine, () => {
 	it('engine is defined after initialization', async () => {

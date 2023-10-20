@@ -1,7 +1,7 @@
 <script lang="ts">
+	import TocTree from '$components/TocTree.svelte';
 	import { makeToc, type TreeNode, type TreeSource } from '$lib/toc';
 	import { onMount } from 'svelte';
-	import TocTree from './TocTree.svelte';
 
 	export let content: HTMLElement | undefined;
 	let rootHeadings: TreeNode<HTMLElement>[];
