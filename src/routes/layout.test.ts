@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
-import '$routes/+layout';
+import { load } from '$routes/+layout';
 import Layout from '$routes/+layout.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
-it('renders', () => {
-	const { container } = render(Layout, { data: { current: '' } });
+it('renders', async () => {
+	// @ts-expect-error Enough for mocking.
+	const { container } = render(Layout, { data: await load({ url: { pathname: '' } }) });
 	expect(container).toBeTruthy();
 });
 

@@ -4,7 +4,7 @@ import Page from '$routes/blog/+page.svelte';
 import { getAllByRole, getByRole, getByText, render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
 
-it('list tags', async () => {
+it('list all unique tags', async () => {
 	const fetch = vi.fn(() => ({
 		json: vi.fn(() => [
 			{
@@ -15,22 +15,50 @@ it('list tags', async () => {
 					tags: ['Apple', 'Watermelon', 'Orange']
 				},
 				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+			},
+			{
+				slug: 'lorem-ipsum',
+				metadata: {
+					title: 'Lorem Ipsum',
+					publicationDate: '2020-04-13T13:09:28.333+09:00',
+					tags: ['Mango', 'Watermelon', 'Grapefruit']
+				},
+				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
 			}
 		])
 	}));
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error Enough for mocking.
 	const page = render(Page, { data: await load({ fetch }) });
 	const section = page.getByTestId('tags');
 	const tags = getAllByRole(section, 'link');
-	expect(tags).toHaveLength(3);
-	['Apple', 'Watermelon', 'Orange'].forEach((tag) => {
+	expect(tags).toHaveLength(5);
+	['Apple', 'Watermelon', 'Orange', 'Mango', 'Grapefruit'].forEach((tag) => {
 		expect(getByText(section, tag)).toBeTruthy();
 		expect(section.querySelector(`a[href="/blog/tag/${tag}"]`)).toBeTruthy();
 	});
 });
 
-it('list posts', async () => {
+it('display some text if there is no tag', async () => {
+	const fetch = vi.fn(() => ({
+		json: vi.fn(() => [
+			{
+				slug: 'lorem-ipsum',
+				metadata: {
+					title: 'Lorem Ipsum',
+					publicationDate: '2020-04-13T13:09:28.333+09:00',
+					tags: []
+				},
+				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
+			}
+		])
+	}));
+	// @ts-expect-error Enough for mocking.
+	const page = render(Page, { data: await load({ fetch }) });
+	const section = page.getByTestId('tags');
+	expect(getByText(section, 'There is no tag yet.')).toBeTruthy();
+});
+
+it('list all posts', async () => {
 	// FIXME: Write global fetch stub for later reuse
 	const fetch = vi.fn(() => ({
 		json: vi.fn(() => [
@@ -46,8 +74,7 @@ it('list posts', async () => {
 			}
 		])
 	}));
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
+	// @ts-expect-error Enough for mocking.
 	const page = render(Page, { data: await load({ fetch }) });
 	const section = page.getByTestId('posts');
 	expect(getByText(section, 'Lorem Ipsum')).toBeTruthy();
@@ -59,4 +86,14 @@ it('list posts', async () => {
 		expect(getByText(section, tag)).toBeTruthy();
 		expect(section.querySelector(`a[href="/blog/tag/${tag}"]`)).toBeTruthy();
 	});
+});
+
+it('display some text if there is no post', async () => {
+	const fetch = vi.fn(() => ({
+		json: vi.fn(() => [])
+	}));
+	// @ts-expect-error Enough for mocking.
+	const page = render(Page, { data: await load({ fetch }) });
+	const section = page.getByTestId('posts');
+	expect(getByText(section, 'There is no post yet.')).toBeTruthy();
 });

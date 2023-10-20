@@ -10,7 +10,7 @@
 	<div class="flex flex-col">
 		{#if posts.length > 0}
 			<p class="mb-4 text-3xl">
-				There are {posts.length} posts with tag <span class="tag">#{tag}</span>
+				There are {posts.length} posts with tag {tag}
 			</p>
 			<ul class="space-y-2">
 				{#each posts as { slug, metadata: { title, publicationDate } }}
@@ -27,14 +27,8 @@
 			</ul>
 		{:else}
 			<p class="text-2xl">
-				There is no post with <span class="tag">#{tag}</span>
+				There is no post with {tag}.
 			</p>
 		{/if}
 	</div>
 </div>
-
-<style lang="postcss">
-	.tag {
-		@apply font-semibold;
-	}
-</style>

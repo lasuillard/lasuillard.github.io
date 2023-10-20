@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @vitest-environment jsdom
 import { load } from '$routes/blog/tag/[tag]/+page';
 import Page from '$routes/blog/tag/[tag]/+page.svelte';
@@ -22,8 +21,7 @@ it('list posts', async () => {
 		])
 	}));
 	const { getByText, getByRole } = render(Page, {
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
+		// @ts-expect-error Enough for mocking.
 		data: await load({ params: { tag: 'Apple' }, fetch })
 	});
 	expect(getByText('Lorem Ipsum')).toBeTruthy();
@@ -31,4 +29,15 @@ it('list posts', async () => {
 		new Date('2020-04-13T13:09:28.333+09:00').toISOString()
 	);
 	expect(getByRole('link').getAttribute('href')).toBeDefined();
+});
+
+it('no post matching tag', async () => {
+	const fetch = vi.fn(() => ({
+		json: vi.fn(() => [])
+	}));
+	const { getByText } = render(Page, {
+		// @ts-expect-error Enough for mocking.
+		data: await load({ params: { tag: 'Apple' }, fetch })
+	});
+	expect(getByText(`There is no post with Apple.`, { exact: false })).toBeTruthy();
 });
