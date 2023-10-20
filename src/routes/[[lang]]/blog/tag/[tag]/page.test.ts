@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { load } from '$routes/blog/tag/[tag]/+page';
-import Page from '$routes/blog/tag/[tag]/+page.svelte';
+import { load } from '$routes/[[lang]]/blog/tag/[tag]/+page';
+import Page from '$routes/[[lang]]/blog/tag/[tag]/+page.svelte';
 import { getByRole, getByText, render } from '@testing-library/svelte';
+import postsFixture from '^/tests/fixtures/posts.json';
 import { expect, it, vi } from 'vitest';
-import postsFixture from '~/tests/fixtures/posts.json';
 
 it('list posts with matching tag', async () => {
 	const fetch = vi.fn(() => ({
@@ -14,7 +14,6 @@ it('list posts with matching tag', async () => {
 		data: await load({ params: { tag: 'Banana' }, fetch })
 	});
 	const resultRows = page.getAllByRole('listitem');
-	console.log(resultRows);
 	postsFixture
 		.filter((post) => post.metadata.tags.includes('Banana'))
 		.forEach((post) => {

@@ -6,7 +6,7 @@
 	import Header from '$components/Header.svelte';
 	import Sidebar from '$components/Sidebar.svelte';
 	import { fade } from 'svelte/transition';
-	import '../app.css';
+	import '~/app.css';
 
 	export let data;
 

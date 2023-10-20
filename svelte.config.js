@@ -16,7 +16,8 @@ const config = {
 		alias: {
 			'$components/*': './src/components/*',
 			'$routes/*': './src/routes/*',
-			'~/*': './*'
+			'~/*': './src/*',
+			'^/*': './*'
 		}
 	}
 };

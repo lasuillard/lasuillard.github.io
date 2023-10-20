@@ -24,7 +24,7 @@ it('renders a post', async () => {
 		// @ts-ignore
 		data: await load({
 			params: { id: 'non-numeric-id', slug: 'coke-and-cider' },
-			route: { id: '/blog/[id]/[[slug]]' }
+			route: { id: '/[[lang]]/blog/[id]/[[slug]]' }
 		})
 	});
 	expect(spy).toHaveBeenCalledOnce();

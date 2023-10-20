@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
-import { load } from '$routes/blog/+page';
-import Page from '$routes/blog/+page.svelte';
+import { load } from '$routes/[[lang]]/blog/+page';
+import Page from '$routes/[[lang]]/blog/+page.svelte';
 import { getAllByRole, getByRole, getByText, render } from '@testing-library/svelte';
+import postsFixture from '^/tests/fixtures/posts.json';
 import { expect, it, vi } from 'vitest';
-import postsFixture from '~/tests/fixtures/posts.json';
 
 it('list all unique tags', async () => {
 	const fetch = vi.fn(() => ({
