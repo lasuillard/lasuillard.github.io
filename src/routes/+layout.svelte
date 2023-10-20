@@ -1,4 +1,7 @@
 <script lang="ts">
+	// TODO: Dynamic theme selection; re-render layout based on key
+	import 'highlight.js/styles/atom-one-dark-reasonable.css';
+
 	import Footer from '$components/Footer.svelte';
 	import Header from '$components/Header.svelte';
 	import Sidebar from '$components/Sidebar.svelte';

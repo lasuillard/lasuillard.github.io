@@ -1,5 +1,6 @@
 import { Post } from '$lib/post';
 import MiniSearch from 'minisearch';
+import { z } from 'zod';
 
 let miniSearch: MiniSearch | undefined = undefined;
 
@@ -10,7 +11,7 @@ let miniSearch: MiniSearch | undefined = undefined;
 export async function initEngine(): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 	miniSearch = new MiniSearch({
-		fields: ['slug', 'metadata.title', 'metadata.tags'],
+		fields: ['slug', 'metadata.title', 'metadata.tags', 'content'],
 		idField: 'slug',
 		storeFields: ['metadata.title', 'metadata.publicationDate', 'metadata.tags'],
 		extractField: (document, fieldName) => {
@@ -21,8 +22,8 @@ export async function initEngine(): Promise<MiniSearch> {
 	// TODO: Search for document contents
 	console.debug('Loading post documents');
 	const response = await fetch('/api/posts');
-	const data: unknown[] = await response.json();
-	const allPosts = data.map(Post.parseObj);
+	const data = await response.json();
+	const allPosts = z.array(Post).parse(data);
 
 	console.debug('Indexing documents');
 	await miniSearch.addAllAsync(allPosts);
