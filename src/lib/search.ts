@@ -12,7 +12,7 @@ export async function initEngine(): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 	miniSearch = new MiniSearch({
 		fields: ['slug', 'metadata.title', 'metadata.tags', 'content'],
-		idField: 'slug',
+		idField: 'id',
 		storeFields: ['metadata.title', 'metadata.publicationDate', 'metadata.tags'],
 		extractField: (document, fieldName) => {
 			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
