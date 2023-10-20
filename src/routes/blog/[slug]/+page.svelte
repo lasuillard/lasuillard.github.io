@@ -40,7 +40,7 @@
 					<Toc bind:content={contentWrapper} class="mb-6" />
 				{/if}
 			</div>
-			<article bind:this={contentWrapper} class="prose lg:prose-lg">
+			<article bind:this={contentWrapper} class="prose max-w-none lg:prose-lg">
 				<Markdown text={content} />
 			</article>
 		</div>
