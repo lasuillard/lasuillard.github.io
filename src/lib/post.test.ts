@@ -10,7 +10,8 @@ describe(getVarName({ Post }), () => {
 			title: 'Coke and Cider',
 			publicationDate: '2020-04-13T00:00:00.000+09:00',
 			tags: ['beverage', 'review']
-		}
+		},
+		content: 'Polar bear'
 	};
 
 	it('parses given JSON object class', () => {
@@ -55,7 +56,7 @@ describe(getPost, () => {
 describe(getAllPosts, () => {
 	it('loads all posts successfully', async () => {
 		const allPosts = await getAllPosts();
-		expect(allPosts.length).greaterThan(0);
+		expect(allPosts).toHaveLength(3);
 	});
 
 	it.todo("throws an error if any of posts' metadata unsatisfying");

@@ -16,14 +16,19 @@ it('list posts', async () => {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
 					tags: ['Apple', 'Watermelon', 'Orange']
-				}
+				},
+				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
 			}
 		])
 	}));
-	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-	// @ts-ignore
-	const { getByText } = render(Page, { data: await load({ params: { tag: 'Apple' }, fetch }) });
+	const { getByText, getByRole } = render(Page, {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		data: await load({ params: { tag: 'Apple' }, fetch })
+	});
 	expect(getByText('Lorem Ipsum')).toBeTruthy();
-	// TODO: Find date string
-	// TODO: Results have links to each posts
+	expect(getByRole('time').getAttribute('datetime')).toEqual(
+		new Date('2020-04-13T13:09:28.333+09:00').toISOString()
+	);
+	expect(getByRole('link').getAttribute('href')).toBeDefined();
 });

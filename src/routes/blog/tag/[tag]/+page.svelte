@@ -13,11 +13,14 @@
 				There are {posts.length} posts with tag <span class="tag">#{tag}</span>
 			</p>
 			<ul class="space-y-2">
-				{#each posts as post}
+				{#each posts as { slug, metadata: { title, publicationDate } }}
 					<li>
-						<p class="mb-1 text-xl"><a href="/blog/{post.slug}">{post.metadata.title}</a></p>
+						<p class="mb-1 text-xl"><a href="/blog/{slug}">{title}</a></p>
 						<p class="font-light">
-							Published at {format(post.metadata.publicationDate, 'yyyy. MM. dd')}
+							Published at
+							<time datetime={publicationDate.toISOString()} role="time"
+								>{format(publicationDate, 'yyyy. MM. dd')}</time
+							>
 						</p>
 					</li>
 				{/each}
