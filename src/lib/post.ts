@@ -1,5 +1,5 @@
-import type { SvelteComponent } from 'svelte';
 import { z } from 'zod';
+import { parse } from './markdown';
 
 /** Expected and required metadata for posts. */
 export const Metadata = z
@@ -15,7 +15,8 @@ export type Metadata = z.infer<typeof Metadata>;
 export const Post = z
 	.object({
 		slug: z.string(),
-		metadata: Metadata
+		metadata: Metadata,
+		content: z.string()
 	})
 	.strict();
 
@@ -26,23 +27,35 @@ export type Post = z.infer<typeof Post>;
  * @param slug Slug of post.
  * @returns Post if exists, otherwise `null`.
  */
-export async function getPost(
-	slug: string
-): Promise<{ metadata: Metadata; content: typeof SvelteComponent } | null> {
+export async function getPost(slug: string): Promise<Post | null> {
 	let post;
 	try {
-		post = import.meta.env.DEV
-			? await import(`../../tests/fixtures/posts/${slug}.md`)
-			: await import(`../../posts/${slug}.md`);
+		post = (
+			import.meta.env.DEV
+				? await import(`../../tests/fixtures/posts/${slug}.md?raw`)
+				: await import(`../../posts/${slug}.md?raw`)
+		).default;
 	} catch (err) {
 		console.error(`Matching post not found: ${err}`);
 		return null;
 	}
 
-	return {
-		metadata: Metadata.parse(post.metadata),
-		content: post.default
-	};
+	const { frontMatter, content } = await parse(post);
+	let metadata: Metadata;
+	try {
+		metadata = Metadata.parse(frontMatter);
+	} catch (err) {
+		if (err instanceof z.ZodError) {
+			throw new Error(`Failed to parse post' metadata: ${err}`);
+		}
+		throw err;
+	}
+
+	return Post.parse({
+		slug,
+		metadata,
+		content
+	});
 }
 
 /**
@@ -52,25 +65,28 @@ export async function getPost(
 export async function getAllPosts(): Promise<Post[]> {
 	const pattern = /^.*\/(.+?)\.md$/;
 	const allPostFiles = import.meta.env.DEV
-		? import.meta.glob('../../tests/fixtures/posts/*.md')
-		: import.meta.glob(`../../posts/*.md`);
+		? import.meta.glob('../../tests/fixtures/posts/*.md', { as: 'raw' })
+		: import.meta.glob(`../../posts/*.md`, { as: 'raw' });
+
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
-			// FIXME: How to annotate type for this line?
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
-			const { metadata } = await resolver();
+			const text = z.string().parse(await resolver());
+			const { frontMatter, content } = await parse(text);
+			const metadata = Metadata.parse(frontMatter);
 			const [, slug] = filepath.match(pattern) ?? [];
 
-			return {
+			return Post.parse({
 				slug,
-				metadata: {
-					...metadata,
-					publicationDate: new Date(metadata.publicationDate)
-				}
-			};
+				metadata,
+				content
+			});
 		})
-	);
+	).catch((err) => {
+		if (err) {
+			console.error(`Failed to load all posts: ${err}`);
+		}
+		return [];
+	});
 
 	return allPosts;
 }
