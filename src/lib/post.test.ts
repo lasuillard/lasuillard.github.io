@@ -12,7 +12,8 @@ describe(getVarName({ Post }), () => {
 			title: 'Coke and Cider',
 			publicationDate: '2020-04-13T00:00:00.000+09:00',
 			tags: ['beverage', 'review']
-		}
+		},
+		content: 'Polar bear'
 	};
 
 	it('parses given JSON object class', () => {
