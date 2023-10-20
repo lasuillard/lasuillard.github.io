@@ -1,0 +1,11 @@
+{
+	"ci": {
+		"collect": {
+			"staticDistDir": "./build"
+		},
+		"assert": {},
+		"upload": {},
+		"server": {},
+		"wizard": {}
+	}
+}
