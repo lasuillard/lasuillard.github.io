@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { Post, getAllPosts, getPost } from '$lib/post';
 import { getVarName, omitKeys } from '$lib/utils';
 import { describe, expect, it } from 'vitest';

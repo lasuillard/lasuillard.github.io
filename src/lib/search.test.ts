@@ -4,8 +4,7 @@ import { getEngine, initEngine } from './search';
 describe(initEngine, () => {
 	it('engine is defined after initialization', async () => {
 		expect(getEngine()).toBeUndefined();
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
+		// @ts-expect-error Enough for mocking.
 		vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => ({
 			json: vi.fn(() => [])
 		}));

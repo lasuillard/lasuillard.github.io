@@ -14,9 +14,7 @@ export const processor = unified()
 	.use(remarkStringify)
 	.use(remarkFrontmatter, ['yaml'])
 	.use(() => (node, file) => {
-		// BUG: `children` exists in node TS says it doesn't
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-expect-error
+		// @ts-expect-error False-positive warning; BUG: `children` exists in node TS says it doesn't
 		const frontMatter = node.children.find((child) => child.type === 'yaml')?.value ?? null;
 		if (frontMatter) {
 			file.data.frontMatter = parseYaml(frontMatter);
