@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Markdown from '$components/Markdown.svelte';
 	import Toc from '$components/Toc.svelte';
 	import { format } from 'date-fns';
 
@@ -15,7 +16,7 @@
 		<!-- Side TOC for large screen -->
 		<div class="class ml-6 hidden lg:order-last lg:col-span-2 lg:block">
 			{#if contentWrapper}
-				<Toc bind:content={contentWrapper} class="sticky top-1/3" />
+				<Toc bind:content={contentWrapper} class="sticky top-1/4" />
 			{/if}
 		</div>
 		<div class="lg:col-span-5">
@@ -39,9 +40,18 @@
 					<Toc bind:content={contentWrapper} class="mb-6" />
 				{/if}
 			</div>
-			<div bind:this={contentWrapper}>
-				<svelte:component this={content} />
-			</div>
+			<article bind:this={contentWrapper} class="prose max-w-none lg:prose-lg">
+				<Markdown text={content} />
+			</article>
 		</div>
 	</div>
 </div>
+
+<style lang="postcss">
+	article :global(:where(h1, h2, h3, h4, h5, h6) > a) {
+		text-decoration-line: none !important;
+	}
+	article :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
+		text-decoration-line: underline !important;
+	}
+</style>

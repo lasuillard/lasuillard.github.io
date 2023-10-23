@@ -18,8 +18,8 @@
 			</label>
 		</div>
 		<div class="flex-none flex-wrap lg:navbar-end">
-			<ThemeSelect />
-			<LanguageSelect class="ml-2 lg:ml-4" />
+			<ThemeSelect class="mr-2 lg:mr-4" />
+			<LanguageSelect class="hidden" />
 		</div>
 	</header>
 </div>
