@@ -38,7 +38,7 @@
 					</a>
 
 					<!-- RSS -->
-					<a href="/rss" class="btn btn-circle btn-ghost self-center">
+					<a href="/rss.xml" class="btn btn-circle btn-ghost self-center">
 						<RSS class="h-8 w-8 lg:h-9 lg:w-9" />
 					</a>
 				</div>
