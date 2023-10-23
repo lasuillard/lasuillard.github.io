@@ -1,4 +1,4 @@
-import { Post } from '$lib/post';
+import { getAllPosts } from '$lib/post';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const prerender = true;
@@ -9,10 +9,8 @@ const siteDescription = "lasuillard's personal tech blog.";
 
 // https://www.rssboard.org/rss-validator/check.cgi?url=https%3A%2F%2Flasuillard.github.io%2Frss
 // https://validator.w3.org/feed/#validate_by_input
-export const GET: RequestHandler = async ({ fetch }) => {
-	const response = await fetch('/api/posts');
-	const data: unknown[] = await response.json();
-	const allPosts = data.map(Post.parseObj);
+export const GET: RequestHandler = async () => {
+	const allPosts = await getAllPosts();
 
 	// TODO: Generate RSS XML document from list of posts; https://www.w3schools.com/xml/xml_rss.asp
 	const body = `<?xml version="1.0" encoding="UTF-8" ?>
