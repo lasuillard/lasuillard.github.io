@@ -32,5 +32,5 @@
 
 <!-- FIXME: mdsvex not able to do this? -->
 <div data-testid="qrcode" {...$$restProps}>
-	<canvas bind:this={qrCode} class="place-self-end" />
+	<canvas bind:this={qrCode} class="place-self-end" title={text} />
 </div>
