@@ -1,33 +1,33 @@
----
----
-
 <script lang="ts">
-    import QRCode from "$components/QRCode.svelte";
+	import { browser } from '$app/environment';
+	import Markdown from '$components/Markdown.svelte';
+	import QRCode from '$components/QRCode.svelte';
+
+	const pageURL = browser ? window.location.href : null;
 </script>
 
-<div class="px-2 py-6">
+<div class="prose max-w-none px-2 py-6">
+	<h1>이유찬</h1>
 
-# 이유찬
+	{#if pageURL}
+		<QRCode text={pageURL} class="flex flex-col justify-self-end" />
+	{/if}
 
-<QRCode textGetter={() => window.location.href} class="flex flex-col justify-self-end" />
-
+	<!-- prettier-ignore -->
+	<Markdown>
 더 나은 코드를 끝없이 갈망하는 개발자, 이유찬입니다.
 
 주니어 개발자로서 여러 웹 기반 B2C/B2B 서비스 및 솔루션의 백엔드 개발, 배포 및 운영 경험을 쌓아가고 있습니다.
 
-반복되는 작업을 찾아 자동화하는 일, 오래된 코드를 새로운 기술과 방법론으로 리팩토링하는 과정을 즐깁니다. 자동화된 테스트를 통해 서비스의 신뢰성과 안정성을 개선하기 위해 노력을 기울이고 있습니다. 또한 동료와의 협업을 위해 문서화, 가독성 좋은 코드에 대해 항상 고민합니다.
+반복되는 작업을 찾아 자동화하는 일, 오래된 코드를 새로운 기술과 방법론으로 리팩토링하는 과정을 즐깁니다.
 
-## SKILL
+자동화된 테스트를 통해 서비스의 신뢰성과 안정성을 개선하기 위해 노력을 기울이고 있습니다. 또한 동료와의 협업을 위해 문서화, 가독성 좋은 코드에 대해 항상 고민합니다.
+  </Markdown>
 
-<section class="m-1 p-1">
-    <span class="badge badge-accent badge-lg font-semibold">
-        Python<span class="badge badge-neutral badge-sm -mr-1 ml-1.5 px-1">0</span>
-    </span>
-    <span class="badge badge-accent badge-lg font-semibold">
-        TypeScript<span class="badge badge-neutral badge-sm -mr-1 ml-1.5 px-1">0</span>
-    </span>
-</section>
+	<Markdown>## SKILL</Markdown>
 
+	<!-- prettier-ignore -->
+	<Markdown>
 ## EDUCATION
 
 -   서울과학기술대학교 컴퓨터공학과 졸업 (4.11/4.5)
@@ -138,8 +138,8 @@ AI BaaS 서비스를 제공하는 B2B 핀테크 스타트업
 
     Raindrop.io 북마크를 크롬 브라우저 북마크와 동기화하기 위한 크롬 브라우저 확장 프로그램
 
-    Svelte,Tailwind CSS, TypeScript, GitHub ACtions
-
+    Svelte,Tailwind CSS, TypeScript, GitHub Actions
+  </Markdown>
 </div>
 
 <style lang="postcss">

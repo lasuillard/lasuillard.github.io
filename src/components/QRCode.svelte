@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	// BUG: `window` is not defined in `.md` files; pass function instead
-	export let textGetter: () => string;
+	export let text: string;
 
 	let qrCode: HTMLElement | undefined;
 
@@ -15,7 +15,7 @@
 
 		QRCode.toCanvas(
 			qrCode,
-			textGetter(),
+			text,
 			{
 				width: 128 // TODO: Responsive size
 			},
