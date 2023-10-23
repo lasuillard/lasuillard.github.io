@@ -3,7 +3,7 @@
 	import Markdown from '$components/Markdown.svelte';
 	import QRCode from '$components/QRCode.svelte';
 
-	const pageURL = browser ? window.location.href : null;
+	const pageURL = browser ? window.location.href.split('#')[0] : null;
 </script>
 
 <div class="prose max-w-none px-2 py-6">
