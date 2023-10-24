@@ -4,6 +4,7 @@
 
 	// BUG: `window` is not defined in `.md` files; pass function instead
 	export let text: string;
+	export let width: number = 128;
 
 	let qrCode: HTMLElement | undefined;
 
@@ -17,7 +18,7 @@
 			qrCode,
 			text,
 			{
-				width: 128 // TODO: Responsive size
+				width // TODO: Responsive size
 			},
 			(err) => {
 				if (err) {
