@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+	html {
+		@apply font-mono;
+	}
+}
+
 ::-webkit-scrollbar {
 	@apply h-2 w-2;
 }
