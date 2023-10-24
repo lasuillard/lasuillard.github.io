@@ -37,7 +37,9 @@
 				{#if allPosts.length}
 					{#each allPosts as { slug, metadata: { title, publicationDate, tags } }}
 						<!-- Post card-->
-						<div class="lg:h-30 card card-compact m-2 rounded-lg shadow-lg md:card-normal">
+						<div
+							class="lg:h-30 card card-compact m-2 rounded-lg bg-base-200 shadow-lg md:card-normal"
+						>
 							<a href={`blog/${slug}`}>
 								<figure>
 									<img

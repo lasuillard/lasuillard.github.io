@@ -7,6 +7,6 @@ export default {
 		extend: {}
 	},
 	daisyui: {
-		themes: ['light', 'dark']
+		themes: ['winter', 'night']
 	}
 };
