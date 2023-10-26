@@ -20,7 +20,7 @@ it('has a link to home', () => {
 
 it('has a link to about', () => {
 	const { getByText } = render(Sidebar);
-	expect(getByText('About').getAttribute('href')).toEqual('/about');
+	expect(getByText('About Me').getAttribute('href')).toEqual('/about-me');
 });
 
 it('has a link to blog', () => {

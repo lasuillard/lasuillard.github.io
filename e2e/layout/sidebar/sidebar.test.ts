@@ -22,7 +22,9 @@ it('has a link to home', async () => {
 });
 
 it('has a link to about', async () => {
-	expect(await sidebar.getByRole('link', { name: 'About' }).getAttribute('href')).toEqual('/about');
+	expect(await sidebar.getByRole('link', { name: 'About' }).getAttribute('href')).toEqual(
+		'/about-me'
+	);
 });
 
 it('has a link to blog', async () => {
