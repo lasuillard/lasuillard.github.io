@@ -26,22 +26,26 @@
 		return tag;
 	};
 
+	const title = `이유찬`;
+	const catchphrase = `좋은 코드를 끝없이 갈망하는 개발자, 이유찬입니다.`;
 	const intro = `
-주니어 백엔드 개발자로서 웹 기반 B2C/B2B 서비스 및 솔루션의 백엔드 개발, 배포 및 운영 경험을
-쌓아왔습니다.
+웹 기반 B2C/B2B 서비스 및 솔루션의 백엔드 개발, 배포 및 운영 경험을 쌓아가고 있는 주니어 백엔드 개발자입니다.
 
-새로운 기술을 탐색하고 더 좋은 코드를 위해 수시로 개선하기 위해 노력하며 협업을 위한 문서화,
-가독성 좋은 코드를 작성하기 위해 항상 고민합니다. 자동화 테스트 및 코드 검사기 등 다양한 도구를
-적극적으로 검토 및 도입하며 서비스의 신뢰성과 안정성을 높이기 위해 노력을 기울이고 있습니다.
+더 좋은 코드를 위해 수시로 개선하기 위해 노력하며 협업을 위한 문서화(Docstring, Swagger)를 습관화하고 가독성 좋은 코드를 작성하기 위해 항상 고민합니다.
 
-Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 다양한 인터페이스 또한
-도입하며 단일 서비스 개발 외에도 아니라 여러 서비스 간 연동에 대해 배워가고 있습니다.
+다양한 자동화 테스트(pytest, Vitest, Playwright) 및 코드 검사 도구(Mypy, Ruff, ESLint, Checkov)를 개발 환경에 적극적으로 도입하며 실수와 오류를 줄이고 제품 품질을 향상시키기 위해 노력하고 있습니다.
+
+Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 통해 배우고 있습니다.
+또한 웹 외에도 브라우저 확장 프로그램, 데스크탑 애플리케이션 등 다양한 소프트웨어 개발 또한 도전하며 지식을 넓혀나가고 있습니다.
   `;
 
 	// TODO: Maintain as separate file for later I18n support + maintainability
 	const educations = [
 		{
-			name: '서울과학기술대학교 컴퓨터공학과 학사 (4.11/4.5)',
+			name: '서울과학기술대학교',
+			description: `
+컴퓨터공학과 학사, 학점 4.11/4.5
+`,
 			period: {
 				start: new Date('2014-03-02'),
 				end: new Date('2020-02-28')
@@ -53,22 +57,26 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 		{
 			name: '정보처리기능사',
 			issuer: '한국산업인력공단',
-			issuanceDate: new Date('2015-02-05')
+			issuanceDate: new Date('2015-02-05'),
+			description: ``
 		},
 		{
 			name: '정보기기운용기능사',
 			issuer: '한국산업인력공단',
-			issuanceDate: new Date('2016-12-05')
+			issuanceDate: new Date('2016-12-05'),
+			description: ``
 		},
 		{
-			name: 'TOEIC',
-			issuer: '',
-			issuanceDate: new Date('2018-09-15')
+			name: 'TOEIC (935/990)',
+			issuer: 'ETS',
+			issuanceDate: new Date('2018-09-15'),
+			description: `935/990`
 		},
 		{
 			name: '정보처리기사',
 			issuer: '한국산업인력공단',
-			issuanceDate: new Date('2020-08-28')
+			issuanceDate: new Date('2020-08-28'),
+			description: ``
 		}
 	];
 
@@ -128,7 +136,7 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 		{
 			organization: '에이젠글로벌',
 			role: '백엔드 개발자',
-			summary: '2명의 백엔드 개발자 및 1명의 프론트엔드 개발자와 함께 서비스 개발',
+			summary: `우리카드 FDS 고도화 프로젝트 및 ABACUS AutoML 솔루션의 개발 및 유지보수`,
 			period: {
 				start: new Date('2022-12-08'),
 				end: new Date('2023-08-31')
@@ -194,31 +202,28 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 	const personalWorks = [
 		{
 			name: 'lasuillard.github.io',
-			description: '바닥부터 직접 개발한 기술 블로그 정적 웹 사이트',
+			description: `바닥부터 직접 개발한 기술 블로그 정적 웹 사이트`,
 			link: 'https://github.com/lasuillard/lasuillard.github.io',
 			tags: tags('GitHub Actions', 'SvelteKit', 'Tailwind CSS'),
 			order: 0 // Ascending order
 		},
 		{
 			name: 'kkowa',
-			description:
-				'중간자 프록시를 이용하여 타사 애플리케이션의 네트워크 데이터를 통해 유용한 정보를 추출, 가공하기 위한 GUI 애플리케이션',
+			description: `중간자 프록시를 이용하여 타사 애플리케이션의 네트워크 데이터를 통해 유용한 정보를 추출, 가공하기 위한 GUI 애플리케이션`,
 			link: 'https://github.com/lasuillard/kkowa',
 			tags: tags('GitHub Actions', 'gRPC', 'mitmproxy', 'PySide6 (Qt) ', 'Python'),
 			order: 1
 		},
 		{
 			name: 'Libra',
-			description:
-				'PC의 수많은 파일을 탐색 및 라벨링하여 체계적으로 관리하기 위한 GUI 애플리케이션',
+			description: `PC의 수많은 파일을 탐색 및 라벨링하여 체계적으로 관리하기 위한 GUI 애플리케이션`,
 			link: 'https://github.com/lasuillard/Libra',
 			tags: tags('GitHub Actions', 'Rust', 'SvelteKit', 'Tailwind CSS', 'Tauri', 'TypeScript'),
 			order: 2
 		},
 		{
 			name: 'Raindrop Sync for Chrome',
-			description:
-				'Raindrop.io와 크롬 브라우저간 북마크 동기화 기능을 제공하는 크롬 브라우저 확장 프로그램',
+			description: `Raindrop.io와 크롬 브라우저간 북마크 동기화 기능을 제공하는 크롬 브라우저 확장 프로그램`,
 			link: 'https://github.com/lasuillard/raindrop-sync-chrome',
 			tags: tags('Chrome Extension', 'GitHub Actions', 'Svelte', 'Tailwind CSS', 'TypeScript'),
 			order: 3
@@ -227,7 +232,7 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 </script>
 
 <div class="prose max-w-none px-4 py-12">
-	<h1>이유찬</h1>
+	<h1>{title}</h1>
 
 	{#if pageURL}
 		<QRCode text={pageURL} width={160} class="flex flex-col justify-self-end" />
@@ -237,7 +242,7 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 		<p
 			class="my-10 text-center text-lg font-semibold before:content-[open-quote] after:content-[close-quote]"
 		>
-			좋은 코드를 끝없이 갈망하는 개발자, 이유찬입니다.
+			{catchphrase}
 		</p>
 		<Markdown>{intro}</Markdown>
 	</div>
@@ -257,49 +262,47 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 	<h2 class="border-l-4 border-sky-600 pl-3">EDUCATION</h2>
 	<div>
 		{#each educations as edu}
-			<div class="flex">
-				<span class="basis-1/3"
-					>{format(edu.period.start, 'yyyy.MM.dd')} ~ {format(edu.period.end, 'yyyy.MM.dd')}</span
-				>
-				<span>{edu.name}</span>
-			</div>
+			<h3>{edu.name}</h3>
+			<p class="subtext">
+				{format(edu.period.start, 'yyyy.MM.dd')} ~ {format(edu.period.end, 'yyyy.MM.dd')}
+			</p>
+			<Markdown>{edu.description}</Markdown>
 		{/each}
 	</div>
 
 	<!-- TODO: Prettify this -->
 	<h2 class="border-l-4 border-gray-500 pl-3">CERTIFICATE</h2>
 	<div>
-		{#each certificates as cert}
-			<div class="flex">
-				<span class="basis-1/3">{format(cert.issuanceDate, 'yyyy.MM.dd')}</span>
-				<span>{cert.name}</span>
-			</div>
+		{#each certificates.toSorted((a, b) => b.issuanceDate.getTime() - a.issuanceDate.getTime()) as cert}
+			<h3>{cert.name}</h3>
+			<p class="subtext">{format(cert.issuanceDate, 'yyyy.MM.dd')}</p>
 		{/each}
 	</div>
 
 	<h2 class="border-l-4 border-red-500 pl-3">EXPERIENCE</h2>
-	{#each experiences as expr}
+	{#each experiences.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as expr}
 		<h3>{expr.organization}</h3>
-		<p>{format(expr.period.start, 'yyyy.MM.dd')} ~ {format(expr.period.end, 'yyyy.MM.dd')}</p>
+		<p class="subtext">
+			{format(expr.period.start, 'yyyy.MM.dd')} ~ {format(expr.period.end, 'yyyy.MM.dd')}
+		</p>
 		<Markdown>{expr.summary}</Markdown>
+
+		<!-- Projects -->
+		{#each expr.projects.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as project}
+			<h4>{project.title}</h4>
+			<p class="subtext">
+				{format(project.period.start, 'yyyy.MM.dd')} ~ {format(project.period.end, 'yyyy.MM.dd')}
+			</p>
+			<div>
+				{#each project.tags as tag}
+					<span class="badge badge-info mr-1 font-semibold">{tag}</span>
+				{/each}
+			</div>
+			<Markdown>{project.description}</Markdown>
+		{/each}
 	{/each}
 
-	<h2 class="border-l-4 border-indigo-500 pl-3">PROJECT</h2>
-	{#each experiences
-		.map((c) => c.projects)
-		.flat()
-		.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as project}
-		<h3>{project.title}</h3>
-		<p>{format(project.period.start, 'yyyy.MM.dd')} ~ {format(project.period.end, 'yyyy.MM.dd')}</p>
-		<div>
-			{#each project.tags as tag}
-				<span class="badge badge-info mr-1 font-semibold">{tag}</span>
-			{/each}
-		</div>
-		<Markdown>{project.description}</Markdown>
-	{/each}
-
-	<h2 class="border-l-4 border-purple-700 pl-3">PERSONAL WORK</h2>
+	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
 
 	{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
 		<h3><a href={pw.link} target="_blank">{pw.name}</a></h3>
@@ -317,6 +320,15 @@ Python 외에도 TypeScript, Rust를 배우고 있습니다. GraphQL, gRPC등 �
 		@apply text-5xl font-extrabold;
 	}
 	h2 {
-		@apply font-bold;
+		@apply text-3xl font-bold;
+	}
+
+	h3,
+	h4:has(+ p.subtext) {
+		@apply !mb-1;
+	}
+
+	.subtext {
+		@apply text-gray-500;
 	}
 </style>
