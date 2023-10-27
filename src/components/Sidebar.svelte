@@ -8,8 +8,8 @@
 			href: '/'
 		},
 		{
-			name: 'About',
-			href: '/about'
+			name: 'About Me',
+			href: '/about-me'
 		},
 		{
 			name: 'Blog',

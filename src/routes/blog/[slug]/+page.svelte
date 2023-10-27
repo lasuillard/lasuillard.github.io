@@ -41,7 +41,7 @@
 				{/if}
 			</div>
 			<article bind:this={contentWrapper} class="prose max-w-none lg:prose-lg">
-				<Markdown text={content} />
+				<Markdown {content} />
 			</article>
 		</div>
 	</div>
