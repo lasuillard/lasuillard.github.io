@@ -16,7 +16,7 @@
 	<div>
 		{#key data.current}
 			<main
-				class="px-3 py-6 lg:py-24 lg:pl-6"
+				class="mx-8 mt-12 lg:mx-24 lg:mt-20"
 				data-testid="main"
 				in:fade={{ duration: 150, delay: 150 }}
 				out:fade={{ duration: 150 }}
@@ -27,5 +27,5 @@
 		{/key}
 	</div>
 
-	<Footer class="sticky top-[100vh] mt-60 bg-base-200 px-2 py-4" />
+	<Footer class="sticky top-[100vh] mt-20 bg-base-200 px-2 py-4 lg:mt-32" />
 </div>

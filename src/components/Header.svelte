@@ -20,7 +20,7 @@
 
 		<div class="drawer-content flex flex-col">
 			<!-- Header -->
-			<header class="navbar z-10 w-full px-3" data-testid="header">
+			<header class="navbar z-10 w-full px-12 py-6" data-testid="header">
 				<!-- Drawer button -->
 				<div class="flex-none md:hidden">
 					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
@@ -39,7 +39,11 @@
 					<ul class="menu menu-horizontal">
 						{#each links as link}
 							<li>
-								<a class:underline={currentPath === link.href} href={link.href}>
+								<a
+									class="text-lg font-semibold"
+									class:underline={currentPath === link.href}
+									href={link.href}
+								>
 									{link.name}
 								</a>
 							</li>

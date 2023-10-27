@@ -12,7 +12,7 @@
 </script>
 
 <div {...$$restProps}>
-	<div class="grid grid-flow-row grid-cols-1 lg:grid-flow-col lg:grid-cols-7">
+	<div class="flex">
 		<!-- Side TOC for large screen -->
 		<div class="class ml-6 hidden lg:order-last lg:col-span-2 lg:block">
 			{#if contentWrapper}
@@ -24,23 +24,23 @@
 			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
 				Published at {format(publicationDate, 'yyyy.MM.dd')}
 			</p>
-			<div class="ml-2 mt-4 space-x-1 space-y-1 md:mt-6">
+			<div class="ml-2 mt-4 space-y-1 md:mt-6">
 				{#each tags as tag}
-					<div class="badge badge-neutral p-3 font-semibold">
+					<div class="badge badge-secondary mr-2 rounded-sm p-3 font-semibold">
 						<a href="/blog/tag/{tag}">
 							{tag}
 						</a>
 					</div>
 				{/each}
 			</div>
-			<div class="divider mb-4" />
+			<div class="divider mb-6" />
 			<!-- Embedded TOC for small screen -->
 			<div class="lg:hidden">
 				{#if contentWrapper}
 					<Toc bind:content={contentWrapper} class="mb-6" />
 				{/if}
 			</div>
-			<article bind:this={contentWrapper} class="prose max-w-none lg:prose-lg">
+			<article bind:this={contentWrapper} class="prose mt-12 lg:prose-lg">
 				<Markdown {content} />
 			</article>
 		</div>
