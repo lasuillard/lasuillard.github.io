@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Search from '$components/Search.svelte';
 	import { formatDistance } from 'date-fns';
 
 	export let data;
@@ -31,6 +32,7 @@
 		</section>
 		<section data-testid="posts" class="mt-7">
 			<h2 class="mb-3 text-3xl">Posts</h2>
+			<Search class="mb-2 w-64" />
 
 			<!-- Post grid -->
 			<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
