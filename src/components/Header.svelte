@@ -22,8 +22,8 @@
 				<li><a href="/blog">Blog</a></li>
 			</ul>
 		</div>
-		<div class="navbar-end flex-none flex-wrap">
-			<ThemeSelect class="mr-2 lg:mr-4" />
+		<div class="navbar-end">
+			<ThemeSelect class="mr-2 flex align-middle" />
 			<LanguageSelect class="hidden" />
 		</div>
 	</header>

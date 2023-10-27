@@ -19,21 +19,14 @@
 
 <!-- BUG: False-positive uncovered branch; https://github.com/vitest-dev/vitest/issues/1893 -->
 <div data-testid="theme-select" {...$$restProps}>
-	<div class="flex items-center space-x-2">
-		<div class="join">
-			<Sun class="h-6 w-6" />
-		</div>
-		<div class="flex">
-			<input
-				data-testid="toggle-input"
-				type="checkbox"
-				class="toggle"
-				checked={$currentTheme === Theme.Dark}
-				on:click={toggleTheme}
-			/>
-		</div>
-		<div class="join-item">
-			<Moon class="h-6 w-6" />
-		</div>
-	</div>
+	<label class="btn btn-circle btn-ghost swap swap-rotate">
+		<input
+			data-testid="toggle-input"
+			type="checkbox"
+			checked={$currentTheme === Theme.Dark}
+			on:click={toggleTheme}
+		/>
+		<Moon class="swap-on h-7 w-7" />
+		<Sun class="swap-off h-7 w-7" />
+	</label>
 </div>
