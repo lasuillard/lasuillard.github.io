@@ -16,8 +16,13 @@
 				<Menu class="swap-on h-6 w-6" />
 				<Menu class="swap-off h-6 w-6" />
 			</label>
+			<ul class="menu menu-horizontal">
+				<li><a href="/">Home</a></li>
+				<li><a href="/about-me">About Me</a></li>
+				<li><a href="/blog">Blog</a></li>
+			</ul>
 		</div>
-		<div class="flex-none flex-wrap lg:navbar-end">
+		<div class="navbar-end flex-none flex-wrap">
 			<ThemeSelect class="mr-2 lg:mr-4" />
 			<LanguageSelect class="hidden" />
 		</div>
