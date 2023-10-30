@@ -14,12 +14,12 @@
 <div {...$$restProps}>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
-		<div class="class ml-6 hidden lg:order-last lg:col-span-2 lg:block">
+		<div class="-mr-8 ml-8 hidden w-full xl:order-last xl:block">
 			{#if contentWrapper}
-				<Toc bind:content={contentWrapper} class="sticky top-1/4" />
+				<Toc bind:content={contentWrapper} class="sticky top-[25rem]" />
 			{/if}
 		</div>
-		<div class="lg:col-span-5">
+		<div>
 			<h1 class="text-center text-4xl font-bold md:text-5xl">{title}</h1>
 			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
 				Published at {format(publicationDate, 'yyyy.MM.dd')}
@@ -35,12 +35,12 @@
 			</div>
 			<div class="divider mb-6" />
 			<!-- Embedded TOC for small screen -->
-			<div class="lg:hidden">
+			<div class="xl:hidden">
 				{#if contentWrapper}
 					<Toc bind:content={contentWrapper} class="mb-6" />
 				{/if}
 			</div>
-			<article bind:this={contentWrapper} class="prose mt-12 lg:prose-lg">
+			<article bind:this={contentWrapper} class="prose-sm mt-12 md:prose-base lg:prose-lg">
 				<Markdown {content} />
 			</article>
 		</div>
