@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 
 	/**
-	 * Front matters extracted from markdown text.
+	 * Front matters extracted from markdown text (slot).
 	 *
 	 * This isn't used inside component, export only.
 	 */
