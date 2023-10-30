@@ -17,5 +17,5 @@
 }
 
 ::-webkit-scrollbar-thumb {
-	@apply bg-indigo-700 hover:bg-indigo-500;
+	@apply bg-secondary hover:bg-secondary-focus;
 }

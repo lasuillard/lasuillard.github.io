@@ -64,18 +64,18 @@
 				{#if searchResults.length > 0}
 					<div role="searchbox">
 						<ol
-							class="menu dropdown-content rounded-box w-full space-y-2 bg-base-300 shadow hover:!visible"
+							class="menu dropdown-content w-full space-y-2 rounded-sm bg-base-200 shadow-xl hover:!visible"
 						>
 							{#each searchResults as result}
 								<li class="font-bold">
-									<a href="/blog/{result.id}">{result['metadata.title']} ({result.id})</a>
+									<a href="/blog/{result.id}">{result['metadata.title']}</a>
 								</li>
 							{/each}
 						</ol>
 					</div>
 				{:else}
 					<div
-						class="card dropdown-content compact rounded-box z-[1] w-full bg-base-300 shadow"
+						class="card dropdown-content compact z-[1] w-full rounded-sm bg-base-200 shadow-xl"
 						role="searchbox"
 					>
 						<div class="card-body items-center">

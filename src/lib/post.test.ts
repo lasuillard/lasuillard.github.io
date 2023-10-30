@@ -9,6 +9,8 @@ describe(getVarName({ Post }), () => {
 		metadata: {
 			title: 'Coke and Cider',
 			publicationDate: '2020-04-13T00:00:00.000+09:00',
+			preview: '/lorem-ipsum.png',
+			summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 			tags: ['beverage', 'review']
 		},
 		content: 'Polar bear'

@@ -12,6 +12,8 @@ it('list all unique tags', async () => {
 				metadata: {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
+					preview: '/lorem-ipsum.png',
+					summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 					tags: ['Apple', 'Watermelon', 'Orange']
 				},
 				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
@@ -21,6 +23,8 @@ it('list all unique tags', async () => {
 				metadata: {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
+					preview: '/lorem-ipsum.png',
+					summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 					tags: ['Mango', 'Watermelon', 'Grapefruit']
 				},
 				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
@@ -46,6 +50,8 @@ it('display some text if there is no tag', async () => {
 				metadata: {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
+					preview: '/lorem-ipsum.png',
+					summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 					tags: []
 				},
 				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
@@ -68,6 +74,8 @@ it('list all posts', async () => {
 				metadata: {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
+					preview: '/lorem-ipsum.png',
+					summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 					tags: ['Apple', 'Watermelon', 'Orange']
 				},
 				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'

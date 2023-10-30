@@ -205,13 +205,15 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 			description: `바닥부터 직접 개발한 기술 블로그 정적 웹 사이트`,
 			link: 'https://github.com/lasuillard/lasuillard.github.io',
 			tags: tags('GitHub Actions', 'SvelteKit', 'Tailwind CSS'),
+			status: 'WIP',
 			order: 0 // Ascending order
 		},
 		{
 			name: 'kkowa',
 			description: `중간자 프록시를 이용하여 타사 애플리케이션의 네트워크 데이터를 통해 유용한 정보를 추출, 가공하기 위한 GUI 애플리케이션`,
 			link: 'https://github.com/lasuillard/kkowa',
-			tags: tags('GitHub Actions', 'gRPC', 'mitmproxy', 'PySide6 (Qt) ', 'Python'),
+			tags: tags('GitHub Actions', 'gRPC', 'mitmproxy', 'PySide6 (Qt) ', 'Python', 'SQLAlchemy'),
+			status: 'WIP',
 			order: 1
 		},
 		{
@@ -219,6 +221,7 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 			description: `PC의 수많은 파일을 탐색 및 라벨링하여 체계적으로 관리하기 위한 GUI 애플리케이션`,
 			link: 'https://github.com/lasuillard/Libra',
 			tags: tags('GitHub Actions', 'Rust', 'SvelteKit', 'Tailwind CSS', 'Tauri', 'TypeScript'),
+			status: 'WIP',
 			order: 2
 		},
 		{
@@ -226,6 +229,7 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 			description: `Raindrop.io와 크롬 브라우저간 북마크 동기화 기능을 제공하는 크롬 브라우저 확장 프로그램`,
 			link: 'https://github.com/lasuillard/raindrop-sync-chrome',
 			tags: tags('Chrome Extension', 'GitHub Actions', 'Svelte', 'Tailwind CSS', 'TypeScript'),
+			status: 'WIP',
 			order: 3
 		}
 	];
@@ -305,7 +309,10 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
 
 	{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
-		<h3><a href={pw.link} target="_blank">{pw.name}</a></h3>
+		<h3>
+			<a href={pw.link} target="_blank">{pw.name}</a>
+			<span class="badge badge-warning align-middle font-bold">{pw.status}</span>
+		</h3>
 		<div>
 			{#each pw.tags as tag}
 				<span class="badge badge-info mr-1 font-semibold">{tag}</span>
