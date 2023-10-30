@@ -1,14 +1,14 @@
 import { browser } from '$app/environment';
 import { persisted } from '$lib/store';
-import type { Writable } from 'svelte/store';
+import { get, type Writable } from 'svelte/store';
 
 // https://daisyui.com/docs/themes/
 /**
  * Available themes for current website.
  */
 export enum Theme {
-	Light = 'light',
-	Dark = 'dark'
+	Light = 'winter',
+	Dark = 'night'
 }
 
 /**
@@ -29,6 +29,11 @@ export function initTheme() {
 	console.debug(`Theme "${themeDefault}" will be used as default`);
 
 	currentTheme = persisted('theme', themeDefault);
+
+	// Coerce to light if theme is not valid (if theme changed)
+	if (!isTheme(get(currentTheme))) {
+		currentTheme.set(Theme.Light);
+	}
 
 	// Bind store to actual theme
 	currentTheme.subscribe((newTheme) => {

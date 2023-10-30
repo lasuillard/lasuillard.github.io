@@ -11,6 +11,5 @@ it('renders', async () => {
 });
 
 it.todo('contains a header');
-it.todo('contains a left sidebar');
 it.todo('contains a main content slot');
 it.todo('contains a footer');

@@ -1,36 +1,12 @@
 ---
 title: Uno terra errat
 publicationDate: 2022-11-23T18:22:31.008+09:00
-tags:
-    [
-        Apple,
-        Watermelon,
-        Orange,
-        Pear,
-        Cherry,
-        Strawberry,
-        Nectarine,
-        Grape,
-        Mango,
-        Blueberry,
-        Pomegranate,
-        Plum,
-        Banana,
-        Raspberry,
-        Mandarin,
-        Jackfruit,
-        Papaya,
-        Kiwi,
-        Pineapple,
-        Lime,
-        Lemon,
-        Apricot,
-        Grapefruit,
-        Melon,
-        Coconut,
-        Avocado,
-        Peach
-    ]
+preview: /lorem-ipsum.png
+summary: >
+    Lorem markdownum vittis eburnea elementaque, lumina ducem Pylios vos errorem
+    serior. Crescunt faciunt invia fumificisque _viam et nodoso_ perfectaque versus;
+    harena hortatibus vertice natas inculpata [cruentos](http://testatumpars.com/).
+tags: [Apple, Watermelon, Orange, Coconut, Avocado, Peach]
 ---
 
 # Uno terra errat

@@ -11,7 +11,7 @@ let miniSearch: MiniSearch | undefined = undefined;
 export async function initEngine(): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 	miniSearch = new MiniSearch({
-		fields: ['slug', 'metadata.title', 'metadata.tags', 'content'],
+		fields: ['slug', 'metadata.title', 'metadata.tags' /* FIXME: Sanitize content HTML tags */],
 		idField: 'slug',
 		storeFields: ['metadata.title', 'metadata.publicationDate', 'metadata.tags'],
 		extractField: (document, fieldName) => {

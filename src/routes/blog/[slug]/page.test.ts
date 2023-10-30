@@ -12,6 +12,8 @@ it('renders a post', async () => {
 		metadata: {
 			title: 'Lorem Ipsum',
 			publicationDate: new Date('2020-04-13T13:09:28.333+09:00'),
+			preview: '/lorem-ipsum.png',
+			summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 			tags: ['Apple', 'Watermelon', 'Orange']
 		},
 		content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'

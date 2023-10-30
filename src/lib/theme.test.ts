@@ -1,6 +1,7 @@
 // @vitest-environment happy-dom
 import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from '$lib/theme';
 import { getVarName } from '$lib/utils';
+import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
 
 describe(initTheme, () => {
@@ -8,6 +9,13 @@ describe(initTheme, () => {
 		expect(currentTheme).toBeUndefined();
 		initTheme();
 		expect(currentTheme).toBeDefined();
+	});
+
+	it('coerce to light theme if theme is not valid', () => {
+		localStorage.setItem('theme', '"cheddar-cheese"');
+		initTheme();
+		// @ts-expect-error It should be set after init
+		expect(get(currentTheme)).toEqual(Theme.Light);
 	});
 });
 

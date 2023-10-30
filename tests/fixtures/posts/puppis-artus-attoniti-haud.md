@@ -1,36 +1,12 @@
 ---
 title: Puppis artus attoniti haud
 publicationDate: 2020-04-13T00:00:00.000+09:00
-tags:
-    [
-        Apple,
-        Watermelon,
-        Orange,
-        Pear,
-        Cherry,
-        Strawberry,
-        Nectarine,
-        Grape,
-        Mango,
-        Blueberry,
-        Pomegranate,
-        Plum,
-        Banana,
-        Raspberry,
-        Mandarin,
-        Jackfruit,
-        Papaya,
-        Kiwi,
-        Pineapple,
-        Lime,
-        Lemon,
-        Apricot,
-        Grapefruit,
-        Melon,
-        Coconut,
-        Avocado,
-        Peach
-    ]
+preview: /lorem-ipsum.png
+summary: >
+    Lorem markdownum signatum **usque** deam, tradere [cono](http://procul.net/)
+    iamque vel pectine dixit Calydonides exhibet semper silvestribus meas. Roboris
+    vagatur. Aspicit sua quae o est vultus Circe silvas, pectora fuge.
+tags: [Apricot, Grapefruit, Melon, Coconut, Avocado, Peach]
 ---
 
 # Puppis artus attoniti haud

@@ -1,6 +1,11 @@
 ---
 title: Lorem Ipsum
 publicationDate: 2020-04-13T00:00:00.000+09:00
+preview: /lorem-ipsum.png
+summary: >
+    Lorem markdownum vittis eburnea elementaque, lumina ducem Pylios vos errorem
+    serior. Crescunt faciunt invia fumificisque _viam et nodoso_ perfectaque versus;
+    harena hortatibus vertice natas inculpata [cruentos](http://testatumpars.com/).
 tags:
     [
         Apple,
