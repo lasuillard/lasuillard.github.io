@@ -1,7 +1,7 @@
 <script lang="ts">
-	import LanguageSelect from '$components/LanguageSelect.svelte';
-	import ThemeSelect from '$components/ThemeSelect.svelte';
 	import Menu from '$components/icon/Menu.svelte';
+	import LanguageSelect from '$components/utility/LanguageSelect.svelte';
+	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
 	const links = [
 		{ name: 'Home', href: '/' },

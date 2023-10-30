@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import ThemeSelect from '$components/ThemeSelect.svelte';
+import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 import { Theme, getTheme, initTheme } from '$lib/theme';
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';

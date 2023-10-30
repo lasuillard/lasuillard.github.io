@@ -1,4 +1,3 @@
-<!-- TODO: I18n, country flags -->
 <script lang="ts">
 	const supportedLanguages = [
 		{

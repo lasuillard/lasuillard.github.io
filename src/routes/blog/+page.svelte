@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Markdown from '$components/Markdown.svelte';
-	import Search from '$components/Search.svelte';
+	import Search from '$components/utility/Search.svelte';
 	import { formatDistance } from 'date-fns';
 
 	export let data;

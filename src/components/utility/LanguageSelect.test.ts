@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import LanguageSelect from '$components/LanguageSelect.svelte';
+import LanguageSelect from '$components/utility/LanguageSelect.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
