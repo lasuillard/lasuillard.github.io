@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Markdown from '$components/Markdown.svelte';
+	import Markdown from '$components/content/Markdown.svelte';
 	import Search from '$components/utility/Search.svelte';
 	import { formatDistance } from 'date-fns';
 

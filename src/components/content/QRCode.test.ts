@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import QRCode from '$components/QRCode.svelte';
+import QRCode from '$components/content/QRCode.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 

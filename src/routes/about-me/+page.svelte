@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import Markdown from '$components/Markdown.svelte';
-	import QRCode from '$components/QRCode.svelte';
+	import Markdown from '$components/content/Markdown.svelte';
+	import QRCode from '$components/content/QRCode.svelte';
 	import { format } from 'date-fns';
 
 	const pageURL = browser ? window.location.href.split('#')[0] : null;
