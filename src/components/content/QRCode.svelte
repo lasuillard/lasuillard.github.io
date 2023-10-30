@@ -2,7 +2,6 @@
 	import QRCode from 'qrcode';
 	import { onMount } from 'svelte';
 
-	// BUG: `window` is not defined in `.md` files; pass function instead
 	export let text: string;
 	export let width: number = 128;
 
@@ -18,20 +17,17 @@
 			qrCode,
 			text,
 			{
-				width // TODO: Responsive size
+				width
 			},
 			(err) => {
 				if (err) {
 					console.error(err);
 					return;
 				}
-				console.debug(`QR Code for URL ${window.location.href} generated successfully`);
+				console.debug(`QR Code for URL ${text} generated successfully`);
 			}
 		);
 	});
 </script>
 
-<!-- FIXME: mdsvex not able to do this? -->
-<div data-testid="qrcode" {...$$restProps}>
-	<canvas bind:this={qrCode} class="place-self-end" title={text} />
-</div>
+<canvas bind:this={qrCode} title={text} data-testid="qrcode" {...$$restProps} />

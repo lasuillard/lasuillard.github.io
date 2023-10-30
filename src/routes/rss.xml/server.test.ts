@@ -26,6 +26,4 @@ describe('GET /rss.xml', () => {
 		const content = xmlDoc.documentElement.outerHTML;
 		expect(content).not.toContain('parsererror');
 	});
-
-	it.todo('returns cache policy headers');
 });

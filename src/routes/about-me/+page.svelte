@@ -238,9 +238,13 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 <div class="prose max-w-none px-4 py-12">
 	<h1>{title}</h1>
 
-	{#if pageURL}
-		<QRCode text={pageURL} width={160} class="flex flex-col justify-self-end" />
-	{/if}
+	<div class="flex flex-col place-items-end">
+		{#if pageURL}
+			<QRCode text={pageURL} width={160} />
+		{:else}
+			<canvas width={160} />
+		{/if}
+	</div>
 
 	<div>
 		<p

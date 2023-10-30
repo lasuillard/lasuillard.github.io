@@ -48,5 +48,3 @@ it('should throw an error page if post not exists', () => {
 		}
 	});
 });
-
-it.todo("conflicting routes shouldn't exist");

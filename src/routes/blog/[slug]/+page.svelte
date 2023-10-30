@@ -8,6 +8,7 @@
 	const { metadata, content } = data;
 	const { title, publicationDate, tags } = metadata;
 
+	// Content wrapper for generating ToC
 	let contentWrapper: HTMLElement | undefined;
 </script>
 
