@@ -10,7 +10,7 @@
 		<div class="flex">
 			<div class="avatar mx-auto">
 				<div
-					class="m-auto h-fit w-48 rounded-full bg-gradient-to-r from-rose-600 via-fuchsia-400 to-yellow-400 p-0.5 lg:w-72"
+					class="m-auto h-fit w-48 rounded-full bg-gradient-to-r from-rose-600 via-fuchsia-400 to-yellow-400 p-0.5 lg:w-56"
 				>
 					<!-- svelte-ignore a11y-img-redundant-alt -->
 					<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->
