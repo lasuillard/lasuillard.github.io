@@ -1,7 +1,12 @@
 // @vitest-environment happy-dom
-import Footer from '$components/Footer.svelte';
+import Footer from '$components/layout/Footer.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
+
+it('has a valid locator', () => {
+	const { getByTestId } = render(Footer);
+	expect(getByTestId('footer')).toBeTruthy();
+});
 
 it('includes copyright notice', () => {
 	const { container } = render(Footer);
