@@ -1,11 +1,7 @@
 {
 	"ci": {
-		"collect": {
-			"staticDistDir": "./build"
-		},
-		"assert": {},
-		"upload": {},
-		"server": {},
-		"wizard": {}
+		"assert": {
+			"preset": "lighthouse:no-pwa"
+		}
 	}
 }

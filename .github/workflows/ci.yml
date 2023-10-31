@@ -85,6 +85,15 @@ jobs:
       - name: Build site
         run: pnpm run build
 
+      # TODO: For testing purpose; REMOVE it before PR merge
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        with:
+          urls: https://lasuillard.github.io/
+          uploadArtifacts: true
+
       - name: Upload build artifact
         if: ${{ github.event_name == 'push' }}
         uses: actions/upload-pages-artifact@v2
@@ -113,6 +122,8 @@ jobs:
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         with:
           urls: ${{ steps.deployment.outputs.page_url }}
           uploadArtifacts: true
