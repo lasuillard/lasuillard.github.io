@@ -85,48 +85,11 @@ jobs:
       - name: Build site
         run: pnpm run build
 
-      - name: Upload build artifact (Lighthouse)
-        uses: actions/upload-artifact@v3
-        if: ${{ github.event_name == 'pull_request' }}
-        with:
-          name: build-lighthouse
-          path: build/
-          retention-days: 1
-
-      - name: Upload build artifact (Deploy)
+      - name: Upload build artifact
         uses: actions/upload-pages-artifact@v2
         if: ${{ github.event_name == 'push' }}
         with:
           path: build/
-
-  lighthouse-preview:
-    name: Lighthouse (Preview)
-    needs: build
-    if: ${{ github.event_name == 'pull_request' }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          # NOTE: Need to status checks to be shown in PR
-          # https://www.brianperry.dev/til/2021/configuring-lighthouse-ci-with-github-actions/
-          ref: ${{ github.event.pull_request.head.sha }}
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: build-lighthouse
-          path: build/
-
-      - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v10
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-        with:
-          runs: 1
-          budgetPath: ./budget.json
-          temporaryPublicStorage: true
 
   deploy:
     name: Deploy
@@ -156,18 +119,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download build artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: github-pages
-
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         with:
           runs: 3
+          configPath: ./.lighthouserc.json
+          budgetPath: ./budget.json
           urls: |
             ${{ needs.deploy.outputs.page_url }}/
-          budgetPath: ./budget.json
+            ${{ needs.deploy.outputs.page_url }}/about-me
+            ${{ needs.deploy.outputs.page_url }}/blog
           temporaryPublicStorage: true
