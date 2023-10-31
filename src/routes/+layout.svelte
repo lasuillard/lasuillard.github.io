@@ -18,7 +18,7 @@
 	<!-- https://github.com/sveltejs/kit/issues/3305 -->
 	<title>{title}</title>
 	{#if $page.data?.meta?.description}
-		<meta name="description" content={$page.data.description} />
+		<meta name="description" content={$page.data.meta.description} />
 	{/if}
 </svelte:head>
 
