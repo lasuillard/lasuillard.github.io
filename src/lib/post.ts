@@ -6,6 +6,8 @@ export const Metadata = z
 	.object({
 		title: z.string(),
 		publicationDate: z.coerce.date(),
+		preview: z.string(),
+		summary: z.string(),
 		tags: z.array(z.string())
 	})
 	.strict();

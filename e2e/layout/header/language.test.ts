@@ -11,7 +11,7 @@ beforeAll('go to index page', async ({ browser }) => {
 	await page.goto('/');
 	const header = page.locator('header').locator('visible = true');
 	languageSelect = header.getByTestId('language-select');
-	await expect(languageSelect).toBeVisible();
+	await expect(languageSelect).toBeHidden();
 });
 
 it('todo', () => fixme());

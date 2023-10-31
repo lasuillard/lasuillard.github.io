@@ -9,15 +9,35 @@ it('has a valid locator', () => {
 });
 
 // NOTE: Further reading for 2-way binding: https://github.com/testing-library/svelte-testing-library/issues/117
-it('has a button to toggle sidebar', async () => {
-	const openSidebar = false;
-	const { getByTestId, component: _component } = render(Header, { openSidebar });
+it('has a button to toggle drawer', async () => {
+	const { getByTestId, component: _component } = render(Header);
 	const component = _component.$$;
-	const sidebarToggle = getByTestId('sidebar-toggle');
-	expect(sidebarToggle).toBeTruthy();
-	expect(component.ctx[component.props['openSidebar']]).toBe(false);
-	sidebarToggle.click();
-	expect(component.ctx[component.props['openSidebar']]).toBe(true);
+	const drawerToggle = getByTestId('drawer-toggle');
+	expect(drawerToggle).toBeTruthy();
+	expect(component.ctx[component.props['drawerOpen']]).toBe(false);
+	drawerToggle.click();
+	expect(component.ctx[component.props['drawerOpen']]).toBe(true);
+});
+
+it('has a link to home', () => {
+	const { getAllByText } = render(Header);
+	getAllByText('Home').forEach((elem) => {
+		expect(elem.getAttribute('href')).toEqual('/');
+	});
+});
+
+it('has a link to about', () => {
+	const { getAllByText } = render(Header);
+	getAllByText('About Me').forEach((elem) => {
+		expect(elem.getAttribute('href')).toEqual('/about-me');
+	});
+});
+
+it('has a link to blog', () => {
+	const { getAllByText } = render(Header);
+	getAllByText('Blog').forEach((elem) => {
+		expect(elem.getAttribute('href')).toEqual('/blog');
+	});
 });
 
 it('contains theme selector', () => {

@@ -17,5 +17,5 @@ it('has a theme select', async () => {
 });
 
 it('has a language select', async () => {
-	await expect(header.getByTestId('language-select')).toBeVisible();
+	await expect(header.getByTestId('language-select')).toBeHidden();
 });

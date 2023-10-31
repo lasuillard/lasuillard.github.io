@@ -33,5 +33,5 @@ it('has a link to send an email to me', () => {
 
 it('has link to RSS feeds', () => {
 	const { container } = render(Footer);
-	expect(container.querySelector('a[href="/rss"]')).toBeTruthy();
+	expect(container.querySelector('a[href="/rss.xml"]')).toBeTruthy();
 });
