@@ -95,7 +95,6 @@ jobs:
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
         with:
-          urls: https://lasuillard.github.io/
           budgetPath: ./budget.json
           temporaryPublicStorage: true
 
