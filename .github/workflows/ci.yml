@@ -101,8 +101,8 @@ jobs:
         run: pnpm run build
 
       - name: Upload build artifact
-        if: ${{ github.event_name == 'push' }}
         uses: actions/upload-pages-artifact@v2
+        if: ${{ github.event_name == 'push' }}
         with:
           path: build/
 
@@ -115,10 +115,35 @@ jobs:
     permissions:
       pages: write
       id-token: write
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url}}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
+
+  lighthouse:
+    name: Lighthouse
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        with:
+          runs: 3
+          configPath: ./.lighthouserc.json
+          budgetPath: ./budget.json
+          urls: |
+            ${{ needs.deploy.outputs.page_url }}/
+            ${{ needs.deploy.outputs.page_url }}/about-me
+            ${{ needs.deploy.outputs.page_url }}/blog
+          temporaryPublicStorage: true
