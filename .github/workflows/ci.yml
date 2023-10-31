@@ -31,10 +31,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          # NOTE: Need to status checks to be shown in PR
-          # https://www.brianperry.dev/til/2021/configuring-lighthouse-ci-with-github-actions/
-          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up PNPM
         uses: pnpm/action-setup@v2
@@ -97,6 +93,7 @@ jobs:
   lighthouse:
     name: Lighthouse
     needs: build
+    if: ${{ github.event_name == 'pull_request' }}
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -131,19 +128,8 @@ jobs:
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url}}
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-
-      - name: Run Lighthouse CI
-        uses: treosh/lighthouse-ci-action@v10
-        env:
-          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-        with:
-          urls: ${{ steps.deployment.outputs.page_url }}
-          uploadArtifacts: true
