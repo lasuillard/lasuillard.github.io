@@ -11,12 +11,15 @@
 
 	export let data;
 
-	$: title = titleWithSuffix($page.data?.title);
+	$: title = titleWithSuffix($page.data?.meta?.title);
 </script>
 
 <svelte:head>
 	<!-- https://github.com/sveltejs/kit/issues/3305 -->
 	<title>{title}</title>
+	{#if $page.data?.meta?.description}
+		<meta name="description" content={$page.data.description} />
+	{/if}
 </svelte:head>
 
 <div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">

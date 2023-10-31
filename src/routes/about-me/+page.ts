@@ -2,6 +2,8 @@ import type { PageLoad } from '../$types';
 
 export const load: PageLoad = () => {
 	return {
-		title: 'About Me'
+		meta: {
+			title: 'About Me'
+		}
 	};
 };
