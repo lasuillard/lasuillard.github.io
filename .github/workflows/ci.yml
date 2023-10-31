@@ -89,7 +89,29 @@ jobs:
       - name: Build site
         run: pnpm run build
 
-      # TODO: For testing purpose; REMOVE it before PR merge
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: build/
+
+  lighthouse:
+    name: Lighthouse
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # NOTE: Need to status checks to be shown in PR
+          # https://www.brianperry.dev/til/2021/configuring-lighthouse-ci-with-github-actions/
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: github-pages
+
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
         env:
@@ -97,12 +119,6 @@ jobs:
         with:
           budgetPath: ./budget.json
           temporaryPublicStorage: true
-
-      - name: Upload build artifact
-        if: ${{ github.event_name == 'push' }}
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: build/
 
   deploy:
     name: Deploy
