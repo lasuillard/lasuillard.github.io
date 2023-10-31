@@ -21,8 +21,12 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-# Created by https://www.toptal.com/developers/gitignore/api/osx,node,linux,svelte,windows,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=osx,node,linux,svelte,windows,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/osx,node,linux,svelte,windows,visualstudiocode,lighthouseci
+# Edit at https://www.toptal.com/developers/gitignore?templates=osx,node,linux,svelte,windows,visualstudiocode,lighthouseci
+
+### LighthouseCI ###
+# Lighthouse reports
+.lighthouseci/
 
 ### Linux ###
 *~
@@ -260,4 +264,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/osx,node,linux,svelte,windows,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/osx,node,linux,svelte,windows,visualstudiocode,lighthouseci
