@@ -10,6 +10,10 @@ export const load: PageLoad = async ({ params }) => {
 	const { metadata, content } = post;
 
 	return {
+		meta: {
+			title: metadata.title,
+			description: metadata.summary // TODO: Sanitize markdown syntax (transform into plain text)
+		},
 		metadata,
 		content
 	};

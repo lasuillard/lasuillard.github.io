@@ -14,6 +14,10 @@ export const load: PageLoad = async ({ params, fetch }) => {
 	);
 
 	return {
+		meta: {
+			title: tag,
+			description: `My writing about ${tag}.`
+		},
 		tag,
 		posts
 	};

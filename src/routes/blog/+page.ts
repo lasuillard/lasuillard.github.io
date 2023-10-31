@@ -7,5 +7,11 @@ export const load: PageLoad = async ({ fetch }) => {
 	const data = await response.json();
 	const allPosts = z.array(Post).parse(data);
 
-	return { allPosts };
+	return {
+		meta: {
+			title: 'Blog',
+			description: 'My writing about almost everything but primarily on S/W development.'
+		},
+		allPosts
+	};
 };
