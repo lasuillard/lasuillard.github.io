@@ -19,7 +19,7 @@
 
 <!-- BUG: False-positive uncovered branch; https://github.com/vitest-dev/vitest/issues/1893 -->
 <div data-testid="theme-select" {...$$restProps}>
-	<label class="btn btn-circle btn-ghost swap swap-rotate">
+	<label class="btn btn-circle btn-ghost swap swap-rotate" aria-label="Theme Selection">
 		<input
 			data-testid="toggle-input"
 			type="checkbox"

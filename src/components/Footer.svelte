@@ -22,7 +22,7 @@
 				<div class="grid grid-flow-col space-x-3 lg:space-x-2">
 					<!-- GitHub -->
 					<a href="https://github.com/lasuillard" target="_blank" class="btn btn-circle btn-ghost">
-						<GitHub class="h-7 w-7 lg:h-8 lg:w-8" />
+						<GitHub class="h-7 w-7 lg:h-8 lg:w-8" aria-label="Visit my GitHub profile" />
 					</a>
 
 					<!-- LinkedIn -->
@@ -31,16 +31,24 @@
 						target="_blank"
 						class="btn btn-circle btn-ghost"
 					>
-						<LinkedIn class="h-6 w-6 lg:h-7 lg:w-7 " />
+						<LinkedIn class="h-6 w-6 lg:h-7 lg:w-7" aria-label="Visit my LinkedIn profile" />
 					</a>
 
 					<!-- Gmail -->
 					<a href="mailto:lasuillard@gmail.com" class="btn btn-circle btn-ghost">
-						<Gmail class="h-8 w-8 items-center p-1 lg:h-9 lg:w-9" />
+						<Gmail
+							class="h-8 w-8 items-center p-1 lg:h-9 lg:w-9"
+							aria-label="Send an email to me"
+						/>
 					</a>
 
 					<!-- RSS -->
-					<a href="/rss.xml" target="_blank" class="btn btn-circle btn-ghost self-center">
+					<a
+						href="/rss.xml"
+						target="_blank"
+						class="btn btn-circle btn-ghost self-center"
+						aria-label="RSS feeds"
+					>
 						<RSS class="h-8 w-8 lg:h-9 lg:w-9" />
 					</a>
 				</div>

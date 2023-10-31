@@ -29,6 +29,7 @@
 						for="header-drawer"
 						class="btn btn-square btn-ghost"
 						data-testid="drawer-toggle"
+						aria-label="Menu"
 					>
 						<Menu class="h-7 w-7" />
 					</label>
