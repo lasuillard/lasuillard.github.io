@@ -4,8 +4,7 @@
 			"preset": "lighthouse:no-pwa"
 		},
 		"collect": {
-			"staticDistDir": "./build",
-			"numberOfRuns": 3
+			"staticDistDir": "./build"
 		}
 	}
 }
