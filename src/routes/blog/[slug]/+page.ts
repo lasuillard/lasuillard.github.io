@@ -10,6 +10,7 @@ export const load: PageLoad = async ({ params }) => {
 	const { metadata, content } = post;
 
 	return {
+		title: metadata.title,
 		metadata,
 		content
 	};

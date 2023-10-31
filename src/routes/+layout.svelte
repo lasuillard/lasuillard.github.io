@@ -2,13 +2,22 @@
 	// TODO: Dynamic theme selection; re-render layout based on key
 	import 'highlight.js/styles/atom-one-dark-reasonable.css';
 
+	import { page } from '$app/stores';
 	import Footer from '$components/Footer.svelte';
 	import Header from '$components/Header.svelte';
+	import { titleWithSuffix } from '$lib/meta';
 	import { fade } from 'svelte/transition';
 	import '../app.css';
 
 	export let data;
+
+	$: title = titleWithSuffix($page.data?.title);
 </script>
+
+<svelte:head>
+	<!-- https://github.com/sveltejs/kit/issues/3305 -->
+	<title>{title}</title>
+</svelte:head>
 
 <div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
 	<Header class="sticky top-0 z-[1] bg-base-200" bind:currentPath={data.current} />

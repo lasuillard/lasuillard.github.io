@@ -7,5 +7,8 @@ export const load: PageLoad = async ({ fetch }) => {
 	const data = await response.json();
 	const allPosts = z.array(Post).parse(data);
 
-	return { allPosts };
+	return {
+		title: 'Blog',
+		allPosts
+	};
 };
