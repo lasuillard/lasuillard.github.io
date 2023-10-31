@@ -90,6 +90,7 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+          LHCI_BUILD_CONTEXT__CURRENT_HASH: ${{ github.event.pull_request.head.sha || github.sha }} # https://github.com/GoogleChrome/lighthouse-ci/discussions/512
         with:
           urls: https://lasuillard.github.io/
           uploadArtifacts: true
