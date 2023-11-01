@@ -35,11 +35,12 @@
 					</a>
 
 					<!-- Gmail -->
-					<a href="mailto:lasuillard@gmail.com" class="btn btn-circle btn-ghost">
-						<Gmail
-							class="h-8 w-8 items-center p-1 lg:h-9 lg:w-9"
-							aria-label="Send an email to me"
-						/>
+					<a
+						href="mailto:lasuillard@gmail.com"
+						class="btn btn-circle btn-ghost"
+						aria-label="Send an email to me"
+					>
+						<Gmail class="h-8 w-8 items-center p-1 lg:h-9 lg:w-9" />
 					</a>
 
 					<!-- RSS -->

@@ -7,8 +7,6 @@ const siteUrl = 'https://lasuillard.github.io';
 const siteTitle = "lasuillard's Blog";
 const siteDescription = "lasuillard's personal tech blog.";
 
-// https://www.rssboard.org/rss-validator/check.cgi?url=https%3A%2F%2Flasuillard.github.io%2Frss
-// https://validator.w3.org/feed/#validate_by_input
 export const GET: RequestHandler = async () => {
 	const allPosts = await getAllPosts();
 
