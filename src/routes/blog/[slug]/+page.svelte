@@ -15,7 +15,7 @@
 <div {...$$restProps}>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
-		<div class="-mr-8 ml-8 hidden w-full xl:order-last xl:block">
+		<div class="ml-8 hidden max-lg:-mr-8 xl:order-last xl:block">
 			{#if contentWrapper}
 				<Toc bind:content={contentWrapper} class="sticky top-[25rem]" />
 			{/if}
@@ -43,7 +43,7 @@
 			</div>
 			<article
 				bind:this={contentWrapper}
-				class="prose prose-sm mt-12 max-w-none md:prose-base lg:prose-lg"
+				class="prose prose-sm mt-12 max-w-none break-words lg:prose-base lg:max-w-[60vw]"
 			>
 				<Markdown {content} />
 			</article>
@@ -61,5 +61,9 @@
 
 	article :global(img) {
 		@apply mx-auto; /* Align center */
+	}
+
+	article :global(h1) {
+		@apply mt-12;
 	}
 </style>
