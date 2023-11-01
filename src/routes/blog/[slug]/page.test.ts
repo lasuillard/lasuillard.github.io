@@ -1,9 +1,9 @@
 // @vitest-environment happy-dom
 import * as post from '$lib/post';
-import { load } from '$routes/blog/[slug]/+page';
-import Page from '$routes/blog/[slug]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
+import { load } from './+page';
+import Page from './+page.svelte';
 
 it('renders a post', async () => {
 	const spy = vi.spyOn(post, 'getPost');

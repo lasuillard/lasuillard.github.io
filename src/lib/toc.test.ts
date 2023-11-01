@@ -1,5 +1,5 @@
-import { makeToc, type TreeSource } from '$lib/toc';
 import { describe, expect, it } from 'vitest';
+import { makeToc, type TreeSource } from './toc';
 
 describe(makeToc, () => {
 	it('make TOC tree from list of headings', () => {

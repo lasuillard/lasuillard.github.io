@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
-import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from '$lib/theme';
-import { getVarName } from '$lib/utils';
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
+import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from './theme';
+import { getVarName } from './utils';
 
 describe(initTheme, () => {
 	it(`store ${getVarName({ currentTheme })} become available once initialized`, () => {

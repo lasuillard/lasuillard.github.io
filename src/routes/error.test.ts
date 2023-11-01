@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
-import Page from '$routes/+error.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
+import Page from './+error.svelte';
 
 it('shows error detail', () => {
 	const { getByText } = render(Page, {

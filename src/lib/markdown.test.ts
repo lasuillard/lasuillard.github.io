@@ -1,5 +1,5 @@
-import { parse } from '$lib/markdown';
 import { describe, expect, it } from 'vitest';
+import { parse } from './markdown';
 
 describe(parse, () => {
 	it('parses given markdown text with front matter', async () => {

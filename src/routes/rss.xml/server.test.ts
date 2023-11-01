@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
-import * as Endpoint from '$routes/rss.xml/+server';
 import { describe, expect, it, vi } from 'vitest';
+import * as Endpoint from './+server';
 
 describe('GET /rss.xml', () => {
 	it('returns an parsable XML document', async () => {
