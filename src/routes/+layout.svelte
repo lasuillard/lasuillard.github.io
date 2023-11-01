@@ -28,7 +28,7 @@
 	<div>
 		{#key data.current}
 			<main
-				class="mx-8 mt-12 lg:mx-24 lg:mt-20"
+				class="mx-6 mt-12 md:mx-10 lg:mx-24 lg:mt-20"
 				data-testid="main"
 				in:fade={{ duration: 150, delay: 150 }}
 				out:fade={{ duration: 150 }}

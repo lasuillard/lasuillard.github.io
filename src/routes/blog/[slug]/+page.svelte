@@ -20,7 +20,7 @@
 				<Toc bind:content={contentWrapper} class="sticky top-[25rem]" />
 			{/if}
 		</div>
-		<div>
+		<div class="mx-auto max-w-full">
 			<h1 class="text-center text-4xl font-bold md:text-5xl">{title}</h1>
 			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
 				Published at {format(publicationDate, 'yyyy.MM.dd')}
@@ -41,7 +41,10 @@
 					<Toc bind:content={contentWrapper} class="mb-6" />
 				{/if}
 			</div>
-			<article bind:this={contentWrapper} class="prose-sm mt-12 md:prose-base lg:prose-lg">
+			<article
+				bind:this={contentWrapper}
+				class="prose prose-sm mt-12 max-w-none md:prose-base lg:prose-lg"
+			>
 				<Markdown {content} />
 			</article>
 		</div>
@@ -50,9 +53,13 @@
 
 <style lang="postcss">
 	article :global(:where(h1, h2, h3, h4, h5, h6) > a) {
-		text-decoration-line: none !important;
+		@apply !no-underline;
 	}
 	article :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
-		text-decoration-line: underline !important;
+		@apply !underline;
+	}
+
+	article :global(img) {
+		@apply mx-auto; /* Align center */
 	}
 </style>
