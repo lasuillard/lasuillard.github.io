@@ -1,7 +1,7 @@
-// @vitest-environment jsdom
-import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from '$lib/theme';
+// @vitest-environment happy-dom
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
+import { Theme, currentTheme, getTheme, initTheme, isTheme, setTheme } from './theme';
 import { getVarName } from './utils';
 
 describe(initTheme, () => {

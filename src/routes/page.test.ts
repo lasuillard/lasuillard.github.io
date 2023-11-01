@@ -1,14 +1,11 @@
-// @vitest-environment jsdom
-import Page from '$routes/+page.svelte';
+// @vitest-environment happy-dom
 import { render } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { expect, it } from 'vitest';
+import { load } from './+page';
+import Page from './+page.svelte';
 
-it('renders', () => {
-	const { container } = render(Page);
+it('renders', async () => {
+	// @ts-expect-error Enough for mocking.
+	const { container } = render(Page, { data: await load() });
 	expect(container).toBeTruthy();
-});
-
-describe('posts', () => {
-	it.todo('have all required metadata');
-	it.todo('are reachable via slug');
 });

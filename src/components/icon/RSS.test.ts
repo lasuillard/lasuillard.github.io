@@ -1,4 +1,4 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import RSS from '$components/icon/RSS.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';

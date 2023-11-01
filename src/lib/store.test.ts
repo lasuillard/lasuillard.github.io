@@ -1,8 +1,8 @@
-// @vitest-environment jsdom
-import { nullStorage, persisted } from '$lib/store';
-import { getVarName } from '$lib/utils';
+// @vitest-environment happy-dom
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
+import { nullStorage, persisted } from './store';
+import { getVarName } from './utils';
 
 describe(getVarName({ nullStorage }), () => {
 	it('should satisfy to browser storage API interface', () => {

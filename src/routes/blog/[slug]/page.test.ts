@@ -1,14 +1,14 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import * as post from '$lib/post';
-import { load } from '$routes/blog/[slug]/+page';
-import Page from '$routes/blog/[slug]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
+import { load } from './+page';
+import Page from './+page.svelte';
 
 it('renders a post', async () => {
 	const spy = vi.spyOn(post, 'getPost');
 	spy.mockResolvedValueOnce({
+		slug: 'lorem-ipsum',
 		metadata: {
 			title: 'Lorem Ipsum',
 			publicationDate: new Date('2020-04-13T13:09:28.333+09:00'),
@@ -16,11 +16,10 @@ it('renders a post', async () => {
 			summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
 			tags: ['Apple', 'Watermelon', 'Orange']
 		},
-		// @ts-ignore
-		content: null // TODO: Should test the content
+		content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
 	});
 	const { getByText, queryByText } = render(Page, {
-		// @ts-ignore
+		// @ts-expect-error Enough for mocking.
 		data: await load({ params: { slug: 'lorem-ipsum' } })
 	});
 	expect(spy).toHaveBeenCalledOnce();
@@ -29,6 +28,9 @@ it('renders a post', async () => {
 	expect(getByText('Watermelon')).toBeTruthy();
 	expect(getByText('Orange')).toBeTruthy();
 	expect(queryByText('Pear')).toBeNull();
+	expect(
+		getByText('Lorem Ipsum is simply dummy text of the printing and typesetting industry.')
+	).toBeTruthy();
 });
 
 it('should throw an error page if post not exists', () => {
@@ -36,7 +38,7 @@ it('should throw an error page if post not exists', () => {
 	spy.mockResolvedValueOnce(null);
 	expect(async () =>
 		render(Page, {
-			// @ts-ignore
+			// @ts-expect-error Enough for mocking.
 			data: await load({ params: { slug: 'lorem-ipsum' } })
 		})
 	).rejects.toMatchObject({
@@ -46,5 +48,3 @@ it('should throw an error page if post not exists', () => {
 		}
 	});
 });
-
-it.todo("conflicting routes shouldn't exist");

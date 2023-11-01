@@ -1,15 +1,16 @@
-// @vitest-environment jsdom
-import { load } from '$routes/+layout';
-import Layout from '$routes/+layout.svelte';
+// @vitest-environment happy-dom
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
+import { load } from './+layout';
+import Layout from './+layout.svelte';
 
 it('renders', async () => {
-	// @ts-expect-error Enough for mocking.
-	const { container } = render(Layout, { data: await load({ url: { pathname: '' } }) });
+	const { container, getByTestId } = render(Layout, {
+		// @ts-expect-error Enough for mocking.
+		data: await load({ url: { pathname: '' } })
+	});
 	expect(container).toBeTruthy();
+	expect(getByTestId('header')).toBeTruthy();
+	expect(getByTestId('main')).toBeTruthy();
+	expect(getByTestId('footer')).toBeTruthy();
 });
-
-it.todo('contains a header');
-it.todo('contains a main content slot');
-it.todo('contains a footer');

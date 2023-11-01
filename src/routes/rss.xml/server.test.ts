@@ -1,6 +1,6 @@
-// @vitest-environment jsdom
-import * as Endpoint from '$routes/rss.xml/+server';
+// @vitest-environment happy-dom
 import { describe, expect, it, vi } from 'vitest';
+import * as Endpoint from './+server';
 
 describe('GET /rss.xml', () => {
 	it('returns an parsable XML document', async () => {
@@ -26,6 +26,4 @@ describe('GET /rss.xml', () => {
 		const content = xmlDoc.documentElement.outerHTML;
 		expect(content).not.toContain('parsererror');
 	});
-
-	it.todo('returns cache policy headers');
 });

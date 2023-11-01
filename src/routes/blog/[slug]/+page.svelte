@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Markdown from '$components/Markdown.svelte';
-	import Toc from '$components/Toc.svelte';
+	import Markdown from '$components/content/Markdown.svelte';
+	import Toc from '$components/content/Toc.svelte';
 	import { format } from 'date-fns';
 
 	export let data;
@@ -8,6 +8,7 @@
 	const { metadata, content } = data;
 	const { title, publicationDate, tags } = metadata;
 
+	// Content wrapper for generating ToC
 	let contentWrapper: HTMLElement | undefined;
 </script>
 

@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-import { Post, getAllPosts, getPost } from '$lib/post';
-import { getVarName, omitKeys } from '$lib/utils';
 import { describe, expect, it } from 'vitest';
+import { Post, getAllPosts, getPost } from './post';
+import { getVarName, omitKeys } from './utils';
 
 describe(getVarName({ Post }), () => {
 	const sample = {

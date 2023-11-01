@@ -1,8 +1,8 @@
-// @vitest-environment jsdom
+// @vitest-environment happy-dom
 import { Post } from '$lib/post';
-import * as Endpoint from '$routes/api/posts/+server';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
+import * as Endpoint from './+server';
 
 describe('GET /api/posts', () => {
 	it('respond with list of all posts', async () => {
