@@ -12,3 +12,5 @@ it('has a link in title for generated code', () => {
 	const { getByTestId } = render(QRCode, { text: 'Hello, World!' });
 	expect(getByTestId('qrcode').title).toEqual('Hello, World!');
 });
+
+// FIXME: Canvas raising errors
