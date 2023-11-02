@@ -23,7 +23,7 @@
 </svelte:head>
 
 <div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
-	<Header class="sticky top-0 z-[1] bg-base-200" bind:currentPath={data.current} />
+	<Header class="bg-base-100" bind:currentPath={data.current} />
 
 	<div>
 		{#key data.current}
