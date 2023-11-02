@@ -52,18 +52,18 @@
 </div>
 
 <style lang="postcss">
-	article :global(:where(h1, h2, h3, h4, h5, h6) > a) {
-		@apply !no-underline;
-	}
-	article :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
-		@apply !underline;
-	}
-
-	article :global(img) {
-		@apply mx-auto; /* Align center */
-	}
-
-	article :global(h1) {
-		@apply mt-12;
+	article {
+		/* Center image */
+		& :global(img) {
+			@apply mx-auto;
+		}
+		/* No underline for heading links */
+		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
+			@apply no-underline;
+		}
+		/* Show '#' on the left of heading links when hover */
+		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
+			@apply before:absolute before:-ml-6 before:text-secondary before:underline before:underline-offset-4 before:content-['#'];
+		}
 	}
 </style>
