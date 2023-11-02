@@ -3,6 +3,7 @@ import rehypeHighlight from 'rehype-highlight';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import remarkFrontmatter from 'remark-frontmatter';
+import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
@@ -11,6 +12,7 @@ import { parse as parseYaml } from 'yaml';
 
 export const processor = unified()
 	.use(remarkParse)
+	.use(remarkGfm)
 	.use(remarkStringify)
 	.use(remarkFrontmatter, ['yaml'])
 	.use(() => (node, file) => {
