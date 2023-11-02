@@ -10,20 +10,55 @@ import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 import { parse as parseYaml } from 'yaml';
 
+interface INode {
+	type: string;
+	tagName?: string;
+	properties?: Record<string, string>;
+	children: INode[];
+}
+
+/**
+ * Visit nodes.
+ * @param tree Tree node.
+ * @param visitor Visitor function.
+ */
+function visit(tree: INode, visitor: (node: INode) => void) {
+	if (!tree?.children?.length) {
+		visitor(tree);
+		return;
+	}
+
+	for (const child of tree.children) {
+		visit(child, visitor);
+	}
+}
+
 export const processor = unified()
 	.use(remarkParse)
 	.use(remarkGfm)
 	.use(remarkStringify)
 	.use(remarkFrontmatter, ['yaml'])
-	.use(() => (node, file) => {
+	.use(() => (tree, file) => {
+		// Frontmatter parser plugin
 		// @ts-expect-error False-positive warning; BUG: `children` exists in node TS says it doesn't
-		const frontMatter = node.children.find((child) => child.type === 'yaml')?.value ?? null;
+		const frontMatter = tree.children.find((child) => child.type === 'yaml')?.value ?? null;
 		if (frontMatter) {
 			file.data.frontMatter = parseYaml(frontMatter);
 		}
 	})
 	.use(remarkRehype)
 	.use(rehypeStringify)
+	.use(() => (tree) => {
+		// Plugin to rewrite URLs starting with '/static' for compatibility with VS Code Markdown Preview
+		// @ts-expect-error False-positive warning
+		visit(tree, (node) => {
+			if (node.type === 'element' && node.tagName) {
+				if (node.properties?.src) {
+					node.properties.src = node.properties.src.replace(/^\/static/, '');
+				}
+			}
+		});
+	})
 	.use(rehypeSlug)
 	.use(rehypeAutolinkHeadings, { behavior: 'wrap' })
 	.use(rehypeHighlight);
