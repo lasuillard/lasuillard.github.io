@@ -64,9 +64,9 @@
 
 <style lang="postcss">
 	article {
-		/* Center image */
+		/* Center image and add some shadow for visual recognition */
 		& :global(img) {
-			@apply mx-auto;
+			@apply mx-auto shadow-md;
 		}
 		/* No underline for heading links */
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
@@ -75,6 +75,14 @@
 		/* Show '#' on the left of heading links when hover */
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
 			@apply before:absolute before:-ml-6 before:text-secondary before:underline before:underline-offset-4 before:content-['#'];
+		}
+		/* Give some space between text and underline */
+		& :global(a) {
+			@apply underline-offset-4;
+		}
+		/* Add some shadow for visual recognition */
+		& :global(pre) {
+			@apply shadow-md;
 		}
 	}
 </style>
