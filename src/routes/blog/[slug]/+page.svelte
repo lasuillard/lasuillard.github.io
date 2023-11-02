@@ -2,6 +2,7 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
 	import { format } from 'date-fns';
+	import { onMount } from 'svelte';
 
 	export let data;
 
@@ -10,6 +11,16 @@
 
 	// Content wrapper for generating ToC
 	let contentWrapper: HTMLElement | undefined;
+
+	onMount(() => {
+		// Monkey-patching I18n for footnote label
+		const footnoteLabel = contentWrapper?.querySelector('#footnote-label');
+		if (!footnoteLabel) {
+			console.debug('Footnote label not found, skip applying I18n for this');
+			return;
+		}
+		footnoteLabel.innerHTML = '각주'; // TODO: I18n
+	});
 </script>
 
 <div {...$$restProps}>
