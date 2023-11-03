@@ -38,3 +38,23 @@ export async function initEngine(): Promise<MiniSearch> {
 export function getEngine(): MiniSearch | undefined {
 	return miniSearch;
 }
+
+/* c8 ignore start */
+if (import.meta.vitest) {
+	const { describe, expect, it, vi } = import.meta.vitest;
+
+	describe(initEngine, () => {
+		it('engine is defined after initialization', async () => {
+			expect(getEngine()).toBeUndefined();
+			// @ts-expect-error Enough for mocking.
+			vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => ({
+				json: vi.fn(() => [])
+			}));
+			await initEngine();
+			expect(getEngine()).toBeDefined();
+		});
+	});
+
+	describe.todo(getEngine);
+}
+/* c8 ignore stop */

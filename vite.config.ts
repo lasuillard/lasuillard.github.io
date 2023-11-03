@@ -3,6 +3,9 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [sveltekit()],
+	define: {
+		'import.meta.vitest': 'undefined'
+	},
 	server: {
 		fs: {
 			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['posts']
@@ -12,7 +15,10 @@ export default defineConfig({
 		alias: [
 			{ find: /^svelte$/, replacement: 'svelte/internal' } // BUG: https://github.com/vitest-dev/vitest/issues/2834
 		],
-		include: ['{src,tests}/**/*.{test,spec}.{js,ts}'],
+		include: [
+			'{src,tests}/**/*.{test,spec}.{js,ts}',
+			'src/lib/**/*.{js,ts}' // In-source testing
+		],
 		setupFiles: ['tests/setup.ts'],
 		coverage: {
 			all: true,

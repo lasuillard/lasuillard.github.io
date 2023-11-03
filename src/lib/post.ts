@@ -1,5 +1,6 @@
 import { parse } from '$lib/markdown';
 import { z } from 'zod';
+import { getVarName, omitKeys } from './utils';
 
 /** Expected and required metadata for posts. */
 export const Metadata = z
@@ -34,7 +35,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 	try {
 		post = (
 			import.meta.env.MODE === 'test'
-				? await import(`../../tests/fixtures/posts/${slug}.md?raw`)
+				? await import(`../../tests/fixtures/posts/${slug}.md?raw`) /* c8 ignore next */
 				: await import(`../../posts/${slug}.md?raw`)
 		).default;
 	} catch (err) {
@@ -42,16 +43,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 		return null;
 	}
 
-	const { frontMatter, content } = await parse(post);
-	let metadata: Metadata;
-	try {
-		metadata = Metadata.parse(frontMatter);
-	} catch (err) {
-		if (err instanceof z.ZodError) {
-			throw new Error(`Failed to parse post' metadata: ${err}`);
-		}
-		throw err;
-	}
+	const { frontMatter: metadata, content } = await parse(post);
 
 	return Post.parse({
 		slug,
@@ -68,7 +60,7 @@ export async function getAllPosts(): Promise<Post[]> {
 	const pattern = /^.*\/(.+?)\.md$/;
 	const allPostFiles =
 		import.meta.env.MODE === 'test'
-			? import.meta.glob('../../tests/fixtures/posts/*.md', { as: 'raw' })
+			? import.meta.glob('../../tests/fixtures/posts/*.md', { as: 'raw' }) /* c8 ignore next */
 			: import.meta.glob(`../../posts/*.md`, { as: 'raw' });
 
 	const allPosts = await Promise.all(
@@ -93,3 +85,72 @@ export async function getAllPosts(): Promise<Post[]> {
 
 	return allPosts;
 }
+
+/* c8 ignore start */
+if (import.meta.vitest) {
+	const { describe, expect, it } = import.meta.vitest;
+
+	describe(getVarName({ Post }), () => {
+		const sample = {
+			slug: 'coke-and-cider',
+			metadata: {
+				title: 'Coke and Cider',
+				publicationDate: '2020-04-13T00:00:00.000+09:00',
+				preview: '/lorem-ipsum.png',
+				summary: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+				tags: ['beverage', 'review']
+			},
+			content: 'Polar bear'
+		};
+
+		it('parses given JSON object class', () => {
+			expect(Post.parse(sample)).toEqual({
+				...sample,
+				metadata: {
+					...sample.metadata,
+					publicationDate: new Date('2020-04-13T00:00:00.000+09:00')
+				}
+			});
+		});
+
+		it.each([
+			// Each for case description, input data
+			['no slug', [omitKeys(sample, ['slug'])]],
+			[
+				'lacking metadata field',
+				['title', 'publicationDate', 'tags'].map((key) => ({
+					...sample,
+					metadata: omitKeys(sample.metadata, [key])
+				}))
+			]
+		])('throws an error if unable to parse (%s)', (_, input) => {
+			input.forEach((item) => {
+				expect(() => Post.parse(item)).toThrow();
+			});
+		});
+	});
+
+	describe(getPost, () => {
+		it('returns post', async () => {
+			const post = await getPost('puppis-artus-attoniti-haud');
+			expect(post).toBeTruthy();
+		});
+
+		it('should return null if not exists', async () => {
+			const post = await getPost('polar-bear-drinking-cider');
+			expect(post).toBeNull();
+		});
+
+		it.todo('throws an error if post metadata schema not satisfactory');
+	});
+
+	describe(getAllPosts, () => {
+		it('loads all posts successfully', async () => {
+			const allPosts = await getAllPosts();
+			expect(allPosts).toHaveLength(3);
+		});
+
+		it.todo("throws an error if any of posts' metadata unsatisfying");
+	});
+}
+/* c8 ignore stop */
