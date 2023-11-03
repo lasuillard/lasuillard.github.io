@@ -33,6 +33,8 @@ it('renders a post', async () => {
 	).toBeTruthy();
 });
 
+it.todo('patch does not break footnote');
+
 it('should throw an error page if post not exists', () => {
 	const spy = vi.spyOn(post, 'getPost');
 	spy.mockResolvedValueOnce(null);

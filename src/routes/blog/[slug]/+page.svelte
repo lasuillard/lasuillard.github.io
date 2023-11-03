@@ -14,7 +14,7 @@
 
 	onMount(() => {
 		// Monkey-patching I18n for footnote label
-		const footnoteLabel = contentWrapper?.querySelector('#footnote-label');
+		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
 		if (!footnoteLabel) {
 			console.debug('Footnote label not found, skip applying I18n for this');
 			return;
