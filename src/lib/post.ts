@@ -33,7 +33,7 @@ export async function getPost(slug: string): Promise<Post | null> {
 	let post;
 	try {
 		post = (
-			import.meta.env.DEV
+			import.meta.env.MODE === 'test'
 				? await import(`../../tests/fixtures/posts/${slug}.md?raw`)
 				: await import(`../../posts/${slug}.md?raw`)
 		).default;
@@ -66,9 +66,10 @@ export async function getPost(slug: string): Promise<Post | null> {
  */
 export async function getAllPosts(): Promise<Post[]> {
 	const pattern = /^.*\/(.+?)\.md$/;
-	const allPostFiles = import.meta.env.DEV
-		? import.meta.glob('../../tests/fixtures/posts/*.md', { as: 'raw' })
-		: import.meta.glob(`../../posts/*.md`, { as: 'raw' });
+	const allPostFiles =
+		import.meta.env.MODE === 'test'
+			? import.meta.glob('../../tests/fixtures/posts/*.md', { as: 'raw' })
+			: import.meta.glob(`../../posts/*.md`, { as: 'raw' });
 
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
