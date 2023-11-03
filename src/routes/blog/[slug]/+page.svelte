@@ -20,6 +20,7 @@
 			return;
 		}
 		footnoteLabel.innerHTML = '각주'; // TODO: I18n
+		footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
 	});
 </script>
 
