@@ -10,12 +10,12 @@
 </script>
 
 <div data-testid="toc-tree" {...$$restProps}>
-	<p class="mb-1 font-light">
+	<p class="mb-1.5 font-light">
 		<a class="link-hover link" href={link}>{heading}</a>
 	</p>
 	<ul>
 		{#each tree.children as child}
-			<li class="ml-4">
+			<li class="ml-8">
 				<svelte:self tree={child} />
 			</li>
 		{/each}

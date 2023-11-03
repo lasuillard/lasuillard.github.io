@@ -1,10 +1,14 @@
+/* https://hangeul.naver.com/font/nanum */
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
 	html {
-		@apply font-mono;
+		@apply scroll-pt-4 scroll-smooth;
+		font-family: 'NanumGothic', ui-monospace;
 	}
 }
 
@@ -13,7 +17,7 @@
 }
 
 ::-webkit-scrollbar-track {
-	@apply bg-transparent;
+	@apply bg-base-100;
 }
 
 ::-webkit-scrollbar-thumb {

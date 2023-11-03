@@ -23,12 +23,12 @@
 </svelte:head>
 
 <div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
-	<Header class="sticky top-0 z-[1] bg-base-200" bind:currentPath={data.current} />
+	<Header class="bg-base-100" bind:currentPath={data.current} />
 
 	<div>
 		{#key data.current}
 			<main
-				class="mx-8 mt-12 lg:mx-24 lg:mt-20"
+				class="mx-6 mt-12 md:mx-10 lg:mx-24 lg:mt-20"
 				data-testid="main"
 				in:fade={{ duration: 150, delay: 150 }}
 				out:fade={{ duration: 150 }}
