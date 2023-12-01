@@ -36,7 +36,7 @@
 		"date-fns": "^2.30.0",
 		"eslint": "^8.52.0",
 		"eslint-config-prettier": "^9.0.0",
-		"eslint-plugin-jsdoc": "^46.8.2",
+		"eslint-plugin-jsdoc": "^46.9.0",
 		"eslint-plugin-svelte": "^2.34.0",
 		"glob": "^10.3.10",
 		"happy-dom": "^12.10.3",
