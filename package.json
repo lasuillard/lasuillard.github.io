@@ -27,7 +27,7 @@
 		"@tailwindcss/typography": "^0.5.10",
 		"@testing-library/svelte": "^4.0.4",
 		"@types/qrcode": "^1.5.4",
-		"@typescript-eslint/eslint-plugin": "^6.9.1",
+		"@typescript-eslint/eslint-plugin": "^6.13.1",
 		"@typescript-eslint/parser": "^6.9.1",
 		"@vitest/coverage-v8": "^0.34.6",
 		"@vitest/ui": "^0.34.6",
