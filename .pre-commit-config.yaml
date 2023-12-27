@@ -37,13 +37,6 @@ repos:
         entry: pnpm exec tsc
         args: [--noEmit]
 
-      - id: checkov
-        name: Run Checkov scanner
-        language: system
-        types: [file]
-        entry: checkov
-        args: [--quiet, --file]
-
       - id: vitest
         name: Run tests with Vitest
         language: system
