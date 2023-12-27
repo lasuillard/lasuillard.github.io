@@ -26,6 +26,14 @@
 		"build/**": true,
 		"node_modules/**": true
 	},
+	"files.exclude": {
+		".svelte-kit": true,
+		"build": true,
+		"coverage": true,
+		"node_modules": true,
+		"playwright-report": true,
+		"test-results": true
+	},
 	"json.format.enable": false,
 	"svelte.enable-ts-plugin": true,
 	"yaml.format.enable": true
