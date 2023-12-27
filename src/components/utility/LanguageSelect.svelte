@@ -23,7 +23,7 @@
 </script>
 
 <div data-testid="language-select" {...$$restProps}>
-	<ul class="menu rounded-box menu-horizontal z-[1]">
+	<ul class="menu menu-horizontal z-[1] rounded-box">
 		<li>
 			<details>
 				<summary class="text-base font-light">
