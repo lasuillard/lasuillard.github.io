@@ -9,6 +9,8 @@ on:
       - main
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   checkov:
     name: Checkov
