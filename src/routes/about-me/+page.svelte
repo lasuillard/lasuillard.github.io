@@ -84,7 +84,7 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 		{
 			organization: '얼리페이',
 			role: '백엔드 개발자',
-			summary: '우리카드 FDS 고도화 프로젝트 및 ABACUS AutoML 솔루션의 개발 및 유지보수',
+			summary: '얼리페이 카드 및 배달 매출 선정산 서비스 백엔드 개발 및 출시',
 			period: {
 				start: new Date('2021-06-01'),
 				end: new Date('2021-12-31')
