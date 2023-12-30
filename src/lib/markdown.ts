@@ -101,7 +101,7 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 			const result = await parse(`# Lorem Ipsum
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
-			expect(result.frontMatter).toEqual(undefined);
+			expect(result.frontMatter).toBeUndefined();
 			expect(result.content)
 				.toEqual(`<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
 <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>`);

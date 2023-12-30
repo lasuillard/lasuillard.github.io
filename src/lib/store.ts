@@ -65,7 +65,7 @@ if (import.meta.vitest) {
 	describe(getVarName({ nullStorage }), () => {
 		it('should satisfy to browser storage API interface', () => {
 			const key = Math.random().toString();
-			expect(nullStorage.getItem(key)).toEqual(null);
+			expect(nullStorage.getItem(key)).toBeNull();
 			expect(() => nullStorage.setItem(key, 'hello world')).not.toThrow();
 			expect(() => nullStorage.clear()).not.toThrow();
 		});
