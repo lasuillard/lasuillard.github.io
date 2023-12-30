@@ -36,11 +36,15 @@ run:  ## Run development application
 	pnpm run dev $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
 .PHONY: run
 
+preview:  ## Preview build
+	pnpm run build && pnpm run preview $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
+.PHONY: preview
+
 
 # =============================================================================
 # CI
 # =============================================================================
-ci: generate lint scan test benchmark e2e-test  ## Run CI tasks
+ci: generate lint scan test benchmark e2e-test build  ## Run CI tasks
 .PHONY: ci
 
 generate:  ## Generate stubs
@@ -75,12 +79,8 @@ e2e-test:  ## Run e2e tests
 .PHONY: e2e-test
 
 build: generate  ## Build application
-
+	pnpm run build
 .PHONY: build
-
-docs:  ## Generate dev documents
-
-.PHONY: docs
 
 
 # =============================================================================
