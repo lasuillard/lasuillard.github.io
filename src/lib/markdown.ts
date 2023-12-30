@@ -1,5 +1,6 @@
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
+import rehypeMermaid from 'rehype-mermaid';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import remarkFrontmatter from 'remark-frontmatter';
@@ -47,6 +48,7 @@ export const processor = unified()
 		}
 	})
 	.use(remarkRehype)
+	.use(rehypeMermaid, { strategy: 'pre-mermaid' }) // Let client render it
 	.use(rehypeStringify)
 	.use(() => (tree) => {
 		// Plugin to rewrite URLs starting with '/static' for compatibility with VS Code Markdown Preview
