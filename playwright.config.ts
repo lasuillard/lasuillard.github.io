@@ -34,7 +34,16 @@ export default {
 	},
 	testDir,
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-	reporter: [['list'], ['html', { open: process.env.CI ? 'never' : 'on-failure' }]],
+	reporter: [
+		['list'],
+		[
+			'html',
+			{
+				open: process.env.CI ? 'never' : 'on-failure',
+				host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
+			}
+		]
+	],
 	projects: [
 		{
 			// Phones
