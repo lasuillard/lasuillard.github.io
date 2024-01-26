@@ -23,7 +23,7 @@
 	"devDependencies": {
 		"@playwright/test": "^1.40.1",
 		"@sveltejs/adapter-static": "^3.0.1",
-		"@sveltejs/kit": "^2.0.6",
+		"@sveltejs/kit": "^2.4.3",
 		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@tailwindcss/typography": "^0.5.10",
 		"@testing-library/svelte": "^4.0.5",
@@ -65,7 +65,7 @@
 		"tslib": "^2.6.2",
 		"typescript": "^5.3.3",
 		"unified": "^11.0.4",
-		"vite": "^5.0.10",
+		"vite": "^5.0.12",
 		"vitest": "^1.1.0",
 		"yaml": "^2.3.4",
 		"zod": "^3.22.4"
