@@ -45,8 +45,8 @@ devDependencies:
     specifier: ^4.4.24
     version: 4.4.24(postcss@8.4.32)
   date-fns:
-    specifier: ^3.0.6
-    version: 3.0.6
+    specifier: ^3.3.1
+    version: 3.3.1
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -1850,8 +1850,8 @@ packages:
       - postcss
     dev: true
 
-  /date-fns@3.0.6:
-    resolution: {integrity: sha512-W+G99rycpKMMF2/YD064b2lE7jJGUe+EjOES7Q8BIGY8sbNdbgcs9XFTZwvzc9Jx1f3k7LB7gZaZa7f8Agzljg==}
+  /date-fns@3.3.1:
+    resolution: {integrity: sha512-y8e109LYGgoQDveiEBD3DYXKba1jWf5BA8YU1FL5Tvm0BTdEfy54WLCwnuYWZNnzzvALy/QQ4Hov+Q9RVRv+Zw==}
     dev: true
 
   /dayjs@1.11.10:
