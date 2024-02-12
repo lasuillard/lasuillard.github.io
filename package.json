@@ -1,7 +1,8 @@
 {
 	"name": "lasuillard.github.io",
-	"version": "0.0.1",
-	"description": "",
+	"version": "23.12.30",
+	"description": "My personal blog.",
+	"readme": "./README.md",
 	"author": {
 		"name": "Yuchan Lee",
 		"email": "lasuillard@gmail.com"
@@ -69,5 +70,8 @@
 		"vitest": "^1.1.0",
 		"yaml": "^2.3.4",
 		"zod": "^3.22.4"
+	},
+	"dependencies": {
+		"@sentry/sveltekit": "^7.100.1"
 	}
 }
