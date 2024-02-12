@@ -30,6 +30,10 @@ WORKDIR "${WORKSPACE}"
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
 
+# Install Sentry CLI
+ARG SENTRY_CLI_VERSION="2.28.0"
+RUN curl -sL https://sentry.io/get-cli/ | SENTRY_CLI_VERSION="${SENTRY_CLI_VERSION}" sh
+
 # Enable Node package managers
 RUN corepack enable && pnpm config set store-dir ~/.local/share/pnpm/store
 
