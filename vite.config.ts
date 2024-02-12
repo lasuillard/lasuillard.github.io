@@ -1,10 +1,27 @@
+import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	plugins: [sveltekit()],
+	plugins: [
+		...(process.env.VITEST
+			? []
+			: [
+					sentrySvelteKit({
+						sourceMapsUploadOptions: {
+							org: 'lasuillard',
+							project: 'lasuillard-github-io'
+						}
+					})
+				]),
+		sveltekit()
+	],
 	define: {
-		'import.meta.vitest': 'undefined'
+		// For in-source testing Vitest
+		'import.meta.vitest': 'undefined',
+		// Inject metadata
+		__APP_NAME__: JSON.stringify(process.env.npm_package_name),
+		__APP_VERSION__: JSON.stringify(process.env.npm_package_version)
 	},
 	server: {
 		fs: {
