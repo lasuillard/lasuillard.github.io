@@ -1,7 +1,7 @@
 {
 	"name": "lasuillard/lasuillard.github.io",
 	"dockerComposeFile": ["../docker-compose.yaml", "./docker-compose.override.yaml"],
-	"runServices": ["workspace"],
+	"runServices": ["workspace", "novnc"],
 	"service": "workspace",
 	"overrideCommand": true,
 	"initializeCommand": "./.devcontainer/initializeCommand.sh",
@@ -26,7 +26,7 @@
 				"bradlc.vscode-tailwindcss",
 				"zixuanchen.vitest-explorer",
 				"dbaeumer.vscode-eslint",
-				"esbenp.prettier-vscode@9.20.0", // BUG: Extension not working for 10.2.0
+				"esbenp.prettier-vscode",
 				"ms-playwright.playwright"
 			]
 		}
