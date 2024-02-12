@@ -38,7 +38,7 @@ jobs:
 
       - name: Build site
         run: pnpm run build
-        with:
+        env:
           VITE_SENTRY_DSN: ${{ vars.VITE_SENTRY_DSN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
