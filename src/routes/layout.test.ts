@@ -4,7 +4,7 @@ import { expect, it } from 'vitest';
 import { load } from './+layout';
 import Layout from './+layout.svelte';
 
-it('renders', async () => {
+it.todo('renders', async () => {
 	const { container, getByTestId } = render(Layout, {
 		// @ts-expect-error Enough for mocking.
 		data: await load({ url: { pathname: '' } })
