@@ -36,5 +36,8 @@
 	},
 	"json.format.enable": false,
 	"svelte.enable-ts-plugin": true,
-	"yaml.format.enable": true
+	"yaml.format.enable": true,
+	"yaml.schemas": {
+		"https://json.schemastore.org/github-workflow.json": ".github/workflows/*.{yml,yaml}"
+	}
 }

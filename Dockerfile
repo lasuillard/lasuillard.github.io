@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
     gnupg2 \
     jq \
     make \
+    openssh-client \
     pkg-config \
     python3-pip \
     wget \

@@ -1,7 +1,8 @@
 {
 	"name": "lasuillard.github.io",
-	"version": "0.0.1",
-	"description": "",
+	"version": "23.12.30",
+	"description": "My personal blog.",
+	"readme": "./README.md",
 	"author": {
 		"name": "Yuchan Lee",
 		"email": "lasuillard@gmail.com"
@@ -37,7 +38,7 @@
 		"date-fns": "^3.3.1",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-jsdoc": "^47.0.2",
+		"eslint-plugin-jsdoc": "^48.0.6",
 		"eslint-plugin-svelte": "^2.35.1",
 		"glob": "^10.3.10",
 		"happy-dom": "^12.10.3",
@@ -69,5 +70,8 @@
 		"vitest": "^1.2.2",
 		"yaml": "^2.3.4",
 		"zod": "^3.22.4"
+	},
+	"dependencies": {
+		"@sentry/sveltekit": "^7.100.1"
 	}
 }
