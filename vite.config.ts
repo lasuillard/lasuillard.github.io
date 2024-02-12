@@ -10,7 +10,10 @@ export default defineConfig({
 					sentrySvelteKit({
 						sourceMapsUploadOptions: {
 							org: 'lasuillard',
-							project: 'lasuillard-github-io'
+							project: 'lasuillard-github-io',
+							setCommits: {
+								auto: true
+							}
 						}
 					})
 				]),

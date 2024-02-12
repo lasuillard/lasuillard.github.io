@@ -7,8 +7,7 @@ import { sequence } from '@sveltejs/kit/hooks';
 Sentry.init({
 	dsn: import.meta.env.SENTRY_DSN,
 	tracesSampleRate: 0.05,
-	environment: import.meta.env.MODE,
-	release: process.env.npm_package_name + '@' + process.env.npm_package_version
+	environment: import.meta.env.MODE
 });
 console.debug('Sentry initialized');
 

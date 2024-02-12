@@ -9,8 +9,7 @@ Sentry.init({
 	replaysSessionSampleRate: 0.05,
 	replaysOnErrorSampleRate: 1,
 	integrations: [Sentry.replayIntegration()],
-	environment: import.meta.env.MODE,
-	release: `${__APP_NAME__}@${__APP_VERSION__}`
+	environment: import.meta.env.MODE
 });
 console.debug('Sentry initialized');
 
