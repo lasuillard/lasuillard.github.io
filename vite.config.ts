@@ -4,15 +4,16 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
-		// @ts-expect-error This breaks tests, so omit the plugin while testing
 		...(process.env.VITEST
 			? []
-			: sentrySvelteKit({
-					sourceMapsUploadOptions: {
-						org: 'lasuillard',
-						project: 'lasuillard-github-io'
-					}
-				})),
+			: [
+					sentrySvelteKit({
+						sourceMapsUploadOptions: {
+							org: 'lasuillard',
+							project: 'lasuillard-github-io'
+						}
+					})
+				]),
 		sveltekit()
 	],
 	define: {
