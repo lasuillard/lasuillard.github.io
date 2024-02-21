@@ -21,7 +21,7 @@
 				"svelte.svelte-vscode",
 				"jock.svg",
 				"bradlc.vscode-tailwindcss",
-				"zixuanchen.vitest-explorer",
+				"vitest.explorer",
 				"dbaeumer.vscode-eslint",
 				"esbenp.prettier-vscode",
 				"ms-playwright.playwright",
