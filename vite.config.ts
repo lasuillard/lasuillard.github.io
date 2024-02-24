@@ -21,10 +21,7 @@ export default defineConfig({
 	],
 	define: {
 		// For in-source testing Vitest
-		'import.meta.vitest': 'undefined',
-		// Inject metadata
-		__APP_NAME__: JSON.stringify(process.env.npm_package_name),
-		__APP_VERSION__: JSON.stringify(process.env.npm_package_version)
+		'import.meta.vitest': 'undefined'
 	},
 	server: {
 		fs: {
