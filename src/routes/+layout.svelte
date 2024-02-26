@@ -7,7 +7,7 @@
 	import Header from '$components/layout/Header.svelte';
 	import { titleWithSuffix } from '$lib/meta';
 	import { fade } from 'svelte/transition';
-	import '../app.css';
+	import '~/app.css';
 
 	export let data;
 

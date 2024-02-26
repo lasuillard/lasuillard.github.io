@@ -5,8 +5,6 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 // eslint-disable-next-line jsdoc/check-tag-names
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	extensions: ['.svelte'],
-
 	// https://kit.svelte.dev/docs/integrations#preprocessors
 	preprocess: [vitePreprocess()],
 
@@ -14,6 +12,8 @@ const config = {
 		// https://kit.svelte.dev/docs/adapters
 		adapter: adapter(),
 		alias: {
+			'^/*': './*',
+			'~/*': './src/*',
 			'$components/*': './src/components/*',
 			'$routes/*': './src/routes/*'
 		}
