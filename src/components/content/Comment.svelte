@@ -21,6 +21,6 @@
 
 <style lang="postcss">
 	:global(.utterances) {
-		@apply mt-20 lg:mx-8 lg:max-w-full;
+		@apply mt-20 max-w-full lg:mx-8;
 	}
 </style>
