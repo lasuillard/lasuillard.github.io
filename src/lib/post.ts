@@ -60,9 +60,12 @@ export async function getAllPosts(): Promise<Post[]> {
 	const pattern = /^.*\/(.+?)\.md$/;
 	const allPostFiles =
 		import.meta.env.MODE === 'test'
-			? import.meta.glob('../../tests/fixtures/posts/*.md', { as: 'raw' }) /* c8 ignore next */
-			: import.meta.glob(`../../posts/*.md`, { as: 'raw' });
-
+			? import.meta.glob('../../tests/fixtures/posts/*.md', {
+					query: '?raw',
+					import: 'default'
+				}) /* c8 ignore next */
+			: import.meta.glob(`../../posts/*.md`, { query: '?raw', import: 'default' });
+	//The glob option "as" has been deprecated in favour of "query". Please update `as: 'raw'` to `query: '?raw', import: 'default'`. (x2)
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 			const text = z.string().parse(await resolver());
