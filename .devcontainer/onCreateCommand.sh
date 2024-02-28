@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
-hooks_dir='./.devcontainer/onCreateCommand'
-
 apt update && apt install -y bash-completion
+
+echo '
+if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+fi
+' >> ~/.bashrc

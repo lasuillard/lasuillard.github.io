@@ -4,9 +4,9 @@
 	"runServices": ["workspace", "novnc"],
 	"service": "workspace",
 	"overrideCommand": true,
-	"initializeCommand": "./.devcontainer/initializeCommand.sh",
 	"onCreateCommand": "./.devcontainer/onCreateCommand.sh",
 	"postAttachCommand": "./.devcontainer/postAttachCommand.sh",
+	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
 	"shutdownAction": "stopCompose",
 	"workspaceFolder": "/workspaces/lasuillard.github.io",
 	"customizations": {

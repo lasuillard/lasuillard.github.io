@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-git fetch --all
+make init
