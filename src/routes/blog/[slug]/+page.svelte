@@ -30,9 +30,9 @@
 <div {...$$restProps}>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
-		<div class="ml-8 hidden max-lg:-mr-8 xl:order-last xl:block">
+		<div class="max-lg:-mr-8 ml-8 hidden xl:order-last xl:block">
 			{#if contentWrapper}
-				<Toc bind:content={contentWrapper} class="sticky top-[25rem]" />
+				<Toc bind:content={contentWrapper} class="h-md:sticky h-md:top-[10%] h-lg:top-[20%]" />
 			{/if}
 		</div>
 		<div class="mx-auto max-w-full">

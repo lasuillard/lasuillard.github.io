@@ -4,7 +4,19 @@ export default {
 	plugins: [require('daisyui'), require('@tailwindcss/typography')],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
-		extend: {}
+		extend: {
+			screens: {
+				'h-sm': {
+					raw: '(min-height: 480px)'
+				},
+				'h-md': {
+					raw: '(min-height: 640px)'
+				},
+				'h-lg': {
+					raw: '(min-height: 768px)'
+				}
+			}
+		}
 	},
 	daisyui: {
 		themes: ['winter', 'night'],
