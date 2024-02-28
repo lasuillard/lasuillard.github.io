@@ -60,8 +60,7 @@
 			/>
 			<div class="dropdown absolute right-0 top-[135%] z-[1] w-full peer-[:focus]:dropdown-open">
 				{#if searchResults.length > 0}
-					<!-- TODO: Browsing search results via keyboard-->
-					<div role="searchbox">
+					<div role="searchbox" tabindex="0">
 						<ol
 							class="menu dropdown-content w-full space-y-2 rounded-sm bg-base-200 shadow-xl hover:!visible"
 						>
