@@ -37,7 +37,7 @@
 
 				<!-- Navigation links -->
 				<div class="hidden flex-none md:block">
-					<ul class="menu menu-horizontal">
+					<ul class="menu menu-horizontal space-x-2">
 						{#each links as link}
 							<li>
 								<a

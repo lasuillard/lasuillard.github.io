@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
+	import Comment from '^/src/components/content/Comment.svelte';
 	import { format } from 'date-fns';
 	import mermaid from 'mermaid';
 	import { onMount } from 'svelte';
@@ -62,6 +63,7 @@
 			>
 				<Markdown {content} />
 			</article>
+			<Comment class="w-full" />
 		</div>
 	</div>
 </div>
