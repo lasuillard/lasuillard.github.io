@@ -25,6 +25,7 @@ help: Makefile  ## Show help
 # =============================================================================
 install:  ## Install the app locally
 	pnpm install
+	pnpm exec playwright install --with-deps
 .PHONY: install
 
 init:  ## Initialize project repository
@@ -44,7 +45,7 @@ preview:  ## Preview build
 # =============================================================================
 # CI
 # =============================================================================
-ci: generate lint scan test benchmark e2e-test build  ## Run CI tasks
+ci: lint test e2e-test  ## Run CI tasks
 .PHONY: ci
 
 generate:  ## Generate stubs
@@ -62,17 +63,9 @@ lint: generate  ## Run linters
 	pnpm exec tsc --noEmit
 .PHONY: lint
 
-scan:  ## Run scans
-	checkov --quiet --directory .
-.PHONY: scan
-
 test: generate ## Run tests
 	pnpm run test
 .PHONY: test
-
-benchmark:  ## Run benchmarks
-
-.PHONY: benchmark
 
 e2e-test:  ## Run e2e tests
 	pnpm run e2e

@@ -1,14 +1,17 @@
 {
 	"name": "lasuillard/lasuillard.github.io",
-	"dockerComposeFile": ["../docker-compose.yaml", "./docker-compose.override.yaml"],
+	"dockerComposeFile": ["./docker-compose.devcontainer.yaml"],
 	"runServices": ["workspace", "novnc"],
 	"service": "workspace",
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/pre-commit:2": {}
+	},
 	"overrideCommand": true,
 	"onCreateCommand": "./.devcontainer/onCreateCommand.sh",
 	"postAttachCommand": "./.devcontainer/postAttachCommand.sh",
 	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
 	"shutdownAction": "stopCompose",
-	"workspaceFolder": "/workspaces/lasuillard.github.io",
+	"workspaceFolder": "/workspace",
 	"customizations": {
 		"vscode": {
 			"extensions": [
@@ -29,5 +32,11 @@
 				"GitHub.vscode-github-actions"
 			]
 		}
+	},
+	"containerEnv": {
+		"PNPM_HOME": "/pnpm"
+	},
+	"remoteEnv": {
+		"PATH": "${containerEnv:PATH}:${containerEnv:PNPM_HOME}"
 	}
 }

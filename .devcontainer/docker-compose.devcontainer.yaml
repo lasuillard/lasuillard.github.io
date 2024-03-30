@@ -2,11 +2,9 @@ version: '3'
 
 services:
   workspace:
-    build:
-      args:
-        WORKSPACE: /workspaces/lasuillard.github.io
+    image: mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm
     volumes:
-      - .:/workspaces/lasuillard.github.io
+      - ..:/workspace
     environment:
       DISPLAY: novnc:0.0
     healthcheck:
