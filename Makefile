@@ -23,16 +23,13 @@ help: Makefile  ## Show help
 # =============================================================================
 # Common
 # =============================================================================
-install:  ## Install the app locally
+install:  ## Install deps and tools
 	yarn install
 	yarn run playwright install --with-deps
+	pre-commit install --install-hooks
 .PHONY: install
 
-init:  ## Initialize project repository
-	pre-commit install --install-hooks --hook-type pre-commit --hook-type commit-msg
-.PHONY: init
-
-update:
+update:  ## Update deps and tools
 	yarn upgrade
 	pre-commit autoupdate
 .PHONY: update
