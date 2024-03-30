@@ -86,7 +86,7 @@ jobs:
       # https://github.com/microsoft/playwright/issues/7249
       - name: Store Playwright version as env
         run: |
-          PLAYWRIGHT_VERSION="$(yarn run playwright --version | cut -d' ' -f2)"
+          PLAYWRIGHT_VERSION="$(yarn run --silent playwright --version | cut -d' ' -f2)"
           echo "Playwright version is ${PLAYWRIGHT_VERSION}"
           echo "PLAYWRIGHT_VERSION=${PLAYWRIGHT_VERSION}" >> ${GITHUB_ENV}
 
