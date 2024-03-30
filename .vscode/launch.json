@@ -2,10 +2,10 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Launch via PNPM",
+			"name": "Run dev server",
 			"request": "launch",
+			"runtimeExecutable": "yarn",
 			"runtimeArgs": ["run", "dev"],
-			"runtimeExecutable": "pnpm",
 			"skipFiles": ["<node_internals>/**"],
 			"type": "node"
 		}

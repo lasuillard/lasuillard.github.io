@@ -32,11 +32,5 @@
 				"GitHub.vscode-github-actions"
 			]
 		}
-	},
-	"containerEnv": {
-		"PNPM_HOME": "/pnpm"
-	},
-	"remoteEnv": {
-		"PATH": "${containerEnv:PATH}:${containerEnv:PNPM_HOME}"
 	}
 }

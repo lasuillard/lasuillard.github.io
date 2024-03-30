@@ -24,21 +24,25 @@ help: Makefile  ## Show help
 # Common
 # =============================================================================
 install:  ## Install the app locally
-	pnpm install
-	pnpm exec playwright install --with-deps
+	yarn install
+	yarn run playwright install --with-deps
 .PHONY: install
 
 init:  ## Initialize project repository
-	pre-commit autoupdate
 	pre-commit install --install-hooks --hook-type pre-commit --hook-type commit-msg
 .PHONY: init
 
+update:
+	yarn upgrade
+	pre-commit autoupdate
+.PHONY: update
+
 run:  ## Run development application
-	pnpm run dev $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
+	yarn run dev $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
 .PHONY: run
 
 preview:  ## Preview build
-	pnpm run build && pnpm run preview $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
+	yarn run build && yarn run preview $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
 .PHONY: preview
 
 
@@ -49,30 +53,30 @@ ci: lint test e2e-test  ## Run CI tasks
 .PHONY: ci
 
 generate:  ## Generate stubs
-	pnpm exec svelte-kit sync
+	yarn run svelte-kit sync
 .PHONY: generate
 
 format:  ## Run autoformatters
-	pnpm exec prettier --list-different --write .
-	pnpm exec eslint --fix .
+	yarn run prettier --list-different --write .
+	yarn run eslint --fix .
 .PHONY: format
 
 lint: generate  ## Run linters
-	pnpm exec prettier --check .
-	pnpm exec eslint .
-	pnpm exec tsc --noEmit
+	yarn run prettier --check .
+	yarn run eslint .
+	yarn run tsc --noEmit
 .PHONY: lint
 
 test: generate ## Run tests
-	pnpm run test
+	yarn run test
 .PHONY: test
 
 e2e-test:  ## Run e2e tests
-	pnpm run e2e
+	yarn run e2e
 .PHONY: e2e-test
 
 build: generate  ## Build application
-	pnpm run build
+	yarn run build
 .PHONY: build
 
 
