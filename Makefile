@@ -46,7 +46,7 @@ preview:  ## Preview build
 # =============================================================================
 # CI
 # =============================================================================
-ci: lint test e2e-test  ## Run CI tasks
+ci: generate lint test e2e-test  ## Run CI tasks
 .PHONY: ci
 
 generate:  ## Generate stubs

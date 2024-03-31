@@ -12,8 +12,6 @@
 		"vitest.explorer",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
-		"ms-playwright.playwright",
-		"github.vscode-pull-request-github",
-		"github.vscode-github-actions"
+		"ms-playwright.playwright"
 	]
 }
