@@ -11,6 +11,7 @@ export default defineConfig({
 						sourceMapsUploadOptions: {
 							org: 'lasuillard',
 							project: 'lasuillard-github-io',
+							/* @ts-expect-error Unknown error, this property is documented */
 							setCommits: {
 								auto: true
 							}
