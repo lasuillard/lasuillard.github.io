@@ -71,6 +71,6 @@
 		"zod": "^3.22.4"
 	},
 	"dependencies": {
-		"@sentry/sveltekit": "^7.109.0"
+		"@sentry/sveltekit": "^8.7.0"
 	}
 }
