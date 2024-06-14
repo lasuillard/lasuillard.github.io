@@ -90,5 +90,9 @@
 		& :global(pre) {
 			@apply shadow-md;
 		}
+		/* Center Mermaid diagram horizontally */
+		& :global(pre.mermaid svg) {
+			@apply mx-auto;
+		}
 	}
 </style>
