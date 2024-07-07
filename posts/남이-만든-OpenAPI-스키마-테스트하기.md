@@ -82,7 +82,7 @@ Schemathesis가 제공하는 풍부한 기능에도 불구하고 최종 채택�
 
 Polly.js는 Netflix에서 공개한 오픈 소스로, HTTP 트래픽을 녹화, 재생 및 스텁(Stub)하는 기능을 제공한다. JavaScript로 작성되어 있으며 특정 프레임워크에 의존하지 않는 독립적인 라이브러리이다.
 
-![Polly.js Vitest Fixture](/static/posts/남이-만든-OpenAPI-스키마-테스트하기/pollyjs-vitest-fixture.png.png)
+![Polly.js Vitest Fixture](/static/posts/남이-만든-OpenAPI-스키마-테스트하기/pollyjs-vitest-fixture.png)
 
 요청을 분석해서 그 요청이 기존에 이미 녹화되어 있으면 저장된 응답을 반환하고, 그렇지 않으면 실제 요청을 보낸다. 테스트 코드를 갱신하고 싶으면 모든 녹화 데이터를 삭제하면 된다.
 
