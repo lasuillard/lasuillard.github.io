@@ -45,7 +45,7 @@
 								<img
 									src={preview}
 									alt="Preview"
-									class="h-92 w-full rounded-sm object-fill lg:h-64 lg:w-96"
+									class="h-92 w-full rounded-sm object-contain lg:h-64 lg:w-96"
 								/>
 								<div class="mt-4 flex flex-1 flex-col lg:ml-16 lg:mt-2">
 									<h2 class="mb-0 text-3xl">
