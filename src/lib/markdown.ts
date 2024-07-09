@@ -47,9 +47,15 @@ export const processor = unified()
 			file.data.frontMatter = parseYaml(frontMatter);
 		}
 	})
-	.use(remarkRehype)
+	.use(remarkRehype, {
+		// Currently there is no user uploaded documents might harmful
+		allowDangerousHtml: true
+	})
 	.use(rehypeMermaid, { strategy: 'pre-mermaid' }) // Let client render it
-	.use(rehypeStringify)
+	.use(rehypeStringify, {
+		// Currently there is no user uploaded documents might harmful
+		allowDangerousHtml: true
+	})
 	.use(() => (tree) => {
 		// Plugin to rewrite URLs starting with '/static' for compatibility with VS Code Markdown Preview
 		// @ts-expect-error False-positive warning
@@ -58,6 +64,10 @@ export const processor = unified()
 				if (node.properties?.src) {
 					node.properties.src = node.properties.src.replace(/^\/static/, '');
 				}
+				// @ts-expect-error Not sure what type should use for `node`
+			} else if (node.type === 'raw' && node.value.startsWith('<img src="/static/')) {
+				// @ts-expect-error Not sure what type should use for `node`
+				node.value = node.value.replace('<img src="/static', '<img src="');
 			}
 		});
 	})
