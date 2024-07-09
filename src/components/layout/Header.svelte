@@ -61,7 +61,7 @@
 		</div>
 
 		<!-- Drawer content -->
-		<div class="drawer-side lg:hidden">
+		<div class="drawer-side z-10 lg:hidden">
 			<label for="header-drawer" class="drawer-overlay" />
 
 			<!-- svelte-ignore a11y-no-static-element-interactions -->
