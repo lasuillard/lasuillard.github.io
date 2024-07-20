@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Theme, currentTheme } from '^/src/lib/theme';
+	import { Theme, currentTheme } from '~/lib/theme';
 
 	$: theme = $currentTheme == Theme.Light ? 'github-light' : 'github-dark';
 </script>

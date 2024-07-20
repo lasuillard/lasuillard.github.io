@@ -1,7 +1,7 @@
 <script lang="ts">
+	import Comment from '$components/content/Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
-	import Comment from '^/src/components/content/Comment.svelte';
 	import { format } from 'date-fns';
 	import mermaid from 'mermaid';
 	import { onMount } from 'svelte';
@@ -81,10 +81,6 @@
 		/* Show '#' on the left of heading links when hover */
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
 			@apply before:absolute before:-ml-6 before:text-secondary before:underline before:underline-offset-4 before:content-['#'];
-		}
-		/* Give some space between text and underline */
-		& :global(a) {
-			@apply underline-offset-4;
 		}
 		/* Add some shadow for visual recognition */
 		& :global(pre) {
