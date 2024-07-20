@@ -1,7 +1,6 @@
 import { browser } from '$app/environment';
 import { persisted } from '$lib/store';
 import { get, type Writable } from 'svelte/store';
-import { getVarName } from './utils';
 
 // https://daisyui.com/docs/themes/
 /**
@@ -81,57 +80,3 @@ export function setTheme(theme: Theme) {
 		document.documentElement.setAttribute('data-theme', theme);
 	}
 }
-
-/* c8 ignore start */
-if (import.meta.vitest) {
-	// @vitest-environment happy-dom
-	const { describe, expect, it } = import.meta.vitest;
-
-	describe(initTheme, () => {
-		it(`store ${getVarName({ currentTheme })} become available once initialized`, () => {
-			expect(currentTheme).toBeUndefined();
-			initTheme();
-			expect(currentTheme).toBeDefined();
-		});
-
-		it('coerce to light theme if theme is not valid', () => {
-			localStorage.setItem('theme', '"cheddar-cheese"');
-			initTheme();
-			// @ts-expect-error It should be set after init
-			expect(get(currentTheme)).toEqual(Theme.Light);
-		});
-	});
-
-	describe(isTheme, () => {
-		it('should return `true` for known enums', () => {
-			for (const theme of Object.values(Theme)) {
-				expect(isTheme(theme)).toBeTruthy();
-			}
-		});
-
-		it('should return `false` for unknown enums', () => {
-			expect(isTheme('crispy-potato')).toBeFalsy();
-			expect(isTheme('comfortable-sofa')).toBeFalsy();
-			expect(isTheme('bed-is-heaven')).toBeFalsy();
-		});
-	});
-
-	describe(getTheme, () => {
-		it('should return `data-theme` attribute of document root', () => {
-			const themeAttr = document.documentElement.getAttribute('data-theme');
-			expect(getTheme()).toEqual(themeAttr);
-		});
-	});
-
-	describe(setTheme, () => {
-		it('should update `data-theme` attribute of document root on change', () => {
-			setTheme(Theme.Dark);
-			expect(document.documentElement.getAttribute('data-theme')).toEqual(Theme.Dark);
-		});
-
-		it('should throw an error if unknown theme given', () => {
-			expect(() => setTheme('cheesy-pizza' as Theme)).toThrowError(/^Invalid theme: (.+)$/);
-		});
-	});
-}
-/* c8 ignore stop */

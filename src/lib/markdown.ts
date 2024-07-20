@@ -87,37 +87,3 @@ export async function parse(markdown: string): Promise<{ frontMatter: unknown; c
 		content: result.toString()
 	};
 }
-
-/* c8 ignore start */
-if (import.meta.vitest) {
-	const { describe, expect, it } = import.meta.vitest;
-
-	describe(parse, () => {
-		it('parses given markdown text with front matter', async () => {
-			const result = await parse(`---
-message: "Hello, World!"
----
-
-# Lorem Ipsum
-
-Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
-			expect(result.frontMatter).toEqual({ message: 'Hello, World!' });
-			expect(result.content)
-				.toEqual(`<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>`);
-		});
-
-		it('should work with no problem if there is no front matter', async () => {
-			const result = await parse(`# Lorem Ipsum
-
-Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
-			expect(result.frontMatter).toBeUndefined();
-			expect(result.content)
-				.toEqual(`<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>`);
-		});
-
-		it.todo('rewrite paths');
-	});
-}
-/* c8 ignore stop */

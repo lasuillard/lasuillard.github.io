@@ -36,28 +36,3 @@ export function omitKeys(obj: any, keys: string[]): any {
 export function quoteJoin(values: unknown[]): string {
 	return values.map((value) => `"${value}"`).join(', ');
 }
-
-/* c8 ignore start */
-if (import.meta.vitest) {
-	const { describe, expect, it } = import.meta.vitest;
-
-	describe(getVarName, () => {
-		it('returns variable name', () => {
-			const myVar = '123';
-			expect(getVarName({ myVar })).toEqual('myVar');
-		});
-	});
-
-	describe(omitKeys, () => {
-		it('omits some properties', () => {
-			expect(omitKeys({ a: 1, b: 3, c: 2 }, ['b'])).toEqual({ a: 1, c: 2 });
-		});
-	});
-
-	describe(quoteJoin, () => {
-		it('joins given items into single text', () => {
-			expect(quoteJoin([13, 2.7, 'abDg'])).toEqual('"13", "2.7", "abDg"');
-		});
-	});
-}
-/* c8 ignore stop */

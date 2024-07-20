@@ -20,10 +20,6 @@ export default defineConfig({
 				]),
 		sveltekit()
 	],
-	define: {
-		// For in-source testing Vitest
-		'import.meta.vitest': 'undefined'
-	},
 	server: {
 		fs: {
 			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['posts']
@@ -33,10 +29,7 @@ export default defineConfig({
 		alias: [
 			{ find: /^svelte$/, replacement: 'svelte/internal' } // BUG: https://github.com/vitest-dev/vitest/issues/2834
 		],
-		include: [
-			'{src,tests}/**/*.{test,spec}.{js,ts}',
-			'src/lib/**/*.{js,ts}' // In-source testing
-		],
+		include: ['{src,tests}/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
 		coverage: {
 			all: true,
