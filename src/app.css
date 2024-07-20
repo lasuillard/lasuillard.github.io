@@ -10,6 +10,10 @@
 		@apply scroll-pt-4 scroll-smooth;
 		font-family: 'NanumGothic', ui-monospace;
 	}
+	/* Give some space between text and underline */
+	a {
+		@apply underline-offset-4;
+	}
 }
 
 ::-webkit-scrollbar {

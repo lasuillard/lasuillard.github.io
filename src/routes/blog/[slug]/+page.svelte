@@ -82,10 +82,6 @@
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
 			@apply before:absolute before:-ml-6 before:text-secondary before:underline before:underline-offset-4 before:content-['#'];
 		}
-		/* Give some space between text and underline */
-		& :global(a) {
-			@apply underline-offset-4;
-		}
 		/* Add some shadow for visual recognition */
 		& :global(pre) {
 			@apply shadow-md;
