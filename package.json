@@ -21,6 +21,7 @@
 		"e2e:watch": "playwright test --ui"
 	},
 	"devDependencies": {
+		"@codecov/vite-plugin": "^0.0.1-beta.10",
 		"@playwright/test": "^1.45.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.5.5",

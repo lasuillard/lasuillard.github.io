@@ -26,6 +26,7 @@ const testGroups = groupTests(['sm', 'md', 'lg']);
 // BUG: Playwright seems not detecting file changes (create / delete)
 export default {
 	webServer: {
+		// NOTE: This will trigger Codecov bundle analysis upload due to build
 		command: 'yarn run build && yarn run preview',
 		port: 4173
 	},
@@ -42,7 +43,8 @@ export default {
 				open: process.env.CI ? 'never' : 'on-failure',
 				host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
 			}
-		]
+		],
+		['junit', { outputFile: 'junit.xml' }]
 	],
 	projects: [
 		{

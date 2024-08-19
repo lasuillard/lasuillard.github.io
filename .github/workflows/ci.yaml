@@ -55,6 +55,14 @@ jobs:
       - name: Run tests
         run: yarn run test
 
+      - name: Upload test results to codecov
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          files: junit.xml
+          flags: unit
+
       - name: Upload coverage report
         uses: codecov/codecov-action@v4
         with:
@@ -99,7 +107,19 @@ jobs:
         run: yarn run playwright install --with-deps
 
       - name: Run end-to-end tests
+        env:
+          # NOTE: E2E includes build step, so it will upload the bundle analysis report
+          #       if the upload token is provided.
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: yarn run e2e
+
+      - name: Upload test results to codecov
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          files: junit.xml
+          flags: e2e
 
       - name: Upload Playwright reports
         uses: actions/upload-artifact@v4

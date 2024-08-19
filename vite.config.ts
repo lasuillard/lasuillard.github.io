@@ -1,3 +1,4 @@
+import { codecovVitePlugin } from '@codecov/vite-plugin';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
@@ -18,7 +19,12 @@ export default defineConfig({
 						}
 					})
 				]),
-		sveltekit()
+		sveltekit(),
+		codecovVitePlugin({
+			enableBundleAnalysis: process.env.CODECOV_TOKEN !== undefined,
+			bundleName: 'lasuillard.github.io',
+			uploadToken: process.env.CODECOV_TOKEN
+		})
 	],
 	server: {
 		fs: {
@@ -31,6 +37,10 @@ export default defineConfig({
 		],
 		include: ['{src,tests}/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
+		reporters: ['junit'],
+		outputFile: {
+			junit: './junit.xml'
+		},
 		coverage: {
 			all: true,
 			include: ['src/**'],

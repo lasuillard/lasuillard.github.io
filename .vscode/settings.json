@@ -6,7 +6,7 @@
 		"editor.defaultFormatter": "svelte.svelte-vscode"
 	},
 	"conventionalCommits.scopes": ["vscode", "gui", "db"],
-	"cSpell.words": [],
+	"cSpell.words": ["CODECOV", "lasuillard"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit",
 		"source.organizeImports": "explicit"
