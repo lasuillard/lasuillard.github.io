@@ -1,5 +1,6 @@
 /playwright-report
 /test-results
+junit.xml
 
 # User hook scripts for VSC devcontainer lifecycle
 .devcontainer/initializeCommand/
