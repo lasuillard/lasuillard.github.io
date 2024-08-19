@@ -42,7 +42,8 @@ export default {
 				open: process.env.CI ? 'never' : 'on-failure',
 				host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
 			}
-		]
+		],
+		['junit', { outputFile: 'junit.xml' }]
 	],
 	projects: [
 		{

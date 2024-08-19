@@ -109,6 +109,14 @@ jobs:
       - name: Run end-to-end tests
         run: yarn run e2e
 
+      - name: Upload test results to codecov
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          files: junit.xml
+          flags: e2e
+
       - name: Upload Playwright reports
         uses: actions/upload-artifact@v4
         if: always()
