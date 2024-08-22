@@ -1,23 +1,19 @@
 <script lang="ts">
-	import { Theme, currentTheme } from '~/lib/theme';
-
-	$: theme = $currentTheme == Theme.Light ? 'github-light' : 'github-dark';
+	export let theme: 'github-light' | 'github-dark';
 </script>
 
-{#key $currentTheme}
-	<div data-testid="utterances" {...$$restProps}>
-		<script
-			src="https://utteranc.es/client.js"
-			repo="lasuillard/lasuillard.github.io"
-			issue-term="pathname"
-			label="comment"
-			{theme}
-			crossorigin="anonymous"
-			async
-		>
-		</script>
-	</div>
-{/key}
+<div data-testid="utterances" {...$$restProps}>
+	<script
+		src="https://utteranc.es/client.js"
+		repo="lasuillard/lasuillard.github.io"
+		issue-term="pathname"
+		label="comment"
+		{theme}
+		crossorigin="anonymous"
+		async
+	>
+	</script>
+</div>
 
 <style lang="postcss">
 	:global(.utterances) {
