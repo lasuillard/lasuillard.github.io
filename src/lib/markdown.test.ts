@@ -11,8 +11,10 @@ message: "Hello, World!"
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 		expect(result.frontMatter).toEqual({ message: 'Hello, World!' });
-		expect(result.content).toEqual(`<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>`);
+		expect(result.content).toMatchInlineSnapshot(`
+			"<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
+			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"
+		`);
 	});
 
 	it('should work with no problem if there is no front matter', async () => {
@@ -20,9 +22,29 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 		expect(result.frontMatter).toBeUndefined();
-		expect(result.content).toEqual(`<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
-<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>`);
+		expect(result.content).toMatchInlineSnapshot(`
+			"<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
+			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"
+		`);
 	});
 
-	it.todo('rewrite paths');
+	it('rewrite /static paths in markdown images', async () => {
+		const result = await parse('![Preview](/static/posts/my-post/preview.png)');
+
+		expect(result.frontMatter).toBeUndefined();
+		expect(result.content).toMatchInlineSnapshot(
+			`"<p><img src="/posts/my-post/preview.png" alt="Preview"></p>"`
+		);
+	});
+
+	it('rewrite /static paths in HTML img elements', async () => {
+		const result = await parse(
+			'<img src="/static/posts/my-post/diagram.png" alt="Diagram" width="50%" />'
+		);
+
+		expect(result.frontMatter).toBeUndefined();
+		expect(result.content).toMatchInlineSnapshot(
+			`"<img src="/posts/my-post/diagram.png" alt="Diagram" width="50%" />"`
+		);
+	});
 });
