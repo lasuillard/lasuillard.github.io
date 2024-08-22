@@ -4,8 +4,8 @@ import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 
 it.each([{ theme: 'github-light' }, { theme: 'github-dark' }])(
-	'renders the component with the given props',
-	(theme) => {
+	'renders the component for theme $theme',
+	({ theme }) => {
 		const { getByTestId } = render(Comment, { theme });
 		expect(getByTestId('utterances')).toBeTruthy();
 	}
