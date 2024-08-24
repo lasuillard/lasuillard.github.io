@@ -29,7 +29,7 @@
 	});
 </script>
 
-<div {...$$restProps}>
+<div>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
 		<div class="max-lg:-mr-8 ml-8 hidden xl:order-last xl:block">
