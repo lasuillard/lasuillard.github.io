@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
+import { load } from '$routes/blog/tag/[tag]/+page';
+import Page from '$routes/blog/tag/[tag]/+page.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
-import { load } from './+page';
-import Page from './+page.svelte';
 
 it('list posts', async () => {
 	// FIXME: Write global fetch stub for later reuse

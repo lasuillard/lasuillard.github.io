@@ -35,7 +35,7 @@ export default defineConfig({
 		alias: [
 			{ find: /^svelte$/, replacement: 'svelte/internal' } // BUG: https://github.com/vitest-dev/vitest/issues/2834
 		],
-		include: ['{src,tests}/**/*.{test,spec}.{js,ts}'],
+		include: ['tests/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
 		reporters: ['junit'],
 		outputFile: {
@@ -44,7 +44,7 @@ export default defineConfig({
 		coverage: {
 			all: true,
 			include: ['src/**'],
-			exclude: ['src/**/__mocks__/*', 'src/**.d.ts', 'src/**/*.{test,spec}.{js,ts}'],
+			exclude: ['src/**.d.ts'],
 			reporter: ['text', 'clover', 'html']
 		},
 		api: {
