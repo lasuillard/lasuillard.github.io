@@ -12,3 +12,18 @@ it('has a valid locator', () => {
 	});
 	expect(getByTestId('toc-tree')).toBeTruthy();
 });
+
+it('renders with data', () => {
+	const elem = document.createElement('div');
+	elem.innerHTML = '<a href="#lorem-ipsum">Lorem Ipsum</a>';
+
+	const { container } = render(TocTree, {
+		tree: {
+			data: elem,
+			children: []
+		}
+	});
+	expect(container.innerHTML).toMatchInlineSnapshot(
+		`"<div data-testid="toc-tree"><p class="mb-1.5 font-light"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul></ul></div>"`
+	);
+});

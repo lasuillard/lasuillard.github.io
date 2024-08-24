@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 
 	export let content: HTMLElement | undefined;
-	let rootHeadings: TreeNode<HTMLElement>[];
+	let rootHeadings: TreeNode<HTMLElement>[] = [];
 
 	onMount(() => {
 		if (!content) {
@@ -12,7 +12,7 @@
 			return;
 		}
 
-		const headings = [...(content.querySelectorAll('h1, h2, h3, h4, h5, h6') ?? [])].map(
+		const headings = [...content.querySelectorAll('h1, h2, h3, h4, h5, h6')].map(
 			(elem) => elem as HTMLElement
 		);
 		const root = {
@@ -41,10 +41,8 @@
 
 <div data-testid="toc" {...$$restProps}>
 	<div>
-		{#if rootHeadings}
-			{#each rootHeadings as root}
-				<TocTree tree={root} />
-			{/each}
-		{/if}
+		{#each rootHeadings as root}
+			<TocTree tree={root} />
+		{/each}
 	</div>
 </div>
