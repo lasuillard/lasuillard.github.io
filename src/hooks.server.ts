@@ -5,9 +5,9 @@ import { handleErrorWithSentry, sentryHandle } from '@sentry/sveltekit';
 import { sequence } from '@sveltejs/kit/hooks';
 
 Sentry.init({
-	dsn: import.meta.env.SENTRY_DSN || '',
+	dsn: import.meta.env?.SENTRY_DSN || '',
 	tracesSampleRate: 0.05,
-	environment: import.meta.env.MODE
+	environment: import.meta.env?.MODE
 });
 console.debug('Sentry initialized');
 
