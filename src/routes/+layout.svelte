@@ -39,5 +39,5 @@
 		{/key}
 	</div>
 
-	<Footer class="sticky top-[100vh] mt-20 bg-base-200 px-2 py-4 lg:mt-32" />
+	<Footer />
 </div>

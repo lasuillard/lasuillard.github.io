@@ -18,7 +18,7 @@
 </script>
 
 <!-- BUG: False-positive uncovered branch; https://github.com/vitest-dev/vitest/issues/1893 -->
-<div data-testid="theme-select" {...$$restProps}>
+<div data-testid="theme-select" class="flex">
 	<label class="btn btn-circle btn-ghost swap swap-rotate" aria-label="Theme Selection">
 		<input
 			data-testid="toggle-input"

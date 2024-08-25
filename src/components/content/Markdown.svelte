@@ -17,7 +17,7 @@
 	 *
 	 * Just ignore this to use slotted inputs for raw markdown text.
 	 */
-	export let content: string;
+	export let content: string = '';
 
 	// Binding wrapper for input slot to obtain its contents
 	let wrapper: HTMLElement;

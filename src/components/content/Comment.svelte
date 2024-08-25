@@ -2,7 +2,7 @@
 	export let theme: 'github-light' | 'github-dark';
 </script>
 
-<div data-testid="utterances" {...$$restProps}>
+<div data-testid="utterances" class="w-full">
 	<script
 		src="https://utteranc.es/client.js"
 		repo="lasuillard/lasuillard.github.io"

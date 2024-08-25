@@ -53,7 +53,7 @@
 
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1">
-					<ThemeSelect class="flex" />
+					<ThemeSelect />
 				</div>
 			</header>
 		</div>

@@ -12,7 +12,7 @@
 <div>
 	<div class="grid grid-cols-1 xl:grid-cols-4">
 		<div class="mb-32">
-			<Search class="mb-2 w-64" />
+			<Search />
 
 			<!-- All tags -->
 			<div data-testid="tags">

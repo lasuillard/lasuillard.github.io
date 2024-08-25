@@ -66,10 +66,7 @@
 			</article>
 
 			{#key $currentTheme}
-				<Comment
-					theme={$currentTheme == Theme.Light ? 'github-light' : 'github-dark'}
-					class="w-full"
-				/>
+				<Comment theme={$currentTheme == Theme.Light ? 'github-light' : 'github-dark'} />
 			{/key}
 		</div>
 	</div>
