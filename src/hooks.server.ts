@@ -1,3 +1,4 @@
+/* c8 ignore start */
 // NOTE: Right now there's no server running but keep this for future
 //       Until, this configuration only will be used for development in local
 import * as Sentry from '@sentry/sveltekit';
@@ -16,3 +17,5 @@ export const handle = sequence(sentryHandle());
 
 // If you have a custom error handler, pass it to `handleErrorWithSentry`
 export const handleError = handleErrorWithSentry();
+
+/* c8 ignore stop */

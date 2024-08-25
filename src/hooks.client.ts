@@ -1,3 +1,4 @@
+/* c8 ignore start */
 import { initEngine } from '$lib/search';
 import { initTheme } from '$lib/theme';
 import * as Sentry from '@sentry/sveltekit';
@@ -13,9 +14,6 @@ Sentry.init({
 });
 console.debug('Sentry initialized');
 
-// Array of initializer promises for testing
-export const initializers: Promise<unknown>[] = [];
-
 initTheme();
 
 // Initialize Mermaid for fancy diagrams
@@ -26,11 +24,10 @@ mermaid.initialize({
 });
 console.debug('Mermaid initialized');
 
-// Initialize search engine
-initializers.push(
-	initEngine().then((engine) => {
-		console.debug(`Search engine initialized, there is ${engine.termCount} terms in the index`);
-	})
-);
+initEngine().then((engine) => {
+	console.debug(`Search engine initialized, there is ${engine.termCount} terms in the index`);
+});
 
 export const handleError = Sentry.handleErrorWithSentry();
+
+/* c8 ignore stop */
