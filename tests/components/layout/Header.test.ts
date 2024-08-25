@@ -46,8 +46,3 @@ it('contains theme selector', () => {
 	const { getByTestId } = render(Header);
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
-
-it('contains language selector', () => {
-	const { getByTestId } = render(Header);
-	expect(getByTestId('language-select')).toBeTruthy();
-});

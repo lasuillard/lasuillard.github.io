@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Menu from '$components/icon/Menu.svelte';
-	import LanguageSelect from '$components/utility/LanguageSelect.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
 	const links = [
@@ -55,7 +54,6 @@
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1">
 					<ThemeSelect class="flex" />
-					<LanguageSelect class="hidden" />
 				</div>
 			</header>
 		</div>
