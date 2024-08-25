@@ -13,7 +13,7 @@
 	export let drawerOpen = false;
 </script>
 
-<div data-testid="header-wrapper" {...$$restProps}>
+<div data-testid="header-wrapper" class="bg-base-100">
 	<!-- Drawer container -->
 	<div class="drawer">
 		<input id="header-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
