@@ -6,9 +6,11 @@ let miniSearch: MiniSearch | undefined = undefined;
 
 /**
  * Initialize search engine.
+ * @param posts POsts to index.
  * @returns Initialized search engine.
  */
-export async function initEngine(): Promise<MiniSearch> {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 	miniSearch = new MiniSearch({
 		fields: ['slug', 'metadata.title', 'metadata.tags' /* FIXME: Sanitize content HTML tags */],
@@ -20,13 +22,17 @@ export async function initEngine(): Promise<MiniSearch> {
 	});
 
 	// TODO: Search for document contents
-	console.debug('Loading post documents');
-	const response = await fetch('/api/posts');
-	const data = await response.json();
-	const allPosts = z.array(Post).parse(data);
+	if (!posts) {
+		console.debug('Loading post documents');
+		const response = await fetch('/api/posts');
+		const data = await response.json();
+		const allPosts = z.array(Post).parse(data);
+
+		posts = allPosts;
+	}
 
 	console.debug('Indexing documents');
-	await miniSearch.addAllAsync(allPosts);
+	await miniSearch.addAllAsync(posts);
 
 	return miniSearch;
 }

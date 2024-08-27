@@ -1,8 +1,9 @@
 // @vitest-environment happy-dom
 import Search from '$components/utility/Search.svelte';
-import { fireEvent, render } from '@testing-library/svelte';
-import { tick } from 'svelte';
-import { expect, it } from 'vitest';
+import { render } from '@testing-library/svelte';
+import { initEngine } from '^/src/lib/search';
+import { it } from '^/tests/_helpers/vitest';
+import { expect } from 'vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Search);
@@ -14,11 +15,28 @@ it('has a text input with placeholder', () => {
 	expect((component.getByRole('textbox') as HTMLInputElement).placeholder).toEqual('Search');
 });
 
-it.todo('shows matching results for given query', async () => {
+it('shows matching results for given query', async ({ user }) => {
+	// Arrange
+	await initEngine([
+		{
+			slug: 'uno-terra-errat',
+			metadata: {
+				title: 'Uno terra errat',
+				publicationDate: new Date(),
+				preview: '/posts/preview.png',
+				tags: ['uno', 'terra', 'errat']
+			},
+			content:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus ut est fermentum aliquam. Nullam sit amet sapien sit amet'
+		}
+	]);
 	const component = render(Search);
+
+	// Act
 	const input = component.getByRole('textbox') as HTMLInputElement;
-	await fireEvent.change(input, { target: { value: 'uno' } });
-	expect(input.value).toEqual('uno');
-	await tick();
-	expect(component.getByText('Uno terra errat')).toBeTruthy(); // FIXME: Not sure why changes aren't reflected
+	await user.click(input);
+	await user.keyboard('uno');
+
+	// Assert
+	expect(component.getByText('Uno terra errat')).toBeTruthy();
 });
