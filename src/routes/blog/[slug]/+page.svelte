@@ -2,7 +2,6 @@
 	import Comment from '$components/content/Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
-	import { currentTheme, Theme } from '^/src/lib/theme';
 	import { format } from 'date-fns';
 	import mermaid from 'mermaid';
 	import { onMount } from 'svelte';
@@ -64,10 +63,7 @@
 			>
 				<Markdown {content} />
 			</article>
-
-			{#key $currentTheme}
-				<Comment theme={$currentTheme == Theme.Light ? 'github-light' : 'github-dark'} />
-			{/key}
+			<Comment />
 		</div>
 	</div>
 </div>
