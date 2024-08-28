@@ -11,11 +11,14 @@ describe(initTheme, () => {
 		expect(currentTheme).toBeDefined();
 	});
 
-	it('coerce to light theme if theme is not valid', () => {
+	it('coerce to preferred theme if theme is not valid', () => {
+		const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const themeDefault = preferDark ? Theme.Dark : Theme.Light;
+
 		localStorage.setItem('theme', '"cheddar-cheese"');
 		initTheme();
 		// @ts-expect-error It should be set after init
-		expect(get(currentTheme)).toEqual(Theme.Light);
+		expect(get(currentTheme)).toEqual(themeDefault);
 	});
 });
 
