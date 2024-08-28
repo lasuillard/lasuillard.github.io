@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
+import { load } from '$routes/blog/+page';
+import Page from '$routes/blog/+page.svelte';
 import { getAllByRole, getByRole, getByText, render } from '@testing-library/svelte';
 import { expect, it, vi } from 'vitest';
-import { load } from './+page';
-import Page from './+page.svelte';
 
 it('list all unique tags', async () => {
 	const fetch = vi.fn(() => ({

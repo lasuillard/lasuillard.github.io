@@ -7,7 +7,7 @@
 	const currentYear = new Date().getFullYear();
 </script>
 
-<div data-testid="footer" {...$$restProps}>
+<div data-testid="footer" class="sticky top-[100vh] mt-20 bg-base-200 px-2 py-4 lg:mt-32">
 	<div class="flex flex-col">
 		<footer class="footer px-3 py-2 md:px-12 md:py-8">
 			<aside class="mx-auto items-center">

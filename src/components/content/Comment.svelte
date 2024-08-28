@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { Theme, currentTheme } from '~/lib/theme';
+	import { currentTheme, Theme } from '$lib/theme';
 
 	$: theme = $currentTheme == Theme.Light ? 'github-light' : 'github-dark';
 </script>
 
-{#key $currentTheme}
-	<div data-testid="utterances" {...$$restProps}>
+{#key theme}
+	<div data-testid="utterances" class="w-full">
 		<script
 			src="https://utteranc.es/client.js"
 			repo="lasuillard/lasuillard.github.io"

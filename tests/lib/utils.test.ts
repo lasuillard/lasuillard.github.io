@@ -1,4 +1,4 @@
-import { getVarName, omitKeys, quoteJoin } from '^/src/lib/utils';
+import { getVarName, omitKeys, quoteJoin } from '$lib/utils';
 import { describe, expect, it } from 'vitest';
 
 describe(getVarName, () => {

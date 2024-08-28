@@ -47,7 +47,4 @@ it('contains theme selector', () => {
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
 
-it('contains language selector', () => {
-	const { getByTestId } = render(Header);
-	expect(getByTestId('language-select')).toBeTruthy();
-});
+it.todo('closes drawer when clicking outside of it');

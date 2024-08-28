@@ -17,7 +17,7 @@
 	 *
 	 * Just ignore this to use slotted inputs for raw markdown text.
 	 */
-	export let content: string | undefined = undefined;
+	export let content: string = '';
 
 	// Binding wrapper for input slot to obtain its contents
 	let wrapper: HTMLElement;
@@ -33,7 +33,6 @@
 	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
 	{@html content}
 {:else}
-	<!-- Internal-->
 	<div bind:this={wrapper} class="hidden">
 		<slot />
 	</div>

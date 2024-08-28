@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { persisted } from '$lib/store';
+import { persisted } from 'svelte-persisted-store';
 import { get, type Writable } from 'svelte/store';
 
 // https://daisyui.com/docs/themes/

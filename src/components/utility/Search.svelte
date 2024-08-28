@@ -44,7 +44,7 @@
 	});
 </script>
 
-<div data-testid="search" {...$$restProps}>
+<div data-testid="search" class="mb-2 w-64">
 	<div class="group relative flex items-center space-x-2">
 		<form class="w-full" autocomplete="off" on:submit|preventDefault role="search">
 			<div class="absolute ml-[11px] mt-[9px]">

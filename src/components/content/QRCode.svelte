@@ -30,4 +30,4 @@
 	});
 </script>
 
-<canvas bind:this={qrCode} title={text} data-testid="qrcode" {...$$restProps} />
+<canvas bind:this={qrCode} data-testid="qrcode" title={text} {width} />

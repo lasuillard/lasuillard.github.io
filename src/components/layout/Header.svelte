@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Menu from '$components/icon/Menu.svelte';
-	import LanguageSelect from '$components/utility/LanguageSelect.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
 	const links = [
@@ -13,7 +12,7 @@
 	export let drawerOpen = false;
 </script>
 
-<div data-testid="header-wrapper" {...$$restProps}>
+<div data-testid="header-wrapper" class="bg-base-100">
 	<!-- Drawer container -->
 	<div class="drawer">
 		<input id="header-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
@@ -54,8 +53,7 @@
 
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1">
-					<ThemeSelect class="flex" />
-					<LanguageSelect class="hidden" />
+					<ThemeSelect />
 				</div>
 			</header>
 		</div>
