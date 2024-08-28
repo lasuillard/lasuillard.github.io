@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import Search from '$components/utility/Search.svelte';
+import { initEngine } from '$lib/search';
 import { render } from '@testing-library/svelte';
-import { initEngine } from '^/src/lib/search';
 import { it } from '^/tests/_helpers/vitest';
 import { expect } from 'vitest';
 

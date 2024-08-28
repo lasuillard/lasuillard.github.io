@@ -1,4 +1,4 @@
-import { makeToc, type TreeSource } from '^/src/lib/toc';
+import { makeToc, type TreeSource } from '$lib/toc';
 import { describe, expect, it } from 'vitest';
 
 describe(makeToc, () => {
