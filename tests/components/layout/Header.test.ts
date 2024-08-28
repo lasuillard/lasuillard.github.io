@@ -46,3 +46,5 @@ it('contains theme selector', () => {
 	const { getByTestId } = render(Header);
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
+
+it.todo('closes drawer when clicking outside of it');

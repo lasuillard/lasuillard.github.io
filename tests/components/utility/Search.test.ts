@@ -40,3 +40,6 @@ it('shows matching results for given query', async ({ user }) => {
 	// Assert
 	expect(component.getByText('Uno terra errat')).toBeTruthy();
 });
+
+it.todo('shows no results for non-matching query');
+it.todo('suggest matching results for given query');
