@@ -1,11 +1,25 @@
+export type PersonalWorkItem = {
+	name: string;
+	description: string;
+	link: string;
+	tags: string[];
+	status: PersonalWorkStatus;
+	order: number;
+};
+
+export enum PersonalWorkStatus {
+	WIP = 'WIP',
+	Published = 'Published'
+}
+
 export default [
 	{
 		name: 'lasuillard.github.io',
 		description: `SvelteKit을 이용하여 직접 처음부터 만든 개인 블로그입니다.`,
 		link: 'https://github.com/lasuillard/lasuillard.github.io',
 		tags: ['GitHub Actions', 'SvelteKit', 'Tailwind CSS'],
-		status: 'WIP',
-		order: 0 // Ascending order
+		status: PersonalWorkStatus.WIP,
+		order: 0
 	},
 	{
 		name: 'raindrop-client',
@@ -17,7 +31,7 @@ Raindrop.io에서 제공하지 않는 OpenAPI 스키마를 직접 정의하고 O
       `,
 		link: 'https://github.com/lasuillard/raindrop-client',
 		tags: ['TypeScript', 'GitHub Actions', 'OpenAPI', 'OpenAPI Generator'],
-		status: 'Published',
+		status: PersonalWorkStatus.Published,
 		order: 1
 	},
 	{
@@ -26,7 +40,7 @@ Raindrop.io에서 제공하지 않는 OpenAPI 스키마를 직접 정의하고 O
 			'Raindrop.io와 크롬 브라우저간 북마크 동기화 기능을 제공하기 위한 크롬 브라우저 확장 프로그램입니다.',
 		link: 'https://github.com/lasuillard/raindrop-sync-chrome',
 		tags: ['Chrome Extension', 'GitHub Actions', 'Svelte', 'Tailwind CSS', 'TypeScript'],
-		status: 'WIP',
+		status: PersonalWorkStatus.WIP,
 		order: 2
 	},
 	{
@@ -37,7 +51,7 @@ Django 프로젝트 내 Slack 메시징 및 봇 개발 편의성을 제공하기
       `,
 		link: 'https://github.com/lasuillard/django-slack-tools',
 		tags: ['Python', 'Django', 'Slack', 'GitHub Actions'],
-		status: 'Published',
+		status: PersonalWorkStatus.Published,
 		order: 4
 	},
 	{
@@ -49,7 +63,31 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 `,
 		link: 'https://github.com/lasuillard/mockoon-novnc',
 		tags: ['Docker', 'Mockoon', 'GitHub Actions'],
-		status: 'Published',
+		status: PersonalWorkStatus.Published,
 		order: 5
+	},
+	{
+		name: 'freerdp-novnc',
+		description: `
+컨테이너에서 FreeRDP를 이용하여 RDP 세션을 맺고 NoVNC를 통해 웹 UI로 노출하는 Docker 이미지입니다.
+
+Windows OS 기반 스크래핑 중 특수한 요구사항을 충족하기 위해 개발되었으며, [Docker Hub](https://hub.docker.com/r/lasuillard/freerdp-novnc)에 공개되어 있습니다.
+    `,
+		link: 'https://github.com/lasuillard/freerdp-novnc',
+		tags: ['Docker', 'RDP', 'GitHub Actions'],
+		status: PersonalWorkStatus.Published,
+		order: 6
+	},
+	{
+		name: '1Password Exporter',
+		description: `
+1Password CLI와 서비스 계정을 이용하여 1Password의 여러 지표를 수집하고 Prometheus 형식으로 노출하기 위한 Rust 프로젝트입니다.
+
+Rust를 배우고자 시작한 간단한 토이 프로젝트이며 바이너리 및 Docker 이미지로 배포되어 있습니다.
+    `,
+		link: 'https://github.com/lasuillard/1password-exporter',
+		tags: ['Rust', 'Prometheus', 'Docker', '1Password'],
+		status: PersonalWorkStatus.Published,
+		order: 7
 	}
-];
+] as PersonalWorkItem[];

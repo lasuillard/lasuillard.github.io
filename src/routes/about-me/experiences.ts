@@ -1,3 +1,22 @@
+export type ExperienceItem = {
+	organization: string;
+	role: string;
+	summary: string;
+	period: {
+		start: Date;
+		end: Date;
+	};
+	projects: {
+		title: string;
+		period: {
+			start: Date;
+			end: Date;
+		};
+		description: string;
+		tags: string[];
+	}[];
+};
+
 export default [
 	{
 		organization: '얼리페이',
@@ -110,4 +129,4 @@ export default [
 		},
 		projects: []
 	}
-];
+] as ExperienceItem[];

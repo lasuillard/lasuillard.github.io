@@ -1,3 +1,10 @@
+export type CertificateItem = {
+	name: string;
+	issuer: string;
+	issuanceDate: Date;
+	description: string;
+};
+
 export default [
 	{
 		name: '정보처리기능사',
@@ -23,4 +30,4 @@ export default [
 		issuanceDate: new Date('2020-08-28'),
 		description: ``
 	}
-];
+] as CertificateItem[];

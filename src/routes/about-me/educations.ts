@@ -1,3 +1,12 @@
+export type EducationItem = {
+	name: string;
+	description: string;
+	period: {
+		start: Date;
+		end: Date;
+	};
+};
+
 export default [
 	{
 		name: '서울과학기술대학교',
@@ -9,4 +18,4 @@ export default [
 			end: new Date('2020-02-28')
 		}
 	}
-];
+] as EducationItem[];
