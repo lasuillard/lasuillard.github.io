@@ -15,7 +15,8 @@ const config = {
 			'^/*': './*',
 			'~/*': './src/*',
 			'$components/*': './src/components/*',
-			'$routes/*': './src/routes/*'
+			'$routes/*': './src/routes/*',
+			'$data/*': './src/data/*'
 		}
 	}
 };
