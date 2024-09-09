@@ -2,8 +2,11 @@
 import { initEngine } from '$lib/search';
 import { initTheme } from '$lib/theme';
 import * as Sentry from '@sentry/sveltekit';
+import { setDefaultOptions } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import mermaid from 'mermaid';
 
+// Sentry
 Sentry.init({
 	dsn: import.meta.env.VITE_SENTRY_DSN,
 	tracesSampleRate: 0.05,
@@ -12,8 +15,14 @@ Sentry.init({
 	integrations: [Sentry.replayIntegration()],
 	environment: import.meta.env.MODE
 });
+export const handleError = Sentry.handleErrorWithSentry();
+
+// Locale
+setDefaultOptions({ locale: ko });
+
 console.debug('Sentry initialized');
 
+// Theme
 initTheme();
 
 // Initialize Mermaid for fancy diagrams
@@ -24,10 +33,9 @@ mermaid.initialize({
 });
 console.debug('Mermaid initialized');
 
+// Search Engine
 initEngine().then((engine) => {
 	console.debug(`Search engine initialized, there is ${engine.termCount} terms in the index`);
 });
-
-export const handleError = Sentry.handleErrorWithSentry();
 
 /* c8 ignore stop */
