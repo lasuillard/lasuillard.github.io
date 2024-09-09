@@ -2,17 +2,17 @@
 	import { browser } from '$app/environment';
 	import Markdown from '$components/content/Markdown.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
+	import Timeline from '$components/content/Timeline.svelte';
 	import certificates from '$data/certificates';
 	import educations from '$data/educations';
 	import experiences from '$data/experiences';
 	import personalWorks from '$data/personal-works';
-	import { format } from 'date-fns';
 
 	// Tag reference counter
 	let tagRefs: { [key: string]: number } = {};
 
 	// Refer a single tag
-	const _tag = (tag: string) => {
+	function _tag(tag: string) {
 		if (Object.hasOwn(tagRefs, tag)) {
 			tagRefs[tag]++;
 		} else {
@@ -23,10 +23,34 @@
 		tagRefs = tagRefs;
 
 		return tag;
-	};
+	}
+	function _tags(tags: string[]) {
+		return tags.map(_tag);
+	}
 
 	// Current page URL to generate QR code
 	const pageURL = browser ? window.location.href.split('#')[0] : null;
+
+	// Transform data into timeline format
+	const eduAsTimeline = educations.map((edu) => ({
+		period: edu.period,
+		title: edu.name,
+		description: edu.description
+	}));
+	const certsAsTimeline = certificates.map((cert) => ({
+		period: { start: cert.issuanceDate },
+		title: cert.name,
+		description: cert.issuer
+	}));
+	const exprAsTimeline = experiences.map((expr) => ({
+		period: expr.period,
+		title: expr.organization,
+		description: expr.summary,
+		tags: _tags(Array.from(new Set(expr.projects.flatMap((p) => p.tags))))
+	}));
+	const timelineItems = [...eduAsTimeline, ...certsAsTimeline, ...exprAsTimeline].sort(
+		(a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime()
+	);
 </script>
 
 <div class="prose max-w-none px-4 py-12">
@@ -71,52 +95,12 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 		</div>
 	</div>
 
-	<!-- TODO: Prettify this -->
-	<h2 class="border-l-4 border-sky-600 pl-3">EDUCATION</h2>
-	<div>
-		{#each educations as edu}
-			<h3>{edu.name}</h3>
-			<p class="subtext">
-				{format(edu.period.start, 'yyyy.MM.dd')} ~ {format(edu.period.end, 'yyyy.MM.dd')}
-			</p>
-			<Markdown>{edu.description}</Markdown>
-		{/each}
+	<h2 class="border-l-4 border-sky-600 pl-3">HISTORY</h2>
+	<div class="not-prose">
+		<Timeline items={timelineItems} />
 	</div>
-
-	<!-- TODO: Prettify this -->
-	<h2 class="border-l-4 border-gray-500 pl-3">CERTIFICATE</h2>
-	<div>
-		{#each certificates.toSorted((a, b) => b.issuanceDate.getTime() - a.issuanceDate.getTime()) as cert}
-			<h3>{cert.name}</h3>
-			<p class="subtext">{format(cert.issuanceDate, 'yyyy.MM.dd')}</p>
-		{/each}
-	</div>
-
-	<h2 class="border-l-4 border-red-500 pl-3">EXPERIENCE</h2>
-	{#each experiences.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as expr}
-		<h3>{expr.organization}</h3>
-		<p class="subtext">
-			{format(expr.period.start, 'yyyy.MM.dd')} ~ {format(expr.period.end, 'yyyy.MM.dd')}
-		</p>
-		<Markdown>{expr.summary}</Markdown>
-
-		<!-- Projects -->
-		{#each expr.projects.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as project}
-			<h4>{project.title}</h4>
-			<p class="subtext">
-				{format(project.period.start, 'yyyy.MM.dd')} ~ {format(project.period.end, 'yyyy.MM.dd')}
-			</p>
-			<div>
-				{#each project.tags as tag}
-					<span class="badge badge-info mr-1 font-semibold">{_tag(tag)}</span>
-				{/each}
-			</div>
-			<Markdown>{project.description}</Markdown>
-		{/each}
-	{/each}
 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
-
 	{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
 		<h3>
 			<a href={pw.link} target="_blank">{pw.name}</a>
@@ -137,14 +121,5 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 	}
 	h2 {
 		@apply text-3xl font-bold;
-	}
-
-	h3,
-	h4:has(+ p.subtext) {
-		@apply !mb-1;
-	}
-
-	.subtext {
-		@apply text-gray-500;
 	}
 </style>
