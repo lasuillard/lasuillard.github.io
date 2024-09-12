@@ -7,6 +7,7 @@
 	import educations from '$data/educations';
 	import experiences from '$data/experiences';
 	import personalWorks from '$data/personal-works';
+	import GitHub from '^/src/components/icon/GitHub.svelte';
 
 	// Tag reference counter
 	let tagRefs: { [key: string]: number } = {};
@@ -101,18 +102,31 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 	</div>
 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
-	{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
-		<h3>
-			<a href={pw.link} target="_blank">{pw.name}</a>
-			<span class="badge badge-warning align-middle font-bold">{pw.status}</span>
-		</h3>
-		<div>
-			{#each pw.tags as tag}
-				<span class="badge badge-info mr-1 font-semibold">{_tag(tag)}</span>
-			{/each}
-		</div>
-		<Markdown>{pw.description}</Markdown>
-	{/each}
+	<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 2xl:grid-cols-4">
+		{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
+			<div class="card bg-slate-800 shadow-xl">
+				<div class="card-body">
+					<h2 class="card-title flex-wrap text-neutral-content">
+						{pw.name}
+						<div class="badge badge-warning">{pw.status}</div>
+					</h2>
+					<div class="flex justify-end">
+						<a href={pw.link} target="_blank" class="btn btn-circle btn-ghost">
+							<GitHub class="h-7 w-7" />
+						</a>
+					</div>
+					<div class="text-neutral-content">
+						<Markdown>{pw.description}</Markdown>
+					</div>
+					<div class="card-actions mt-auto">
+						{#each pw.tags as tag}
+							<span class="badge badge-info font-semibold">{_tag(tag)}</span>
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/each}
+	</div>
 </div>
 
 <style lang="postcss">
