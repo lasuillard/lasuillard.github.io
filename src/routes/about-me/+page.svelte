@@ -122,9 +122,11 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 				<div class="card-body">
 					<h2 class="card-title flex-wrap text-neutral-content">
 						{pw.name}
-						<div class="badge badge-warning">{pw.status}</div>
 					</h2>
 					<div class="flex justify-end">
+						<span class="badge badge-warning font-semibold">{pw.status}</span>
+					</div>
+					<div class="mt-3 flex justify-end">
 						{#each Object.entries(pw.links) as [platform, link]}
 							{@const Icon = iconMap[platform]}
 							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
