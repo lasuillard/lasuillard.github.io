@@ -21,7 +21,7 @@ export default [
 	{
 		organization: '얼리페이',
 		role: '백엔드 개발자',
-		summary: '얼리페이 카드 및 배달 매출 선정산 서비스 백엔드 개발 및 출시',
+		summary: '카드/배달 매출 선정산 서비스 개발 및 출시',
 		period: {
 			start: new Date('2021-06-01'),
 			end: new Date('2021-12-31')
@@ -71,7 +71,7 @@ export default [
 	{
 		organization: '에이젠글로벌',
 		role: '백엔드 개발자',
-		summary: `우리카드 FDS 고도화 프로젝트 및 ABACUS AutoML 솔루션의 개발 및 유지보수`,
+		summary: `우리카드 FDS 고도화 프로젝트 참여 및 ABACUS AutoML 솔루션의 개발 및 유지보수`,
 		period: {
 			start: new Date('2022-12-08'),
 			end: new Date('2023-08-31')
@@ -115,18 +115,42 @@ export default [
 - Locust를 이용한 부하 테스트
 - 레거시 ClickHouse 데이터베이스 성능 개선
         `, // TODO
-				tags: ['ClickHouse', 'Docker', 'Locust', 'NGINX', 'Python', 'Redis', 'SQLite', 'Twisted']
+				tags: ['ClickHouse', 'Docker', 'NGINX', 'Python', 'Redis', 'SQLite', 'Twisted']
 			}
 		]
 	},
 	{
 		organization: '얼리페이',
 		role: '백엔드 개발자',
-		summary: '재직 중',
+		summary: '얼리페이 시스템 개발 및 유지보수',
 		period: {
 			start: new Date('2023-12-04'),
 			end: new Date(Date.now())
 		},
-		projects: []
+		projects: [
+			{
+				title: '얼리페이 시스템 개발 및 유지보수',
+				period: {
+					start: new Date('2023-12-04'),
+					end: new Date(Date.now())
+				},
+				description: ``,
+				tags: [
+					'Amazon Web Services',
+					'Celery',
+					'Django',
+					'Docker',
+					'FastAPI',
+					'GitHub Actions',
+					'PostgreSQL',
+					'Python',
+					'Redis',
+					'Selenium',
+					'MySQL',
+					'Terraform',
+					'Windows Server'
+				]
+			}
+		]
 	}
 ] as ExperienceItem[];
