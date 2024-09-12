@@ -1,7 +1,12 @@
 export type PersonalWorkItem = {
 	name: string;
 	description: string;
-	link: string;
+	links: {
+		github?: string;
+		docker?: string;
+		npm?: string;
+		pypi?: string;
+	};
 	tags: string[];
 	status: PersonalWorkStatus;
 	order: number;
@@ -16,7 +21,9 @@ export default [
 	{
 		name: 'lasuillard.github.io',
 		description: `SvelteKit을 이용하여 직접 처음부터 만든 개인 블로그입니다.`,
-		link: 'https://github.com/lasuillard/lasuillard.github.io',
+		links: {
+			github: 'https://github.com/lasuillard/lasuillard.github.io'
+		},
 		tags: ['GitHub Actions', 'SvelteKit', 'Tailwind CSS'],
 		status: PersonalWorkStatus.WIP,
 		order: 0
@@ -29,7 +36,10 @@ Raindrop.io API의 비공식 OpenAPI 스키마 정의 및 자동 생성된 클�
 Raindrop.io에서 제공하지 않는 OpenAPI 스키마를 직접 정의하고 OpenAPI Generator를 이용하여 API 클라이언트 코드를 자동 생성합니다.
 [npm](https://www.npmjs.com/package/@lasuillard/raindrop-client)에 배포되어 있습니다.
       `,
-		link: 'https://github.com/lasuillard/raindrop-client',
+		links: {
+			github: 'https://github.com/lasuillard/raindrop-client',
+			npm: 'https://www.npmjs.com/package/@lasuillard/raindrop-client'
+		},
 		tags: ['TypeScript', 'GitHub Actions', 'OpenAPI', 'OpenAPI Generator'],
 		status: PersonalWorkStatus.Published,
 		order: 1
@@ -38,7 +48,9 @@ Raindrop.io에서 제공하지 않는 OpenAPI 스키마를 직접 정의하고 O
 		name: 'Raindrop Sync for Chrome',
 		description:
 			'Raindrop.io와 크롬 브라우저간 북마크 동기화 기능을 제공하기 위한 크롬 브라우저 확장 프로그램입니다.',
-		link: 'https://github.com/lasuillard/raindrop-sync-chrome',
+		links: {
+			github: 'https://github.com/lasuillard/raindrop-sync-chrome'
+		},
 		tags: ['Chrome Extension', 'GitHub Actions', 'Svelte', 'Tailwind CSS', 'TypeScript'],
 		status: PersonalWorkStatus.WIP,
 		order: 2
@@ -49,7 +61,10 @@ Raindrop.io에서 제공하지 않는 OpenAPI 스키마를 직접 정의하고 O
 Django 프로젝트 내 Slack 메시징 및 봇 개발 편의성을 제공하기 위한 라이브러리입니다.
 [PyPI](https://pypi.org/project/django-slack-tools/)에 공개되어 있습니다.
       `,
-		link: 'https://github.com/lasuillard/django-slack-tools',
+		links: {
+			github: 'https://github.com/lasuillard/django-slack-tools',
+			pypi: 'https://pypi.org/project/django-slack-tools/'
+		},
 		tags: ['Python', 'Django', 'Slack', 'GitHub Actions'],
 		status: PersonalWorkStatus.Published,
 		order: 4
@@ -61,7 +76,10 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 
 개발 중 모의 서버 구성 및 관리 편의를 위해 개발되었으며, [Docker Hub](https://hub.docker.com/r/lasuillard/mockoon-novnc)에 공개되어 있습니다.
 `,
-		link: 'https://github.com/lasuillard/mockoon-novnc',
+		links: {
+			github: 'https://github.com/lasuillard/mockoon-novnc',
+			docker: 'https://hub.docker.com/r/lasuillard/mockoon-novnc'
+		},
 		tags: ['Docker', 'Mockoon', 'GitHub Actions'],
 		status: PersonalWorkStatus.Published,
 		order: 5
@@ -73,7 +91,10 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 
 Windows OS 기반 스크래핑 중 특수한 요구사항을 충족하기 위해 개발되었으며, [Docker Hub](https://hub.docker.com/r/lasuillard/freerdp-novnc)에 공개되어 있습니다.
     `,
-		link: 'https://github.com/lasuillard/freerdp-novnc',
+		links: {
+			github: 'https://github.com/lasuillard/freerdp-novnc',
+			docker: 'https://hub.docker.com/r/lasuillard/freerdp-novnc'
+		},
 		tags: ['Docker', 'RDP', 'GitHub Actions'],
 		status: PersonalWorkStatus.Published,
 		order: 6
@@ -85,7 +106,10 @@ Windows OS 기반 스크래핑 중 특수한 요구사항을 충족하기 위해
 
 Rust를 배우고자 시작한 간단한 토이 프로젝트이며 바이너리 및 Docker 이미지로 배포되어 있습니다.
     `,
-		link: 'https://github.com/lasuillard/1password-exporter',
+		links: {
+			github: 'https://github.com/lasuillard/1password-exporter',
+			docker: 'https://hub.docker.com/r/lasuillard/1password-exporter'
+		},
 		tags: ['Rust', 'Prometheus', 'Docker', '1Password'],
 		status: PersonalWorkStatus.Published,
 		order: 7

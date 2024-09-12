@@ -7,12 +7,24 @@
 	import educations from '$data/educations';
 	import experiences from '$data/experiences';
 	import personalWorks from '$data/personal-works';
+	import Docker from '^/src/components/icon/Docker.svelte';
 	import GitHub from '^/src/components/icon/GitHub.svelte';
+	import Npm from '^/src/components/icon/npm.svelte';
+	import PyPi from '^/src/components/icon/PyPI.svelte';
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const iconMap: { [key: string]: any } = {
+		github: GitHub,
+		docker: Docker,
+		npm: Npm,
+		pypi: PyPi
+	};
 
 	// Tag reference counter
 	let tagRefs: { [key: string]: number } = {};
 
 	// Refer a single tag
+	// eslint-disable-next-line jsdoc/require-jsdoc
 	function _tag(tag: string) {
 		if (Object.hasOwn(tagRefs, tag)) {
 			tagRefs[tag]++;
@@ -25,6 +37,8 @@
 
 		return tag;
 	}
+
+	// eslint-disable-next-line jsdoc/require-jsdoc
 	function _tags(tags: string[]) {
 		return tags.map(_tag);
 	}
@@ -111,9 +125,12 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 						<div class="badge badge-warning">{pw.status}</div>
 					</h2>
 					<div class="flex justify-end">
-						<a href={pw.link} target="_blank" class="btn btn-circle btn-ghost">
-							<GitHub class="h-7 w-7" />
-						</a>
+						{#each Object.entries(pw.links) as [platform, link]}
+							{@const Icon = iconMap[platform]}
+							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
+								<svelte:component this={Icon} class="h-7 w-7" />
+							</a>
+						{/each}
 					</div>
 					<div class="text-neutral-content">
 						<Markdown>{pw.description}</Markdown>
