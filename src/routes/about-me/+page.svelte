@@ -168,9 +168,9 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
 	<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 2xl:grid-cols-4">
 		{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
-			<div class="card bg-slate-800 shadow-xl">
+			<div class="card border-2 border-slate-500 shadow-xl">
 				<div class="card-body">
-					<h2 class="card-title flex-wrap text-neutral-content">
+					<h2 class="card-title flex-wrap">
 						{pw.name}
 					</h2>
 					<div class="flex justify-end">
@@ -184,7 +184,7 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 							</a>
 						{/each}
 					</div>
-					<div class="text-neutral-content">
+					<div>
 						<Markdown>{pw.description}</Markdown>
 					</div>
 					<div class="card-actions mt-auto">
