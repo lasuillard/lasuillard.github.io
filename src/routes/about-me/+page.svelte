@@ -2,7 +2,6 @@
 	import { browser } from '$app/environment';
 	import Markdown from '$components/content/Markdown.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
-	import Timeline from '$components/content/Timeline.svelte';
 	import certificates from '$data/certificates';
 	import educations from '$data/educations';
 	import experiences from '$data/experiences';
@@ -11,6 +10,7 @@
 	import GitHub from '^/src/components/icon/GitHub.svelte';
 	import Npm from '^/src/components/icon/npm.svelte';
 	import PyPi from '^/src/components/icon/PyPI.svelte';
+	import { format, isSameYear } from 'date-fns';
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const iconMap: { [key: string]: any } = {
@@ -47,25 +47,36 @@
 	const pageURL = browser ? window.location.href.split('#')[0] : null;
 
 	// Transform data into timeline format
-	const eduAsTimeline = educations.map((edu) => ({
+	type TimelineItem = {
+		period: { start: Date; end?: Date };
+		title: string;
+		summary: string;
+		description?: string;
+		tags?: string[];
+	};
+
+	const eduAsTimeline: TimelineItem[] = educations.map((edu) => ({
 		period: edu.period,
 		title: edu.name,
-		description: edu.description
+		summary: edu.description
 	}));
-	const certsAsTimeline = certificates.map((cert) => ({
+	const certsAsTimeline: TimelineItem[] = certificates.map((cert) => ({
 		period: { start: cert.issuanceDate },
 		title: cert.name,
-		description: cert.issuer
+		summary: cert.issuer
 	}));
-	const exprAsTimeline = experiences.map((expr) => ({
+	const exprAsTimeline: TimelineItem[] = experiences.map((expr) => ({
 		period: expr.period,
 		title: expr.organization,
-		description: expr.summary,
-		tags: _tags(Array.from(new Set(expr.projects.flatMap((p) => p.tags))))
+		summary: expr.summary,
+		description: expr.description,
+		tags: _tags(expr.tags)
 	}));
-	const timelineItems = [...eduAsTimeline, ...certsAsTimeline, ...exprAsTimeline].sort(
-		(a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime()
-	);
+	const timelineItems: TimelineItem[] = [
+		...eduAsTimeline,
+		...certsAsTimeline,
+		...exprAsTimeline
+	].sort((a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime());
 </script>
 
 <div class="prose max-w-none px-4 py-12">
@@ -111,8 +122,47 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 	</div>
 
 	<h2 class="border-l-4 border-sky-600 pl-3">HISTORY</h2>
-	<div class="not-prose">
-		<Timeline items={timelineItems} />
+	<div>
+		<ul class="max-md:timeline-compact timeline timeline-vertical timeline-snap-icon">
+			{#each timelineItems as { period: { start, end }, title, summary, tags }, index}
+				{@const dir = index % 2 == 0 ? 'left' : 'right'}
+				<li>
+					<hr />
+					<div class="timeline-middle">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							class="h-5 w-5"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+					</div>
+					<div class="{dir == 'left' ? 'timeline-start md:text-end' : 'timeline-end'} mb-10">
+						<time class="font-mono italic">{format(start, 'yyyy. MMMM')}</time>
+						{#if end}
+							{@const dateFmt = isSameYear(start, end) ? 'MMMM' : 'yyyy. MMMM'}
+							<span class="mx-2">~</span><time class="font-mono italic">{format(end, dateFmt)}</time
+							>
+						{/if}
+						<div class="text-lg font-black">{title}</div>
+						<div>{summary}</div>
+						{#if tags}
+							<div class="mt-2 flex flex-wrap {dir == 'left' ? 'justify-end' : ''} gap-1">
+								{#each tags as tag}
+									<span class="badge badge-info badge-md font-semibold">{tag}</span>
+								{/each}
+							</div>
+						{/if}
+					</div>
+					<hr />
+				</li>
+			{/each}
+		</ul>
 	</div>
 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
