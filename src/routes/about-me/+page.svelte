@@ -124,9 +124,9 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 	<h2 class="border-l-4 border-sky-600 pl-3">HISTORY</h2>
 	<div>
 		<ul class="max-md:timeline-compact timeline timeline-vertical timeline-snap-icon">
-			{#each timelineItems as { period: { start, end }, title, summary, tags }, index}
+			{#each timelineItems as { period: { start, end }, title, summary, description, tags }, index}
 				{@const dir = index % 2 == 0 ? 'left' : 'right'}
-				<li>
+				<li class="my-0">
 					<hr />
 					<div class="timeline-middle">
 						<svg
@@ -149,8 +149,22 @@ Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 
 							<span class="mx-2">~</span><time class="font-mono italic">{format(end, dateFmt)}</time
 							>
 						{/if}
-						<div class="text-lg font-black">{title}</div>
-						<div>{summary}</div>
+						<div class="mb-1 text-lg font-black">{title}</div>
+						<div class="mb-1">{summary}</div>
+						{#if description}
+							<div class="prose-sm">
+								<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+								<div tabindex="0" class="collapse text-center">
+									<input type="checkbox" />
+									<div class="collapse-title font-semibold">더 보기</div>
+									<div class="collapse-content text-start">
+										<Markdown>
+											{description}
+										</Markdown>
+									</div>
+								</div>
+							</div>
+						{/if}
 						{#if tags}
 							<div class="mt-2 flex flex-wrap {dir == 'left' ? 'justify-end' : ''} gap-1">
 								{#each tags as tag}
