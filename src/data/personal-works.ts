@@ -24,7 +24,7 @@ export default [
 		links: {
 			github: 'https://github.com/lasuillard/lasuillard.github.io'
 		},
-		tags: ['GitHub Actions', 'SvelteKit', 'Tailwind CSS'],
+		tags: ['GitHub Actions', 'SvelteKit', 'Tailwind CSS', 'TypeScript'],
 		status: PersonalWorkStatus.Published,
 		order: 0
 	},
@@ -76,7 +76,7 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 			github: 'https://github.com/lasuillard/mockoon-novnc',
 			docker: 'https://hub.docker.com/r/lasuillard/mockoon-novnc'
 		},
-		tags: ['Docker', 'NGINX', 'GitHub Actions'],
+		tags: ['Docker', 'NGINX', 'GitHub Actions', 'Shell Scripting'],
 		status: PersonalWorkStatus.Published,
 		order: 5
 	},
@@ -91,7 +91,7 @@ Windows OS 기반 스크래핑 중 특수한 요구사항을 충족하기 위해
 			github: 'https://github.com/lasuillard/freerdp-novnc',
 			docker: 'https://hub.docker.com/r/lasuillard/freerdp-novnc'
 		},
-		tags: ['Docker', 'GitHub Actions'],
+		tags: ['Docker', 'GitHub Actions', 'Shell Scripting'],
 		status: PersonalWorkStatus.Published,
 		order: 6
 	},
