@@ -2,18 +2,30 @@
 	import { browser } from '$app/environment';
 	import Markdown from '$components/content/Markdown.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
-	import { format } from 'date-fns';
+	import certificates from '$data/certificates';
+	import educations from '$data/educations';
+	import experiences from '$data/experiences';
+	import personalWorks from '$data/personal-works';
+	import Docker from '^/src/components/icon/Docker.svelte';
+	import GitHub from '^/src/components/icon/GitHub.svelte';
+	import Npm from '^/src/components/icon/npm.svelte';
+	import PyPi from '^/src/components/icon/PyPI.svelte';
+	import { format, isSameYear } from 'date-fns';
 
-	const pageURL = browser ? window.location.href.split('#')[0] : null;
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	const iconMap: { [key: string]: any } = {
+		github: GitHub,
+		docker: Docker,
+		npm: Npm,
+		pypi: PyPi
+	};
 
 	// Tag reference counter
 	let tagRefs: { [key: string]: number } = {};
 
-	// Bulk-ref tags
-	const tags = (...tags: string[]) => tags.map(tag).toSorted();
-
 	// Refer a single tag
-	const tag = (tag: string) => {
+	// eslint-disable-next-line jsdoc/require-jsdoc
+	function _tag(tag: string) {
 		if (Object.hasOwn(tagRefs, tag)) {
 			tagRefs[tag]++;
 		} else {
@@ -24,244 +36,51 @@
 		tagRefs = tagRefs;
 
 		return tag;
+	}
+
+	// eslint-disable-next-line jsdoc/require-jsdoc
+	function _tags(tags: string[]) {
+		return tags.map(_tag);
+	}
+
+	// Current page URL to generate QR code
+	const pageURL = browser ? window.location.href.split('#')[0] : null;
+
+	// Transform data into timeline format
+	type TimelineItem = {
+		period: { start: Date; end?: Date };
+		title: string;
+		summary: string;
+		description?: string;
+		tags?: string[];
 	};
 
-	const title = `이유찬`;
-	const catchphrase = `좋은 코드를 끝없이 갈망하는 개발자, 이유찬입니다.`;
-	const intro = `
-웹 기반 B2C/B2B 서비스 및 솔루션의 백엔드 개발, 배포 및 운영 경험을 쌓아가고 있는 주니어 백엔드 개발자입니다.
-
-더 좋은 코드를 위해 수시로 개선하기 위해 노력하며 협업을 위한 문서화(Docstring, Swagger)를 습관화하고 가독성 좋은 코드를 작성하기 위해 항상 고민합니다.
-
-다양한 자동화 테스트(pytest, Vitest, Playwright) 및 코드 검사 도구(Mypy, Ruff, ESLint, Checkov)를 개발 환경에 적극적으로 도입하며 실수와 오류를 줄이고 제품 품질을 향상시키기 위해 노력하고 있습니다.
-
-Python 외에도 TypeScript, Rust에도 관심이 많아 토이 프로젝트를 통해 배우고 있습니다.
-또한 웹 외에도 브라우저 확장 프로그램, 데스크탑 애플리케이션 등 다양한 소프트웨어 개발 또한 도전하며 지식을 넓혀나가고 있습니다.
-  `;
-
-	// TODO: Maintain as separate file for later I18n support + maintainability
-	const educations = [
-		{
-			name: '서울과학기술대학교',
-			description: `
-컴퓨터공학과 학사, 학점 4.11/4.5
-`,
-			period: {
-				start: new Date('2014-03-02'),
-				end: new Date('2020-02-28')
-			}
-		}
-	];
-
-	const certificates = [
-		{
-			name: '정보처리기능사',
-			issuer: '한국산업인력공단',
-			issuanceDate: new Date('2015-02-05'),
-			description: ``
-		},
-		{
-			name: '정보기기운용기능사',
-			issuer: '한국산업인력공단',
-			issuanceDate: new Date('2016-12-05'),
-			description: ``
-		},
-		{
-			name: 'TOEIC (935/990)',
-			issuer: 'ETS',
-			issuanceDate: new Date('2018-09-15'),
-			description: `935/990`
-		},
-		{
-			name: '정보처리기사',
-			issuer: '한국산업인력공단',
-			issuanceDate: new Date('2020-08-28'),
-			description: ``
-		}
-	];
-
-	const experiences = [
-		{
-			organization: '얼리페이',
-			role: '백엔드 개발자',
-			summary: '얼리페이 카드 및 배달 매출 선정산 서비스 백엔드 개발 및 출시',
-			period: {
-				start: new Date('2021-06-01'),
-				end: new Date('2021-12-31')
-			},
-			projects: [
-				{
-					title: '얼리페이 서비스 개발 및 출시',
-					period: {
-						start: new Date('2021-06-01'),
-						end: new Date('2021-12-31')
-					},
-					description: `
-- Django 기반 선정산 서버 개발
-  - 데이터베이스 설계 및 ORM 구현
-  - Django Admin을 이용한 정산 관리자 페이지 개발
-  - SPA FE 웹 애플리케이션과의 통신을 위한 REST API 구현 (DRF)
-  - Celery를 이용하여 정기 일괄 작업 처리
-  - 여러 내/외부 서비스와 연동 (크롤러, 펌뱅킹, 카카오 알림톡, Slack, etc.)
-
-- 선정산 데이터 수집을 위한 웹 크롤러 개발
-  - 기존 Flask 1 기반 크롤러 구현을 FastAPI로 마이그레이션, 전반적인 구조 및 성능 개선
-  - VAN (Value-Added Network) / 배달 플랫폼 크롤러 구현
-
-- Etc.
-  - 컨테이너 기반 개발 환경 구성 (Docker, Docker Compose, VS Code Devcontainer)
-  - 코드 품질 개선을 위한 CQA 도구 도입 (pre-commit, flake8, isort 및 Black / Mypy)
-  - pytest를 이용한 자동화 테스트
-  - GitHub Actions를 이용하여 서비스 배포 자동화 (AWS Beanstalk)
-  - 모니터링 구성 및 연동 (CloudWatch, Sentry)
-          `,
-					tags: tags(
-						'Amazon Web Services',
-						'Celery',
-						'Django REST Framework',
-						'Django',
-						'Docker',
-						'FastAPI',
-						'GitHub Actions',
-						'PostgreSQL',
-						'Python',
-						'Redis',
-						'Selenium'
-					)
-				}
-			]
-		},
-		{
-			organization: '에이젠글로벌',
-			role: '백엔드 개발자',
-			summary: `우리카드 FDS 고도화 프로젝트 및 ABACUS AutoML 솔루션의 개발 및 유지보수`,
-			period: {
-				start: new Date('2022-12-08'),
-				end: new Date('2023-08-31')
-			},
-			projects: [
-				{
-					title: 'ABACUS 유지보수',
-					period: {
-						start: new Date('2022-12-08'),
-						end: new Date('2023-08-31')
-					},
-					description: `
-- 레거시 애플리케이션 유지보수
-- 고객사 (우리FIS) 장애 대응
-- 차세대 AutoMLOps 솔루션 ABACUS Enterprise 설계 및 기획 참여
-          `, // TODO
-					tags: tags(
-						'Celery',
-						'Django REST Framework',
-						'Django',
-						'Docker',
-						'NGINX',
-						'PostgreSQL',
-						'Python',
-						'Redis'
-					)
-				},
-				{
-					title: '우리카드 FDS 고도화 및 유지보수',
-					period: {
-						start: new Date('2022-12-08'),
-						end: new Date('2023-08-31')
-					},
-					description: `
-- 레거시 우리카드 FDS 시스템의 유지보수 및 신규 기능 개발
-  - 일일 약 700만건의 요청을 처리하는 Python Twisted 기반 비동기 TCP 서버 애플리케이션 유지보수
-  - 딥러닝 스코어링 요청 처리 다중 프로세스 Python 애플리케이션 유지보수
-
-- 애플리케이션 성능 개선 작업
-  - 리소스 사용량 개선을 통한 서버 안정화
-  - Locust를 이용한 부하 테스트
-  - 레거시 ClickHouse 데이터베이스 성능 개선
-          `, // TODO
-					tags: tags(
-						'ClickHouse',
-						'Docker',
-						'Locust',
-						'NGINX',
-						'Python',
-						'Redis',
-						'SQLite',
-						'Twisted'
-					)
-				}
-			]
-		},
-		{
-			organization: '얼리페이',
-			role: '백엔드 개발자',
-			summary: '재직 중',
-			period: {
-				start: new Date('2023-12-04'),
-				end: new Date(Date.now())
-			},
-			projects: []
-		}
-	];
-
-	const personalWorks = [
-		{
-			name: 'lasuillard.github.io',
-			description: `SvelteKit을 이용하여 직접 처음부터 만든 개인 블로그입니다.`,
-			link: 'https://github.com/lasuillard/lasuillard.github.io',
-			tags: tags('GitHub Actions', 'SvelteKit', 'Tailwind CSS'),
-			status: 'WIP',
-			order: 0 // Ascending order
-		},
-		{
-			name: 'raindrop-client',
-			description: `
-Raindrop.io API의 비공식 OpenAPI 스키마 정의 및 자동 생성된 클라이언트 라이브러리입니다.
-
-Raindrop.io에서 제공하지 않는 OpenAPI 스키마를 직접 정의하고 OpenAPI Generator를 이용하여 API 클라이언트 코드를 자동 생성합니다.
-[npm](https://www.npmjs.com/package/@lasuillard/raindrop-client)에 배포되어 있습니다.
-        `,
-			link: 'https://github.com/lasuillard/raindrop-client',
-			tags: tags('TypeScript', 'GitHub Actions', 'OpenAPI', 'OpenAPI Generator'),
-			status: 'Published',
-			order: 1
-		},
-		{
-			name: 'Raindrop Sync for Chrome',
-			description:
-				'Raindrop.io와 크롬 브라우저간 북마크 동기화 기능을 제공하기 위한 크롬 브라우저 확장 프로그램입니다.',
-			link: 'https://github.com/lasuillard/raindrop-sync-chrome',
-			tags: tags('Chrome Extension', 'GitHub Actions', 'Svelte', 'Tailwind CSS', 'TypeScript'),
-			status: 'WIP',
-			order: 2
-		},
-		{
-			name: 'django-slack-tools',
-			description: `
-Django 프로젝트 내 Slack 메시징 및 봇 개발 편의성을 제공하기 위한 라이브러리입니다.
-[PyPI](https://pypi.org/project/django-slack-tools/)에 공개되어 있습니다.
-        `,
-			link: 'https://github.com/lasuillard/django-slack-tools',
-			tags: tags('Python', 'Django', 'Slack', 'GitHub Actions'),
-			status: 'Published',
-			order: 4
-		},
-		{
-			name: 'mockoon-novnc',
-			description: `
-Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC 연동 및 부가 기능을 제공하기 위한 Docker 이미지입니다.
-
-개발 중 모의 서버 구성 및 관리 편의를 위해 개발되었으며, [Docker Hub](https://hub.docker.com/r/lasuillard/mockoon-novnc)에 공개되어 있습니다.
-`,
-			link: 'https://github.com/lasuillard/mockoon-novnc',
-			tags: tags('Docker', 'Mockoon', 'GitHub Actions'),
-			status: 'Published',
-			order: 5
-		}
-	];
+	const eduAsTimeline: TimelineItem[] = educations.map((edu) => ({
+		period: edu.period,
+		title: edu.name,
+		summary: edu.description
+	}));
+	const certsAsTimeline: TimelineItem[] = certificates.map((cert) => ({
+		period: { start: cert.issuanceDate },
+		title: cert.name,
+		summary: cert.issuer
+	}));
+	const exprAsTimeline: TimelineItem[] = experiences.map((expr) => ({
+		period: expr.period,
+		title: expr.organization,
+		summary: expr.summary,
+		description: expr.description,
+		tags: _tags(expr.tags)
+	}));
+	const timelineItems: TimelineItem[] = [
+		...eduAsTimeline,
+		...certsAsTimeline,
+		...exprAsTimeline
+	].sort((a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime());
 </script>
 
 <div class="prose max-w-none px-4 py-12">
-	<h1>{title}</h1>
+	<h1>이유찬</h1>
 
 	<div class="flex flex-col place-items-end">
 		{#if pageURL}
@@ -275,9 +94,19 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 		<p
 			class="my-10 text-center text-lg font-semibold before:content-[open-quote] after:content-[close-quote]"
 		>
-			{catchphrase}
+			좋은 코드를 끝없이 갈망하는 개발자, 이유찬입니다.
 		</p>
-		<Markdown>{intro}</Markdown>
+		<Markdown>
+			{`
+Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발자입니다. 주로 Django, FastAPI 프레임워크를 사용해 웹 서비스를 개발하고 운영해왔습니다.
+
+가장 선호하는 언어는 Python이지만 TypeScript와 Rust에도 관심이 많아 블로그를 직접 구현하거나 간단한 Rust CLI 애플리케이션을 만들어보며 지평을 넓히고 있습니다.
+항상 틀에 얽매이지 않고 새로운 가능성을 열어두고자 합니다.
+
+자동화 테스트 및 코드 검사 도구를 통한 코드 품질 향상에 관심이 많으며 문서화를 중요하게 생각합니다.
+언제 다시 보더라도 이해하기 쉬운 코드, 가독성 좋은 코드를 작성하기 위해 노력하고 있습니다.
+`}
+		</Markdown>
 	</div>
 
 	<h2 class="border-l-4 border-teal-500 pl-3">SKILL</h2>
@@ -291,64 +120,95 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 		</div>
 	</div>
 
-	<!-- TODO: Prettify this -->
-	<h2 class="border-l-4 border-sky-600 pl-3">EDUCATION</h2>
+	<h2 class="border-l-4 border-sky-600 pl-3">HISTORY</h2>
 	<div>
-		{#each educations as edu}
-			<h3>{edu.name}</h3>
-			<p class="subtext">
-				{format(edu.period.start, 'yyyy.MM.dd')} ~ {format(edu.period.end, 'yyyy.MM.dd')}
-			</p>
-			<Markdown>{edu.description}</Markdown>
-		{/each}
+		<ul class="max-md:timeline-compact timeline timeline-vertical timeline-snap-icon">
+			{#each timelineItems as { period: { start, end }, title, summary, description, tags }, index}
+				{@const dir = index % 2 == 0 ? 'left' : 'right'}
+				<li class="my-0">
+					<hr />
+					<div class="timeline-middle">
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							viewBox="0 0 20 20"
+							fill="currentColor"
+							class="h-5 w-5"
+						>
+							<path
+								fill-rule="evenodd"
+								d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+								clip-rule="evenodd"
+							/>
+						</svg>
+					</div>
+					<div class="{dir == 'left' ? 'timeline-start md:text-end' : 'timeline-end'} mb-10">
+						<time class="font-mono italic">{format(start, 'yyyy. MMMM')}</time>
+						{#if end}
+							{@const dateFmt = isSameYear(start, end) ? 'MMMM' : 'yyyy. MMMM'}
+							<span class="mx-2">~</span><time class="font-mono italic">{format(end, dateFmt)}</time
+							>
+						{/if}
+						<div class="mb-1 text-lg font-black">{title}</div>
+						<div class="mb-1">{summary}</div>
+						{#if description}
+							<div class="prose-sm">
+								<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+								<div tabindex="0" class="collapse text-center">
+									<input type="checkbox" />
+									<div class="collapse-title font-semibold">더 보기</div>
+									<div class="collapse-content text-start">
+										<Markdown>
+											{description}
+										</Markdown>
+									</div>
+								</div>
+							</div>
+						{/if}
+						{#if tags}
+							<div class="mt-2 flex flex-wrap {dir == 'left' ? 'justify-end' : ''} gap-1">
+								{#each tags as tag}
+									<span class="badge badge-info badge-md font-semibold">{tag}</span>
+								{/each}
+							</div>
+						{/if}
+					</div>
+					<hr />
+				</li>
+			{/each}
+		</ul>
 	</div>
-
-	<!-- TODO: Prettify this -->
-	<h2 class="border-l-4 border-gray-500 pl-3">CERTIFICATE</h2>
-	<div>
-		{#each certificates.toSorted((a, b) => b.issuanceDate.getTime() - a.issuanceDate.getTime()) as cert}
-			<h3>{cert.name}</h3>
-			<p class="subtext">{format(cert.issuanceDate, 'yyyy.MM.dd')}</p>
-		{/each}
-	</div>
-
-	<h2 class="border-l-4 border-red-500 pl-3">EXPERIENCE</h2>
-	{#each experiences.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as expr}
-		<h3>{expr.organization}</h3>
-		<p class="subtext">
-			{format(expr.period.start, 'yyyy.MM.dd')} ~ {format(expr.period.end, 'yyyy.MM.dd')}
-		</p>
-		<Markdown>{expr.summary}</Markdown>
-
-		<!-- Projects -->
-		{#each expr.projects.toSorted((a, b) => b.period.end.getTime() - a.period.end.getTime()) as project}
-			<h4>{project.title}</h4>
-			<p class="subtext">
-				{format(project.period.start, 'yyyy.MM.dd')} ~ {format(project.period.end, 'yyyy.MM.dd')}
-			</p>
-			<div>
-				{#each project.tags as tag}
-					<span class="badge badge-info mr-1 font-semibold">{tag}</span>
-				{/each}
-			</div>
-			<Markdown>{project.description}</Markdown>
-		{/each}
-	{/each}
 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
-
-	{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
-		<h3>
-			<a href={pw.link} target="_blank">{pw.name}</a>
-			<span class="badge badge-warning align-middle font-bold">{pw.status}</span>
-		</h3>
-		<div>
-			{#each pw.tags as tag}
-				<span class="badge badge-info mr-1 font-semibold">{tag}</span>
-			{/each}
-		</div>
-		<Markdown>{pw.description}</Markdown>
-	{/each}
+	<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 2xl:grid-cols-4">
+		{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
+			<div class="card border-2 border-slate-500 shadow-xl">
+				<div class="card-body">
+					<h2 class="card-title flex-wrap">
+						{pw.name}
+					</h2>
+					<div class="flex justify-end">
+						<span class="badge badge-warning font-semibold">{pw.status}</span>
+					</div>
+					<div class="mt-3 flex justify-end">
+						{#each Object.entries(pw.links) as [platform, link]}
+							{@const Icon = iconMap[platform]}
+							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
+								<svelte:component this={Icon} class="h-7 w-7" />
+							</a>
+						{/each}
+					</div>
+					<div>
+						<Markdown>{pw.description}</Markdown>
+					</div>
+					<div class="card-actions mt-auto">
+						{#each pw.tags as tag}
+							<span class="badge badge-info font-semibold">{_tag(tag)}</span>
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/each}
+	</div>
 </div>
 
 <style lang="postcss">
@@ -357,14 +217,5 @@ Mockoon의 GUI를 웹 브라우저에서 실행할 수 있도록 하는 NoVNC �
 	}
 	h2 {
 		@apply text-3xl font-bold;
-	}
-
-	h3,
-	h4:has(+ p.subtext) {
-		@apply !mb-1;
-	}
-
-	.subtext {
-		@apply text-gray-500;
 	}
 </style>
