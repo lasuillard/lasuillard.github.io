@@ -1,4 +1,5 @@
 {
+	"name": "lasuillard/lasuillard.github.io",
 	"dockerComposeFile": ["./docker-compose.devcontainer.yaml"],
 	"runServices": ["workspace", "novnc"],
 	"service": "workspace",
