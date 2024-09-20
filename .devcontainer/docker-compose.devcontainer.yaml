@@ -4,7 +4,7 @@ services:
   workspace:
     image: mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm
     volumes:
-      - ..:/workspace
+      - ..:/workspaces/lasuillard.github.io
     environment:
       DISPLAY: novnc:0.0
     healthcheck:
