@@ -37,7 +37,7 @@ export default defineConfig({
 		],
 		include: ['tests/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
-		reporters: ['junit'],
+		reporters: ['junit', 'default'],
 		outputFile: {
 			junit: './junit.xml'
 		},
