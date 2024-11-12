@@ -1,12 +1,13 @@
 import { codecovVitePlugin } from '@codecov/vite-plugin';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
+import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
 		...(process.env.VITEST
-			? []
+			? [svelteTesting()]
 			: [
 					sentrySvelteKit({
 						sourceMapsUploadOptions: {
@@ -31,10 +32,11 @@ export default defineConfig({
 			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['posts']
 		}
 	},
+	resolve: {
+		// https://github.com/sveltejs/svelte/issues/11394
+		conditions: process.env.VITEST ? ['browser'] : []
+	},
 	test: {
-		alias: [
-			{ find: /^svelte$/, replacement: 'svelte/internal' } // BUG: https://github.com/vitest-dev/vitest/issues/2834
-		],
 		include: ['tests/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
 		reporters: ['junit', 'default'],

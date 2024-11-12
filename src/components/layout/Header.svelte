@@ -8,8 +8,12 @@
 		{ name: 'Blog', href: '/blog' }
 	];
 
-	export let currentPath: string | undefined = undefined;
-	export let drawerOpen = false;
+	interface Props {
+		currentPath?: string | undefined;
+		drawerOpen?: boolean;
+	}
+
+	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 </script>
 
 <div data-testid="header-wrapper" class="bg-base-100">
@@ -22,7 +26,7 @@
 			<header class="navbar z-10 w-full px-12 py-6" data-testid="header">
 				<!-- Drawer button -->
 				<div class="flex-none md:hidden">
-					<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 					<label
 						tabindex="0"
 						for="header-drawer"
@@ -60,13 +64,13 @@
 
 		<!-- Drawer content -->
 		<div class="drawer-side z-10 lg:hidden">
-			<label for="header-drawer" class="drawer-overlay" />
+			<label for="header-drawer" class="drawer-overlay"></label>
 
-			<!-- svelte-ignore a11y-no-static-element-interactions -->
-			<!-- svelte-ignore a11y-click-events-have-key-events -->
+			<!-- svelte-ignore a11y_no_static_element_interactions -->
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
 			<div
 				class="flex min-h-screen w-full"
-				on:click={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
+				onclick={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
 			>
 				<ul class="menu m-auto text-2xl text-white">
 					{#each links as link}
@@ -75,7 +79,7 @@
 								class="w-fit"
 								class:underline={currentPath === link.href}
 								href={link.href}
-								on:click={(/* Close drawer when link clicked */) => (drawerOpen = false)}
+								onclick={(/* Close drawer when link clicked */) => (drawerOpen = false)}
 							>
 								{link.name}
 							</a>

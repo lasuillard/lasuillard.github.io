@@ -1,10 +1,15 @@
-<script>
+<script lang="ts">
 	import { page } from '$app/stores';
 
-	// FIXME: Accepting parameters for testing because mocking store isn't easy
-	export let status = $page.status;
-	/* c8 ignore next */
-	export let message = $page.error?.message || 'Unknown Error';
+	interface Props {
+		// FIXME: Accepting parameters for testing because mocking store isn't easy
+		status?: any;
+		/* c8 ignore next */
+		message?: any;
+	}
+
+	let { status = $page.status, message = $page.error?.message || 'Unknown Error' }: Props =
+		$props();
 </script>
 
 <div class="flex h-full w-full flex-col items-center justify-center">

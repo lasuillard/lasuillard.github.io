@@ -12,7 +12,7 @@
 				<div
 					class="m-auto h-fit w-48 rounded-full bg-gradient-to-r from-rose-600 via-fuchsia-400 to-yellow-400 p-0.5 lg:w-56"
 				>
-					<!-- svelte-ignore a11y-img-redundant-alt -->
+					<!-- svelte-ignore a11y_img_redundant_alt -->
 					<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->
 					<img
 						class="mask mask-circle"

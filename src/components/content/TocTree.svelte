@@ -1,7 +1,13 @@
 <script lang="ts">
+	import TocTree from './TocTree.svelte';
 	import type { TreeNode } from '$lib/toc';
 
-	export let tree: TreeNode<HTMLElement>;
+	interface Props {
+		tree: TreeNode<HTMLElement>;
+		[key: string]: any;
+	}
+
+	let { tree, ...rest }: Props = $props();
 
 	const heading = tree.data.textContent;
 
@@ -9,14 +15,14 @@
 	const link = tree.data.querySelector('a')?.getAttribute('href');
 </script>
 
-<div data-testid="toc-tree" {...$$restProps}>
+<div data-testid="toc-tree" {...rest}>
 	<p class="mb-1.5 font-light">
 		<a class="link-hover link" href={link}>{heading}</a>
 	</p>
 	<ul>
 		{#each tree.children as child}
 			<li class="ml-8">
-				<svelte:self tree={child} />
+				<TocTree tree={child} />
 			</li>
 		{/each}
 	</ul>

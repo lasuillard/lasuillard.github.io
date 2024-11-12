@@ -1,8 +1,16 @@
+<script lang="ts">
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...rest }: Props = $props();
+</script>
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	viewBox="0 0 756.26 596.9"
   data-testid="icon/docker"
-	{...$$restProps}
+	{...rest}
 >
 	<defs>
 		<style>

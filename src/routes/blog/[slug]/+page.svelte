@@ -6,13 +6,13 @@
 	import mermaid from 'mermaid';
 	import { onMount } from 'svelte';
 
-	export let data;
+	let { data } = $props();
 
 	const { metadata, content } = data;
 	const { title, publicationDate, tags } = metadata;
 
 	// Content wrapper for generating ToC
-	let contentWrapper: HTMLElement | undefined;
+	let contentWrapper: HTMLElement | undefined = $state();
 
 	onMount(() => {
 		mermaid.init();
@@ -50,7 +50,7 @@
 					</div>
 				{/each}
 			</div>
-			<div class="divider mb-6" />
+			<div class="divider mb-6"></div>
 			<!-- Embedded TOC for small screen -->
 			<div class="xl:hidden">
 				{#if contentWrapper}
@@ -75,11 +75,11 @@
 			@apply mx-auto shadow-md;
 		}
 		/* No underline for heading links */
-		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
+		& :global(:where(:global(h1, h2, h3, h4, h5, h6)) > a) {
 			@apply no-underline;
 		}
 		/* Show '#' on the left of heading links when hover */
-		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
+		& :global(:where(:global(h1, h2, h3, h4, h5, h6)) > a:hover) {
 			@apply before:absolute before:-ml-6 before:text-secondary before:underline before:underline-offset-4 before:content-['#'];
 		}
 		/* Add some shadow for visual recognition */

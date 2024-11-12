@@ -2,25 +2,29 @@
 	import { parse } from '$lib/markdown';
 	import { onMount } from 'svelte';
 
-	/**
-	 * Front matters extracted from markdown text (slot).
-	 *
-	 * This isn't used inside component, export only.
-	 */
-	export let frontMatter: unknown | undefined = undefined;
+	interface Props {
+		/**
+		 * Front matters extracted from markdown text (slot).
+		 *
+		 * This isn't used inside component, export only.
+		 */
+		frontMatter?: unknown | undefined;
+		/**
+		 * Parsed HTML text from markdown.
+		 *
+		 * This exists to provide common functionality (such as styles, highlights, auto link headings, etc.)
+		 * to markdown HTML documents.
+		 *
+		 * Just ignore this to use slotted inputs for raw markdown text.
+		 */
+		content?: string;
+		children?: import('svelte').Snippet;
+	}
 
-	/**
-	 * Parsed HTML text from markdown.
-	 *
-	 * This exists to provide common functionality (such as styles, highlights, auto link headings, etc.)
-	 * to markdown HTML documents.
-	 *
-	 * Just ignore this to use slotted inputs for raw markdown text.
-	 */
-	export let content: string = '';
+	let { frontMatter = $bindable(undefined), content = $bindable(''), children }: Props = $props();
 
 	// Binding wrapper for input slot to obtain its contents
-	let wrapper: HTMLElement;
+	let wrapper: HTMLElement | undefined = $state();
 
 	onMount(async () => {
 		if (content) return;
@@ -34,6 +38,6 @@
 	{@html content}
 {:else}
 	<div bind:this={wrapper} class="hidden">
-		<slot />
+		{@render children?.()}
 	</div>
 {/if}

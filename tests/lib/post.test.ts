@@ -1,3 +1,4 @@
+// @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
 import { getAllPosts, getPost, Post } from '~/lib/post';
 import { getVarName, omitKeys } from '~/lib/utils';

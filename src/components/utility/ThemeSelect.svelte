@@ -24,7 +24,7 @@
 			data-testid="toggle-input"
 			type="checkbox"
 			checked={$currentTheme === Theme.Dark}
-			on:click={toggleTheme}
+			onclick={toggleTheme}
 		/>
 		<Moon class="swap-on h-7 w-7" />
 		<Sun class="swap-off h-7 w-7" />

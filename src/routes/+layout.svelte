@@ -9,9 +9,9 @@
 	import { fade } from 'svelte/transition';
 	import '~/app.css';
 
-	export let data;
+	let { data = $bindable(), children } = $props();
 
-	$: title = titleWithSuffix($page.data?.meta?.title);
+	let title = $derived(titleWithSuffix($page.data?.meta?.title));
 </script>
 
 <svelte:head>
@@ -34,7 +34,7 @@
 				out:fade={{ duration: 150 }}
 			>
 				<!-- TODO: Breadcrumbs -->
-				<slot />
+				{@render children?.()}
 			</main>
 		{/key}
 	</div>
