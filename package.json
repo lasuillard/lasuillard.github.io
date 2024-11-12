@@ -43,7 +43,7 @@
 		"eslint-plugin-jsdoc": "^50.3.0",
 		"eslint-plugin-svelte": "^2.44.1",
 		"glob": "^11.0.0",
-		"happy-dom": "^15.10.1",
+		"happy-dom": "^15.10.2",
 		"highlight.js": "^11.9.0",
 		"mermaid": "^11.4.0",
 		"minisearch": "^7.1.0",
