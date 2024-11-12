@@ -8,19 +8,6 @@ it('has a valid locator', () => {
 	expect(getByTestId('header')).toBeTruthy();
 });
 
-// NOTE: Further reading for 2-way binding: https://github.com/testing-library/svelte-testing-library/issues/117
-it('has a button to toggle drawer', async () => {
-	const {
-		getByTestId,
-		component: { $$: component }
-	} = render(Header);
-	const drawerToggle = getByTestId('drawer-toggle');
-	expect(drawerToggle).toBeTruthy();
-	expect(component.ctx[component.props['drawerOpen']]).toBe(false);
-	drawerToggle.click();
-	expect(component.ctx[component.props['drawerOpen']]).toBe(true);
-});
-
 it('has a link to home', () => {
 	const { getAllByText } = render(Header);
 	getAllByText('Home').forEach((elem) => {

@@ -2,10 +2,14 @@
 	import QRCode from 'qrcode';
 	import { onMount } from 'svelte';
 
-	export let text: string;
-	export let width: number = 128;
+	interface Props {
+		text: string;
+		width?: number;
+	}
 
-	let qrCode: HTMLElement | undefined;
+	let { text, width = 128 }: Props = $props();
+
+	let qrCode: HTMLElement | undefined = $state();
 
 	onMount(() => {
 		if (!qrCode) {
@@ -30,4 +34,4 @@
 	});
 </script>
 
-<canvas bind:this={qrCode} data-testid="qrcode" title={text} {width} />
+<canvas bind:this={qrCode} data-testid="qrcode" title={text} {width}></canvas>

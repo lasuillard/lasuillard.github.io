@@ -1,4 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" {...$$restProps}>
+<script lang="ts">
+  interface Props {
+    [key: string]: any
+  }
+
+  let { ...rest }: Props = $props();
+</script>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" {...rest}>
   <path d="M18.7909 22.6992L27.6027 25.9085V36.2613L18.7909 33.0547V22.6992Z" fill="#E9E9FF" stroke="#CCCCCC" stroke-width="0.212801" stroke-linejoin="bevel"/>
   <path d="M9.85202 25.9555V36.3111L18.7911 33.0547V22.6992L9.85202 25.9555Z" fill="#353564" stroke="#CCCCCC" stroke-width="0.212801" stroke-linejoin="bevel"/>
   <path d="M9.85187 36.311L18.6609 39.5176L27.6027 36.2612L18.7909 33.0547L9.85187 36.311Z" fill="#AFAFDE" stroke="#CCCCCC" stroke-width="0.212801" stroke-linejoin="bevel"/>

@@ -21,7 +21,7 @@
 	};
 
 	// Tag reference counter
-	let tagRefs: { [key: string]: number } = {};
+	const tagRefs: { [key: string]: number } = {};
 
 	// Refer a single tag
 	// eslint-disable-next-line jsdoc/require-jsdoc
@@ -31,9 +31,6 @@
 		} else {
 			tagRefs[tag] = 1;
 		}
-
-		// Force-trigger update
-		tagRefs = tagRefs;
 
 		return tag;
 	}
@@ -77,6 +74,11 @@
 		...certsAsTimeline,
 		...exprAsTimeline
 	].sort((a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime());
+
+	// Previous implementation causing recursion explode; temporary fix
+	for (const pw of Object.values(personalWorks)) {
+		pw.tags = _tags(pw.tags);
+	}
 </script>
 
 <div class="prose max-w-none px-4 py-12">
@@ -86,7 +88,7 @@
 		{#if pageURL}
 			<QRCode text={pageURL} width={160} />
 		{:else}
-			<canvas width={160} />
+			<canvas width={160}></canvas>
 		{/if}
 	</div>
 
@@ -152,7 +154,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 						<div class="mb-1">{summary}</div>
 						{#if description}
 							<div class="prose-sm">
-								<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+								<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 								<div tabindex="0" class="collapse text-center">
 									<input type="checkbox" />
 									<div class="collapse-title font-semibold">더 보기</div>
@@ -193,7 +195,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 						{#each Object.entries(pw.links) as [platform, link]}
 							{@const Icon = iconMap[platform]}
 							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
-								<svelte:component this={Icon} class="h-7 w-7" />
+								<Icon class="h-7 w-7" />
 							</a>
 						{/each}
 					</div>
@@ -202,7 +204,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 					</div>
 					<div class="card-actions mt-auto">
 						{#each pw.tags as tag}
-							<span class="badge badge-info font-semibold">{_tag(tag)}</span>
+							<span class="badge badge-info font-semibold">{tag}</span>
 						{/each}
 					</div>
 				</div>

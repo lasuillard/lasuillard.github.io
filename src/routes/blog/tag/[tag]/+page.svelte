@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { format } from 'date-fns';
 
-	export let data;
+	let { data } = $props();
 
 	const { tag, posts } = data;
 </script>

@@ -3,7 +3,7 @@
 	import Search from '$components/utility/Search.svelte';
 	import { formatDistance } from 'date-fns';
 
-	export let data;
+	let { data } = $props();
 
 	const { allPosts } = data;
 	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());

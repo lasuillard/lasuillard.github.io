@@ -3,8 +3,13 @@
 	import { makeToc, type TreeNode, type TreeSource } from '$lib/toc';
 	import { onMount } from 'svelte';
 
-	export let content: HTMLElement | undefined;
-	let rootHeadings: TreeNode<HTMLElement>[] = [];
+	interface Props {
+		content: HTMLElement | undefined;
+		[key: string]: any;
+	}
+
+	let { content = $bindable(), ...rest }: Props = $props();
+	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
 
 	onMount(() => {
 		if (!content) {
@@ -39,7 +44,7 @@
 	});
 </script>
 
-<div data-testid="toc" {...$$restProps}>
+<div data-testid="toc" {...rest}>
 	<div>
 		{#each rootHeadings as root}
 			<TocTree tree={root} />

@@ -1,4 +1,7 @@
 <script lang="ts">
+	import { createBubbler, preventDefault } from 'svelte/legacy';
+
+	const bubble = createBubbler();
 	import Search from '$components/icon/Search.svelte';
 	import { getEngine } from '$lib/search';
 	import { quoteJoin } from '$lib/utils';
@@ -8,8 +11,8 @@
 	const searchEngine = getEngine();
 
 	let searchText = writable('');
-	let searchResults: SearchResult[] = [];
-	let suggestions: Suggestion[] = [];
+	let searchResults: SearchResult[] = $state([]);
+	let suggestions: Suggestion[] = $state([]);
 
 	searchText.subscribe((text) => {
 		if (!text) {
@@ -46,7 +49,12 @@
 
 <div data-testid="search" class="mb-2 w-64">
 	<div class="group relative flex items-center space-x-2">
-		<form class="w-full" autocomplete="off" on:submit|preventDefault role="search">
+		<form
+			class="w-full"
+			autocomplete="off"
+			onsubmit={preventDefault(bubble('submit'))}
+			role="search"
+		>
 			<div class="absolute ml-[11px] mt-[9px]">
 				<Search class="h-4 w-4 stroke-gray-400" />
 			</div>

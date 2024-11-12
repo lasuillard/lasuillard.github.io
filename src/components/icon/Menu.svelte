@@ -1,10 +1,18 @@
+<script lang="ts">
+	interface Props {
+		[key: string]: any
+	}
+
+	let { ...rest }: Props = $props();
+</script>
+
 <svg
 	xmlns="http://www.w3.org/2000/svg"
 	fill="none"
 	viewBox="0 0 24 24"
 	stroke="currentColor"
 	data-testid="icon/menu"
-	{...$$restProps}
+	{...rest}
 >
 	<path
 		stroke-linecap="round"
