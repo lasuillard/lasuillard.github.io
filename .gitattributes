@@ -1,3 +1,5 @@
+posts/* linguist-vendored
+
 # https://gitattributes.io/api/devcontainer%2Cvisualstudiocode%2Cweb%2Ccommon%2Cmarkdown%2Cpython
 # Common settings that generally should always be used with your language specific settings
 
