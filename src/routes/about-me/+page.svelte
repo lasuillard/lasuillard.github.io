@@ -181,9 +181,9 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 	</div>
 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
-	<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 2xl:grid-cols-4">
+	<div class="columns-1 gap-8 space-y-8 lg:columns-2 2xl:columns-4 2xl:gap-4 2xl:space-y-4">
 		{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
-			<div class="card border-2 border-slate-500 shadow-xl">
+			<div class="card break-inside-avoid border-2 border-slate-500 shadow-xl">
 				<div class="card-body">
 					<h2 class="card-title flex-wrap">
 						{pw.name}
