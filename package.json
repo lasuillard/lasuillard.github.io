@@ -30,7 +30,7 @@
 		"daisyui": "^4.12.2",
 		"date-fns": "^4.1.0",
 		"glob": "^11.0.0",
-		"highlight.js": "^11.9.0",
+		"highlight.js": "^11.11.1",
 		"mermaid": "^11.4.0",
 		"minisearch": "^7.1.0",
 		"postcss": "^8.4.38",
