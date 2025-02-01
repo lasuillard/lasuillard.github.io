@@ -23,7 +23,7 @@
 	"dependencies": {
 		"@sentry/sveltekit": "^8.47.0",
 		"@sveltejs/adapter-static": "^3.0.1",
-		"@sveltejs/kit": "^2.9.0",
+		"@sveltejs/kit": "^2.16.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@tailwindcss/typography": "^0.5.12",
 		"autoprefixer": "^10.4.19",
