@@ -22,9 +22,11 @@ export default defineConfig({
 				]),
 		sveltekit(),
 		codecovVitePlugin({
-			enableBundleAnalysis: process.env.CODECOV_TOKEN !== undefined,
+			enableBundleAnalysis: true,
 			bundleName: 'lasuillard.github.io',
-			uploadToken: process.env.CODECOV_TOKEN
+			oidc: {
+				useGitHubOIDC: true
+			}
 		})
 	],
 	server: {
