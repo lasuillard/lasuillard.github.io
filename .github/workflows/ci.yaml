@@ -39,6 +39,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -56,17 +59,18 @@ jobs:
         run: yarn run test
 
       - name: Upload test results to codecov
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
           fail_ci_if_error: false
+          report_type: test_results
           files: junit.xml
           flags: unit
 
       - name: Upload coverage report
         uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
           fail_ci_if_error: false
           files: coverage/clover.xml
           flags: unit
@@ -75,6 +79,9 @@ jobs:
     name: E2E Test
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -107,17 +114,14 @@ jobs:
         run: yarn run playwright install --with-deps
 
       - name: Run end-to-end tests
-        env:
-          # NOTE: E2E includes build step, so it will upload the bundle analysis report
-          #       if the upload token is provided.
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: yarn run e2e
 
       - name: Upload test results to codecov
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v5
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          use_oidc: true
           fail_ci_if_error: false
+          report_type: test_results
           files: junit.xml
           flags: e2e
 
