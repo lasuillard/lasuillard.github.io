@@ -56,10 +56,11 @@ jobs:
         run: yarn run test
 
       - name: Upload test results to codecov
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
+          report_type: test_results
           files: junit.xml
           flags: unit
 
@@ -114,10 +115,11 @@ jobs:
         run: yarn run e2e
 
       - name: Upload test results to codecov
-        uses: codecov/test-results-action@v1
+        uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
+          report_type: test_results
           files: junit.xml
           flags: e2e
 
