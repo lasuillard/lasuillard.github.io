@@ -16,14 +16,14 @@ message: "Hello, World!"
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 	const { container } = render(Markdown, { content });
 	expect(container.innerHTML).toMatchInlineSnapshot(`
-		"<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
-		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p><!----><!---->"
+		"<!----><!----><h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
+		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"
 	`);
 });
 
 it('render with nothing', async () => {
 	const { container } = render(Markdown);
-	expect(container.innerHTML).toMatchInlineSnapshot(`"<div class="hidden"><!----></div><!---->"`);
+	expect(container.innerHTML).toMatchInlineSnapshot(`"<!----><div class="hidden"><!----></div>"`);
 });
 
 it.todo('render with raw markdown input slot'); // https://github.com/testing-library/svelte-testing-library/issues/48
