@@ -87,11 +87,11 @@ console.log(response.data);
 
 OpenAPI 스키마를 가져다 쓰는 경우라면 스키마를 굳이 까다롭게 테스트할 필요가 없습니다. 보통 서버를 구현하는 측에서 테스트하기 때문입니다. 하지만 이번엔 조금 상황이 특별합니다. Raindrop에서 제공하는 OpenAPI 스키마가 없고 스키마를 직접 제3자인 제가 작성하기 때문입니다. 그래서 실제로 작성한 스키마의 요청과 응답이 예상대로인지 확인할 필요가 있습니다.
 
--   동작(데이터) 테스트
+- 동작(데이터) 테스트
 
     요청에 대해 응답이 정상적으로 돌아오는지, 기본적인 API 호출에 대한 테스트가 필요합니다.
 
--   스키마(타입) 테스트
+- 스키마(타입) 테스트
 
     스키마를 테스트하기 위해 타입 체커(TypeScript)를 이용하고자 했지만 런타임 수준에서 응답 스냅샷(JSON 문자열)에 대한 동적인 타입 체크를 구성할 수 있는 방법을 찾을 수 없었습니다.
 
@@ -136,17 +136,9 @@ export async function polly({ task }: { task: Task }, use: Use<Polly>) {
 	const _polly = new Polly(taskId(task), {
 		adapters: ['node-http'],
 		persister: 'fs',
-		persisterOptions: {
-			fs: {
-				recordingsDir: 'tests/__recordings__'
-			}
-		},
+		persisterOptions: { fs: { recordingsDir: 'tests/__recordings__' } },
 		recordFailedRequests: true,
-		matchRequestsBy: {
-			headers: {
-				exclude: ['authorization']
-			}
-		}
+		matchRequestsBy: { headers: { exclude: ['authorization'] } }
 	});
 	_polly.server.any().on('beforePersist', (_, recording) => {
 		recording.request.headers = recording.request.headers.map(
@@ -192,11 +184,7 @@ export async function generateTypeTest(
 		// Add snapshot serializer as an workaround for hook to generate type tests
 		expect.addSnapshotSerializer({
 			serialize(val, config, indentation, depth, refs, printer) {
-				addTest({
-					testId: taskId(task),
-					type: args.type,
-					value: JSON.stringify(val)
-				});
+				addTest({ testId: taskId(task), type: args.type, value: JSON.stringify(val) });
 				ack = true;
 				return printer(val, config, indentation, depth, refs);
 			},
@@ -266,5 +254,5 @@ raindrop-client는 Raindrop Sync for Chrome 프로젝트를 위해 만들어졌�
 
 관련된 프로젝트는 모두 공개된 오픈 소스이니 관심이 있다면 둘러보시길 바랍니다.
 
--   https://github.com/lasuillard/raindrop-sync-chrome
--   https://github.com/lasuillard/raindrop-client
+- https://github.com/lasuillard/raindrop-sync-chrome
+- https://github.com/lasuillard/raindrop-client
