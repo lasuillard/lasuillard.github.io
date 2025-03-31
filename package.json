@@ -54,7 +54,7 @@
 	},
 	"devDependencies": {
 		"@codecov/vite-plugin": "^1.9.0",
-		"@playwright/test": "^1.51.0",
+		"@playwright/test": "1.47.2",
 		"@testing-library/svelte": "^5.2.0",
 		"@testing-library/user-event": "^14.6.1",
 		"@types/qrcode": "^1.5.5",
