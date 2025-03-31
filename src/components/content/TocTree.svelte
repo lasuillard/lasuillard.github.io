@@ -1,6 +1,6 @@
 <script lang="ts">
-	import TocTree from './TocTree.svelte';
 	import type { TreeNode } from '$lib/toc';
+	import TocTree from './TocTree.svelte';
 
 	interface Props {
 		tree: TreeNode<HTMLElement>;
@@ -20,7 +20,7 @@
 		<a class="link-hover link" href={link}>{heading}</a>
 	</p>
 	<ul>
-		{#each tree.children as child}
+		{#each tree.children as child (child.data.textContent)}
 			<li class="ml-8">
 				<TocTree tree={child} />
 			</li>

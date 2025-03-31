@@ -19,7 +19,7 @@
 				<h2 class="mb-2 mt-10 text-2xl uppercase">Tags</h2>
 				<div class="space-y-2">
 					{#if allTags.size}
-						{#each allTags as tag}
+						{#each allTags as tag (tag)}
 							<span
 								class="badge badge-secondary badge-sm mr-2 rounded-sm font-semibold md:badge-md"
 							>
@@ -39,7 +39,7 @@
 		<section data-testid="posts" class="xl:col-span-3">
 			<div class="flex flex-col space-y-32">
 				{#if allPosts.length}
-					{#each allPosts as { slug, metadata: { title, publicationDate, preview, summary, tags } }}
+					{#each allPosts as { slug, metadata: { title, publicationDate, preview, summary, tags } } (slug)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -60,7 +60,7 @@
 										<Markdown>{summary}</Markdown>
 									</div>
 									<div class="mt-6 space-y-2">
-										{#each tags as tag}
+										{#each tags as tag (tag)}
 											<span
 												class="badge badge-secondary badge-sm mr-2 rounded-sm font-semibold md:badge-md"
 											>

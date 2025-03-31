@@ -13,7 +13,7 @@
 				There are {posts.length} posts with tag {tag}
 			</p>
 			<ul class="space-y-2">
-				{#each posts as { slug, metadata: { title, publicationDate } }}
+				{#each posts as { slug, metadata: { title, publicationDate } } (slug)}
 					<li>
 						<p class="mb-1 text-xl"><a href="/blog/{slug}">{title}</a></p>
 						<p class="font-light">

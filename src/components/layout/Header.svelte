@@ -41,7 +41,7 @@
 				<!-- Navigation links -->
 				<div class="hidden flex-none md:block">
 					<ul class="menu menu-horizontal space-x-2">
-						{#each links as link}
+						{#each links as link (link.name)}
 							<li>
 								<a
 									class="text-lg font-semibold"
@@ -73,7 +73,7 @@
 				onclick={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
 			>
 				<ul class="menu m-auto text-2xl text-white">
-					{#each links as link}
+					{#each links as link (link.name)}
 						<li>
 							<a
 								class="w-fit"

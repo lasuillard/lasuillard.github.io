@@ -8,7 +8,7 @@ it('list all unique tags', async () => {
 	const fetch = vi.fn(() => ({
 		json: vi.fn(() => [
 			{
-				slug: 'lorem-ipsum',
+				slug: 'lorem-ipsum-1',
 				metadata: {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
@@ -19,7 +19,7 @@ it('list all unique tags', async () => {
 				content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.'
 			},
 			{
-				slug: 'lorem-ipsum',
+				slug: 'lorem-ipsum-2',
 				metadata: {
 					title: 'Lorem Ipsum',
 					publicationDate: '2020-04-13T13:09:28.333+09:00',
