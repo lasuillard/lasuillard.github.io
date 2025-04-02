@@ -46,7 +46,7 @@
 
 <div data-testid="toc" {...rest}>
 	<div>
-		{#each rootHeadings as root}
+		{#each rootHeadings as root (root.data.textContent)}
 			<TocTree tree={root} />
 		{/each}
 	</div>

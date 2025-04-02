@@ -114,7 +114,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 	<h2 class="border-l-4 border-teal-500 pl-3">SKILL</h2>
 	<div>
 		<div class="space-y-1">
-			{#each Object.entries(tagRefs).toSorted(([, a], [, b]) => b - a) as [tag, count]}
+			{#each Object.entries(tagRefs).toSorted(([, a], [, b]) => b - a) as [tag, count] (tag)}
 				<span class="badge badge-info badge-lg mr-2 font-semibold">
 					{tag}<span class="badge badge-neutral badge-sm -mr-1 ml-1.5 px-1">{count}</span>
 				</span>
@@ -125,7 +125,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 	<h2 class="border-l-4 border-sky-600 pl-3">HISTORY</h2>
 	<div>
 		<ul class="max-md:timeline-compact timeline timeline-vertical timeline-snap-icon">
-			{#each timelineItems as { period: { start, end }, title, summary, description, tags }, index}
+			{#each timelineItems as { period: { start, end }, title, summary, description, tags }, index (index)}
 				{@const dir = index % 2 == 0 ? 'left' : 'right'}
 				<li class="my-0">
 					<hr />
@@ -168,7 +168,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 						{/if}
 						{#if tags}
 							<div class="mt-2 flex flex-wrap {dir == 'left' ? 'justify-end' : ''} gap-1">
-								{#each tags as tag}
+								{#each tags as tag (tag)}
 									<span class="badge badge-info badge-md font-semibold">{tag}</span>
 								{/each}
 							</div>
@@ -182,7 +182,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 
 	<h2 class="border-l-4 border-indigo-700 pl-3">PERSONAL WORK</h2>
 	<div class="columns-1 gap-8 space-y-8 lg:columns-2 2xl:columns-4 2xl:gap-4 2xl:space-y-4">
-		{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw}
+		{#each Object.values(personalWorks).toSorted((a, b) => a.order - b.order) as pw (pw.name)}
 			<div class="card break-inside-avoid border-2 border-slate-500 shadow-xl">
 				<div class="card-body">
 					<h2 class="card-title flex-wrap">
@@ -192,7 +192,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 						<span class="badge badge-warning font-semibold">{pw.status}</span>
 					</div>
 					<div class="mt-3 flex justify-end">
-						{#each Object.entries(pw.links) as [platform, link]}
+						{#each Object.entries(pw.links) as [platform, link] (link)}
 							{@const Icon = iconMap[platform]}
 							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
 								<Icon class="h-7 w-7" />
@@ -203,7 +203,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 						<Markdown>{pw.description}</Markdown>
 					</div>
 					<div class="card-actions mt-auto">
-						{#each pw.tags as tag}
+						{#each pw.tags as tag (tag)}
 							<span class="badge badge-info font-semibold">{tag}</span>
 						{/each}
 					</div>

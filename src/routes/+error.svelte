@@ -8,6 +8,7 @@
 		message?: any;
 	}
 
+	// eslint-disable-next-line svelte/valid-prop-names-in-kit-pages
 	let { status = $page.status, message = $page.error?.message || 'Unknown Error' }: Props =
 		$props();
 </script>

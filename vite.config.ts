@@ -5,6 +5,7 @@ import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
+	// @ts-expect-error Unknown error (Plugin is not assignable to type PluginOption)
 	plugins: [
 		...(process.env.VITEST
 			? [svelteTesting()]

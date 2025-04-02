@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { createBubbler, preventDefault } from 'svelte/legacy';
-
-	const bubble = createBubbler();
 	import Search from '$components/icon/Search.svelte';
 	import { getEngine } from '$lib/search';
 	import { quoteJoin } from '$lib/utils';
 	import type { SearchResult, Suggestion } from 'minisearch';
+	import { createBubbler, preventDefault } from 'svelte/legacy';
 	import { writable } from 'svelte/store';
 
+	const bubble = createBubbler();
 	const searchEngine = getEngine();
 
 	let searchText = writable('');
@@ -72,7 +71,7 @@
 						<ol
 							class="menu dropdown-content w-full space-y-2 rounded-sm bg-base-200 shadow-xl hover:!visible"
 						>
-							{#each searchResults as result}
+							{#each searchResults as result (result.id)}
 								<li class="font-bold">
 									<a href="/blog/{result.id}">{result['metadata.title']}</a>
 								</li>

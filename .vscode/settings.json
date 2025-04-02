@@ -5,7 +5,6 @@
 	"[svelte]": {
 		"editor.defaultFormatter": "svelte.svelte-vscode"
 	},
-	"conventionalCommits.scopes": ["vscode", "gui", "db"],
 	"cSpell.words": ["CODECOV", "lasuillard"],
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit",
@@ -13,19 +12,11 @@
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
+	"eslint.useFlatConfig": true,
 	"files.associations": {
-		"**.css": "tailwindcss",
-		".devcontainer/docker-compose.override.yaml": "dockercompose",
-		".ignore": "ignore" // Ignore file used by `cargo-watch`,
+		"**.css": "tailwindcss"
 	},
 	"files.eol": "\n",
-	"files.insertFinalNewline": true,
-	"files.readonlyFromPermissions": true,
-	"files.readonlyInclude": {
-		".svelte-kit/**": true,
-		"build/**": true,
-		"node_modules/**": true
-	},
 	"files.exclude": {
 		".svelte-kit": true,
 		"build": true,
@@ -33,6 +24,13 @@
 		"node_modules": true,
 		"playwright-report": true,
 		"test-results": true
+	},
+	"files.insertFinalNewline": true,
+	"files.readonlyFromPermissions": true,
+	"files.readonlyInclude": {
+		".svelte-kit/**": true,
+		"build/**": true,
+		"node_modules/**": true
 	},
 	"json.format.enable": false,
 	"svelte.enable-ts-plugin": true,
