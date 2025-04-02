@@ -6,11 +6,11 @@
 </script>
 
 <div class="pt-12">
-	<div class="grid grid-cols-1 space-x-4 space-y-8 lg:grid-cols-3">
+	<div class="grid grid-cols-1 space-y-8 space-x-4 lg:grid-cols-3">
 		<div class="flex">
 			<div class="avatar mx-auto">
 				<div
-					class="m-auto h-fit w-48 rounded-full bg-gradient-to-r from-rose-600 via-fuchsia-400 to-yellow-400 p-0.5 lg:w-56"
+					class="m-auto h-fit w-48 rounded-full bg-linear-to-r from-rose-600 via-fuchsia-400 to-yellow-400 p-0.5 lg:w-56"
 				>
 					<!-- svelte-ignore a11y_img_redundant_alt -->
 					<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->

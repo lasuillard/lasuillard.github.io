@@ -54,7 +54,7 @@
 			onsubmit={preventDefault(bubble('submit'))}
 			role="search"
 		>
-			<div class="absolute ml-[11px] mt-[9px]">
+			<div class="absolute mt-[9px] ml-[11px]">
 				<Search class="h-4 w-4 stroke-gray-400" />
 			</div>
 			<!-- TODO: Add button to clear search text -->
@@ -65,11 +65,11 @@
 				bind:value={$searchText}
 				class="peer input input-bordered h-8 w-full pl-8 placeholder:font-light"
 			/>
-			<div class="dropdown absolute right-0 top-[135%] z-[1] w-full peer-[:focus]:dropdown-open">
+			<div class="dropdown peer-[:focus]:dropdown-open absolute top-[135%] right-0 z-1 w-full">
 				{#if searchResults.length > 0}
 					<div role="searchbox" tabindex="0">
 						<ol
-							class="menu dropdown-content w-full space-y-2 rounded-sm bg-base-200 shadow-xl hover:!visible"
+							class="menu dropdown-content bg-base-200 w-full space-y-2 rounded-xs shadow-xl hover:visible!"
 						>
 							{#each searchResults as result (result.id)}
 								<li class="font-bold">
@@ -80,7 +80,7 @@
 					</div>
 				{:else}
 					<div
-						class="card dropdown-content compact z-[1] w-full rounded-sm bg-base-200 shadow-xl"
+						class="card dropdown-content compact bg-base-200 z-1 w-full rounded-xs shadow-xl"
 						role="searchbox"
 					>
 						<div class="card-body items-center">
