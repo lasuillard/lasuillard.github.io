@@ -2,7 +2,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
 	// eslint-disable-next-line @typescript-eslint/no-require-imports
-	plugins: [require('daisyui'), require('@tailwindcss/typography')],
+	plugins: [require('@tailwindcss/typography')],
 	content: ['./src/**/*.{html,js,svelte,ts}'],
 	theme: {
 		extend: {
@@ -18,9 +18,5 @@ export default {
 				}
 			}
 		}
-	},
-	daisyui: {
-		themes: ['winter', 'night'],
-		logs: false
 	}
 };

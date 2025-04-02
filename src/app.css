@@ -1,9 +1,14 @@
 /* https://hangeul.naver.com/font/nanum */
-@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic.css');
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic.css') layer(base);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin 'daisyui' {
+	themes:
+		winter --default,
+		night --prefersdark;
+}
+
+@config '../tailwind.config.js';
 
 @layer base {
 	html {

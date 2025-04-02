@@ -16,12 +16,12 @@
 
 			<!-- All tags -->
 			<div data-testid="tags">
-				<h2 class="mb-2 mt-10 text-2xl uppercase">Tags</h2>
+				<h2 class="mt-10 mb-2 text-2xl uppercase">Tags</h2>
 				<div class="space-y-2">
 					{#if allTags.size}
 						{#each allTags as tag (tag)}
 							<span
-								class="badge badge-secondary badge-sm mr-2 rounded-sm font-semibold md:badge-md"
+								class="badge badge-secondary badge-sm md:badge-md mr-2 rounded-xs font-semibold"
 							>
 								<a href="/blog/tag/{tag}">
 									{tag}
@@ -45,9 +45,9 @@
 								<img
 									src={preview}
 									alt="Preview"
-									class="h-92 w-full rounded-sm object-contain lg:h-64 lg:w-96"
+									class="h-92 w-full rounded-xs object-contain lg:h-64 lg:w-96"
 								/>
-								<div class="mt-4 flex flex-1 flex-col lg:ml-16 lg:mt-2">
+								<div class="mt-4 flex flex-1 flex-col lg:mt-2 lg:ml-16">
 									<h2 class="mb-0 text-3xl">
 										<a href="/blog/{slug}" class="link hover:text-secondary">{title}</a>
 									</h2>
@@ -62,7 +62,7 @@
 									<div class="mt-6 space-y-2">
 										{#each tags as tag (tag)}
 											<span
-												class="badge badge-secondary badge-sm mr-2 rounded-sm font-semibold md:badge-md"
+												class="badge badge-secondary badge-sm md:badge-md mr-2 rounded-xs font-semibold"
 											>
 												<a href="/blog/tag/{tag}">{tag}</a>
 											</span>

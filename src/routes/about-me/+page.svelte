@@ -213,7 +213,9 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
+	@reference "../../app.css";
+
 	h1 {
 		@apply text-5xl font-extrabold;
 	}

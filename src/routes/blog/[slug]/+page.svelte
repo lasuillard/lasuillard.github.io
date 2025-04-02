@@ -31,7 +31,7 @@
 <div>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
-		<div class="max-lg:-mr-8 ml-8 hidden xl:order-last xl:block">
+		<div class="ml-8 hidden max-lg:-mr-8 xl:order-last xl:block">
 			{#if contentWrapper}
 				<Toc bind:content={contentWrapper} class="h-md:sticky h-md:top-[10%] h-lg:top-[20%]" />
 			{/if}
@@ -41,9 +41,9 @@
 			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
 				Published at {format(publicationDate, 'yyyy.MM.dd')}
 			</p>
-			<div class="ml-2 mt-4 space-y-1 md:mt-6">
+			<div class="mt-4 ml-2 space-y-1 md:mt-6">
 				{#each tags as tag (tag)}
-					<div class="badge badge-secondary mr-2 rounded-sm p-3 font-semibold">
+					<div class="badge badge-secondary mr-2 rounded-xs p-3 font-semibold">
 						<a href="/blog/tag/{tag}">
 							{tag}
 						</a>
@@ -59,7 +59,7 @@
 			</div>
 			<article
 				bind:this={contentWrapper}
-				class="prose prose-sm mt-12 max-w-none break-words lg:prose-base lg:max-w-[60vw]"
+				class="prose prose-sm lg:prose-base mt-12 max-w-none break-words lg:max-w-[60vw]"
 			>
 				<Markdown {content} />
 			</article>
@@ -68,7 +68,9 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
+	@reference "../../../app.css";
+
 	article {
 		/* Center image and add some shadow for visual recognition */
 		& :global(img) {
@@ -80,7 +82,7 @@
 		}
 		/* Show '#' on the left of heading links when hover */
 		& :global(:where(:global(h1, h2, h3, h4, h5, h6)) > a:hover) {
-			@apply before:absolute before:-ml-6 before:text-secondary before:underline before:underline-offset-4 before:content-['#'];
+			@apply before:text-secondary before:absolute before:-ml-6 before:underline before:underline-offset-4 before:content-['#'];
 		}
 		/* Add some shadow for visual recognition */
 		& :global(pre) {
