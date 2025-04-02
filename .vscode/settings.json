@@ -6,6 +6,7 @@
 		"editor.defaultFormatter": "svelte.svelte-vscode"
 	},
 	"cSpell.words": ["CODECOV", "lasuillard"],
+	"css.validate": false,
 	"editor.codeActionsOnSave": {
 		"source.fixAll": "explicit",
 		"source.organizeImports": "explicit"
@@ -14,7 +15,7 @@
 	"editor.formatOnSave": true,
 	"eslint.useFlatConfig": true,
 	"files.associations": {
-		"**.css": "tailwindcss"
+		"*.css": "tailwindcss"
 	},
 	"files.eol": "\n",
 	"files.exclude": {

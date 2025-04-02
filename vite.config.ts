@@ -1,6 +1,7 @@
 import { codecovVitePlugin } from '@codecov/vite-plugin';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vitest/config';
 
@@ -21,6 +22,7 @@ export default defineConfig({
 						}
 					})
 				]),
+		tailwindcss(),
 		sveltekit(),
 		codecovVitePlugin({
 			enableBundleAnalysis: true,

@@ -39,7 +39,7 @@
 	</div>
 </div>
 
-<style lang="postcss">
+<style>
 	@keyframes typing {
 		from {
 			width: 0;
