@@ -46,7 +46,7 @@
 		"remark-parse": "^11.0.0",
 		"remark-rehype": "^11.1.0",
 		"remark-stringify": "^11.0.0",
-		"svelte": "^5.25.6",
+		"svelte": "^5.28.2",
 		"svelte-persisted-store": "^0.12.0",
 		"tailwindcss": "^4.1.1",
 		"unified": "^11.0.4",
