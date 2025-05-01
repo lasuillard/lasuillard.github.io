@@ -21,7 +21,7 @@
 		"e2e:watch": "playwright test --ui"
 	},
 	"dependencies": {
-		"@sentry/sveltekit": "^9.10.1",
+		"@sentry/sveltekit": "^9.15.0",
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.20.2",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
