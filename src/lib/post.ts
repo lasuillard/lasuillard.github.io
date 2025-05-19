@@ -64,7 +64,7 @@ export async function getAllPosts(): Promise<Post[]> {
 					import: 'default'
 				}) /* c8 ignore next */
 			: import.meta.glob(`../../posts/*.md`, { query: '?raw', import: 'default' });
-	//The glob option "as" has been deprecated in favour of "query". Please update `as: 'raw'` to `query: '?raw', import: 'default'`. (x2)
+	// The glob option "as" has been deprecated in favour of "query". Please update `as: 'raw'` to `query: '?raw', import: 'default'`. (x2)
 	const allPosts = await Promise.all(
 		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 			const text = z.string().parse(await resolver());
