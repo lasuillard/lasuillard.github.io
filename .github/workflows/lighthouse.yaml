@@ -1,0 +1,33 @@
+name: LightHouse
+
+on:
+  workflow_dispatch:
+
+permissions: read-all
+
+concurrency:
+  group: lighthouse
+  cancel-in-progress: false
+
+jobs:
+  lighthouse:
+    name: lighthouse
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+        with:
+          runs: 3
+          configPath: ./.lighthouserc.json
+          budgetPath: ./budget.json
+          urls: |
+            ${{ vars.BLOG_URL }}/
+            ${{ vars.BLOG_URL }}/about-me
+            ${{ vars.BLOG_URL }}/blog
+          temporaryPublicStorage: true

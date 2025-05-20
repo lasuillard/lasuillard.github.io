@@ -8,7 +8,15 @@ import { sequence } from '@sveltejs/kit/hooks';
 Sentry.init({
 	dsn: import.meta.env?.SENTRY_DSN || '',
 	tracesSampleRate: 0.05,
-	environment: import.meta.env?.MODE
+	environment: import.meta.env?.MODE,
+	integrations: [
+		Sentry.consoleLoggingIntegration({
+			levels: ['warn', 'error']
+		})
+	],
+	_experiments: {
+		enableLogs: true
+	}
 });
 console.debug('Sentry initialized');
 

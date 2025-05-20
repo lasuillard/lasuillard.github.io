@@ -12,8 +12,16 @@ Sentry.init({
 	tracesSampleRate: 0.05,
 	replaysSessionSampleRate: 0.05,
 	replaysOnErrorSampleRate: 1,
-	integrations: [Sentry.replayIntegration()],
-	environment: import.meta.env.MODE
+	integrations: [
+		Sentry.replayIntegration(),
+		Sentry.consoleLoggingIntegration({
+			levels: ['warn', 'error']
+		})
+	],
+	environment: import.meta.env.MODE,
+	_experiments: {
+		enableLogs: true
+	}
 });
 export const handleError = Sentry.handleErrorWithSentry();
 
