@@ -6,7 +6,7 @@ on:
 permissions: read-all
 
 concurrency:
-  group: release
+  group: lighthouse
   cancel-in-progress: false
 
 jobs:
