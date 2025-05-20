@@ -1,0 +1,6 @@
+{
+	"$schema": "https://www.unpkg.com/wrangler/config-schema.json",
+	"assets": {
+		"directory": "./.svelte-kit/cloudflare"
+	}
+}
