@@ -1,5 +1,6 @@
 {
 	"$schema": "https://www.unpkg.com/wrangler/config-schema.json",
+	"compatibility_date": "2025-05-20",
 	"assets": {
 		"directory": "./.svelte-kit/cloudflare"
 	}
