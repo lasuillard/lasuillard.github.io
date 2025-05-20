@@ -1,8 +1,6 @@
 import { getAllPosts } from '$lib/post';
 import type { RequestHandler } from '@sveltejs/kit';
 
-export const prerender = true;
-
 const siteUrl = 'https://lasuillard.github.io';
 const siteTitle = "lasuillard's Blog";
 const siteDescription = "lasuillard's personal tech blog.";
