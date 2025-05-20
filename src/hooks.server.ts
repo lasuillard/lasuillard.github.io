@@ -5,17 +5,20 @@ import * as Sentry from '@sentry/sveltekit';
 import { handleErrorWithSentry, sentryHandle } from '@sentry/sveltekit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-const { logger } = Sentry;
-
 Sentry.init({
 	dsn: import.meta.env?.SENTRY_DSN || '',
 	tracesSampleRate: 0.05,
 	environment: import.meta.env?.MODE,
+	integrations: [
+		Sentry.consoleLoggingIntegration({
+			levels: ['warn', 'error']
+		})
+	],
 	_experiments: {
 		enableLogs: true
 	}
 });
-logger.debug('Sentry initialized');
+console.debug('Sentry initialized');
 
 // If you have custom handlers, make sure to place them after `sentryHandle()` in the `sequence` function.
 export const handle = sequence(sentryHandle());

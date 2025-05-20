@@ -6,15 +6,18 @@ import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import mermaid from 'mermaid';
 
-const { logger } = Sentry;
-
 // Sentry
 Sentry.init({
 	dsn: import.meta.env.VITE_SENTRY_DSN,
 	tracesSampleRate: 0.05,
 	replaysSessionSampleRate: 0.05,
 	replaysOnErrorSampleRate: 1,
-	integrations: [Sentry.replayIntegration()],
+	integrations: [
+		Sentry.replayIntegration(),
+		Sentry.consoleLoggingIntegration({
+			levels: ['warn', 'error']
+		})
+	],
 	environment: import.meta.env.MODE,
 	_experiments: {
 		enableLogs: true
@@ -25,7 +28,7 @@ export const handleError = Sentry.handleErrorWithSentry();
 // Locale
 setDefaultOptions({ locale: ko });
 
-logger.debug('Sentry initialized');
+console.debug('Sentry initialized');
 
 // Theme
 initTheme();
@@ -36,11 +39,11 @@ mermaid.initialize({
 	startOnLoad: false,
 	theme: 'neutral'
 });
-logger.debug('Mermaid initialized');
+console.debug('Mermaid initialized');
 
 // Search Engine
 initEngine().then((engine) => {
-	logger.debug(`Search engine initialized, there is ${engine.termCount} terms in the index`);
+	console.debug(`Search engine initialized, there is ${engine.termCount} terms in the index`);
 });
 
 /* c8 ignore stop */
