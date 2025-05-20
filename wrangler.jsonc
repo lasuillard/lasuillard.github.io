@@ -3,5 +3,5 @@
 	"compatibility_date": "2025-05-20",
 	"assets": {
 		"directory": "./.svelte-kit/cloudflare"
-	}
+	},"name": "my-blog"
 }
