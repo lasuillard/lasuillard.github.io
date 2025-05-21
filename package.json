@@ -13,13 +13,14 @@
 		"postinstall": "svelte-kit sync",
 		"dev": "vite dev",
 		"build": "vite build",
-		"preview": "vite preview",
+		"preview": "wrangler pages dev",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest --coverage --run",
 		"test:watch": "vitest --coverage --watch --ui --silent",
 		"e2e": "playwright test",
-		"e2e:watch": "playwright test --ui"
+		"e2e:watch": "playwright test --ui",
+		"cf-typegen": "wrangler types src/worker-configuration.d.ts"
 	},
 	"dependencies": {
 		"@sentry/sveltekit": "^9.15.0",
