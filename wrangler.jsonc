@@ -3,7 +3,10 @@
 	"name": "lasuillard-blog",
 	"compatibility_date": "2025-05-20",
 	"compatibility_flags": ["nodejs_als", "nodejs_compat"],
-	"pages_build_output_dir": "./.svelte-kit/cloudflare",
+	"assets": {
+		"directory": "./.svelte-kit/cloudflare",
+		"not_found_handling": "single-page-application"
+	},
 	"observability": {
 		"enabled": true
 	}
