@@ -22,7 +22,11 @@ Sentry.init({
 	replaysSessionSampleRate: 0.05,
 	replaysOnErrorSampleRate: 1,
 	integrations: [
-		Sentry.replayIntegration(),
+		Sentry.replayIntegration({
+			maskAllText: false,
+			maskAllInputs: false,
+			blockAllMedia: false
+		}),
 		Sentry.consoleLoggingIntegration({
 			levels: ['warn', 'error']
 		})
