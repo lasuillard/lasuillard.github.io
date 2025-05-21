@@ -4,7 +4,10 @@
 	"compatibility_date": "2025-05-20",
 	"compatibility_flags": ["nodejs_als", "nodejs_compat"],
 	"observability": {
-		"enabled": true
+		"enabled": true,
+		"logs": {
+			"enabled": true
+		}
 	},
 	"build": {
 		"command": "yarn run build",
