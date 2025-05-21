@@ -13,7 +13,7 @@
 		"postinstall": "svelte-kit sync",
 		"dev": "vite dev",
 		"build": "vite build",
-		"preview": "wrangler pages dev",
+		"preview": "wrangler dev",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "vitest --coverage --run",
