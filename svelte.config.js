@@ -10,7 +10,13 @@ const config = {
 
 	kit: {
 		// https://kit.svelte.dev/docs/adapters
-		adapter: adapter(),
+		adapter: adapter({
+			fallback: 'spa',
+			routes: {
+				include: ['/*'],
+				exclude: ['<all>']
+			}
+		}),
 		alias: {
 			'^/*': './*',
 			'~/*': './src/*',
