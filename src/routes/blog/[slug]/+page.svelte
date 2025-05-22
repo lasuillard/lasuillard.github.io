@@ -61,7 +61,7 @@
 				bind:this={contentWrapper}
 				class="prose prose-sm lg:prose-base mt-12 max-w-none break-words lg:max-w-[60vw]"
 			>
-				<Markdown {content} />
+				<Markdown>{content}</Markdown>
 			</article>
 			<Comment />
 		</div>

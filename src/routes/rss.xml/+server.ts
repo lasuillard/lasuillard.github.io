@@ -1,12 +1,15 @@
-import { getAllPosts } from '$lib/post';
+import { Post } from '$lib/post';
 import type { RequestHandler } from '@sveltejs/kit';
+import { z } from 'zod';
 
 const siteUrl = 'https://lasuillard.github.io';
 const siteTitle = "lasuillard's Blog";
 const siteDescription = "lasuillard's personal tech blog.";
 
-export const GET: RequestHandler = async () => {
-	const allPosts = await getAllPosts();
+export const GET: RequestHandler = async ({ fetch }) => {
+	const response = await fetch('/api/posts');
+	const data = await response.json();
+	const allPosts = z.array(Post).parse(data);
 
 	// TODO: Generate RSS XML document from list of posts; https://www.w3schools.com/xml/xml_rss.asp
 	const body = `<?xml version="1.0" encoding="UTF-8" ?>
