@@ -21,6 +21,7 @@
 	"keep_vars": true,
 	"env": {
 		"production": {
+			"name": "lasuillard-blog",
 			"vars": {
 				"ENVIRONMENT": "production",
 				"PUBLIC_ENVIRONMENT": "production"
