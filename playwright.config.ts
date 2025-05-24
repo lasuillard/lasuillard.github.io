@@ -28,7 +28,7 @@ export default {
 	webServer: {
 		// NOTE: This will trigger Codecov bundle analysis upload due to build
 		command: 'yarn run build && yarn run preview',
-		port: 4173
+		port: 8787
 	},
 	use: {
 		screenshot: 'only-on-failure'

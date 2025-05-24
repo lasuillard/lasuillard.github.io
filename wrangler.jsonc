@@ -9,10 +9,6 @@
 			"enabled": true
 		}
 	},
-	"build": {
-		"command": "yarn run build",
-		"watch_dir": ["src/*"]
-	},
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
