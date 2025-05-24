@@ -11,11 +11,23 @@
 	},
 	"build": {
 		"command": "yarn run build",
-		"watch_dir": "src"
+		"watch_dir": ["src/*"]
 	},
 	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
 		"binding": "ASSETS",
 		"directory": ".svelte-kit/cloudflare"
+	},
+	"vars": {
+		"ENVIRONMENT": "development",
+		// TODO(lasuillard): Testing build time variables
+		"VITE_ENVIRONMENT": "development"
+	},
+	"env": {
+		"production": {
+			"vars": {
+				"ENVIRONMENT": "production"
+			}
+		}
 	}
 }
