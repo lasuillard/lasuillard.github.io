@@ -3,12 +3,16 @@ import * as glob from 'glob';
 
 const testDir = 'e2e';
 
+// Test grouping for various device sizes; debug with `playwright test --list`.
 const groupTests = (keys: string[]) => {
 	const pattern = new RegExp(/.*?\.((.+)\.)?test\.ts/);
 	const testFiles = glob.sync(`${testDir}/**/*.{test,spec}.ts`);
 	const grouped: { [size: string]: string[] } = Object.fromEntries(keys.map((size) => [size, []]));
 
-	for (const filename of testFiles) {
+	for (let filename of testFiles) {
+		// Escape some characters that might interfere with regex matching (`testMatch`)
+		filename = filename.replaceAll('[', '\\[').replaceAll(']', '\\]');
+
 		const match = filename.match(pattern) || [];
 		const size: string | undefined = match[2];
 		if (size) {
