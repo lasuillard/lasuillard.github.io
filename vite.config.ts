@@ -50,7 +50,7 @@ export default defineConfig({
 		},
 		coverage: {
 			all: true,
-			include: ['src/**'],
+			include: ['src/components/**', 'src/lib/**'],
 			exclude: ['src/**.d.ts'],
 			reporter: ['text', 'clover', 'html']
 		},
