@@ -3,12 +3,16 @@ import * as glob from 'glob';
 
 const testDir = 'e2e';
 
+// Test grouping for various device sizes; debug with `playwright test --list`.
 const groupTests = (keys: string[]) => {
 	const pattern = new RegExp(/.*?\.((.+)\.)?test\.ts/);
 	const testFiles = glob.sync(`${testDir}/**/*.{test,spec}.ts`);
 	const grouped: { [size: string]: string[] } = Object.fromEntries(keys.map((size) => [size, []]));
 
-	for (const filename of testFiles) {
+	for (let filename of testFiles) {
+		// Escape some characters that might interfere with regex matching (`testMatch`)
+		filename = filename.replaceAll('[', '\\[').replaceAll(']', '\\]');
+
 		const match = filename.match(pattern) || [];
 		const size: string | undefined = match[2];
 		if (size) {
@@ -27,8 +31,9 @@ const testGroups = groupTests(['sm', 'md', 'lg']);
 export default {
 	webServer: {
 		// NOTE: This will trigger Codecov bundle analysis upload due to build
-		command: 'yarn run build && yarn run preview',
-		port: 8787
+		command: 'yarn run preview',
+		port: 8787,
+		reuseExistingServer: true
 	},
 	use: {
 		screenshot: 'only-on-failure'
@@ -73,6 +78,10 @@ export default {
 		}
 	],
 	expect: {
-		timeout: 5000
+		timeout: 5000,
+		toHaveScreenshot: {
+			maxDiffPixelRatio: 0.025 // 2.5%
+			// ? Perhaps `fullPage` option is not supported here?
+		}
 	}
 } satisfies PlaywrightTestConfig;

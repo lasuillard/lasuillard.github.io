@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { parse } from '$lib/markdown';
 	import { onMount } from 'svelte';
 
 	interface Props {
@@ -29,7 +28,9 @@
 	onMount(async () => {
 		if (content) return;
 
-		({ frontMatter, content } = await parse(wrapper?.textContent || ''));
+		({ frontMatter, content } = await import('$lib/markdown').then(({ parse }) =>
+			parse(wrapper?.textContent || '')
+		));
 	});
 </script>
 

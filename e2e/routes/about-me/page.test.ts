@@ -10,14 +10,13 @@ beforeAll('go to about me page', async ({ browser }) => {
 	await page.goto('/about-me');
 });
 
-it('has a layout', async () => {
-	await expect(page.getByTestId('layout')).toBeVisible();
+it('visit page', async () => {
+	await expect(page).toHaveScreenshot();
 });
 
 it('has a title and meta tags for SEO', async () => {
 	expect(await page.title()).toMatch(/.+ • lasuillard's Blog/);
-	expect(page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
+	expect(await page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
 });
 
-it('rendered successfully', () => fixme());
 it('all external links in resume should be valid', () => fixme());
