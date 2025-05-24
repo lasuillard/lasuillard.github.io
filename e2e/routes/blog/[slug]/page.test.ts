@@ -7,7 +7,7 @@ let page: Page;
 
 beforeAll('go to post page', async ({ browser }) => {
 	page = await browser.newPage();
-	await page.goto('/blog/lorem-ipsum');
+	await page.goto('/blog/기술-블로그-시작하기');
 });
 
 it('visit page', async () => {
