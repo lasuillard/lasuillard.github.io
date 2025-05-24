@@ -2,15 +2,15 @@
 	import { browser } from '$app/environment';
 	import Markdown from '$components/content/Markdown.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
-	import certificates from '$data/certificates';
-	import educations from '$data/educations';
-	import experiences from '$data/experiences';
-	import personalWorks from '$data/personal-works';
 	import Docker from '^/src/components/icon/Docker.svelte';
 	import GitHub from '^/src/components/icon/GitHub.svelte';
 	import Npm from '^/src/components/icon/npm.svelte';
 	import PyPi from '^/src/components/icon/PyPI.svelte';
 	import { format, isSameYear } from 'date-fns';
+	import { onMount } from 'svelte';
+
+	let { data } = $props();
+	const { certificates, educations, experiences, personalWorks } = data;
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const iconMap: { [key: string]: any } = {
@@ -52,33 +52,38 @@
 		tags?: string[];
 	};
 
-	const eduAsTimeline: TimelineItem[] = educations.map((edu) => ({
-		period: edu.period,
-		title: edu.name,
-		summary: edu.description
-	}));
-	const certsAsTimeline: TimelineItem[] = certificates.map((cert) => ({
-		period: { start: cert.issuanceDate },
-		title: cert.name,
-		summary: cert.issuer
-	}));
-	const exprAsTimeline: TimelineItem[] = experiences.map((expr) => ({
-		period: expr.period,
-		title: expr.organization,
-		summary: expr.summary,
-		description: expr.description,
-		tags: _tags(expr.tags)
-	}));
-	const timelineItems: TimelineItem[] = [
-		...eduAsTimeline,
-		...certsAsTimeline,
-		...exprAsTimeline
-	].sort((a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime());
+	let eduAsTimeline: TimelineItem[] = $state([]);
+	let certsAsTimeline: TimelineItem[] = $state([]);
+	let exprAsTimeline: TimelineItem[] = $state([]);
+	let timelineItems: TimelineItem[] = $state([]);
 
-	// Previous implementation causing recursion explode; temporary fix
-	for (const pw of Object.values(personalWorks)) {
-		pw.tags = _tags(pw.tags);
-	}
+	onMount(() => {
+		eduAsTimeline = educations.map((edu) => ({
+			period: edu.period,
+			title: edu.name,
+			summary: edu.description
+		}));
+		certsAsTimeline = certificates.map((cert) => ({
+			period: { start: cert.issuanceDate },
+			title: cert.name,
+			summary: cert.issuer
+		}));
+		exprAsTimeline = experiences.map((expr) => ({
+			period: expr.period,
+			title: expr.organization,
+			summary: expr.summary,
+			description: expr.description,
+			tags: _tags(expr.tags)
+		}));
+		timelineItems = [...eduAsTimeline, ...certsAsTimeline, ...exprAsTimeline].sort(
+			(a, b) => new Date(b.period.start).getTime() - new Date(a.period.start).getTime()
+		);
+
+		// Previous implementation causing recursion explode; temporary fix
+		for (const pw of Object.values(personalWorks)) {
+			pw.tags = _tags(pw.tags);
+		}
+	});
 </script>
 
 <div class="prose max-w-none px-4 py-12">
