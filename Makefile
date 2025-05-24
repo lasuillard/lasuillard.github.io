@@ -70,6 +70,7 @@ test: generate ## Run tests
 .PHONY: test
 
 e2e-test:  ## Run e2e tests
+	yarn run build
 	yarn run e2e
 .PHONY: e2e-test
 

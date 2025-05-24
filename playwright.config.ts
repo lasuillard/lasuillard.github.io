@@ -27,8 +27,9 @@ const testGroups = groupTests(['sm', 'md', 'lg']);
 export default {
 	webServer: {
 		// NOTE: This will trigger Codecov bundle analysis upload due to build
-		command: 'yarn run build && yarn run preview',
-		port: 8787
+		command: 'yarn run preview',
+		port: 8787,
+		reuseExistingServer: true
 	},
 	use: {
 		screenshot: 'only-on-failure'
