@@ -3,7 +3,6 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
 	import { format } from 'date-fns';
-	import mermaid from 'mermaid';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
@@ -14,8 +13,8 @@
 	// Content wrapper for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
 
-	onMount(() => {
-		mermaid.init();
+	onMount(async () => {
+		import('mermaid').then(({ default: mermaid }) => mermaid.run());
 
 		// Monkey-patching I18n for footnote label
 		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');

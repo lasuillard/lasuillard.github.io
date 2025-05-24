@@ -48,9 +48,8 @@ setDefaultOptions({ locale: ko });
 initTheme();
 
 // Initialize Mermaid for fancy diagrams
-// Should call `mermaid.init()` on components load explicitly
+// Should call `mermaid.run()` on components load explicitly
 mermaid.initialize({
-	startOnLoad: false,
 	theme: 'neutral'
 });
 console.debug('Mermaid initialized');
