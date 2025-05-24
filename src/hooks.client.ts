@@ -1,3 +1,4 @@
+import { env } from '$env/dynamic/public';
 import { initEngine } from '$lib/search';
 import { initTheme } from '$lib/theme';
 import * as Sentry from '@sentry/sveltekit';
@@ -5,8 +6,8 @@ import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import mermaid from 'mermaid';
 
-const currentEnv = import.meta.env.VITE_ENVIRONMENT || 'unknown';
-const sentryDsn = import.meta.env.VITE_SENTRY_DSN || '';
+const currentEnv = env.PUBLIC_ENVIRONMENT || 'unknown';
+const sentryDsn = env.PUBLIC_SENTRY_DSN || '';
 
 console.info('Current environment is:', currentEnv);
 if (sentryDsn) {

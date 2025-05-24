@@ -20,13 +20,13 @@
 	},
 	"vars": {
 		"ENVIRONMENT": "development",
-		// TODO(lasuillard): Testing build time variables
-		"VITE_ENVIRONMENT": "development"
+		"PUBLIC_ENVIRONMENT": "development"
 	},
 	"env": {
 		"production": {
 			"vars": {
-				"ENVIRONMENT": "production"
+				"ENVIRONMENT": "production",
+				"PUBLIC_ENVIRONMENT": "production"
 			}
 		}
 	}
