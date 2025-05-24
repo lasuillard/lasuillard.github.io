@@ -28,6 +28,6 @@ export async function parse(markdown: string): Promise<{ frontMatter: unknown; c
 
 	return {
 		frontMatter: result.data.frontMatter,
-		content: result.toString()
+		content: markdown
 	};
 }
