@@ -34,7 +34,7 @@ export default defineConfig({
 	],
 	server: {
 		fs: {
-			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['posts']
+			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['static']
 		}
 	},
 	resolve: {
@@ -50,7 +50,7 @@ export default defineConfig({
 		},
 		coverage: {
 			all: true,
-			include: ['src/**'],
+			include: ['src/components/**', 'src/lib/**'],
 			exclude: ['src/**.d.ts'],
 			reporter: ['text', 'clover', 'html']
 		},

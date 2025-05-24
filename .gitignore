@@ -1,6 +1,8 @@
 /playwright-report
 /test-results
 junit.xml
+.wrangler/
+.dev.vars
 
 # User hook scripts for VSC devcontainer lifecycle
 .devcontainer/initializeCommand/

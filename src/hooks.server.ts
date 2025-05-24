@@ -1,29 +1,29 @@
-/* c8 ignore start */
-// NOTE: Right now there's no server running but keep this for future
-//       Until, this configuration only will be used for development in local
+import { env } from '$env/dynamic/private';
 import * as Sentry from '@sentry/sveltekit';
-import { handleErrorWithSentry, sentryHandle } from '@sentry/sveltekit';
 import { sequence } from '@sveltejs/kit/hooks';
 
-Sentry.init({
-	dsn: import.meta.env?.SENTRY_DSN || '',
-	tracesSampleRate: 0.05,
-	environment: import.meta.env?.MODE,
-	integrations: [
-		Sentry.consoleLoggingIntegration({
-			levels: ['warn', 'error']
-		})
-	],
-	_experiments: {
-		enableLogs: true
-	}
-});
-console.debug('Sentry initialized');
+const currentEnv = env.ENVIRONMENT || 'unknown';
+const sentryDsn = env.SENTRY_DSN || '';
 
-// If you have custom handlers, make sure to place them after `sentryHandle()` in the `sequence` function.
-export const handle = sequence(sentryHandle());
+console.info('Current environment is:', currentEnv);
+if (sentryDsn) {
+	console.info('Non-empty Sentry DSN detected.');
+} else {
+	console.warn('Sentry DSN is not provided.');
+}
 
-// If you have a custom error handler, pass it to `handleErrorWithSentry`
-export const handleError = handleErrorWithSentry();
+export const handle = sequence(
+	Sentry.initCloudflareSentryHandle({
+		dsn: sentryDsn,
+		tracesSampleRate: 0.05,
+		environment: currentEnv,
+		integrations: [],
+		sendDefaultPii: true,
+		_experiments: {
+			enableLogs: true
+		}
+	}),
+	Sentry.sentryHandle()
+);
 
-/* c8 ignore stop */
+export const handleError = Sentry.handleErrorWithSentry(/* ({ error, event }) => {} */);

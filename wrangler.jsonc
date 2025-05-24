@@ -2,7 +2,29 @@
 	"$schema": "https://www.unpkg.com/wrangler/config-schema.json",
 	"name": "lasuillard-blog",
 	"compatibility_date": "2025-05-20",
+	"compatibility_flags": ["nodejs_als", "nodejs_compat"],
+	"observability": {
+		"enabled": true,
+		"logs": {
+			"enabled": true
+		}
+	},
+	"main": ".svelte-kit/cloudflare/_worker.js",
 	"assets": {
-		"directory": "./.svelte-kit/cloudflare"
+		"binding": "ASSETS",
+		"directory": ".svelte-kit/cloudflare"
+	},
+	"vars": {
+		"ENVIRONMENT": "development",
+		"PUBLIC_ENVIRONMENT": "development"
+	},
+	"keep_vars": true,
+	"env": {
+		"production": {
+			"vars": {
+				"ENVIRONMENT": "production",
+				"PUBLIC_ENVIRONMENT": "production"
+			}
+		}
 	}
 }

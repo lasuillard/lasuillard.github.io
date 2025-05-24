@@ -1,4 +1,4 @@
-/* c8 ignore start */
+import { env } from '$env/dynamic/public';
 import { initEngine } from '$lib/search';
 import { initTheme } from '$lib/theme';
 import * as Sentry from '@sentry/sveltekit';
@@ -6,29 +6,43 @@ import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import mermaid from 'mermaid';
 
+const currentEnv = env.PUBLIC_ENVIRONMENT || 'unknown';
+const sentryDsn = env.PUBLIC_SENTRY_DSN || '';
+
+console.info('Current environment is:', currentEnv);
+if (sentryDsn) {
+	console.info('Non-empty Sentry DSN detected.');
+} else {
+	console.warn('Sentry DSN is not provided.');
+}
+
 // Sentry
 Sentry.init({
-	dsn: import.meta.env.VITE_SENTRY_DSN,
+	dsn: sentryDsn,
 	tracesSampleRate: 0.05,
 	replaysSessionSampleRate: 0.05,
 	replaysOnErrorSampleRate: 1,
 	integrations: [
-		Sentry.replayIntegration(),
+		Sentry.replayIntegration({
+			maskAllText: false,
+			maskAllInputs: false,
+			blockAllMedia: false
+		}),
 		Sentry.consoleLoggingIntegration({
 			levels: ['warn', 'error']
 		})
 	],
-	environment: import.meta.env.MODE,
+	environment: currentEnv,
+	sendDefaultPii: true,
 	_experiments: {
 		enableLogs: true
 	}
 });
-export const handleError = Sentry.handleErrorWithSentry();
+
+export const handleError = Sentry.handleErrorWithSentry(/* ({ error, event }) => {} */);
 
 // Locale
 setDefaultOptions({ locale: ko });
-
-console.debug('Sentry initialized');
 
 // Theme
 initTheme();
@@ -45,5 +59,3 @@ console.debug('Mermaid initialized');
 initEngine().then((engine) => {
 	console.debug(`Search engine initialized, there is ${engine.termCount} terms in the index`);
 });
-
-/* c8 ignore stop */

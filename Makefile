@@ -39,7 +39,8 @@ run:  ## Run development application
 .PHONY: run
 
 preview:  ## Preview build
-	yarn run build && yarn run preview $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
+	yarn run build
+	yarn run preview --ip "$$([ -z "$$CONTAINER" ] && echo '0.0.0.0' || echo '127.0.0.1')"
 .PHONY: preview
 
 
