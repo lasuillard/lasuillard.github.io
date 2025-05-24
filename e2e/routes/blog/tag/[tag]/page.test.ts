@@ -10,8 +10,8 @@ beforeAll('go to tag page', async ({ browser }) => {
 	await page.goto('/blog/tag/Apple');
 });
 
-it('has a layout', async () => {
-	await expect(page.getByTestId('layout')).toBeVisible();
+it('visit page', async () => {
+	await expect(page).toHaveScreenshot();
 });
 
 it('has a title and meta tags for SEO', async () => {
