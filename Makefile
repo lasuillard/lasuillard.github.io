@@ -30,7 +30,7 @@ install:  ## Install deps and tools
 .PHONY: install
 
 update:  ## Update deps and tools
-	yarn upgrade
+	yarn up
 	pre-commit autoupdate
 .PHONY: update
 
@@ -38,8 +38,11 @@ run:  ## Run development application
 	yarn run dev $$([ -z "$$CONTAINER" ] && echo '' || echo '--host')
 .PHONY: run
 
-preview:  ## Preview build
+build: generate  ## Build application
 	yarn run build
+.PHONY: build
+
+preview: build  ## Preview build
 	yarn run preview --ip "$$([ -z "$$CONTAINER" ] && echo '0.0.0.0' || echo '127.0.0.1')"
 .PHONY: preview
 
@@ -52,6 +55,7 @@ ci: generate lint test e2e-test  ## Run CI tasks
 
 generate:  ## Generate stubs
 	yarn run svelte-kit sync
+	yarn run cf-typegen
 .PHONY: generate
 
 format:  ## Run autoformatters
@@ -69,14 +73,9 @@ test: generate ## Run tests
 	yarn run test
 .PHONY: test
 
-e2e-test:  ## Run e2e tests
-	yarn run build
+e2e-test: build  ## Run e2e tests
 	yarn run e2e
 .PHONY: e2e-test
-
-build: generate  ## Build application
-	yarn run build
-.PHONY: build
 
 
 # =============================================================================
