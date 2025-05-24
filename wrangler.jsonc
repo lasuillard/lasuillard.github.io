@@ -24,7 +24,7 @@
 			"vars": {
 				"ENVIRONMENT": "production",
 				"PUBLIC_ENVIRONMENT": "production"
-			}
+			},"name": "lasuillard-blog"
 		}
 	}
 }
