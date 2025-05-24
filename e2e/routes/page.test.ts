@@ -16,7 +16,7 @@ it('visit page', async () => {
 
 it('has a title and meta tags for SEO', async () => {
 	expect(await page.title()).toMatch(/.+ • lasuillard's Blog/);
-	expect(page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
+	expect(await page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
 });
 
 it('list all tags with ref counts', () => fixme());
