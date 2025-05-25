@@ -74,7 +74,7 @@ test: generate ## Run tests
 .PHONY: test
 
 e2e-test: build  ## Run e2e tests
-	yarn run e2e
+	yarn run e2e --update-snapshots
 .PHONY: e2e-test
 
 

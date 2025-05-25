@@ -21,7 +21,7 @@
 	};
 
 	// Tag reference counter
-	const tagRefs: { [key: string]: number } = {};
+	const tagRefs: { [key: string]: number } = $state({});
 
 	// Refer a single tag
 	// eslint-disable-next-line jsdoc/require-jsdoc
