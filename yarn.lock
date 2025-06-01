@@ -2532,15 +2532,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.20.2":
-  version: 2.20.3
-  resolution: "@sveltejs/kit@npm:2.20.3"
+"@sveltejs/kit@npm:^2.21.1":
+  version: 2.21.1
+  resolution: "@sveltejs/kit@npm:2.21.1"
   dependencies:
+    "@sveltejs/acorn-typescript": "npm:^1.0.5"
     "@types/cookie": "npm:^0.6.0"
+    acorn: "npm:^8.14.1"
     cookie: "npm:^0.6.0"
     devalue: "npm:^5.1.0"
     esm-env: "npm:^1.2.2"
-    import-meta-resolve: "npm:^4.1.0"
     kleur: "npm:^4.1.5"
     magic-string: "npm:^0.30.5"
     mrmime: "npm:^2.0.0"
@@ -2553,7 +2554,7 @@ __metadata:
     vite: ^5.0.3 || ^6.0.0
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/222101aa89872c33b57eed5daf592b8b2f1877f312201fa294abbec6d18a7fdefd3e6f1660967e017011c4df99d1568b52fc908243c54cb7ea6e842444f226e5
+  checksum: 10c0/9273d0f0f726b44b33d3e29e633ce13577fe362c707ce72349ca5a2f9eca9fde93e878822da1ae466d64c68b35a7217cbb85f4cdba3b7ef55d790bff9d8cb8bb
   languageName: node
   linkType: hard
 
@@ -3516,7 +3517,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.12.1, acorn@npm:^8.14.0, acorn@npm:^8.8.1, acorn@npm:^8.9.0":
+"acorn@npm:^8.12.1, acorn@npm:^8.14.0, acorn@npm:^8.14.1, acorn@npm:^8.8.1, acorn@npm:^8.9.0":
   version: 8.14.1
   resolution: "acorn@npm:8.14.1"
   bin:
@@ -5914,13 +5915,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"import-meta-resolve@npm:^4.1.0":
-  version: 4.1.0
-  resolution: "import-meta-resolve@npm:4.1.0"
-  checksum: 10c0/42f3284b0460635ddf105c4ad99c6716099c3ce76702602290ad5cbbcd295700cbc04e4bdf47bacf9e3f1a4cec2e1ff887dabc20458bef398f9de22ddff45ef5
-  languageName: node
-  linkType: hard
-
 "imurmurhash@npm:^0.1.4":
   version: 0.1.4
   resolution: "imurmurhash@npm:0.1.4"
@@ -6271,7 +6265,7 @@ __metadata:
     "@playwright/test": "npm:1.47.2"
     "@sentry/sveltekit": "npm:^9.15.0"
     "@sveltejs/adapter-cloudflare": "npm:^7.0.3"
-    "@sveltejs/kit": "npm:^2.20.2"
+    "@sveltejs/kit": "npm:^2.21.1"
     "@sveltejs/vite-plugin-svelte": "npm:^4.0.0"
     "@tailwindcss/postcss": "npm:^4.1.1"
     "@tailwindcss/typography": "npm:^0.5.12"
