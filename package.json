@@ -24,7 +24,7 @@
 	},
 	"dependencies": {
 		"@sentry/sveltekit": "^9.15.0",
-		"@sveltejs/kit": "^2.20.2",
+		"@sveltejs/kit": "^2.21.1",
 		"@sveltejs/vite-plugin-svelte": "^4.0.0",
 		"@tailwindcss/postcss": "^4.1.1",
 		"@tailwindcss/typography": "^0.5.12",
