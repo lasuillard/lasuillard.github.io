@@ -26,4 +26,7 @@ export const handle = sequence(
 	Sentry.sentryHandle()
 );
 
-export const handleError = Sentry.handleErrorWithSentry(/* ({ error, event }) => {} */);
+// @ts-expect-error Ignore types here
+export const handleError = Sentry.handleErrorWithSentry(({ error, event }) => {
+	console.error('An error occurred on the server side:', error, event);
+});
