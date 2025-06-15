@@ -3,6 +3,7 @@ import Search from '$components/utility/Search.svelte';
 import { initEngine } from '$lib/search';
 import { render } from '@testing-library/svelte';
 import { it } from '^/tests/_helpers/vitest';
+import { tick } from 'svelte';
 import { expect } from 'vitest';
 
 it('has a valid locator', () => {
@@ -36,9 +37,16 @@ it('shows matching results for given query', async ({ user }) => {
 	const input = component.getByRole('textbox') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uno');
+	await tick();
 
 	// Assert
-	expect(component.getByText('Uno terra errat')).toBeTruthy();
+	expect(component.getByText('Uno terra errat')).toMatchInlineSnapshot(`
+		<a
+		  href="/blog/uno-terra-errat"
+		>
+		  Uno terra errat
+		</a>
+	`);
 });
 
 it.todo('shows no results for non-matching query');
