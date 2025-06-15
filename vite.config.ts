@@ -39,7 +39,7 @@ export default defineConfig({
 	},
 	resolve: {
 		// https://github.com/sveltejs/svelte/issues/11394
-		conditions: process.env.VITEST ? ['browser'] : []
+		conditions: ['browser']
 	},
 	test: {
 		include: ['tests/**/*.{test,spec}.{js,ts}'],
