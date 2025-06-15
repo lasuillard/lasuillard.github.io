@@ -6,7 +6,7 @@ import { svelteTesting } from '@testing-library/svelte/vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	// @ts-expect-error Unknown error (Plugin is not assignable to type PluginOption)
+	// @ts-expect-error Plugin type compatibility issues between different versions
 	plugins: [
 		...(process.env.VITEST
 			? [svelteTesting()]
@@ -15,7 +15,7 @@ export default defineConfig({
 						sourceMapsUploadOptions: {
 							org: 'lasuillard',
 							project: 'lasuillard-github-io',
-							/* @ts-expect-error Unknown error, this property is documented */
+							// @ts-expect-error This property exists in Sentry config but not in types
 							setCommits: {
 								auto: true
 							}
@@ -36,10 +36,6 @@ export default defineConfig({
 		fs: {
 			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['static']
 		}
-	},
-	resolve: {
-		// https://github.com/sveltejs/svelte/issues/11394
-		conditions: ['browser']
 	},
 	test: {
 		include: ['tests/**/*.{test,spec}.{js,ts}'],
