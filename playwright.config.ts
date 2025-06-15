@@ -37,7 +37,7 @@ export default {
 	},
 	use: {
 		screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+		video: 'retain-on-failure'
 	},
 	testDir,
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
