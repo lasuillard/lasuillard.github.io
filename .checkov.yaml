@@ -1,2 +1,0 @@
-skip-path:
-  - pnpm-lock.yaml # False-positive CKV_SECRET_3 hits

@@ -6091,7 +6091,7 @@ __metadata:
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.0"
     remark-stringify: "npm:^11.0.0"
-    svelte: "npm:^5.28.2"
+    svelte: "npm:^5.33.11"
     svelte-check: "npm:^4.1.5"
     svelte-persisted-store: "npm:^0.12.0"
     tailwindcss: "npm:^4.1.1"
@@ -8898,9 +8898,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.28.2":
-  version: 5.34.3
-  resolution: "svelte@npm:5.34.3"
+"svelte@npm:^5.33.11":
+  version: 5.33.11
+  resolution: "svelte@npm:5.33.11"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -8916,7 +8916,7 @@ __metadata:
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10c0/78f7befb176bc5a9cb24343d644b8cb7f2d02d78e6ed6a2410760fca3019b31ded1dd70b2bc8fc6805435dce3a36787308c1730974d0511cc3aaf0d80cd471d2
+  checksum: 10c0/f098a981546cf71a2ff5966cb6a722d8033a946375d580b22dd6236bd25132982a1859a1b5c3c425ec45fb624573c7a38fe54f5831c14ba68bf29c8cddb211a7
   languageName: node
   linkType: hard
 
