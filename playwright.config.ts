@@ -36,7 +36,8 @@ export default {
 		reuseExistingServer: true
 	},
 	use: {
-		screenshot: 'only-on-failure'
+		screenshot: 'only-on-failure',
+		video: 'retain-on-failure'
 	},
 	testDir,
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
