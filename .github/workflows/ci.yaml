@@ -27,7 +27,7 @@ jobs:
           cache: yarn
 
       - name: Install deps
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Check code formatting
         run: yarn run prettier --check .
@@ -59,7 +59,7 @@ jobs:
           cache: yarn
 
       - name: Install deps
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run tests
         run: yarn run test
@@ -102,7 +102,7 @@ jobs:
           cache: yarn
 
       - name: Install deps
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       # https://github.com/microsoft/playwright/issues/7249
       - name: Store Playwright version as env
