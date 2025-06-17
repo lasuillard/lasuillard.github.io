@@ -51,10 +51,7 @@ export default defineConfig({
 			reporter: ['text', 'clover', 'html']
 		},
 		api: {
-			host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1',
-			port: 51204
-		},
-		// NOTE: Browser testing via Playwright
-		css: false
+			host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
+		}
 	}
 });
