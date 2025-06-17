@@ -6,24 +6,32 @@
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
-
 	const { metadata, content } = data;
 	const { title, publicationDate, tags } = metadata;
 
-	// Content wrapper for generating ToC
+	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
+	let contentIsReady = $state(false);
 
-	onMount(async () => {
-		import('mermaid').then(({ default: mermaid }) => mermaid.run());
+	// Take action when the content is ready
+	$effect(() => {
+		if (!contentIsReady) {
+			console.debug('Content is not ready yet. Skipping patching.');
+			return;
+		}
 
-		// Monkey-patching I18n for footnote label
+		// Monkey-patching footnote label (add emoji and translate)
 		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
 		if (!footnoteLabel) {
-			console.debug('Footnote label not found, skip applying I18n for this');
+			console.debug('Footnote label not found. Skipping patching.');
 			return;
 		}
 		footnoteLabel.innerHTML = '각주'; // TODO: I18n
 		footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
+	});
+
+	onMount(() => {
+		import('mermaid').then(({ default: mermaid }) => mermaid.run());
 	});
 </script>
 
@@ -31,8 +39,8 @@
 	<div class="flex">
 		<!-- Side TOC for large screen -->
 		<div class="ml-8 hidden max-lg:-mr-8 xl:order-last xl:block">
-			{#if contentWrapper}
-				<Toc bind:content={contentWrapper} class="h-md:sticky h-md:top-[10%] h-lg:top-[20%]" />
+			{#if contentIsReady}
+				<Toc content={contentWrapper} class="h-md:sticky h-md:top-[10%] h-lg:top-[20%]" />
 			{/if}
 		</div>
 		<div class="mx-auto max-w-full">
@@ -52,16 +60,15 @@
 			<div class="divider mb-6"></div>
 			<!-- Embedded TOC for small screen -->
 			<div class="xl:hidden">
-				{#if contentWrapper}
-					<Toc bind:content={contentWrapper} class="mb-6" />
+				{#if contentIsReady}
+					<Toc content={contentWrapper} class="mb-6" />
 				{/if}
 			</div>
-			<article
-				bind:this={contentWrapper}
-				class="prose prose-sm lg:prose-base mt-12 max-w-none break-words lg:max-w-[60vw]"
-			>
-				<Markdown>{content}</Markdown>
-			</article>
+			<div bind:this={contentWrapper}>
+				<article class="prose prose-sm lg:prose-base mt-12 max-w-none break-words lg:max-w-[60vw]">
+					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
+				</article>
+			</div>
 			<Comment />
 		</div>
 	</div>

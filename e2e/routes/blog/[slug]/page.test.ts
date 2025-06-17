@@ -11,7 +11,7 @@ beforeAll('go to post page', async ({ browser }) => {
 });
 
 it('visit page', async () => {
-	await expect(page).toHaveScreenshot();
+	await expect(page).toHaveScreenshot({ fullPage: true });
 });
 
 it('has a title and meta tags for SEO', async () => {
