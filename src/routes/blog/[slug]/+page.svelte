@@ -40,7 +40,7 @@
 			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
 				Published at {format(publicationDate, 'yyyy.MM.dd')}
 			</p>
-			<div class="mt-4 ml-2 space-y-1 md:mt-6">
+			<div class="mt-4 mb-2 ml-2 md:mt-6">
 				{#each tags as tag (tag)}
 					<div class="badge badge-secondary mr-2 rounded-xs p-3 font-semibold">
 						<a href="/blog/tag/{tag}">

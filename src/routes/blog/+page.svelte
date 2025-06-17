@@ -17,11 +17,11 @@
 			<!-- All tags -->
 			<div data-testid="tags">
 				<h2 class="mt-10 mb-2 text-2xl uppercase">Tags</h2>
-				<div class="space-y-2">
+				<div>
 					{#if allTags.size}
 						{#each allTags as tag (tag)}
 							<span
-								class="badge badge-secondary badge-sm md:badge-md mr-2 rounded-xs font-semibold"
+								class="badge badge-secondary badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 							>
 								<a href="/blog/tag/{tag}">
 									{tag}
@@ -59,7 +59,7 @@
 									<div class="mt-4">
 										<Markdown>{summary}</Markdown>
 									</div>
-									<div class="mt-6 space-y-2">
+									<div class="mt-6 mb-2">
 										{#each tags as tag (tag)}
 											<span
 												class="badge badge-secondary badge-sm md:badge-md mr-2 rounded-xs font-semibold"
