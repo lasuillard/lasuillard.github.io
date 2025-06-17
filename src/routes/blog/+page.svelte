@@ -59,10 +59,10 @@
 									<div class="mt-4">
 										<Markdown>{summary}</Markdown>
 									</div>
-									<div class="mt-6 mb-2">
+									<div class="mt-6">
 										{#each tags as tag (tag)}
 											<span
-												class="badge badge-secondary badge-sm md:badge-md mr-2 rounded-xs font-semibold"
+												class="badge badge-secondary badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 											>
 												<a href="/blog/tag/{tag}">{tag}</a>
 											</span>
