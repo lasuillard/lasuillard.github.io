@@ -1,36 +1,28 @@
 <script lang="ts">
+	import { parse } from '$lib/markdown';
 	import { onMount } from 'svelte';
 
-	interface Props {
-		/**
-		 * Front matters extracted from markdown text (slot).
-		 *
-		 * This isn't used inside component, export only.
-		 */
-		frontMatter?: unknown | undefined;
-		/**
-		 * Parsed HTML text from markdown.
-		 *
-		 * This exists to provide common functionality (such as styles, highlights, auto link headings, etc.)
-		 * to markdown HTML documents.
-		 *
-		 * Just ignore this to use slotted inputs for raw markdown text.
-		 */
-		content?: string;
-		children?: import('svelte').Snippet;
-	}
+	let {
+		// Parsed front matter and content
+		frontMatter = $bindable(undefined),
+		content = $bindable(''),
+		// Whether the content is ready to be displayed
+		ready = $bindable(false),
+		// Child elements to render if no content is provided
+		children
+	} = $props();
 
-	let { frontMatter = $bindable(undefined), content = $bindable(''), children }: Props = $props();
-
-	// Binding wrapper for input slot to obtain its contents
+	// Binding wrapper used to obtain input slot contents
 	let wrapper: HTMLElement | undefined = $state();
 
 	onMount(async () => {
-		if (content) return;
+		if (content) {
+			return;
+		}
+		({ frontMatter, content } = await parse(wrapper?.textContent || ''));
 
-		({ frontMatter, content } = await import('$lib/markdown').then(({ parse }) =>
-			parse(wrapper?.textContent || '')
-		));
+		console.debug('Content is ready to be displayed.');
+		ready = true;
 	});
 </script>
 
