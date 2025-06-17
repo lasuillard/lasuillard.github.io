@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { parse } from '$lib/markdown';
 	import { onMount } from 'svelte';
 
 	let {
@@ -19,7 +18,9 @@
 		if (content) {
 			return;
 		}
-		({ frontMatter, content } = await parse(wrapper?.textContent || ''));
+		({ frontMatter, content } = await import('$lib/markdown').then(({ parse }) =>
+			parse(wrapper?.textContent || '')
+		));
 
 		console.debug('Content is ready to be displayed.');
 		ready = true;
