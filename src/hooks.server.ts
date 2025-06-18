@@ -4,7 +4,6 @@ import { sequence } from '@sveltejs/kit/hooks';
 
 const currentEnv = env.ENVIRONMENT || 'unknown';
 const sentryDsn = env.SENTRY_DSN || '';
-const disableSentry = (env.DISABLE_SENTRY || '').length > 0;
 
 console.info('Current environment is:', currentEnv);
 if (sentryDsn) {
@@ -14,20 +13,16 @@ if (sentryDsn) {
 }
 
 export const handle = sequence(
-	...(disableSentry
-		? [
-				Sentry.initCloudflareSentryHandle({
-					dsn: sentryDsn,
-					tracesSampleRate: 0.05,
-					environment: currentEnv,
-					integrations: [],
-					sendDefaultPii: true,
-					_experiments: {
-						enableLogs: true
-					}
-				})
-			]
-		: []),
+	Sentry.initCloudflareSentryHandle({
+		dsn: sentryDsn,
+		tracesSampleRate: 0.05,
+		environment: currentEnv,
+		integrations: [],
+		sendDefaultPii: true,
+		_experiments: {
+			enableLogs: true
+		}
+	}),
 	Sentry.sentryHandle()
 );
 

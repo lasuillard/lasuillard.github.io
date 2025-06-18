@@ -37,6 +37,10 @@ export default defineConfig({
 			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['static']
 		}
 	},
+	ssr: {
+		// FIXME: https://github.com/getsentry/sentry-javascript/issues/16586#issuecomment-2983269318
+		external: ['@sentry/sveltekit']
+	},
 	test: {
 		include: ['tests/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
