@@ -14,7 +14,7 @@ if (sentryDsn) {
 
 export const handle = sequence(
 	Sentry.initCloudflareSentryHandle({
-		dsn: 'https://a8567308101f63e0bc560ef3af26557f@o4506363324792832.ingest.us.sentry.io/4506568129380352',
+		dsn: sentryDsn,
 		tracesSampleRate: 0.05,
 		environment: currentEnv,
 		integrations: [],
