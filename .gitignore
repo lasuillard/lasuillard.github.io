@@ -3,6 +3,7 @@
 junit.xml
 .wrangler/
 .dev.vars
+**/.yarn
 
 # User hook scripts for VSC devcontainer lifecycle
 .devcontainer/initializeCommand/
