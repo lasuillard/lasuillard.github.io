@@ -1,10 +1,11 @@
-version: '3'
-
 services:
   workspace:
     image: mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm
     volumes:
       - ..:/workspaces/lasuillard.github.io
+      - pulumi:/home/node/.pulumi
+      - aws:/home/node/.aws
+      - cache:/home/node/.cache:delegated
     environment:
       DISPLAY: novnc:0.0
     healthcheck:
@@ -18,3 +19,8 @@ services:
       RUN_XTERM: 'no'
     ports:
       - ${NOVNC_HOST:-127.0.0.1}:${NOVNC_PORT:-8080}:8080
+
+volumes:
+  pulumi:
+  aws:
+  cache:
