@@ -2,8 +2,9 @@
 
 sudo corepack enable yarn
 
-# pre-commit
-pipx install pre-commit
-
 # Pulumi CLI
 curl -fsSL https://get.pulumi.com | sudo sh -s -- --install-root /usr/local
+
+# Some useful tools
+pipx install pre-commit
+pipx install aws-annoying
