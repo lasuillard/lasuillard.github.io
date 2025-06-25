@@ -2,14 +2,14 @@
 id: 3
 title: 남이 만든 OpenAPI 스키마 테스트하기
 publicationDate: 2024-07-09T21:41:00.000+09:00
-preview: /posts/남이-만든-OpenAPI-스키마-테스트하기/preview.png
+preview: ./preview.png
 summary: >
     API 클라이언트 코드 자동 생성을 위해 남이 만든 API 서버에 OpenAPI 스키마 붙여보기
 
 tags: [TypeScript, Vitest, OpenAPI, OpenAPI Generator]
 ---
 
-<img src="/static/posts/남이-만든-OpenAPI-스키마-테스트하기/preview.png" alt="Preview" width="50%" />
+<img src="./preview.png" alt="Preview" width="50%" />
 
 평소 북마크와 하이라이트를 관리하기 위해 [Raindrop](https://raindrop.io/)을 이용하고 있습니다. 하지만 Chrome 북마크 동기화를 지원하지 않아 항상 아쉽다고 생각하고 있었습니다. Chrome 북마크를 이용하면 북마크 바에서 자주 사용하는 북마크를 바로 이용할 수 있고 검색 또한 훨씬 빠르기 때문입니다.
 
@@ -21,7 +21,7 @@ tags: [TypeScript, Vitest, OpenAPI, OpenAPI Generator]
 
 [OpenAPI](https://www.openapis.org/)는 HTTP API를 표현에 대한 사양(Specification)입니다. 보통 REST API를 이용해 본 적이 있다면 Swagger를 이용해 본 경험이 있으실겁니다.
 
-![Swagger](/static/posts/남이-만든-OpenAPI-스키마-테스트하기/swagger.png)
+![Swagger](./assets/swagger.png)
 
 Swagger는 OpenAPI 문서를 기반으로 자동 생성된 웹 기반 API 클라이언트의 대표적인 예시입니다. OpenAPI를 사용하면 여러 장점이 있습니다.
 
@@ -102,7 +102,7 @@ OpenAPI 스키마를 가져다 쓰는 경우라면 스키마를 굳이 까다롭
 
 [Schemathesis](https://schemathesis.io/)는 API 스키마를 테스트하기 위한 도구입니다. API 안정성, 성능, 보안 등 여러 부분을 테스트할 수 있으며 CI 통합, 리포트 등 다양한 추가 기능을 제공합니다. OpenAPI 뿐만 아니라 GraphQL 스키마도 지원하는 것으로 보입니다.
 
-![Schemathesis](/static/posts/남이-만든-OpenAPI-스키마-테스트하기/schemathesis.png)
+![Schemathesis](./assets/schemathesis.png)
 
 Schemathesis는 꽤나 매력적이었지만 최종적으로 이용할 수는 없었습니다.
 

@@ -1,6 +1,7 @@
 import { Metadata, Post } from '$lib/post';
 import { parse } from '$lib/server/markdown';
 import _ from 'lodash';
+import path from 'node:path';
 import { z } from 'zod';
 
 export class PostRepository {
@@ -26,9 +27,12 @@ export class PostRepository {
 		});
 
 		this.posts = await Promise.all(
-			Object.entries(allPostFiles).map(async ([, resolver]) => {
+			Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 				const text = z.string().parse(await resolver());
-				const { frontMatter, content } = await parse(text);
+				const { frontMatter, content } = await parse(text, {
+					// e.g. ../../posts/1/index.md -> /posts/1/index.md
+					filepath: path.resolve(filepath)
+				});
 				const metadata = Metadata.parse(frontMatter);
 
 				// ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.

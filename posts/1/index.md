@@ -2,16 +2,14 @@
 id: 1
 title: 기술 블로그 시작하기
 publicationDate: 2023-11-03T16:39:00.000+09:00
-preview: /posts/기술-블로그-시작하기/preview.png
+preview: ./preview.png
 summary: >
     SvelteKit으로 만드는 마크다운 블로그
 
 tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
 ---
 
-<!-- TODO: Preview should be handled by component / routes -->
-
-![Preview](/static/posts/기술-블로그-시작하기/preview.png)
+![Preview](./preview.png)
 
 지금껏 개인 블로그를 운영한 적이 없었습니다. 경력을 시작한 지 얼마 되지도 않았고, 남과 나눌 수 있는 정도의 지식이나 경험을 가지고 있지 않았으며 무엇보다 필요성을 느끼지 못했기 때문이었습니다.
 
@@ -103,7 +101,7 @@ tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
     </style>
     ```
 
-    ![SvelteKit 예시](/static/posts/%EA%B8%B0%EC%88%A0-%EB%B8%94%EB%A1%9C%EA%B7%B8-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0/sveltekit-demo.gif)
+    ![SvelteKit 예시](./assets/sveltekit-demo.gif)
 
 - [상태 관리](https://kit.svelte.dev/docs/state-management)
 
@@ -221,7 +219,7 @@ SvelteKit을 이용하여 정적 블로그를 만드는 좋은 글[^sveltekit-ma
 
 디자인 경험이 거의 없기에 기초적인 레이아웃을 구상하는 데에도 꽤 애를 먹었습니다. 처음에는 대략적인 틀을 잡아보며 이것저것 시도하다 중간부터는 다른 블로그를 많이 참고했습니다. 주로 레이아웃을 참고했고, 시각 효과가 있는 요소는 내부 CSS를 파보고 구현 방법을 찾아보았습니다.
 
-![레이아웃](/static/posts/기술-블로그-시작하기/layout.png)
+![레이아웃](./assets/layout.png)
 
 - 상단 바 (Header)
 
@@ -259,7 +257,7 @@ SvelteKit을 이용하여 정적 블로그를 만드는 좋은 글[^sveltekit-ma
 
 [^gravatar-dev]: [Gravatar Developer Resources](https://docs.gravatar.com/)
 
-![프로필](/static/posts/기술-블로그-시작하기/profile.png)
+![프로필](./assets/profile.png)
 
 GET HTTP 메소드를 이용하므로 쉽고 단순하며 공개된 정보에 접근하는 것이니 인증이 필요하지 않습니다. 지금 당장은 프로필 이미지만 동기화하고 있지만 API를 통해 JSON 객체로 표현된 프로필 정보를 가져오는 것 또한 가능하므로 추후에는 Gravatar 프로필 내용까지 동기화할 계획입니다.
 
@@ -298,13 +296,13 @@ GET HTTP 메소드를 이용하므로 쉽고 단순하며 공개된 정보에 �
 
 목차를 구현하기 위해 헤딩(`h1` ~ `h6`)에 대한 들여쓰기를 어떻게 처리하는지 Notion을 참고했습니다.
 
-![Notion 목차](/static/posts/기술-블로그-시작하기/toc-notion.png)
+![Notion 목차](./assets/toc-notion.png)
 
 헤딩 태그에 따라 들여쓰기 크기가 정해진 것이 아니라 중첩된 목록처럼 스타일이 적용됩니다. 태그마다 절댓값을 주면 구현이 쉽고 편하겠지만 범용성을 위해 조금 더 시간을 할애하기로 했습니다.
 
 그렇게 주어진 헤딩의 1차원 리스트로부터 트리 자료구조를 생성하는 알고리즘과 컴포넌트를 구현([/src/lib/toc.ts](https://github.com/lasuillard/lasuillard.github.io/blob/9ec91330ebae92e8fd4632a36d971870dddb4c2d/src/lib/markdown.ts), [/src/components/content/Toc.svelte](https://github.com/lasuillard/lasuillard.github.io/blob/9ec91330ebae92e8fd4632a36d971870dddb4c2d/src/components/content/Toc.svelte))했습니다. 알고리즘에 대한 공부가 게을렀던 탓인지 필히 어려운 문제가 아닌 것 같은데, 구현을 위해 생각보다 오랜 시간 머리를 싸매야 했습니다.
 
-![목차](/static/posts/기술-블로그-시작하기/toc.png)
+![목차](./assets/toc.png)
 
 내용이 많아졌을 때 가독성을 해치는 경우가 있어 추후 목차를 열고 닫을 수 있게끔 할 생각입니다.
 
@@ -312,9 +310,9 @@ GET HTTP 메소드를 이용하므로 쉽고 단순하며 공개된 정보에 �
 
 기본적인 게시글 검색 기능을 구현하고 싶어 [MiniSearch](https://github.com/lucaong/minisearch) 패키지를 이용했습니다. 구성과 사용 모두 간단합니다.
 
-![검색 제안](/static/posts/기술-블로그-시작하기/search-suggestion.png)
+![검색 제안](./assets/search-suggestion.png)
 
-![검색 결과](/static/posts/기술-블로그-시작하기/search-result.png)
+![검색 결과](./assets/search-result.png)
 
 당장은 제목과 태그만 인덱싱하고 있는데 언젠가는 내용에 대한 인덱싱 또한 추가하고 싶네요.
 
@@ -357,11 +355,11 @@ lighthouse:
 
 매 배포 후 Lighthouse 리포트가 생성됩니다.
 
-![Lighthouse CI 체크](/static/posts/기술-블로그-시작하기/lighthouse-checks.png)
+![Lighthouse CI 체크](./assets/lighthouse-checks.png)
 
 Details를 누르면 Google Cloud의 Temporary Public Storage에 저장된 LHCI 리포트를 볼 수 있습니다.
 
-![Lighthouse 보고서](/static/posts/기술-블로그-시작하기/lighthouse-report.png)
+![Lighthouse 보고서](./assets/lighthouse-report.png)
 
 ### 🧪 자동화 테스트
 
@@ -369,7 +367,7 @@ FE 테스트에 대해서는 많은 지식이나 경험이 없는지라 크게 �
 
 요구사항이 명확히 정의되지 않았고 프레임워크와 테스트 API에 대한 지식이 없는 상태에서 먼저 테스트를 작성하는 건 쉽지 않은 일이기 때문에 기능을 먼저 구현한 뒤 테스트를 작성하는 식으로 진행했습니다. 테스트를 써 버릇 하다보니 나중에는 기능을 구상하면서 먼저 요구사항을 머릿속으로 정리하고 어느정도 테스트를 미리 작성할 수 있게 되었습니다.
 
-![Playwright UI](/static/posts/기술-블로그-시작하기/playwright-ui.png)
+![Playwright UI](./assets/playwright-ui.png)
 
 종단 간 테스트를 위해 사용한 Playwright의 UI는 꽤 편리했습니다. VS Code 개발 컨테이너는 자동으로 X11 설정을 포워딩하므로 호스트 환경(내 경우 WSL)의 X Server를 통해 Playwright UI를 직접 이용할 수도 있습니다.
 
