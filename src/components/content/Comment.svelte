@@ -19,10 +19,10 @@
 	</div>
 {/key}
 
-<style>
+<style lang="postcss">
 	@reference "../../app.css";
 
 	:global(.utterances) {
-		@apply mt-20 max-w-full lg:mx-8;
+		@apply mx-auto mt-20 max-w-full;
 	}
 </style>

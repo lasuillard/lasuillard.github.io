@@ -2912,6 +2912,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/lodash@npm:^4":
+  version: 4.17.18
+  resolution: "@types/lodash@npm:4.17.18"
+  checksum: 10c0/d25f86941990403d59dcaae42b42fc9fef55a0a7f398790517e7189300183e425a94127594cbeaf9b5fcdc4f6c2b285e34f4301fb56c92f81ccd8505a41ab5f5
+  languageName: node
+  linkType: hard
+
 "@types/mdast@npm:^4.0.0":
   version: 4.0.4
   resolution: "@types/mdast@npm:4.0.4"
@@ -6032,6 +6039,7 @@ __metadata:
     "@tailwindcss/vite": "npm:^4.1.1"
     "@testing-library/svelte": "npm:^5.2.0"
     "@testing-library/user-event": "npm:^14.6.1"
+    "@types/lodash": "npm:^4"
     "@types/qrcode": "npm:^1.5.5"
     "@vitest/coverage-v8": "npm:^3.0.8"
     "@vitest/ui": "npm:^3.0.8"
@@ -6044,6 +6052,7 @@ __metadata:
     glob: "npm:^11.0.0"
     happy-dom: "npm:^18.0.1"
     highlight.js: "npm:^11.11.1"
+    lodash: "npm:^4.17.21"
     mermaid: "npm:^11.6.0"
     minisearch: "npm:^7.1.0"
     postcss: "npm:^8.5.3"
@@ -6279,6 +6288,13 @@ __metadata:
   version: 4.6.2
   resolution: "lodash.merge@npm:4.6.2"
   checksum: 10c0/402fa16a1edd7538de5b5903a90228aa48eb5533986ba7fa26606a49db2572bf414ff73a2c9f5d5fd36b31c46a5d5c7e1527749c07cbcf965ccff5fbdf32c506
+  languageName: node
+  linkType: hard
+
+"lodash@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash@npm:4.17.21"
+  checksum: 10c0/d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
   languageName: node
   linkType: hard
 

@@ -18,7 +18,7 @@
 		if (content) {
 			return;
 		}
-		({ frontMatter, content } = await import('$lib/markdown').then(({ parse }) =>
+		({ content } = await import('$lib/markdown').then(({ parse }) =>
 			parse(wrapper?.textContent || '')
 		));
 

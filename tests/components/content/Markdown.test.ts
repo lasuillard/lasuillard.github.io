@@ -7,11 +7,7 @@ import { expect, it } from 'vitest';
 // NOTE: It is required not to have any wrapping element (thus no locator) as this component is just an wrapper
 
 it('render with parsed content', async () => {
-	const { content } = await parse(`---
-message: "Hello, World!"
----
-
-# Lorem Ipsum
+	const { content } = await parse(`# Lorem Ipsum
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 	const { container } = render(Markdown, { content });

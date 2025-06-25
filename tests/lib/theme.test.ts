@@ -2,10 +2,9 @@
 import { get } from 'svelte/store';
 import { describe, expect, it } from 'vitest';
 import { currentTheme, getTheme, initTheme, isTheme, setTheme, Theme } from '~/lib/theme';
-import { getVarName } from '~/lib/utils';
 
 describe(initTheme, () => {
-	it(`store ${getVarName({ currentTheme })} become available once initialized`, () => {
+	it('store `currentTheme` become available once initialized', () => {
 		expect(currentTheme).toBeUndefined();
 		initTheme();
 		expect(currentTheme).toBeDefined();

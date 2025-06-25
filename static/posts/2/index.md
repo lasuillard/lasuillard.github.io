@@ -1,14 +1,15 @@
 ---
+id: 2
 title: 개발을 위한 데이터베이스
 publicationDate: 2024-06-12T10:45:23.000+00:00
-preview: /posts/개발을-위한-데이터베이스/preview.png
+preview: ./preview.png
 summary: >
     개발 환경을 위해 데이터 추출하기
 
 tags: [AWS, RDS, S3, Route 53, GitHub Actions, PostgreSQL]
 ---
 
-<img src="/static/posts/개발을-위한-데이터베이스/preview.png" alt="Preview" width="50%" />
+<img src="./preview.png" alt="Preview" width="50%" />
 
 현재 일터에서는 Postgres 데이터베이스를 이용하고 있습니다. 기능 개발, 버그 수정 등 개발 전반에서 다양한 데이터를 필요로 하기에 데이터를 추출하기 위해 `pg_dump`와 `pg_restore`를 이용하고 있었지만 데이터가 점차 쌓이면서 추출과 적재에 소요되는 시간이 계속 늘어가고 있었고, 개인정보 보호 및 보안 강화에 대한 요구 사항도 늘어만 갔습니다.
 
@@ -55,7 +56,7 @@ SQL 스크립트를 작성하여 필요한 데이터를 추출하는 가장 직�
     [Importing data from Amazon S3 into an RDS for PostgreSQL DB instance
     ](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PostgreSQL.S3Import.html)
 
-<img src="/static/posts/개발을-위한-데이터베이스/rds-s3-export-import.jpg" alt="RDS aws_s3 확장 프로그램" width="65%" />
+<img src="./assets/rds-s3-export-import.jpg" alt="RDS aws_s3 확장 프로그램" width="65%" />
 
 장점은 AWS에서 제공하는 확장 프로그램 `aws_s3`을 이용하므로 복잡한 설정이나 구성이 필요하지 않다는 것입니다. 또한 저렴한 S3에 데이터셋을 저장해두고 공유하거나 재사용할 수 있습니다.
 

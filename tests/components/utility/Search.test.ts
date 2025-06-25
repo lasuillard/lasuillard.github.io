@@ -20,8 +20,9 @@ it('shows matching results for given query', async ({ user }) => {
 	// Arrange
 	await initEngine([
 		{
-			slug: 'uno-terra-errat',
 			metadata: {
+				id: 1,
+				slug: 'uno-terra-errat',
 				title: 'Uno terra errat',
 				publicationDate: new Date(),
 				preview: '/posts/preview.png',
@@ -42,7 +43,7 @@ it('shows matching results for given query', async ({ user }) => {
 	// Assert
 	expect(component.getByText('Uno terra errat')).toMatchInlineSnapshot(`
 		<a
-		  href="/blog/uno-terra-errat"
+		  href="/blog/1"
 		>
 		  Uno terra errat
 		</a>

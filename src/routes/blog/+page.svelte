@@ -39,7 +39,7 @@
 		<section data-testid="posts" class="xl:col-span-3">
 			<div class="flex flex-col space-y-32">
 				{#if allPosts.length}
-					{#each allPosts as { slug, metadata: { title, publicationDate, preview, summary, tags } } (slug)}
+					{#each allPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -49,7 +49,7 @@
 								/>
 								<div class="mt-4 flex flex-1 flex-col lg:mt-2 lg:ml-16">
 									<h2 class="mb-0 text-3xl">
-										<a href="/blog/{slug}" class="link hover:text-secondary">{title}</a>
+										<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
 									</h2>
 									<p class="text-gray-500">
 										<time datetime={publicationDate.toISOString()} role="time"

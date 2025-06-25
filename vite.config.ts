@@ -34,7 +34,8 @@ export default defineConfig({
 	],
 	server: {
 		fs: {
-			allow: process.env.VITEST ? ['tests/fixtures/posts'] : ['static']
+			allow: ['static'],
+			deny: ['**.md']
 		}
 	},
 	ssr: {

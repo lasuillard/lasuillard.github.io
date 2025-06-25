@@ -1,68 +1,71 @@
 import { Metadata, Post } from '$lib/post';
 import { parse } from '$lib/server/markdown';
+import _ from 'lodash';
+import path from 'node:path';
 import { z } from 'zod';
 
-/**
- * Return post matching slug.
- * @param slug Slug of post.
- * @returns Post if exists, otherwise `null`.
- */
-export async function getPost(slug: string): Promise<Post | null> {
-	let post;
-	try {
-		post = (
-			import.meta.env.MODE === 'test'
-				? await import(`../../../tests/fixtures/posts/${slug}.md?raw`) /* c8 ignore next */
-				: await import(`../../../posts/${slug}.md?raw`)
-		).default;
-	} catch (err) {
-		console.error(`Matching post not found: ${err}`);
-		return null;
+export class PostRepository {
+	private posts: Post[];
+
+	constructor() {
+		this.posts = [];
 	}
 
-	const { frontMatter, content } = await parse(post);
-	const metadata = Metadata.parse(frontMatter);
-
-	return Post.parse({
-		slug,
-		metadata,
-		content
-	});
-}
-
-/**
- * Find and return all posts.
- * @returns Array of posts. If none found, will be empty.
- */
-export async function getAllPosts(): Promise<Post[]> {
-	const pattern = /^.*\/(.+?)\.md$/;
-	const allPostFiles =
-		import.meta.env.MODE === 'test'
-			? import.meta.glob('../../../tests/fixtures/posts/*.md', {
-					query: '?raw',
-					import: 'default'
-				}) /* c8 ignore next */
-			: import.meta.glob(`../../../posts/*.md`, { query: '?raw', import: 'default' });
-	// The glob option "as" has been deprecated in favour of "query". Please update `as: 'raw'` to `query: '?raw', import: 'default'`. (x2)
-	const allPosts = await Promise.all(
-		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
-			const text = z.string().parse(await resolver());
-			const { frontMatter, content } = await parse(text);
-			const metadata = Metadata.parse(frontMatter);
-			const [, slug] = filepath.match(pattern) ?? [];
-
-			return Post.parse({
-				slug,
-				metadata,
-				content
-			});
-		})
-	).catch((err) => {
-		if (err) {
-			console.error(`Failed to load all posts: ${err}`);
+	/**
+	 * Find and return all posts.
+	 * @returns Array of posts. If none found, will be empty.
+	 */
+	async getAllPosts(): Promise<Post[]> {
+		if (this.posts.length > 0) {
+			return this.posts;
 		}
-		return [];
-	});
 
-	return allPosts;
+		// Retrieve all post files from the filesystem
+		const allPostFiles = import.meta.glob(`../../../static/posts/*/index.md`, {
+			query: '?raw',
+			import: 'default'
+		});
+
+		this.posts = await Promise.all(
+			Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
+				const text = z.string().parse(await resolver());
+				const { frontMatter, content } = await parse(text, {
+					// e.g. ../../posts/1/index.md -> /posts/1/index.md
+					filepath: path.resolve(filepath)
+				});
+				const metadata = Metadata.parse(frontMatter);
+
+				// ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.
+				const slug = _.kebabCase(metadata.title);
+
+				return Post.parse({
+					metadata: {
+						...metadata,
+						slug: metadata.slug || slug
+					},
+					content
+				});
+			})
+		).catch((err) => {
+			if (err) {
+				console.error(`Failed to load all posts: ${err}`);
+			}
+			return [];
+		});
+		return this.posts;
+	}
+
+	/**
+	 * Find a post by its ID.
+	 * @param id The ID of the post to find.
+	 * @returns The post if found, otherwise null.
+	 */
+	async findPostById(id: string): Promise<Post | null> {
+		const allPosts = await this.getAllPosts();
+		const post = allPosts.find((post) => post.metadata.id === id);
+		return post ?? null;
+	}
 }
+
+// Export a singleton instance for app-wide use
+export const postRepository = new PostRepository();
