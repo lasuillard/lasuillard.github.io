@@ -21,7 +21,7 @@ export class PostRepository {
 		}
 
 		// Retrieve all post files from the filesystem
-		const allPostFiles = import.meta.glob(`../../../posts/*/index.md`, {
+		const allPostFiles = import.meta.glob(`../../../static/posts/*/index.md`, {
 			query: '?raw',
 			import: 'default'
 		});
