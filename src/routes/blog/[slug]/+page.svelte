@@ -3,7 +3,6 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
 	import { format } from 'date-fns';
-	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	const { metadata, content } = data;
@@ -28,10 +27,11 @@
 		}
 		footnoteLabel.innerHTML = '각주'; // TODO: I18n
 		footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
-	});
 
-	onMount(() => {
-		import('mermaid').then(({ default: mermaid }) => mermaid.run());
+		import('mermaid').then(({ default: mermaid }) => {
+			console.debug('Mermaid loaded. Running...');
+			mermaid.run();
+		});
 	});
 </script>
 
