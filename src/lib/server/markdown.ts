@@ -4,7 +4,6 @@ import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 import { parse as parseYaml } from 'yaml';
 
-// TODO: Markdown parser
 export const processor = unified()
 	.use(remarkParse)
 	.use(remarkStringify)
