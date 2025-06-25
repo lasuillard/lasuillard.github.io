@@ -1,4 +1,5 @@
 ---
+id: 3
 title: 남이 만든 OpenAPI 스키마 테스트하기
 publicationDate: 2024-07-09T21:41:00.000+09:00
 preview: /posts/남이-만든-OpenAPI-스키마-테스트하기/preview.png

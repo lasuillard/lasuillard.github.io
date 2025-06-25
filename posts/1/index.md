@@ -1,4 +1,5 @@
 ---
+id: 1
 title: 기술 블로그 시작하기
 publicationDate: 2023-11-03T16:39:00.000+09:00
 preview: /posts/기술-블로그-시작하기/preview.png
@@ -7,6 +8,8 @@ summary: >
 
 tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
 ---
+
+<!-- TODO: Preview should be handled by component / routes -->
 
 ![Preview](/static/posts/기술-블로그-시작하기/preview.png)
 

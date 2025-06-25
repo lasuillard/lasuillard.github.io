@@ -1,4 +1,5 @@
 ---
+id: 1
 title: Uno terra errat
 publicationDate: 2022-11-23T18:22:31.008+09:00
 preview: /lorem-ipsum.png

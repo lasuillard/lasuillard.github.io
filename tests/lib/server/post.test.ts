@@ -4,12 +4,12 @@ import { getAllPosts, getPost } from '~/lib/server/post';
 
 describe(getPost, () => {
 	it('returns post', async () => {
-		const post = await getPost('puppis-artus-attoniti-haud');
+		const post = await getPost('1');
 		expect(post).toBeTruthy();
 	});
 
 	it('should return null if not exists', async () => {
-		const post = await getPost('polar-bear-drinking-cider');
+		const post = await getPost('nonexistent-id');
 		expect(post).toBeNull();
 	});
 

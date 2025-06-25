@@ -1,4 +1,5 @@
 ---
+id: 2
 title: Recepta mihi cetera humo
 publicationDate: 2010-08-21T03:08:11.719+09:00
 preview: /lorem-ipsum.png

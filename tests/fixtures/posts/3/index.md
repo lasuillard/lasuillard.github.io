@@ -1,4 +1,5 @@
 ---
+id: 3
 title: Puppis artus attoniti haud
 publicationDate: 2020-04-13T00:00:00.000+09:00
 preview: /lorem-ipsum.png

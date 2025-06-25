@@ -1,59 +1,52 @@
 import { Metadata, Post } from '$lib/post';
 import { parse } from '$lib/server/markdown';
+import _ from 'lodash';
 import { z } from 'zod';
 
 /**
- * Return post matching slug.
- * @param slug Slug of post.
+ * Return post matching id.
+ * @param id Id of post.
  * @returns Post if exists, otherwise `null`.
  */
-export async function getPost(slug: string): Promise<Post | null> {
-	let post;
-	try {
-		post = (
-			import.meta.env.MODE === 'test'
-				? await import(`../../../tests/fixtures/posts/${slug}.md?raw`) /* c8 ignore next */
-				: await import(`../../../posts/${slug}.md?raw`)
-		).default;
-	} catch (err) {
-		console.error(`Matching post not found: ${err}`);
-		return null;
-	}
-
-	const { frontMatter, content } = await parse(post);
-	const metadata = Metadata.parse(frontMatter);
-
-	return Post.parse({
-		slug,
-		metadata,
-		content
-	});
+export async function getPost(id: string): Promise<Post | null> {
+	const allPosts = await getAllPosts();
+	const post = allPosts.find((post) => post.metadata.id === id);
+	return post ?? null;
 }
+
+let allPosts: Post[] = [];
 
 /**
  * Find and return all posts.
  * @returns Array of posts. If none found, will be empty.
  */
 export async function getAllPosts(): Promise<Post[]> {
-	const pattern = /^.*\/(.+?)\.md$/;
+	if (allPosts.length > 0) {
+		return allPosts;
+	}
+
 	const allPostFiles =
 		import.meta.env.MODE === 'test'
-			? import.meta.glob('../../../tests/fixtures/posts/*.md', {
+			? import.meta.glob('../../../tests/fixtures/posts/*/index.md', {
 					query: '?raw',
 					import: 'default'
 				}) /* c8 ignore next */
-			: import.meta.glob(`../../../posts/*.md`, { query: '?raw', import: 'default' });
-	// The glob option "as" has been deprecated in favour of "query". Please update `as: 'raw'` to `query: '?raw', import: 'default'`. (x2)
-	const allPosts = await Promise.all(
-		Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
+			: import.meta.glob(`../../../posts/*/index.md`, { query: '?raw', import: 'default' });
+
+	allPosts = await Promise.all(
+		Object.entries(allPostFiles).map(async ([, resolver]) => {
 			const text = z.string().parse(await resolver());
 			const { frontMatter, content } = await parse(text);
 			const metadata = Metadata.parse(frontMatter);
-			const [, slug] = filepath.match(pattern) ?? [];
+
+			// ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.
+			const slug = _.kebabCase(metadata.title);
 
 			return Post.parse({
-				slug,
-				metadata,
+				metadata: {
+					...metadata,
+					slug: metadata.slug || slug
+				},
 				content
 			});
 		})

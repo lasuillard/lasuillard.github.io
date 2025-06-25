@@ -3,7 +3,11 @@ import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 
 export const load: PageLoad = async ({ fetch, params }) => {
-	const response = await fetch(`/api/post/${params.slug}`);
+	// * Expect the slug to be in the format "id-slug", e.g., "1-My-blog-post".
+	// * The ID is used to fetch the post, while the slug is used for SEO-friendly URLs.
+	const [id] = params.slug.split('-');
+
+	const response = await fetch(`/api/post/${id}`);
 	if (!response.ok) {
 		throw error(404, { message: 'Failed to fetch post' });
 	}

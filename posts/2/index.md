@@ -1,4 +1,5 @@
 ---
+id: 2
 title: 개발을 위한 데이터베이스
 publicationDate: 2024-06-12T10:45:23.000+00:00
 preview: /posts/개발을-위한-데이터베이스/preview.png
