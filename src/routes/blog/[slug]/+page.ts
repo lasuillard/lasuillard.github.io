@@ -9,7 +9,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
 
 	const response = await fetch(`/api/post/${id}`);
 	if (!response.ok) {
-		throw error(404, { message: 'Failed to fetch post' });
+		throw error(response.status, { message: `Failed to fetch post.` });
 	}
 
 	const data = await response.json();
@@ -19,7 +19,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
 	return {
 		meta: {
 			title: metadata.title,
-			description: metadata.summary // TODO: Sanitize markdown syntax (transform into plain text)
+			description: metadata.summary
 		},
 		metadata,
 		content
