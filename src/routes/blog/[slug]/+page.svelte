@@ -74,7 +74,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	@reference "../../../app.css";
 
 	article {
@@ -83,16 +83,16 @@
 			@apply mx-auto shadow-md;
 		}
 		/* No underline for heading links */
-		& :global(:where(:global(h1 h2 h3 h4 h5 h6)) > a) {
+		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
 			@apply no-underline;
 		}
 		/* Show '#' on the left of heading links when hover */
-		& :global(:where(:global(h1 h2 h3 h4 h5 h6)) > a:hover) {
+		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
 			@apply before:text-secondary before:absolute before:-ml-6 before:underline before:underline-offset-4 before:content-['#'];
 		}
 		/* Add some shadow for visual recognition */
 		& :global(pre) {
-			@apply shadow-md;
+			@apply m-2 p-0 text-wrap;
 		}
 		/* Center Mermaid diagram horizontally */
 		& :global(pre.mermaid svg) {
