@@ -1,7 +1,7 @@
 ---
 id: 5
 title: 마음대로 쓰고 버리는 개발 컨테이너
-publicationDate: 2024-06-12T10:45:23+00:00
+publicationDate: 2025-06-26T12:03:34+00:00
 preview: ./preview.png
 summary: >
     개발 컨테이너를 활용하여 개발 환경 구성 및 관리하기
@@ -9,7 +9,6 @@ summary: >
 tags: [VS Code, Dev Container, Docker, GitHub]
 ---
 
-<!-- TODO: Update preview image -->
 <img src="./preview.png" alt="미리보기" width="50%" />
 
 다들 개발 환경은 어떻게 구성하고 관리하고 계신가요? 아마도 Python 가상 환경(venv), pyenv, nodenv, poetry 등 여러 패키지 매니저나 환경 관리 도구를 활용하고 계실 것 같습니다. 저 역시 다양한 도구를 사용해봤지만, 최근에는 새 프로젝트를 시작할 때 개발 컨테이너 구성을 가장 우선하고 있습니다.
@@ -148,7 +147,8 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 프로젝트 개발 컨테이너 설정을 가능한 한 최소로, 가볍게 유지하세요. 꼭 필요한(MUST) 설정만 유지하고, 그 외의 개인적인 설정은 다른 설정 주입 방법을 활용하세요.
 
 - 개인 에디터 설정은 User Settings를 활용하세요.
-  `dev.containers.*`, `remote.*` 설정을 활용하세요. 생각보다 유용한 설정이 많습니다. 개인화된 설정을 위해 활용하기 좋은 설정은 다음과 같은 것들이 있습니다.
+
+    `dev.containers.*`, `remote.*` 설정을 활용하세요. 생각보다 유용한 설정이 많습니다. 개인화된 설정을 위해 활용하기 좋은 설정은 다음과 같은 것들이 있습니다.
 
     - `dev.containers.copyGitConfig`
 
@@ -166,8 +166,9 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 - 작업 공간에서 **강제되어야** 하는 설정은 VS Code 워크스페이스 설정(`.vscode/settings.json`)을 활용할 수 있지만, 꼭 필요한 최소한의 설정만을 공유하세요.
 - 필요하다면 [Multi-root Workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces) 기능을 활용하여 워크스페이스 설정 또한 오버라이드할 수 있습니다.
 - `*.example` 패턴을 활용하세요.
-  `.env.example`, `.vscode.example` 등 비침습적이고 공유할 수 있는 예시를 제공하는 좋은 방법입니다.
-  최대한의 유연성을 제공하고 싶다면 `.devcontainer` 디렉터리 또한 `.devcontainer.example`로 바꾸어 개발자가 직접 설정할 수 있도록 하는 것도 좋은 방법입니다.
+
+    `.env.example`, `.vscode.example` 등 비침습적이고 공유할 수 있는 예시를 제공하는 좋은 방법입니다.
+    최대한의 유연성을 제공하고 싶다면 `.devcontainer` 디렉터리 또한 `.devcontainer.example`로 바꾸어 개발자가 직접 설정할 수 있도록 하는 것도 좋은 방법입니다.
 
 ### 🔄 Settings Sync
 
