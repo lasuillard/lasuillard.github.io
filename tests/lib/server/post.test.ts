@@ -6,7 +6,7 @@ describe('PostRepository.getAllPosts', () => {
 	it('loads all posts successfully', async () => {
 		const postRepository = new PostRepository();
 		const allPosts = await postRepository.getAllPosts();
-		expect(allPosts).toHaveLength(3);
+		expect(allPosts).toHaveLength(4);
 	});
 
 	it.todo("throws an error if any of posts' metadata unsatisfying");
