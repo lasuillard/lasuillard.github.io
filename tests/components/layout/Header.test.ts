@@ -1,7 +1,8 @@
 // @vitest-environment happy-dom
 import Header from '$components/layout/Header.svelte';
 import { render } from '@testing-library/svelte';
-import { expect, it } from 'vitest';
+import { expect } from 'vitest';
+import { it } from '^/tests/_helpers/vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Header);
@@ -34,4 +35,14 @@ it('contains theme selector', () => {
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
 
-it.todo('closes drawer when clicking outside of it');
+it('closes drawer when clicking outside of it', async ({ user }) => {
+	const component = render(Header, { drawerOpen: true });
+
+	const drawerOverlay = component.container.querySelector('.drawer-overlay');
+	if (drawerOverlay) {
+		await user.click(drawerOverlay);
+	}
+
+	const drawerCheckbox = component.container.querySelector('#header-drawer') as HTMLInputElement;
+	expect(drawerCheckbox).toBeTruthy();
+});

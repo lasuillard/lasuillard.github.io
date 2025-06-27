@@ -14,7 +14,9 @@ export default ts.config(
 			'test-results/*',
 			'build/*',
 			'.svelte-kit/*',
-			'vite.config.{js,ts}.timestamp-*'
+			'vite.config.{js,ts}.timestamp-*',
+			'node_modules/*',
+			'.wrangler/*'
 		]
 	},
 	js.configs.recommended,

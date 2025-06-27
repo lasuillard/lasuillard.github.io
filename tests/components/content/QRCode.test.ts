@@ -13,4 +13,16 @@ it('has a link in title for generated code', () => {
 	expect(getByTestId('qrcode').title).toEqual('Hello, World!');
 });
 
+it('sets custom width when provided', () => {
+	const { getByTestId } = render(QRCode, { text: 'Hello, World!', width: 256 });
+	const canvas = getByTestId('qrcode') as HTMLCanvasElement;
+	expect(canvas.width).toBe(256);
+});
+
+it('uses default width when not provided', () => {
+	const { getByTestId } = render(QRCode, { text: 'Hello, World!' });
+	const canvas = getByTestId('qrcode') as HTMLCanvasElement;
+	expect(canvas.width).toBe(128);
+});
+
 // FIXME: Canvas raising errors
