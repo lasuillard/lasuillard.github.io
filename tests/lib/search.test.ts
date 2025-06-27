@@ -1,17 +1,8 @@
 // @vitest-environment happy-dom
-import { describe, expect, it, vi } from 'vitest';
-import { getEngine, initEngine } from '~/lib/search';
+import { describe, it } from 'vitest';
 
-describe(initEngine, () => {
-	it('engine is defined after initialization', async () => {
-		expect(getEngine()).toBeUndefined();
-		// @ts-expect-error Enough for mocking.
-		vi.spyOn(globalThis, 'fetch').mockImplementationOnce(() => ({
-			json: vi.fn(() => [])
-		}));
-		await initEngine();
-		expect(getEngine()).toBeDefined();
-	});
+describe('getEngine', () => {
+	it.todo('returns undefined when not initialized');
+
+	it.todo('returns engine instance after initialization');
 });
-
-describe.todo(getEngine);

@@ -19,6 +19,18 @@ describe(initTheme, () => {
 		// @ts-expect-error It should be set after init
 		expect(get(currentTheme)).toEqual(themeDefault);
 	});
+
+	it('fallback to light theme when invalid theme stored', () => {
+		// Store an invalid theme in localStorage
+		localStorage.setItem('theme', '"invalid-theme"');
+		initTheme();
+		// Should fallback to the system preferred theme (in test environment it's Dark)
+		const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const expectedTheme = preferDark ? Theme.Dark : Theme.Light;
+
+		// @ts-expect-error It should be set after init
+		expect(get(currentTheme)).toBe(expectedTheme);
+	});
 });
 
 describe(isTheme, () => {
@@ -39,6 +51,32 @@ describe(getTheme, () => {
 	it('should return `data-theme` attribute of document root', () => {
 		const themeAttr = document.documentElement.getAttribute('data-theme');
 		expect(getTheme()).toEqual(themeAttr);
+	});
+
+	it('should return default light theme when no valid theme attribute', () => {
+		// Remove theme attribute temporarily
+		const originalTheme = document.documentElement.getAttribute('data-theme');
+		document.documentElement.removeAttribute('data-theme');
+
+		expect(getTheme()).toBe(Theme.Light);
+
+		// Restore original theme
+		if (originalTheme) {
+			document.documentElement.setAttribute('data-theme', originalTheme);
+		}
+	});
+
+	it('should return light theme when invalid theme attribute', () => {
+		// Set invalid theme temporarily
+		const originalTheme = document.documentElement.getAttribute('data-theme');
+		document.documentElement.setAttribute('data-theme', 'invalid-theme');
+
+		expect(getTheme()).toBe(Theme.Light);
+
+		// Restore original theme
+		if (originalTheme) {
+			document.documentElement.setAttribute('data-theme', originalTheme);
+		}
 	});
 });
 
