@@ -9,7 +9,7 @@ summary: >
 tags: [AWS, RDS, S3, Route 53, GitHub Actions, PostgreSQL]
 ---
 
-<img src="./preview.png" alt="Preview" width="50%" />
+<img src="./preview.png" alt="미리보기" width="50%" />
 
 현재 일터에서는 Postgres 데이터베이스를 이용하고 있습니다. 기능 개발, 버그 수정 등 개발 전반에서 다양한 데이터를 필요로 하기에 데이터를 추출하기 위해 `pg_dump`와 `pg_restore`를 이용하고 있었지만 데이터가 점차 쌓이면서 추출과 적재에 소요되는 시간이 계속 늘어가고 있었고, 개인정보 보호 및 보안 강화에 대한 요구 사항도 늘어만 갔습니다.
 

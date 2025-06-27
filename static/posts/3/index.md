@@ -9,7 +9,7 @@ summary: >
 tags: [TypeScript, Vitest, OpenAPI, OpenAPI Generator]
 ---
 
-<img src="./preview.png" alt="Preview" width="50%" />
+<img src="./preview.png" alt="미리보기" width="50%" />
 
 평소 북마크와 하이라이트를 관리하기 위해 [Raindrop](https://raindrop.io/)을 이용하고 있습니다. 하지만 Chrome 북마크 동기화를 지원하지 않아 항상 아쉽다고 생각하고 있었습니다. Chrome 북마크를 이용하면 북마크 바에서 자주 사용하는 북마크를 바로 이용할 수 있고 검색 또한 훨씬 빠르기 때문입니다.
 
