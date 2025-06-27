@@ -79,13 +79,13 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.`,
 message: "First"
 ---
 ---
-message: "Second"  
+message: "Second"
 ---
 
 # Content`,
 			{ filepath: '/posts/test/index.md' }
 		);
-		
+
 		// Should only parse the first frontmatter block
 		expect(result.frontMatter).toEqual({ message: 'First' });
 		expect(result.content).toContain('# Content');
@@ -96,7 +96,7 @@ message: "Second"
 			'<img alt="No source" />',
 			{ filepath: '/posts/test/index.md' }
 		);
-		
+
 		// Should not crash and keep original HTML
 		expect(result.content).toContain('<img alt="No source" />');
 	});
@@ -110,7 +110,7 @@ preview: https://example.com/preview.png
 ![Remote](https://example.com/image.png)`,
 			{ filepath: '/posts/test/index.md' }
 		);
-		
+
 		// Remote URLs should remain unchanged
 		expect(result.frontMatter.preview).toBe('https://example.com/preview.png');
 		expect(result.content).toContain('https://example.com/image.png');

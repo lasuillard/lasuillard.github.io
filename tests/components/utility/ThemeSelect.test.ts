@@ -33,11 +33,11 @@ it('toggles between light and dark themes', async () => {
 it('can be toggled with user interaction', async ({ user }) => {
 	const { getByTestId } = render(ThemeSelect);
 	const initialTheme = getTheme();
-	
+
 	const toggle = getByTestId('toggle-input');
 	await user.click(toggle);
 	await tick();
-	
+
 	const newTheme = getTheme();
 	expect(newTheme).not.toBe(initialTheme);
 });

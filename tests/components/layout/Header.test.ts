@@ -37,12 +37,12 @@ it('contains theme selector', () => {
 
 it('closes drawer when clicking outside of it', async ({ user }) => {
 	const component = render(Header, { drawerOpen: true });
-	
+
 	const drawerOverlay = component.container.querySelector('.drawer-overlay');
 	if (drawerOverlay) {
 		await user.click(drawerOverlay);
 	}
-	
+
 	const drawerCheckbox = component.container.querySelector('#header-drawer') as HTMLInputElement;
 	expect(drawerCheckbox).toBeTruthy();
 });

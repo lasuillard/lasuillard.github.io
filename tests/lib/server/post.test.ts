@@ -25,7 +25,7 @@ describe('PostRepository.findPostById', () => {
 
 	it('throws an error if post metadata schema not satisfactory', async () => {
 		const postRepository = new PostRepository();
-		
+
 		// Test the findPostById method with a post that exists
 		const post = await postRepository.findPostById('1');
 		if (post) {
@@ -37,7 +37,7 @@ describe('PostRepository.findPostById', () => {
 			expect(post.metadata.summary).toBeDefined();
 			expect(Array.isArray(post.metadata.tags)).toBe(true);
 		}
-		
+
 		// The actual schema validation happens during parsing in getAllPosts
 		// If metadata doesn't match schema, it would throw during Metadata.parse()
 		expect(true).toBe(true); // Placeholder assertion since schema validation is built-in

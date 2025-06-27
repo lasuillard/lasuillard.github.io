@@ -24,7 +24,7 @@ describe(initTheme, () => {
 		// Store an invalid theme in localStorage
 		localStorage.setItem('theme', '"invalid-theme"');
 		initTheme();
-		// @ts-expect-error It should be set after init  
+		// @ts-expect-error It should be set after init
 		// Should fallback to the system preferred theme (in test environment it's Dark)
 		const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		const expectedTheme = preferDark ? Theme.Dark : Theme.Light;
@@ -56,9 +56,9 @@ describe(getTheme, () => {
 		// Remove theme attribute temporarily
 		const originalTheme = document.documentElement.getAttribute('data-theme');
 		document.documentElement.removeAttribute('data-theme');
-		
+
 		expect(getTheme()).toBe(Theme.Light);
-		
+
 		// Restore original theme
 		if (originalTheme) {
 			document.documentElement.setAttribute('data-theme', originalTheme);
@@ -69,9 +69,9 @@ describe(getTheme, () => {
 		// Set invalid theme temporarily
 		const originalTheme = document.documentElement.getAttribute('data-theme');
 		document.documentElement.setAttribute('data-theme', 'invalid-theme');
-		
+
 		expect(getTheme()).toBe(Theme.Light);
-		
+
 		// Restore original theme
 		if (originalTheme) {
 			document.documentElement.setAttribute('data-theme', originalTheme);
