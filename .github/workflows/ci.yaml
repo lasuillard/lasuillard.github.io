@@ -29,14 +29,12 @@ jobs:
       - name: Install deps
         run: yarn install --immutable
 
-      - name: Check code formatting
-        run: yarn run prettier --check .
+      - uses: pre-commit/action@v3.0.1
+        env:
+          SKIP: vitest
 
-      - name: Lint code
-        run: yarn run eslint .
-
-      - name: Run type checks
-        run: yarn run tsc --noEmit
+      - uses: pre-commit-ci/lite-action@v1.1.0
+        if: always()
 
   test:
     name: Test
