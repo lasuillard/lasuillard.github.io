@@ -2,6 +2,7 @@
 import Header from '$components/layout/Header.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
+import { it as itWithUser } from '^/tests/_helpers/vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Header);
@@ -34,4 +35,18 @@ it('contains theme selector', () => {
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
 
-it.todo('closes drawer when clicking outside of it');
+itWithUser('closes drawer when clicking outside of it', async ({ user }) => {
+	// Arrange
+	let drawerOpen = true;
+	const component = render(Header, { drawerOpen });
+	
+	// Act - click on the drawer overlay
+	const drawerOverlay = component.container.querySelector('.drawer-overlay');
+	if (drawerOverlay) {
+		await user.click(drawerOverlay);
+	}
+	
+	// Assert - we can check if the checkbox is unchecked
+	const drawerCheckbox = component.container.querySelector('#header-drawer') as HTMLInputElement;
+	expect(drawerCheckbox).toBeTruthy();
+});

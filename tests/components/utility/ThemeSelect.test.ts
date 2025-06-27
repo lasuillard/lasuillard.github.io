@@ -4,6 +4,7 @@ import { Theme, getTheme, initTheme } from '$lib/theme';
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { beforeEach, expect, it } from 'vitest';
+import { it as itWithUser } from '^/tests/_helpers/vitest';
 
 beforeEach(() => {
 	initTheme();
@@ -27,4 +28,22 @@ it('toggles between light and dark themes', async () => {
 	expect(toggle.checked).toBeTruthy();
 	await tick();
 	expect(getTheme()).toEqual(Theme.Dark);
+});
+
+itWithUser('can be toggled with user interaction', async ({ user }) => {
+	const { getByTestId } = render(ThemeSelect);
+	const initialTheme = getTheme();
+	
+	const toggle = getByTestId('toggle-input');
+	await user.click(toggle);
+	await tick();
+	
+	// Theme should have changed
+	const newTheme = getTheme();
+	expect(newTheme).not.toBe(initialTheme);
+});
+
+it('has proper accessibility label', () => {
+	const { getByLabelText } = render(ThemeSelect);
+	expect(getByLabelText('Theme Selection')).toBeTruthy();
 });
