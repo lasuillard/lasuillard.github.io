@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import Search from '$components/utility/Search.svelte';
-import { initEngine } from '$lib/search';
 import { Post } from '$lib/post';
+import { initEngine } from '$lib/search';
 import { render } from '@testing-library/svelte';
 import { it } from '^/tests/_helpers/vitest';
 import { tick } from 'svelte';
@@ -18,7 +18,7 @@ it('has a text input with placeholder', () => {
 });
 
 it('shows matching results for given query', async ({ user }) => {
-	const testPost: Post = {
+	const testPost = Post.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -30,7 +30,7 @@ it('shows matching results for given query', async ({ user }) => {
 		},
 		content:
 			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus ut est fermentum aliquam. Nullam sit amet sapien sit amet'
-	};
+	});
 	await initEngine([testPost]);
 	const component = render(Search);
 
@@ -52,7 +52,7 @@ it('shows matching results for given query', async ({ user }) => {
 });
 
 it('shows no results for non-matching query', async ({ user }) => {
-	const testPost: Post = {
+	const testPost = Post.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -63,7 +63,7 @@ it('shows no results for non-matching query', async ({ user }) => {
 			tags: ['uno', 'terra', 'errat']
 		},
 		content: 'Lorem ipsum dolor sit amet'
-	};
+	});
 	await initEngine([testPost]);
 	const component = render(Search);
 
@@ -78,7 +78,7 @@ it('shows no results for non-matching query', async ({ user }) => {
 });
 
 it('suggest matching results for given query', async ({ user }) => {
-	const testPost: Post = {
+	const testPost = Post.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -89,7 +89,7 @@ it('suggest matching results for given query', async ({ user }) => {
 			tags: ['uno', 'terra', 'errat']
 		},
 		content: 'Lorem ipsum dolor sit amet'
-	};
+	});
 	await initEngine([testPost]);
 	const component = render(Search);
 
