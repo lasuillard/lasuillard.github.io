@@ -109,6 +109,7 @@ preview: https://example.com/preview.png
 		);
 
 		// Remote URLs should remain unchanged
+		// @ts-expect-error Refactor later
 		expect(result.frontMatter.preview).toBe('https://example.com/preview.png');
 		expect(result.content).toContain('https://example.com/image.png');
 	});

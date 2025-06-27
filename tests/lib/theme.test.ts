@@ -24,10 +24,11 @@ describe(initTheme, () => {
 		// Store an invalid theme in localStorage
 		localStorage.setItem('theme', '"invalid-theme"');
 		initTheme();
-		// @ts-expect-error It should be set after init
 		// Should fallback to the system preferred theme (in test environment it's Dark)
 		const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 		const expectedTheme = preferDark ? Theme.Dark : Theme.Light;
+
+		// @ts-expect-error It should be set after init
 		expect(get(currentTheme)).toBe(expectedTheme);
 	});
 });
