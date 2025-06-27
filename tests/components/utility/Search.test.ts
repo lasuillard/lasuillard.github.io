@@ -28,7 +28,8 @@ it('shows matching results for given query', async ({ user }) => {
 			summary: 'A test summary',
 			tags: ['uno', 'terra', 'errat']
 		},
-		content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus ut est fermentum aliquam. Nullam sit amet sapien sit amet'
+		content:
+			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus ut est fermentum aliquam. Nullam sit amet sapien sit amet'
 	};
 	await initEngine([testPost]);
 	const component = render(Search);

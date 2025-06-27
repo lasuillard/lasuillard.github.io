@@ -92,10 +92,7 @@ message: "Second"
 	});
 
 	it('handles HTML img without src attribute', async () => {
-		const result = await parse(
-			'<img alt="No source" />',
-			{ filepath: '/posts/test/index.md' }
-		);
+		const result = await parse('<img alt="No source" />', { filepath: '/posts/test/index.md' });
 
 		// Should not crash and keep original HTML
 		expect(result.content).toContain('<img alt="No source" />');
