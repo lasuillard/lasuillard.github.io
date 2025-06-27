@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import QRCode from '$components/content/QRCode.svelte';
 import { render } from '@testing-library/svelte';
-import { expect, it, vi } from 'vitest';
+import { expect, it } from 'vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(QRCode, { text: 'Hello, World!' });

@@ -3,8 +3,8 @@ import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 import { Theme, getTheme, initTheme } from '$lib/theme';
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
-import { beforeEach, expect, it } from 'vitest';
-import { it as itWithUser } from '^/tests/_helpers/vitest';
+import { beforeEach, expect } from 'vitest';
+import { it } from '^/tests/_helpers/vitest';
 
 beforeEach(() => {
 	initTheme();
@@ -30,7 +30,7 @@ it('toggles between light and dark themes', async () => {
 	expect(getTheme()).toEqual(Theme.Dark);
 });
 
-itWithUser('can be toggled with user interaction', async ({ user }) => {
+it('can be toggled with user interaction', async ({ user }) => {
 	const { getByTestId } = render(ThemeSelect);
 	const initialTheme = getTheme();
 	
@@ -38,7 +38,6 @@ itWithUser('can be toggled with user interaction', async ({ user }) => {
 	await user.click(toggle);
 	await tick();
 	
-	// Theme should have changed
 	const newTheme = getTheme();
 	expect(newTheme).not.toBe(initialTheme);
 });

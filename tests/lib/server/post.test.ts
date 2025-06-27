@@ -8,24 +8,6 @@ describe('PostRepository.getAllPosts', () => {
 		const allPosts = await postRepository.getAllPosts();
 		expect(allPosts).toHaveLength(3);
 	});
-
-	it("throws an error if any of posts' metadata unsatisfying", async () => {
-		// Mock the import.meta.glob to return invalid metadata
-		const postRepository = new PostRepository();
-		
-		// This test would require mocking the file system access, which is complex
-		// For now, we can test the error handling path by checking the catch block behavior
-		const originalConsoleError = console.error;
-		const consoleErrorSpy = vi.fn();
-		console.error = consoleErrorSpy;
-		
-		// The current implementation catches errors and returns empty array
-		// This is the expected behavior when posts can't be loaded
-		const posts = await postRepository.getAllPosts();
-		expect(Array.isArray(posts)).toBe(true);
-		
-		console.error = originalConsoleError;
-	});
 });
 
 describe('PostRepository.findPostById', () => {
