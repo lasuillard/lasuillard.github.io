@@ -9,7 +9,6 @@ let miniSearch: MiniSearch | undefined = undefined;
  * @param posts POsts to index.
  * @returns Initialized search engine.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 	miniSearch = new MiniSearch({

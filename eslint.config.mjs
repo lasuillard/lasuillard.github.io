@@ -6,6 +6,14 @@ import globals from 'globals';
 import ts from 'typescript-eslint';
 import svelteConfig from './svelte.config.js';
 
+// https://github.com/sindresorhus/globals/issues/239
+const browserGlobals = {
+	...globals.browser,
+	AudioWorkletGlobalScope: false // this is the default,
+};
+
+delete browserGlobals['AudioWorkletGlobalScope '];
+
 export default ts.config(
 	{
 		ignores: [
@@ -16,7 +24,8 @@ export default ts.config(
 			'.svelte-kit/*',
 			'vite.config.{js,ts}.timestamp-*',
 			'node_modules/*',
-			'.wrangler/*'
+			'.wrangler/*',
+			'src/worker-configuration.d.ts'
 		]
 	},
 	js.configs.recommended,
@@ -27,7 +36,7 @@ export default ts.config(
 	{
 		languageOptions: {
 			globals: {
-				...globals.browser,
+				...browserGlobals,
 				...globals.node
 			}
 		}
