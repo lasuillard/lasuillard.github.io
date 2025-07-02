@@ -12,7 +12,6 @@
 	let { data } = $props();
 	const { certificates, educations, experiences, personalWorks } = data;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const iconMap: { [key: string]: any } = {
 		github: GitHub,
 		docker: Docker,
