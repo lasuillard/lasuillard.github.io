@@ -1,12 +1,12 @@
 ---
-id: 3
-title: 남이 만든 OpenAPI 스키마 테스트하기
-publicationDate: 2024-07-09T21:41:00.000+09:00
+id: 4
+title: Windows Server에 Python 웹 스크래핑 애플리케이션 배포하기
+publicationDate: 2025-07-11T16:43:00.000+09:00
 preview: ./preview.png
 summary: >
-    API 클라이언트 코드 자동 생성을 위해 남이 만든 API 서버에 OpenAPI 스키마 붙여보기
+    CodeDeploy를 이용하여 Windows Server에 Python 웹 스크래핑 애플리케이션 배포하기
 
-tags: [TypeScript, Vitest, OpenAPI, OpenAPI Generator]
+tags: [Python, AWS, EC2 Image Builder, CodeDeploy, Windows, CodeDeploy, Selenium, Web Scraping]
 ---
 
 <img src="./preview.png" alt="미리보기" width="50%" />
