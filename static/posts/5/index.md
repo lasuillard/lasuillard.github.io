@@ -98,6 +98,10 @@ Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기�
 
     ![Exploring Codespaces](./assets/codespaces-main.png)
 
+6. 사용이 끝났다면 Codespaces를 삭제합니다.
+
+    ![Delete Codespaces](./assets/delete-codespaces.png)
+
 좀 더 완전한 구성을 위해서는 해야 할 일이 더 있습니다. 개발 컨테이너의 이점과 함께 따라오는 복잡성도 있습니다. 그리고 호스트로부터 분리된 환경이라는 특성도 함께 고려해야 합니다. 호스트에 있던 다양한 설정 파일들을 컨테이너 내에서는 사용할 수 없게 되었기 때문입니다.
 
 ## 🛠️ 개발 컨테이너 사용자화하기
@@ -149,7 +153,6 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 - 개인 에디터 설정은 User Settings를 활용하세요.
 
     `dev.containers.*`, `remote.*` 설정을 활용하세요. 생각보다 유용한 설정이 많습니다. 개인화된 설정을 위해 활용하기 좋은 설정은 다음과 같은 것들이 있습니다.
-
     - `dev.containers.copyGitConfig`
 
         개발 컨테이너 시작 시 호스트의 Git 설정을 개발 컨테이너로 복사하는 기능입니다. Git 설정을 Dotfiles로 관리한다면 이 설정을 끄는 편이 좋습니다.
