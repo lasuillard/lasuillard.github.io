@@ -19,11 +19,11 @@ tags:
 
 <img src="./preview.png" alt="미리보기" width="50%" />
 
-Windows는 개발에 적합하지 않다고 흔히들 이야기합니다. Windows에 특화된 생태계는 크고 복잡하여 쉽게 들어설 수 없는 거대한 장벽이 존재하기에 소위 말하는 일반적인 개발 경험과 다소 거리가 있습니다. 저는 Windows와 WSL (Windows Subsystem for Linux)과 많은 시간을 함께했지만 Windows에서 벗어날수록 개발이 편해졌다는 건 결코 부인할 수 없습니다.
+Windows는 개발에 적합하지 않다고 흔히들 이야기합니다. Windows에 특화된 생태계는 크고 복잡하여 쉽게 들어설 수 없는 거대한 장벽이 존재하기에 소위 말하는 일반적인 개발 경험과 다소 거리가 있습니다. 저는 Windows와 WSL (Windows Subsystem for Linux)로 개발을 시작해서 많은 시간을 함께했지만 Windows에서 벗어날수록 개발이 편해졌다는 건 결코 부인할 수 없습니다.
 
-개발 환경이 그럴진대, 서버 애플리케이션을 Windows에 배포하는 것은 어떨까요? 가상화 및 컨테이너 기술이 발달하면서, 거기에 WSL까지 발전을 거듭하면서 Linux 외의 환경에 서버 애플리케이션을 배포하는 것은 흔치 않은 일이 되었으리라 봅니다. 어디서든 Linux 환경에서 개발할 수 있게 되었으니까요.
+개발 환경이 그럴진대, 서버 애플리케이션을 Windows에 배포하는 것은 어떨까요? 가상화 및 컨테이너 기술이 발달하면서, 거기에 WSL까지 발전을 거듭하면서 Linux 외의 환경에 서버 애플리케이션을 배포하는 것은 흔치 않은 일이 되었습니다. 어디서든 Linux 환경에서 개발할 수 있게 되었으니까요.
 
-잠시 몸담았던 회사에서는 서비스를 위해 다양한 데이터를 수집해야 했는데, 대부분의 데이터는 Linux 환경에서 수집할 수 있지만 드물게 보안 프로그램 때문에 Windows 환경을 이용해야 하는 경우도 있었습니다. 이번 글에서는 그 경험을 공유하려고 합니다.
+이전 회사에서 서비스 운영을 위해 다양한 데이터를 수집하던 중, 대부분의 데이터는 Linux 환경에서 수집할 수 있지만 드물게 보안 프로그램 때문에 Windows 환경을 이용해야 하는 경우도 있었습니다. 이번 글에서는 그 경험을 공유하려고 합니다.
 
 ## 📜 요구사항
 
@@ -39,9 +39,9 @@ Windows는 개발에 적합하지 않다고 흔히들 이야기합니다. Window
 
 ## 🛡️ 보안 프로그램
 
-Selenium 및 PyAutoGUI로 실험해보았을 때 키 입력이 무시되었습니다. 보안 프로그램의 설계 및 동작 방식에 의한 것이라고 예상되었고 보안 프로그램의 동작을 이해하기 위한 충분한 자료를 찾을 수는 없었지만, 다음과 같은 다이어그램을 찾을 수 있었습니다.
+Selenium 및 PyAutoGUI로 실험해보았을 때 키 입력이 무시되었습니다. 보안 프로그램의 설계 및 동작 방식에 의한 것이라고 예상되었고, 보안 프로그램의 동작을 이해하기 위한 충분한 자료를 찾을 수는 없었지만, 일반적인 동작을 추측하는데 도움이 될 만한 [블로그 글](https://skensita.tistory.com/entry/키보드-보안)을 하나 찾을 수 있었습니다.
 
-![https://skensita.tistory.com/entry/키보드-보안](./assets/keyboard-security.png)
+![키보드 보안](./assets/keyboard-security.png)
 
 더 높은 수준의 키보드 입력 우선순위를 가진 보안 프로그램이 키 입력을 중간에서 가로채어 소프트웨어적 키 입력을 차단하는 것이라고 추측했습니다.
 
@@ -53,19 +53,23 @@ Selenium 및 PyAutoGUI로 실험해보았을 때 키 입력이 무시되었습�
 
 2. 하드웨어 입력을 활용하여 자동화하기
 
-    이러한 하드웨어 입력을 소프트웨어로 제어할 수 있는 USB 장치를 직접 만들어 문제를 해결하는 분도 있다고 합니다. 하지만 제겐 그러한 지식이 없고, 모든 서비스는 AWS 클라우드에 호스팅되어 있어 이 장치를 마련하더라도 연결할 수 있는 물리 서버도 없었습니다. 그리고 이 기능의 중요도 대비 필요로 하는 비용이 너무 높았습니다.
+    이러한 하드웨어 입력을 소프트웨어로 제어할 수 있는 USB 장치를 직접 만들어 문제를 해결하는 분도 있다고 합니다. 하지만 제겐 그러한 지식이 없고, 모든 서비스는 AWS 클라우드에 호스팅되어 있어 이 장치를 마련하더라도 연결할 수 있는 물리 서버도 없었습니다.
+
+    이를 위해 서버를 구매하고, 하드웨어를 제작 또는 외주를 통해 조달하는 것도 가능하겠지만 이 기능의 중요도 대비 필요로 하는 비용이 너무 높았습니다.
 
 3. 이미지 분석을 활용해 보안 키보드를 사용하여 입력하기
 
     브라우저 스크린샷과 OpenCV를 활용하여 키보드 버튼을 찾아 클릭하는 방법입니다. 보안 키보드의 변경에 취약할 수 있습니다. 또한 보안 키보드의 크기, 위치, 색상 등은 사이트마다 다를 수 있습니다.
 
+    하지만 실제로 보안 키패드는 자주 변경되는 요소는 아닙니다. 또한 추가 비용이 들지 않고, 소프트웨어적으로 구현할 수 있는 방법입니다.
+
 다양한 선택지를 검토한 끝에 결국 보안 키보드를 직접 파훼하는 정공법이 가장 합리적인 선택이 되었습니다. Selenium 스크린샷에서 OpenCV를 이용해 키 좌표를 찾아 클릭하도록 할 수 있습니다. [soulee-dev/fuckvkeypad](https://github.com/soulee-dev/fuckvkeypad)에서 영감을 받아 작업을 진행했습니다.
 
-## 🔧 구현
+## 🔧 인프라 구축
 
-이제 계획을 실행에 옮겨야 했습니다. 로컬 환경에서 개발하는 중에는 Vagrant를 이용해 Windows Server VM을 프로비저닝하여 이용했습니다. Selenium Node를 배포하고, VM 외부의 Selenium Hub에 합류시켜 이용했습니다.
+이제 계획을 실행에 옮겨야 했습니다. 로컬 환경에서 개발하는 중에는 Vagrant를 이용해 Windows Server VM을 구성하여 이용했습니다. Selenium Node를 배포하고, VM 외부의 Selenium Hub에 등록하여 이용했습니다.
 
-구현 중 가장 신경을 쓴 부분은 한/영/숫자 등 키 배열 전환에 대한 상태 전이([python-statemachine](https://python-statemachine.readthedocs.io/en/latest/)을 활용)에 대한 추상화였습니다. 추후 다른 웹 사이트에서도 활용할 수 있기를 원했기 때문입니다.
+구현 중 가장 신경을 쓴 부분은 한/영/숫자 등 키 배열 전환에 대한 상태 전이에 대한 추상화였습니다. 추후 다른 웹 사이트에서도 활용할 수 있기를 원했기 때문입니다. 이를 위해 [python-statemachine](https://python-statemachine.readthedocs.io/en/latest/)을 활용했습니다.
 
 ![키보드 상태 다이어그램](./assets/keyboard-mode-state-diagram.png)
 
@@ -73,7 +77,7 @@ Selenium 및 PyAutoGUI로 실험해보았을 때 키 입력이 무시되었습�
 
 ![애플리케이션 구조도](./assets/old-application-diagram.png)
 
-ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 이용해 Selenium Server를 Remote Webdriver로 이용해 로그인 과정을 수행합니다.
+ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 통해 Selenium Server를 Remote Webdriver로 연결하여 로그인 과정을 수행합니다.
 
 이 과정에서 생소한 Windows Server와 씨름해야 했고, 여러 문제와 맞닥뜨렸습니다.
 
@@ -117,13 +121,15 @@ ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 이�
     exit 3010
     ```
 
-    `ForceAutoLogon` 설정을 통해 유지보수 작업이 끝난 후 콘솔 세션이 자동으로 시작되도록 할 수 있습니다. 단, 자동 로그온은 보안상 위험할 수 있으므로 주의가 필요합니다. EC2 User Data 및 서버 내 레지스트리에 관리자 계정 정보가 평문으로 저장되기 때문입니다.
+    `ForceAutoLogon` 설정을 통해 유지보수 작업이 끝난 후 콘솔 세션이 자동으로 시작되도록 할 수 있습니다. 단, **자동 로그온은 보안상 위험할 수 있으므로 주의가 필요**합니다. EC2 User Data 및 서버 내 레지스트리에 관리자 계정 정보가 평문으로 저장되기 때문입니다.
 
 - Selenium 서버 시작하기
 
     보통 Selenium 서버는 `.jar` 파일로 제공되며 실행하기 위해 `java`가 필요합니다. Windows 서버는 바로 이용할 수 있는 패키지 관리 도구가 없습니다. 또한 장애가 발생했을 때 서버가 재시작되게끔 서비스로 등록하여야 합니다.
 
-    패키지 매니저로 Chocolatey를 이용하고 Java Runtime을 설치, NSSM을 이용하여 Selenium을 서비스로 등록해주었습니다. 다음 스크립트는 로컬 환경에서 Vagrant를 이용해 Windows Server VM을 생성할 때 사용했던, Selenium Node를 Selenium Hub (**192.168.0.2:4444**)에 합류시키는 스크립트입니다.
+    패키지 매니저로 Chocolatey를 이용하고 Java Runtime을 설치, NSSM을 이용하여 Selenium을 서비스로 등록해주었습니다.
+
+    다음 스크립트는 로컬 환경에서 Vagrant를 이용해 Windows Server VM을 생성할 때 사용했던, Selenium Node를 Selenium Hub (**192.168.0.2:4444**)에 등록하는 PowerShell 스크립트입니다.
 
     ```powershell
     # Install via Chocolatey
@@ -169,7 +175,7 @@ ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 이�
 
     단일 Selenium 서버를 올리고 관리하는 건 어렵지 않지만 확장성을 고려해야 한다면 Windows Server 기반 확장 가능한 Selenium Grid 구성이 필요합니다. 허브 노드 그룹과 브라우저 노드 그룹을 관리해야 하며, 전체적인 복잡도를 크게 끌어올릴 것입니다. 또한 분리된 구성에서는 브라우저의 모든 기능을 활용하기 어렵습니다.
 
-    시스템 리소스에 대한 접근 수준(화면, 키보드 / 마우스, 봇 감지 우회 등)을 높이고자 한다면 애플리케이션을 직접 서버에 배포하고 웹 드라이버를 각 서버에 설치하여 직접 상호작용하는 편이 좋을 것입니다. Selenium Grid는 걷어내기로 했습니다.
+    시스템 리소스에 대한 접근 수준(화면, 키보드 / 마우스, 봇 감지 우회 등)을 높이고자 한다면 애플리케이션을 직접 서버에 배포하고 웹 드라이버를 각 서버에 설치하여 직접 이용하는 편이 좋을 것입니다. Selenium Server는 치우기로 했습니다.
 
 다음과 같은 구성을 계획했습니다.
 
@@ -184,18 +190,24 @@ ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 이�
 - EC2 Image Builder
 
     User Data는 사용하기 편하지만 설치가 오래 걸리는 의존성을 매번 설치하면 인스턴스가 시작하고 실제로 애플리케이션이 배포 가능하기까지 오랜 시간이 걸립니다.
+
     - 필요한 도구 / 패키지 등 설치 (Chocolatey, NSSM, 보안 프로그램 등)
     - AutoLogon 설정 후 인스턴스 재부팅
 
-        인스턴스 시작 속도를 높이고자 기반 AMI를 만들어 활용하기로 했습니다. Packer를 활용할 수도 있지만 가능한 구성을 단순화하고자 했습니다. 또한 AWS에서 제공하는 미리 정의된 컴포넌트(Chocolatey, Python 설치 등)를 활용할 수 있습니다.
+        인스턴스 시작 속도를 높이고자 기반 AMI를 만들어 활용하기로 했습니다. Packer를 활용할 수도 있지만 개발 환경과 CI/CD를 가능한 단순화하고자 했습니다. 또한 AWS에서 제공하는 미리 정의된 컴포넌트(Chocolatey, Python 설치 등)를 활용할 수 있습니다.
 
-        Image Builder를 통해 자동 로그온 설정을 하고자 했지만 Sysprep에 의해 관련 레지스트리 설정이 날아가는 문제가 있었습니다. 추후 개선의 여지를 모색하도록 하고, 당장은 User Data를 활용하기로 했습니다.
+        Image Builder를 통해 자동 로그온 설정을 하고자 했지만 Sysprep에 의해 관련 레지스트리 설정이 날아가는 문제가 있었습니다. 당장은 필요 이상으로 복잡해지기 때문에 추후 개선의 여지를 모색하도록 하고, 당장은 User Data를 활용하기로 했습니다.
+
         SSM Association 또한 시도해봤지만 스케일 아웃 후 인스턴스가 준비되기까지 오랜 시간이 걸리고, 재부팅을 요하는 복잡한 초기화를 구성하기가 어려웠습니다.
 
 - CodeDeploy
-  애플리케이션 배포를 위해 이용합니다. ASG 스케일 아웃 또한 처리할 수 있으며, ALB와의 연계도 좋습니다. GitHub을 이용하고 있으니 배포는 GitHub Actions를 통해 자동화합니다.
-  Elastic Beanstalk를 활용할 수도 있겠지만 Windows 기반 Python 런타임은 없었고, .NET 런타임에 Beanstalk 설정을 변경하여 Python 애플리케이션을 실행하도록 할 수도 있겠지만 구성 요소 전체를 직접 관리하고 싶었기에 Beanstalk는 제외했습니다.
-  애플리케이션은 [NSSM](https://nssm.cc/)을 이용해 서비스로 등록하여 관리합니다.
+
+    애플리케이션 배포를 위해 이용합니다. ASG 스케일 아웃 또한 처리할 수 있으며, ALB와의 연계도 좋습니다. GitHub을 이용하고 있으니 배포는 GitHub Actions를 통해 자동화합니다.
+
+    Elastic Beanstalk을 활용할 수도 있겠지만 Windows 기반 Python 런타임은 없었고, .NET 런타임을 조금 수정하여 Python 애플리케이션을 실행하도록 할 수도 있겠지만 구성 요소 전체를 직접 관리하고 싶었기에 Beanstalk는 제외했습니다.
+
+    애플리케이션은 [NSSM](https://nssm.cc/)을 이용해 서비스로 등록하여 관리합니다.
+
 - 그 외
   VPC, NAT, CloudWatch, IAM 등 많은 요소가 직간접적으로 연관되어 있습니다. 당장은 동작하는 구성을 실험하기 위해 HTTPS (Route 53 / ACM)는 구성하지 않았습니다.
 
@@ -206,16 +218,22 @@ ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 이�
 Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거나 직접 구현해야 했습니다.
 
 - 최초 구성 후 이미지 빌드 시작하기
-  최초 구성 시 이미지 빌드 파이프라인이 자동으로 시작되게끔 자동화하고 싶었습니다. 이를 지원하는 연관 설정이나 리소스가 없었기에 Pulumi의 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/) 기능을 이용해 사용자 정의 리소스를 구현하여 자동화했습니다.
+
+    최초 구성 시 이미지 빌드 파이프라인이 자동으로 시작되게끔 자동화하고 싶었습니다. 이를 지원하는 연관 설정이나 리소스가 없었기에 Pulumi의 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/) 기능을 이용해 사용자 정의 리소스를 구현하여 자동화했습니다.
 
     ![EC2 Image Builder](./assets/ec2-image-builder-workflow.png)
 
 - 관리되지 않는 리소스 추적하기
-  Image Builder는 이미지 빌드 시 CloudWatch 로그 그룹으로 빌드 로그를 전달합니다. 다만 문제는 현재 연관된 리소스 그 어디에서도 로그 그룹을 사용자가 지정할 수 있는 선택지가 없다는 문제가 있습니다. IaC를 다루다 보면 인기가 없는 제품은 문서나 설정이 많이 부족한 경우를 쉽게 찾아볼 수 있습니다.
-  명명 규칙(`/aws/imagebuilder/<이미지 이름>`)을 따라 미리 로그 그룹을 생성해두면 이 리소스를 직접 관리할 수 있습니다. Image Builder는 이미 존재한다면 그 로그 그룹을 사용합니다.
+
+    Image Builder는 이미지 빌드 시 CloudWatch 로그 그룹으로 빌드 로그를 전달합니다. 다만 문제는 현재 연관된 리소스 그 어디에서도 로그 그룹을 사용자가 지정할 수 있는 선택지가 없다는 문제가 있습니다. IaC를 다루다 보면 인기가 없는 제품은 문서나 설정이 많이 부족한 경우를 쉽게 찾아볼 수 있습니다.
+
+    명명 규칙(`/aws/imagebuilder/<이미지 이름>`)을 따라 미리 로그 그룹을 생성해두면 이 리소스를 직접 관리할 수 있습니다. Image Builder는 이미 존재한다면 그 로그 그룹을 사용합니다.
+
 - 깨끗하게 뒤처리하기
-  실험이 끝난 뒤 리소스를 삭제하여도 Image Builder에 의해 생성된 일부 리소스(Image Builder Images, EC2 AMI, EC2 EBS Snapshot)는 알아서 삭제되지 않기에 추가 비용이 청구되지 않도록 직접 처리해주어야 합니다.
-  가능한 반복적인 작업을 자동화하고 싶었기에 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/)를 활용하여 해결했습니다. 반복적인 작업은 실수할 여지가 많기 때문에 가능하면 자동화하는 것이 좋다고 생각합니다.
+
+    실험이 끝난 뒤 리소스를 삭제하여도 Image Builder에 의해 생성된 일부 리소스(Image Builder Images, EC2 AMI, EC2 EBS Snapshot)는 알아서 삭제되지 않기에 추가 비용이 청구되지 않도록 직접 처리해주어야 합니다.
+
+    가능한 반복적인 작업을 자동화하고 싶었기에 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/)를 활용하여 해결했습니다. 반복적인 작업은 실수할 여지가 많기 때문에 가능하면 자동화하는 것이 좋다고 생각합니다.
 
 ## ✅ 결과 및 검토
 
@@ -228,19 +246,28 @@ Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거
 - RDP 세션 연결 및 종료 후, 콘솔 세션 자동 시작 확인
 
     Fleet Manager를 이용하여 RDP로 접속해보겠습니다.
+
     ![Fleet Manager - Remote Desktop](./assets/fleet-manager-rdp.png)
+
     ![RDP 세션 확인](./assets/check-rdp-session.png)
+
     RDP 세션이 정상적으로 생성되며, 기존 콘솔 세션이 방해받지 않습니다. 세션을 끊은 뒤, 잠시 후 다시 확인해보겠습니다.
+
     ![콘솔 세션 확인](./assets/check-console-session.png)
+
     잘 동작하고 있네요.
 
 - GitHub Actions 배포
-  간단한 GitHub Actions Workflow를 작성했습니다. `git archive`를 이용하여 압축 파일을 만들고 S3에 업로드한 뒤,
-  CodeDeploy 배포를 트리거합니다.
-  AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본적으로 배포를 생성한 뒤 완료를 기다리지 않으므로 `aws deploy wait deployment-successful` 명령어를 이용하여 배포를 기다려줘야 합니다.
-  ![GitHub Actions Workflow](./assets/github-actions-workflow-codedeploy.png)
-  CodeDeploy 콘솔을 확인해봅니다. 잘 배포되었네요.
-  ![CodeDeploy 배포 확인](./assets/check-codedeploy-deployment.png)
+
+    간단한 GitHub Actions Workflow를 작성했습니다. `git archive`를 이용하여 압축 파일을 만들고 S3에 업로드한 뒤, CodeDeploy 배포를 트리거합니다.
+
+    AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본적으로 배포를 생성한 뒤 완료를 기다리지 않으므로 `aws deploy wait deployment-successful` 명령어를 이용하여 배포를 기다려줘야 합니다.
+
+    ![GitHub Actions Workflow](./assets/github-actions-workflow-codedeploy.png)
+
+    CodeDeploy 콘솔을 확인해봅니다. 잘 배포되었네요.
+
+    ![CodeDeploy 배포 확인](./assets/check-codedeploy-deployment.png)
 
 - 애플리케이션 동작 확인
 
@@ -282,9 +309,10 @@ Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거
     AMI 빌드 후 Launch Template이 변경된 뒤 자동으로 Instance Refresh가 수행되지 않는 문제가 있습니다. EventBridge 및 Lambda를 이용하여 이를 자동화할 예정입니다.
 
     또한 느린 인스턴스 스케일 아웃 속도를 개선하려고 합니다.
+
     - AutoLogon 설정 개선 또는 대안 모색
 
-        Sysprep 과정에서 자동 로그온을 설정할 수 있다면 인스턴스가 자동 로그온 설정 후 재부팅할 필요가 없으며, 준비까지 필요한 시간을 유의미하게 단축할 수 있으리라 생각합니다. 혹은 AutoLogon을 사용하지 않고도 콘솔 세션을 유지할 수 있는 대안을 찾으면 좋겠습니다.
+        Sysprep 과정에서 자동 로그온을 설정할 수 있다면 인스턴스가 자동 로그온 설정 후 재부팅할 필요가 없으며, 준비까지 필요한 시간을 유의미하게 단축할 수 있으리라 생각합니다. 가능하다면 AutoLogon을 사용하지 않고도 콘솔 세션을 유지할 수 있는 대안을 찾으면 좋겠습니다.
 
     - [EC2 Fast Launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/win-ami-config-fast-launch.html) 기능 실험
 
@@ -294,7 +322,7 @@ Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거
 
     IaC를 통해 대부분의 작업을 자동화할 수 있었지만, 애플리케이션을 개발하고 Windows Server 내에서 실험하는 데에 모든 AWS 인프라 자원이 필요하지는 않으며, 여전히 상당한 초기 설정 시간이 필요합니다.
 
-    로컬 환경에서 Windows Server에 대한 배포 및 애플리케이션 구성을 실험할 수 있으면 큰 도움이 될 것이며, Vagrant를 활용하려고 합니다.
+    실제 애플리케이션 개발 과정에서는 로컬 환경에서 Windows Server에 대한 배포 및 애플리케이션 구성을 실험할 수 있으면 큰 도움이 될 것이며, Vagrant를 활용하려고 합니다.
 
 - 실제 동작하는 스크래핑 애플리케이션 예제 추가
 
