@@ -3,27 +3,22 @@ import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
+import type { PluginOption } from 'vite';
 import { defineConfig } from 'vitest/config';
 
+// @ts-expect-error Excessive stack depth blah blah
 export default defineConfig({
-	// @ts-expect-error Plugin type compatibility issues between different versions
+	// @ts-expect-error Typed badly?
 	plugins: [
-		...(process.env.VITEST
-			? [svelteTesting()]
-			: [
-					sentrySvelteKit({
-						sourceMapsUploadOptions: {
-							org: 'lasuillard',
-							project: 'lasuillard-github-io',
-							// @ts-expect-error This property exists in Sentry config but not in types
-							setCommits: {
-								auto: true
-							}
-						}
-					})
-				]),
+		sentrySvelteKit({
+			sourceMapsUploadOptions: {
+				org: 'lasuillard',
+				project: 'lasuillard-github-io'
+			}
+		}),
 		tailwindcss(),
 		sveltekit(),
+		svelteTesting() as PluginOption,
 		codecovVitePlugin({
 			enableBundleAnalysis: true,
 			bundleName: 'lasuillard.github.io',
@@ -31,7 +26,7 @@ export default defineConfig({
 				useGitHubOIDC: true
 			}
 		})
-	],
+	] as PluginOption[],
 	server: {
 		fs: {
 			allow: ['static'],

@@ -18,7 +18,6 @@ export function getVarName(obj: { [_: string]: unknown }): string {
  * @param keys Keys to omit.
  * @returns Object with given keys omitted.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function omitKeys(obj: any, keys: string[]): any {
 	return Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)));
 }
