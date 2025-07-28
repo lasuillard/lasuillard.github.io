@@ -19,7 +19,7 @@
 		"test": "vitest --coverage --run",
 		"test:watch": "vitest --coverage --watch --ui --silent",
 		"e2e": "playwright test",
-		"e2e:watch": "playwright test --ui",
+		"e2e:watch": "playwright test --ui --update-snapshots",
 		"cf-typegen": "wrangler types src/worker-configuration.d.ts && prettier --write src/worker-configuration.d.ts"
 	},
 	"dependencies": {

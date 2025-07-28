@@ -31,7 +31,7 @@ const testGroups = groupTests(['sm', 'md', 'lg']);
 export default {
 	webServer: {
 		// NOTE: This will trigger Codecov bundle analysis upload due to build
-		command: 'yarn run preview',
+		command: 'yarn run preview --ip 0.0.0.0',
 		port: 8787,
 		reuseExistingServer: true
 	},
@@ -84,8 +84,9 @@ export default {
 	expect: {
 		timeout: 5 * 1000,
 		toHaveScreenshot: {
-			maxDiffPixelRatio: 0.025 // 2.5%
+			maxDiffPixelRatio: 0.025, // 2.5%
 			// ? Perhaps `fullPage` option is not supported here?
+			stylePath: './e2e/screenshot.css'
 		}
 	}
 } satisfies PlaywrightTestConfig;
