@@ -24,7 +24,7 @@
 	},
 	"dependencies": {
 		"@sentry/sveltekit": "^9.34.0",
-		"@sveltejs/kit": "^2.22.2",
+		"@sveltejs/kit": "^2.27.0",
 		"lodash": "^4.17.21",
 		"rehype-stringify": "^10.0.1",
 		"remark-frontmatter": "^5.0.0",
