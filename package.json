@@ -23,7 +23,7 @@
 		"cf-typegen": "wrangler types src/worker-configuration.d.ts && prettier --write src/worker-configuration.d.ts"
 	},
 	"dependencies": {
-		"@sentry/sveltekit": "^9.34.0",
+		"@sentry/sveltekit": "^10.0.0",
 		"@sveltejs/kit": "^2.22.2",
 		"lodash": "^4.17.21",
 		"rehype-stringify": "^10.0.1",
