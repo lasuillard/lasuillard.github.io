@@ -4990,12 +4990,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"esrap@npm:^1.4.8":
-  version: 1.4.9
-  resolution: "esrap@npm:1.4.9"
+"esrap@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "esrap@npm:2.1.0"
   dependencies:
     "@jridgewell/sourcemap-codec": "npm:^1.4.15"
-  checksum: 10c0/21b4c58f358360ada596ea46b8dbf47771c6d7734277add55e7cd1d5655126dea25591788712452ed8575a99acd388eae756bf941bab31d7b9fb424620c10c40
+  checksum: 10c0/42f9f8b49972989a58082dda58c3862689c9c45f3245fd9bfa7e84a00de9cdc422d73621fad1c5d4872c12875869bd770cda80be20ffb1244e6c27b192a3f7b0
   languageName: node
   linkType: hard
 
@@ -6083,7 +6083,7 @@ __metadata:
     remark-parse: "npm:^11.0.0"
     remark-rehype: "npm:^11.1.2"
     remark-stringify: "npm:^11.0.0"
-    svelte: "npm:^5.34.9"
+    svelte: "npm:^5.37.2"
     svelte-check: "npm:^4.2.2"
     svelte-persisted-store: "npm:^0.12.0"
     tailwindcss: "npm:^4.1.11"
@@ -8774,9 +8774,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"svelte@npm:^5.34.9":
-  version: 5.34.9
-  resolution: "svelte@npm:5.34.9"
+"svelte@npm:^5.37.2":
+  version: 5.37.2
+  resolution: "svelte@npm:5.37.2"
   dependencies:
     "@ampproject/remapping": "npm:^2.3.0"
     "@jridgewell/sourcemap-codec": "npm:^1.5.0"
@@ -8787,12 +8787,12 @@ __metadata:
     axobject-query: "npm:^4.1.0"
     clsx: "npm:^2.1.1"
     esm-env: "npm:^1.2.1"
-    esrap: "npm:^1.4.8"
+    esrap: "npm:^2.1.0"
     is-reference: "npm:^3.0.3"
     locate-character: "npm:^3.0.0"
     magic-string: "npm:^0.30.11"
     zimmerframe: "npm:^1.1.2"
-  checksum: 10c0/e68fcc99905bf4d57dab2b03afd82c765e56ea2e052da6c515866ac05487397ea49e81fb46cdd0f589b60e1f374c8bf2d14393f8b581568f4d735f85998a318d
+  checksum: 10c0/1b91f7d7c238f8bdb94e3b277f176c7280b49f4c1ff705e06cc3b36e5eaa89154fbe138e8f02a90aefe731e5a618d5a2b3b8e4ba184bac982b067244c094c1fc
   languageName: node
   linkType: hard
 
