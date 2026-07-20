@@ -1,3 +1,0 @@
-# Define server runtime variables here; put build variables in .env file
-ENVIRONMENT=local
-SENTRY_DSN=

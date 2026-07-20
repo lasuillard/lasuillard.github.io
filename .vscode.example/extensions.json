@@ -1,13 +1,11 @@
 {
 	"recommendations": [
-		"streetsidesoftware.code-spell-checker",
-		"editorconfig.editorconfig",
-		"svelte.svelte-vscode",
-		"jock.svg",
-		"bradlc.vscode-tailwindcss",
-		"vitest.explorer",
 		"dbaeumer.vscode-eslint",
 		"esbenp.prettier-vscode",
+		"editorconfig.editorconfig",
+		"svelte.svelte-vscode",
+		"bradlc.vscode-tailwindcss",
+		"vitest.explorer",
 		"ms-playwright.playwright"
 	]
 }

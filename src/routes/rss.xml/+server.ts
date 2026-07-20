@@ -2,11 +2,13 @@ import { Post } from '$lib/post';
 import type { RequestHandler } from '@sveltejs/kit';
 import { z } from 'zod';
 
-const siteUrl = 'https://lasuillard.github.io';
-const siteTitle = "lasuillard's Blog";
-const siteDescription = "lasuillard's personal tech blog.";
+export const prerender = true;
 
 export const GET: RequestHandler = async ({ fetch }) => {
+	const siteUrl = 'https://lasuillard.github.io';
+	const siteTitle = "lasuillard's Blog";
+	const siteDescription = "lasuillard's personal tech blog.";
+
 	const response = await fetch('/api/posts');
 	const data = await response.json();
 	const allPosts = z.array(Post).parse(data);

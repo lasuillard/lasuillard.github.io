@@ -1,0 +1,25 @@
+{
+	"name": "lasuillard/lasuillard.github.io",
+	"image": "mcr.microsoft.com/devcontainers/base:dev-trixie",
+	"features": {
+		"ghcr.io/devcontainers/features/nix:1": {
+			"extraNixConfig": "extra-experimental-features = nix-command flakes"
+		},
+		"ghcr.io/devcontainers/features/docker-in-docker:4": {
+			"moby": false
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"editorconfig.editorconfig",
+				"svelte.svelte-vscode",
+				"bradlc.vscode-tailwindcss",
+				"vitest.explorer",
+				"ms-playwright.playwright"
+			]
+		}
+	}
+}

@@ -1,8 +1,16 @@
 import { Post } from '$lib/post';
+import { postRepository } from '$lib/server/post';
 import { z } from 'zod';
-import type { PageLoad } from './$types';
+import type { EntryGenerator, PageServerLoad } from './$types';
 
-export const load: PageLoad = async ({ params, fetch }) => {
+export const entries: EntryGenerator = async () => {
+	const allPosts = await postRepository.getAllPosts();
+	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());
+
+	return Array.from(allTags).map((tag) => ({ tag }));
+};
+
+export const load: PageServerLoad = async ({ params, fetch }) => {
 	const { tag } = params;
 	const response = await fetch('/api/posts');
 	const data = await response.json();

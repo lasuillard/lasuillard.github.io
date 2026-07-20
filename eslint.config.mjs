@@ -23,9 +23,7 @@ export default ts.config(
 			'build/*',
 			'.svelte-kit/*',
 			'vite.config.{js,ts}.timestamp-*',
-			'node_modules/*',
-			'.wrangler/*',
-			'src/worker-configuration.d.ts'
+			'node_modules/*'
 		]
 	},
 	js.configs.recommended,

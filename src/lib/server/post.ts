@@ -21,7 +21,7 @@ export class PostRepository {
 		}
 
 		// Retrieve all post files from the filesystem
-		const allPostFiles = import.meta.glob(`../../../static/posts/*/index.md`, {
+		const allPostFiles = import.meta.glob(`/static/posts/*/index.md`, {
 			query: '?raw',
 			import: 'default'
 		});
@@ -29,9 +29,13 @@ export class PostRepository {
 		this.posts = await Promise.all(
 			Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
 				const text = z.string().parse(await resolver());
+				const resolvedPath = path.resolve(
+					__PROJECT_ROOT__,
+					filepath.slice(1) // Remove leading slash to get relative path from project root
+				);
 				const { frontMatter, content } = await parse(text, {
 					// e.g. ../../posts/1/index.md -> /posts/1/index.md
-					filepath: path.resolve(filepath)
+					filepath: resolvedPath
 				});
 				const metadata = Metadata.parse(frontMatter);
 

@@ -1,3 +1,4 @@
+fail_fast: true
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v5.0.0
@@ -7,36 +8,37 @@ repos:
 
   - repo: local
     hooks:
-      - id: generate
-        name: Generate stubs
+      - id: eslint
+        name: eslint
         language: system
-        pass_filenames: false
-        entry: make generate
+        types_or: [javascript, ts, svelte]
+        entry: yarn exec -- eslint
+        args: [--fix]
 
       - id: prettier
-        name: Format with Prettier
+        name: prettier
         language: system
         types_or: [javascript, ts, svelte, json, yaml]
-        entry: yarn run prettier
+        entry: yarn exec -- prettier
         args: [--write]
 
-      - id: eslint
-        name: Lint with ESLint
-        language: system
-        types_or: [javascript, ts, svelte]
-        entry: yarn run eslint
-        args: []
-
-      - id: typescript
-        name: Type check with TypeScript
+      - id: sveltekit-sync
+        name: sveltekit-sync
         language: system
         types_or: [javascript, ts, svelte]
         pass_filenames: false
-        entry: yarn run tsc
-        args: [--noEmit]
+        entry: yarn exec -- svelte-kit sync
+
+      - id: svelte-check
+        name: svelte-check
+        language: system
+        types_or: [javascript, ts, svelte]
+        pass_filenames: false
+        entry: yarn exec -- svelte-check
+        args: [--tsconfig, ./tsconfig.json]
 
       - id: vitest
-        name: Run tests with Vitest
+        name: vitest
         language: system
         types_or: [javascript, ts, svelte]
         pass_filenames: false

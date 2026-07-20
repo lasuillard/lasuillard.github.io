@@ -6,7 +6,6 @@ import { svelteTesting } from '@testing-library/svelte/vite';
 import type { PluginOption } from 'vite';
 import { defineConfig } from 'vitest/config';
 
-// @ts-expect-error Excessive stack depth blah blah
 export default defineConfig({
 	// @ts-expect-error Typed badly?
 	plugins: [
@@ -24,12 +23,16 @@ export default defineConfig({
 			bundleName: 'lasuillard.github.io',
 			oidc: {
 				useGitHubOIDC: true
-			}
+			},
+			telemetry: false
 		})
 	] as PluginOption[],
+	define: {
+		__PROJECT_ROOT__: JSON.stringify(import.meta.dirname)
+	},
 	server: {
 		fs: {
-			allow: ['static'],
+			allow: ['static/**'],
 			deny: ['**.md']
 		}
 	},

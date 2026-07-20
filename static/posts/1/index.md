@@ -4,7 +4,7 @@ title: 기술 블로그 시작하기
 publicationDate: 2023-11-03T16:39:00.000+09:00
 preview: ./preview.png
 summary: >
-    SvelteKit으로 만드는 마크다운 블로그
+  SvelteKit으로 만드는 마크다운 블로그
 
 tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
 ---
@@ -19,15 +19,15 @@ tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
 
 - 지식 저장 및 공유를 통한 피드백
 
-    공개된 글을 작성하게 되면 책임감 있고 정제된 글을 작성하는 데 도움이 될 것이라고 생각했습니다. 신중한 단어 선택이나 가독성을 염두에 둔 구조화된 문서 작성 능력을 기를 수 있지 않을까 기대했습니다.
+  공개된 글을 작성하게 되면 책임감 있고 정제된 글을 작성하는 데 도움이 될 것이라고 생각했습니다. 신중한 단어 선택이나 가독성을 염두에 둔 구조화된 문서 작성 능력을 기를 수 있지 않을까 기대했습니다.
 
 - 학습 효과
 
-    글을 작성하며 경험을 복기하고 정리하면서 다시 복습하는 효과를 기대할 수 있을 것입니다.
+  글을 작성하며 경험을 복기하고 정리하면서 다시 복습하는 효과를 기대할 수 있을 것입니다.
 
 - 자기 PR
 
-    아직까지 제대로 된 경력 기술이나 포트폴리오가 없었고 지금 진행중인 여러 개인 프로젝트의 진척과 경험을 기록해두면 언젠가 도움이 될 것입니다.
+  아직까지 제대로 된 경력 기술이나 포트폴리오가 없었고 지금 진행중인 여러 개인 프로젝트의 진척과 경험을 기록해두면 언젠가 도움이 될 것입니다.
 
 블로그를 시작하기로 다짐했으니 어디서 어떻게 호스팅 할지 조사해보았습니다.
 
@@ -66,54 +66,54 @@ tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
 
 - 다양한 렌더링 옵션
 
-    SvelteKit의 기본 렌더링 동작은 서버에서 먼저 렌더링한 후 클라이언트에서 하이드레이션(Hydration) 프로세스를 거쳐 브라우저에서 다시 렌더링됩니다.
+  SvelteKit의 기본 렌더링 동작은 서버에서 먼저 렌더링한 후 클라이언트에서 하이드레이션(Hydration) 프로세스를 거쳐 브라우저에서 다시 렌더링됩니다.
 
-    전통적인 웹 서버(SSR 또는 SSG)를 구현할 수도 있고, SPA(CSR)를 구현할 수도 있습니다. SSR, CSR 모두 이용하는 혼합 렌더링 웹 서비스를 구현하는 것 또한 가능합니다. 일부 페이지는 프리렌더링(Pre-rendering) 되도록 하여 성능 향상을 꾀할 수도 있습니다.
+  전통적인 웹 서버(SSR 또는 SSG)를 구현할 수도 있고, SPA(CSR)를 구현할 수도 있습니다. SSR, CSR 모두 이용하는 혼합 렌더링 웹 서비스를 구현하는 것 또한 가능합니다. 일부 페이지는 프리렌더링(Pre-rendering) 되도록 하여 성능 향상을 꾀할 수도 있습니다.
 
 - 반응성
 
-    변수를 선언하고 사용하는 것으로 쉽게 반응성을 구현할 수 있습니다. 반응성을 구현하는 데에는 복잡한 함수 호출이나 까다로운 제약이 존재하지 않습니다.
+  변수를 선언하고 사용하는 것으로 쉽게 반응성을 구현할 수 있습니다. 반응성을 구현하는 데에는 복잡한 함수 호출이나 까다로운 제약이 존재하지 않습니다.
 
-    다음은 반응성을 보여주는 간단한 예시(_주: Tailwind를 이용하고 있음_)입니다.
+  다음은 반응성을 보여주는 간단한 예시(_주: Tailwind를 이용하고 있음_)입니다.
 
-    ```html
-    <script lang="ts">
-    	let value = '';
-    	$: reply = 'Received:' + value;
-    </script>
+  ```html
+  <script lang="ts">
+  	let value = '';
+  	$: reply = 'Received:' + value;
+  </script>
 
-    <div>
-    	<form>
-    		<label for="greet">Greeting</label>
-    		<input id="greet" type="text" placeholder="Type something..." bind:value />
-    	</form>
+  <div>
+  	<form>
+  		<label for="greet">Greeting</label>
+  		<input id="greet" type="text" placeholder="Type something..." bind:value />
+  	</form>
 
-    	<p>{reply}</p>
-    </div>
+  	<p>{reply}</p>
+  </div>
 
-    <style lang="postcss">
-    	input {
-    		@apply bg-rose-200;
-    	}
-    	p {
-    		@apply mt-2 font-extrabold;
-    	}
-    </style>
-    ```
+  <style lang="postcss">
+  	input {
+  		@apply bg-rose-200;
+  	}
+  	p {
+  		@apply mt-2 font-extrabold;
+  	}
+  </style>
+  ```
 
-    ![SvelteKit 예시](./assets/sveltekit-demo.gif)
+  ![SvelteKit 예시](./assets/sveltekit-demo.gif)
 
 - [상태 관리](https://kit.svelte.dev/docs/state-management)
 
-    내장된 저장소를 이용하여 쉽게 상태를 관리할 수 있습니다. 저장소에 대한 반응성을 구현하는 것 또한 쉽습니다.
+  내장된 저장소를 이용하여 쉽게 상태를 관리할 수 있습니다. 저장소에 대한 반응성을 구현하는 것 또한 쉽습니다.
 
 - [파일 경로 기반 라우팅](https://kit.svelte.dev/docs/routing)
 
-    파일 시스템 구조가 실제 웹 페이지의 구조에 반영됩니다. 학부생 시절 처음 Nuxt.js를 접했을 때에도 개념으로 새로운 것은 아닙니다. 여기에 더해 레이아웃, 동적인 라우팅 파라미터 구성, 파라미터 검증 등 고급 라우팅 기능을 제공하므로 라우팅에 대해 더 많은 제어가 가능합니다.
+  파일 시스템 구조가 실제 웹 페이지의 구조에 반영됩니다. 학부생 시절 처음 Nuxt.js를 접했을 때에도 개념으로 새로운 것은 아닙니다. 여기에 더해 레이아웃, 동적인 라우팅 파라미터 구성, 파라미터 검증 등 고급 라우팅 기능을 제공하므로 라우팅에 대해 더 많은 제어가 가능합니다.
 
 - [어댑터](https://kit.svelte.dev/docs/adapters)
 
-    어댑터를 통해 추가 설정 없이(Zero-config) Cloudflare, Netlify, Vercel 등 다양한 플랫폼에 추가 설정 없이(Zero-config) 쉽고 빠르게 배포할 수 있습니다. 원한다면 Node 서버를 구성하거나 정적 웹 사이트로 빌드할 수 있는 어댑터 또한 존재합니다.
+  어댑터를 통해 추가 설정 없이(Zero-config) Cloudflare, Netlify, Vercel 등 다양한 플랫폼에 추가 설정 없이(Zero-config) 쉽고 빠르게 배포할 수 있습니다. 원한다면 Node 서버를 구성하거나 정적 웹 사이트로 빌드할 수 있는 어댑터 또한 존재합니다.
 
 ### 🐋 개발 컨테이너 구성
 
@@ -121,45 +121,45 @@ tags: [SvelteKit, GitHub Actions, GitHub Pages, Tailwind CSS, TypeScript]
 
 - 개발 환경 구축 및 공유
 
-    여러 개발자 또는 기기 간 동일 개발 환경을 쉽게 구축하고 공유할 수 있습니다. Docker Compose를 또한 응용할 수 있으므로 로컬 환경에서 의존 서비스(e.g. 데이터베이스) 구성 또한 간편합니다.
+  여러 개발자 또는 기기 간 동일 개발 환경을 쉽게 구축하고 공유할 수 있습니다. Docker Compose를 또한 응용할 수 있으므로 로컬 환경에서 의존 서비스(e.g. 데이터베이스) 구성 또한 간편합니다.
 
 - 격리된 환경
 
-    여러 프로젝트를 다루다 보면 프레임워크 뿐만 아니라 언어 버전도 달라지는 경우가 있습니다. [pyenv](https://github.com/pyenv/pyenv)와 같은 환경 관리자(Environment Manager)를 이용하더라도 pyenv를 통해 Python 인터프리터를 설치하는 과정에 호스트 환경 구성 차이로 인해 문제가 발생하는 경우가 종종 있습니다.
+  여러 프로젝트를 다루다 보면 프레임워크 뿐만 아니라 언어 버전도 달라지는 경우가 있습니다. [pyenv](https://github.com/pyenv/pyenv)와 같은 환경 관리자(Environment Manager)를 이용하더라도 pyenv를 통해 Python 인터프리터를 설치하는 과정에 호스트 환경 구성 차이로 인해 문제가 발생하는 경우가 종종 있습니다.
 
-    또한 일부 패키지(e.g. **psycopg2**)의 경우 호스트 환경 의존성을 가지는 경우가 있으며 이러한 패키지 설치 및 관리는 리눅스 배포판에 따라(e.g. `apt`, `apk`, `yum`, ...) 달라질 수 있습니다. 하지만 개발 컨테이너를 이용하면 이러한 간극을 최소화할 수 있습니다.
+  또한 일부 패키지(e.g. **psycopg2**)의 경우 호스트 환경 의존성을 가지는 경우가 있으며 이러한 패키지 설치 및 관리는 리눅스 배포판에 따라(e.g. `apt`, `apk`, `yum`, ...) 달라질 수 있습니다. 하지만 개발 컨테이너를 이용하면 이러한 간극을 최소화할 수 있습니다.
 
 - IDE 프로필 관리 단순화
 
-    저는 가능한 호스트 환경에 확장 프로그램을 설치하지 않는 편입니다. Shell, PowerShell, Python 등 모든 프로젝트에 걸쳐 자주 사용되는 일부 확장 프로그램만 설치하여 이용합니다.
+  저는 가능한 호스트 환경에 확장 프로그램을 설치하지 않는 편입니다. Shell, PowerShell, Python 등 모든 프로젝트에 걸쳐 자주 사용되는 일부 확장 프로그램만 설치하여 이용합니다.
 
-    프로젝트에서 사용하는 확장 프로그램(Python, LLDB 등)은 개발 컨테이너 내부(`.devcontainer/devcontainer.json`)에 정의하고 개인적으로 사용하는 공통 확장 프로그램(Git Graph, GitLens 등)은 사용자 설정(`dev.containers.defaultExtensions`)에 정의하여 자동으로 설치되도록, 프로필을 분리하여 이용하고 있습니다.
+  프로젝트에서 사용하는 확장 프로그램(Python, LLDB 등)은 개발 컨테이너 내부(`.devcontainer/devcontainer.json`)에 정의하고 개인적으로 사용하는 공통 확장 프로그램(Git Graph, GitLens 등)은 사용자 설정(`dev.containers.defaultExtensions`)에 정의하여 자동으로 설치되도록, 프로필을 분리하여 이용하고 있습니다.
 
 - GitHub Codespaces
 
-    웹 브라우저 또는 VS Code에서 GitHub Codespaces 확장 프로그램을 통해 Codespaces에 연결할 수 있습니다. 무료 계정에 대해 월 120 코어 사용 시간이 제공[^github-codespaces-billing]됩니다. Codespaces와 같은 원격 개발 환경을 이용하면 Docker를 설치할 필요도 없어지지만 다양한 네트워크 제약, 비용 등의 문제로 필요한 경우에만 이용하는 편입니다.
+  웹 브라우저 또는 VS Code에서 GitHub Codespaces 확장 프로그램을 통해 Codespaces에 연결할 수 있습니다. 무료 계정에 대해 월 120 코어 사용 시간이 제공[^github-codespaces-billing]됩니다. Codespaces와 같은 원격 개발 환경을 이용하면 Docker를 설치할 필요도 없어지지만 다양한 네트워크 제약, 비용 등의 문제로 필요한 경우에만 이용하는 편입니다.
 
-    [^github-codespaces-billing]: [Monthly included storage and core hours for personal accounts](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts)
+  [^github-codespaces-billing]: [Monthly included storage and core hours for personal accounts](https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces#monthly-included-storage-and-core-hours-for-personal-accounts)
 
 - 쓰고 버릴 수 있는(Disposable) 개발 환경
 
-    개발 환경을 자주 재구성하게 되면서 개발 환경 자체의 문제점을 파악할 수 있게 됩니다.
+  개발 환경을 자주 재구성하게 되면서 개발 환경 자체의 문제점을 파악할 수 있게 됩니다.
 
 물론 단점도 있습니다.
 
 - Docker에 대한 상당한 지식 요구
 
-    프로젝트 성격에 따라 복잡한 네트워크, 권한 및 볼륨 설정 등을 요하는 경우도 있습니다.
+  프로젝트 성격에 따라 복잡한 네트워크, 권한 및 볼륨 설정 등을 요하는 경우도 있습니다.
 
 - 쉽게 메꿀 수 없는 하드웨어 수준의 간극(CPU 아키텍처, GPU 자원 등)
 
-    Windows를 사용하는 개발자와 macOS를 사용하는 개발자 간 개발 환경 구성에 간극이 존재하며 이로 인한 문제가 발생할 수 있습니다.
+  Windows를 사용하는 개발자와 macOS를 사용하는 개발자 간 개발 환경 구성에 간극이 존재하며 이로 인한 문제가 발생할 수 있습니다.
 
-    개인적으로 웹 크롤러 개발 중 Selenium 3.x 컨테이너 이미지가 ARM 아키텍처에 대한 지원이 미흡하여 정상적인 환경 구성에 문제를 겪었던 경험이 있었습니다. 하지만 극히 드문 경우는 아니었고 대부분 해결은 가능했습니다.
+  개인적으로 웹 크롤러 개발 중 Selenium 3.x 컨테이너 이미지가 ARM 아키텍처에 대한 지원이 미흡하여 정상적인 환경 구성에 문제를 겪었던 경험이 있었습니다. 하지만 극히 드문 경우는 아니었고 대부분 해결은 가능했습니다.
 
 - 리소스 공유
 
-    기본적으로 격리된 환경에서 일상적으로 이용하는 많은 자원이 공유되지 않을 수 있습니다. GPG, X 디스플레이, SSH 소켓 등 일부 자원에 대한 공유 설정은 VS Code에 의해 기본적으로 처리됩니다.
+  기본적으로 격리된 환경에서 일상적으로 이용하는 많은 자원이 공유되지 않을 수 있습니다. GPG, X 디스플레이, SSH 소켓 등 일부 자원에 대한 공유 설정은 VS Code에 의해 기본적으로 처리됩니다.
 
 ### 🚀 지속적 통합 · 배포 (CI · CD)
 
@@ -175,7 +175,7 @@ GitHub Pages를 이용하여 블로그를 호스팅하기로 한 만큼, 코드 
 
 - 언어: JavaScript / TypeScript (Node 20.x)
 
-    형 검사가 지원되는 언어를 선호하기에 TypeScript를 선택했습니다. 형 검사는 간단한 테스트를 대체할 수 있으며 테스트보다 빠르게 잡아낼 수 있는 문법 오류도 많습니다.
+  형 검사가 지원되는 언어를 선호하기에 TypeScript를 선택했습니다. 형 검사는 간단한 테스트를 대체할 수 있으며 테스트보다 빠르게 잡아낼 수 있는 문법 오류도 많습니다.
 
 - 웹 프레임워크: [SvelteKit](https://kit.svelte.dev/) 1.x
 
@@ -183,15 +183,15 @@ GitHub Pages를 이용하여 블로그를 호스팅하기로 한 만큼, 코드 
 
 - 단위 테스트: [Vitest](https://vitest.dev/)
 
-    개발을 위해 [Vite](https://vitejs.dev/)를 이용하고 있어서 Vitest를 이용했습니다. 정적 웹 사이트를 만드는 것이니 테스트의 중요도는 비교적 낮지만 기초적인 블로그 프레임워크를 만든다고 생각하고 빌드에 사용되는 여러 내부 요소에 대한 단위 테스트를 수행했습니다.
+  개발을 위해 [Vite](https://vitejs.dev/)를 이용하고 있어서 Vitest를 이용했습니다. 정적 웹 사이트를 만드는 것이니 테스트의 중요도는 비교적 낮지만 기초적인 블로그 프레임워크를 만든다고 생각하고 빌드에 사용되는 여러 내부 요소에 대한 단위 테스트를 수행했습니다.
 
 - 종단 간 테스트: [Playwright](https://playwright.dev/)
 
-    완성된 웹 사이트에 대한 접근성, SEO 및 여러 평가를 수행하고자 했습니다. 어느정도는 수작업으로라도 하게 될 것이 눈에 선했기에 가능하면 자동화하고자 했습니다.
+  완성된 웹 사이트에 대한 접근성, SEO 및 여러 평가를 수행하고자 했습니다. 어느정도는 수작업으로라도 하게 될 것이 눈에 선했기에 가능하면 자동화하고자 했습니다.
 
 - 개발 환경 구성: Docker + VS Code Devcontainer
 
-    최종 산출물이 정적 웹 사이트이기 때문에 Docker는 개발 컨테이너를 위해서만 사용했습니다.
+  최종 산출물이 정적 웹 사이트이기 때문에 Docker는 개발 컨테이너를 위해서만 사용했습니다.
 
 - 지속적 통합 · 배포: GitHub Actions
 
@@ -207,11 +207,11 @@ SvelteKit을 이용하여 정적 블로그를 만드는 좋은 글[^sveltekit-ma
 
 - [date-fns](https://date-fns.org/)
 
-    시간과 관련된 지리(로케일) 설정, 서식 지정 등을 위해 사용했습니다.
+  시간과 관련된 지리(로케일) 설정, 서식 지정 등을 위해 사용했습니다.
 
 - [zod](https://zod.dev/)
 
-    타입, 인터페이스에 대한 테스트를 작성하는 건 귀찮고 재미없는 일입니다. Python의 Pydantic처럼 Zod를 통해 이를 대신하고자 했습니다.
+  타입, 인터페이스에 대한 테스트를 작성하는 건 귀찮고 재미없는 일입니다. Python의 Pydantic처럼 Zod를 통해 이를 대신하고자 했습니다.
 
 ### 🎨 레이아웃
 
@@ -223,17 +223,17 @@ SvelteKit을 이용하여 정적 블로그를 만드는 좋은 글[^sveltekit-ma
 
 - 상단 바 (Header)
 
-    너무 많은 요소가 노출되지 않도록 했습니다. 헤더는 쉽게 눈에 띄는 요소인지라 하나여서 반응성을 가장 신경썼습니다. 처음에는 스티키(Sticky) 헤더로 만들었다가 앵커(#)를 따라 스크롤이 이동했을 때 요소를 가리는 문제가 있어 나중에 되돌렸습니다.
+  너무 많은 요소가 노출되지 않도록 했습니다. 헤더는 쉽게 눈에 띄는 요소인지라 하나여서 반응성을 가장 신경썼습니다. 처음에는 스티키(Sticky) 헤더로 만들었다가 앵커(#)를 따라 스크롤이 이동했을 때 요소를 가리는 문제가 있어 나중에 되돌렸습니다.
 
-    요소를 가리는 문제는 `scroll-padding-top` CSS를 이용하여 해결할 수 있지만 치웠을 때 보기가 더 좋아서 헤더를 치우기로 결정했습니다.
+  요소를 가리는 문제는 `scroll-padding-top` CSS를 이용하여 해결할 수 있지만 치웠을 때 보기가 더 좋아서 헤더를 치우기로 결정했습니다.
 
 - 측면 메뉴 바 (Sidebar)
 
-    처음엔 프로필을 비롯한 다양한 기능을 사이드바에 넣어두었다가 블로그보다는 대시보드같은 느낌이 들어 제거했습니다.
+  처음엔 프로필을 비롯한 다양한 기능을 사이드바에 넣어두었다가 블로그보다는 대시보드같은 느낌이 들어 제거했습니다.
 
 - 하단 바 (Footer)
 
-    당장은 넣을만한 것이 없어서 간단하게 만들어 두었습니다. 언젠가 사이트맵을 비롯해 여러 링크를 더 넣게 될 것 같습니다.
+  당장은 넣을만한 것이 없어서 간단하게 만들어 두었습니다. 언젠가 사이트맵을 비롯해 여러 링크를 더 넣게 될 것 같습니다.
 
 그렇게 기초적인 레이아웃을 작업했지만 결국 단순한 게 제일이었다고 생각합니다. 초기 디자인을 대시보드를 참고하여 만들어서인지 블로그와 어울리지 않았습니다.
 
@@ -269,15 +269,15 @@ GET HTTP 메소드를 이용하므로 쉽고 단순하며 공개된 정보에 �
 
 - 마크다운 문법에 대한 [제약](https://mdsvex.com/docs#limitations)
 
-    제약 사항이 많은 편은 아니고 치명적인 것도 아니지만 글을 쓸 때 가능하면 이런 제약 사항을 신경쓰고 싶지 않았습니다.
+  제약 사항이 많은 편은 아니고 치명적인 것도 아니지만 글을 쓸 때 가능하면 이런 제약 사항을 신경쓰고 싶지 않았습니다.
 
 - 개발 도구의 혜택을 충분히 받을 수 없음
 
-    Prettier, ESLint, TypeScript와 같은 도구의 힘을 빌리기가 어려웠습니다.
+  Prettier, ESLint, TypeScript와 같은 도구의 힘을 빌리기가 어려웠습니다.
 
 - 충분히 편리하지도, 유연하지도 않음
 
-    레이아웃 컴포넌트를 변경하거나 rehype 플러그인을 추가함으로써 기능을 확장할 수 있지만 그렇다면 그냥 둘 다 직접 구현하는 편이 낫겠다는 생각이 들었습니다. mdsvex를 이용해 마크다운 문서 내에서 Svelte 컴포넌트를 사용할 수 있지만 반대로 어디서든 마크다운 요소를 이용할 수 있도록 컴포넌트를 구현하고자 했습니다.
+  레이아웃 컴포넌트를 변경하거나 rehype 플러그인을 추가함으로써 기능을 확장할 수 있지만 그렇다면 그냥 둘 다 직접 구현하는 편이 낫겠다는 생각이 들었습니다. mdsvex를 이용해 마크다운 문서 내에서 Svelte 컴포넌트를 사용할 수 있지만 반대로 어디서든 마크다운 요소를 이용할 수 있도록 컴포넌트를 구현하고자 했습니다.
 
 그렇게 구현된 코드입니다.
 
@@ -330,27 +330,27 @@ GET HTTP 메소드를 이용하므로 쉽고 단순하며 공개된 정보에 �
 
 ```yaml
 lighthouse:
-    name: Lighthouse
-    needs: deploy
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    steps:
-        - name: Checkout
-          uses: actions/checkout@v4
+  name: Lighthouse
+  needs: deploy
+  runs-on: ubuntu-latest
+  timeout-minutes: 30
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
 
-        - name: Run Lighthouse CI
-          uses: treosh/lighthouse-ci-action@v10
-          env:
-              LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
-          with:
-              runs: 3
-              configPath: ./.lighthouserc.json
-              budgetPath: ./budget.json
-              urls: |
-                  ${{ needs.deploy.outputs.page_url }}/
-                  ${{ needs.deploy.outputs.page_url }}/about-me
-                  ${{ needs.deploy.outputs.page_url }}/blog
-              temporaryPublicStorage: true
+    - name: Run Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v10
+      env:
+        LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}
+      with:
+        runs: 3
+        configPath: ./.lighthouserc.json
+        budgetPath: ./budget.json
+        urls: |
+          ${{ needs.deploy.outputs.page_url }}/
+          ${{ needs.deploy.outputs.page_url }}/about-me
+          ${{ needs.deploy.outputs.page_url }}/blog
+        temporaryPublicStorage: true
 ```
 
 매 배포 후 Lighthouse 리포트가 생성됩니다.
@@ -387,32 +387,32 @@ FE 테스트에 대해서는 많은 지식이나 경험이 없는지라 크게 �
 
 - I18n
 
-    라우팅부터 시작해서 영향 범위가 너무 커서 당초 예상보다 큰 시간과 노력이 필요한 기능인지라 일단은 보류하기로 했습니다. 충분한 지식이 있었다면 개발 초기부터 완전한 구성을 했겠지만.. 일단은 동작하는 기초적인 블로그를 만들고자 했습니다.
+  라우팅부터 시작해서 영향 범위가 너무 커서 당초 예상보다 큰 시간과 노력이 필요한 기능인지라 일단은 보류하기로 했습니다. 충분한 지식이 있었다면 개발 초기부터 완전한 구성을 했겠지만.. 일단은 동작하는 기초적인 블로그를 만들고자 했습니다.
 
 - Gravatar 프로필 동기화
 
-    Gravatar를 프로필 정보 원천으로 삼으려고 합니다. Gravatar는 여러 언어에 대한 프로필도 지원하므로 I18n과 같이 작업하게 될 것 같습니다.
+  Gravatar를 프로필 정보 원천으로 삼으려고 합니다. Gravatar는 여러 언어에 대한 프로필도 지원하므로 I18n과 같이 작업하게 될 것 같습니다.
 
 - 댓글
 
-    당장 필수적이진 않아서 보류했지만 높은 우선순위를 두고 있는지라 조만간 추가하려고 합니다. [utterances](https://utteranc.es/)를 이용하게 될 것으로 예상하지만 GitHub를 작업 관리를 위한 이슈 트래커로 이용하고 있어서 다른 방법을 찾을지도 모르겠네요.
+  당장 필수적이진 않아서 보류했지만 높은 우선순위를 두고 있는지라 조만간 추가하려고 합니다. [utterances](https://utteranc.es/)를 이용하게 될 것으로 예상하지만 GitHub를 작업 관리를 위한 이슈 트래커로 이용하고 있어서 다른 방법을 찾을지도 모르겠네요.
 
 - CSS 컴포넌트 프레임워크 변경
 
-    DaisyUI는 사용하기 쉬웠고 기본 제공되는 테마도 많지만 컴포넌트 수도 적고 전체적인 디자인이 지향점과 다소 어긋나는 부분이 있었습니다.
+  DaisyUI는 사용하기 쉬웠고 기본 제공되는 테마도 많지만 컴포넌트 수도 적고 전체적인 디자인이 지향점과 다소 어긋나는 부분이 있었습니다.
 
 - 자원 관리
 
-    첫 글을 작성하면서 이미지 자원을 관리하는 데 많은 애로사항을 느꼈습니다. 파일 경로가 달라 IDE의 마크다운 미리보기와 연동이 되지 않았고, 내용(`/posts`)과 이미지 자원(`/static`)이 서로 다른 경로에 존재하게 되어 불편했습니다. 당장은 rehype 플러그인을 작성해 임시 처리하고 있는데, 더 나은 방법을 모색해야 할 것 같네요.
+  첫 글을 작성하면서 이미지 자원을 관리하는 데 많은 애로사항을 느꼈습니다. 파일 경로가 달라 IDE의 마크다운 미리보기와 연동이 되지 않았고, 내용(`/posts`)과 이미지 자원(`/static`)이 서로 다른 경로에 존재하게 되어 불편했습니다. 당장은 rehype 플러그인을 작성해 임시 처리하고 있는데, 더 나은 방법을 모색해야 할 것 같네요.
 
 - Google Analytics
 
-    필요보다는 흥미 본위에 의한 것으로, 그냥 넣어보고 싶은 기능입니다. 언젠가 트래픽이 많아진다면 사이트 개선을 위한 유의미한 정보를 제공해 줄지도.
+  필요보다는 흥미 본위에 의한 것으로, 그냥 넣어보고 싶은 기능입니다. 언젠가 트래픽이 많아진다면 사이트 개선을 위한 유의미한 정보를 제공해 줄지도.
 
-    GA API를 이용하면 페이지 조회 관련 데이터 또한 얻을 수 있는 것으로 보이는데 이를 활용하면 조회수 또한 구현할 수 있지 않을까요.
+  GA API를 이용하면 페이지 조회 관련 데이터 또한 얻을 수 있는 것으로 보이는데 이를 활용하면 조회수 또한 구현할 수 있지 않을까요.
 
 - Google AdSense
 
-    언젠가는 광고도 넣었으면 합니다. 잠깐 확인해보니 어느 정도 컨텐츠가 쌓여야 심사[^google-adsense-eligibility]를 통과할 수 있다는 모양이라 어느 정도 글이 쌓이게 되면 광고를 추가하게 될 것 같습니다.
+  언젠가는 광고도 넣었으면 합니다. 잠깐 확인해보니 어느 정도 컨텐츠가 쌓여야 심사[^google-adsense-eligibility]를 통과할 수 있다는 모양이라 어느 정도 글이 쌓이게 되면 광고를 추가하게 될 것 같습니다.
 
-    [^google-adsense-eligibility]: [Eligibility requirements for AdSense](https://support.google.com/adsense/answer/9724?hl=en)
+  [^google-adsense-eligibility]: [Eligibility requirements for AdSense](https://support.google.com/adsense/answer/9724?hl=en)
