@@ -6095,7 +6095,7 @@ __metadata:
     vitest: "npm:^3.2.4"
     wrangler: "npm:^4.22.0"
     yaml: "npm:^2.8.0"
-    zod: "npm:^3.25.67"
+    zod: "npm:^4.4.3"
   languageName: unknown
   linkType: soft
 
@@ -9836,10 +9836,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod@npm:^3.25.67":
-  version: 3.25.67
-  resolution: "zod@npm:3.25.67"
-  checksum: 10c0/80a0cab3033272c4ab9312198081f0c4ea88e9673c059aa36dc32024906363729db54bdb78f3dc9d5529bd1601f74974d5a56c0a23e40c6f04a9270c9ff22336
+"zod@npm:^4.4.3":
+  version: 4.4.3
+  resolution: "zod@npm:4.4.3"
+  checksum: 10c0/7ea31b558e88f9faf44f31dd185e2e1cbf51fed3081787fb96cc2534749b50c0acfc6da7f0922a7353ed092dd358c7d50c28ea96c94d04af64191bd33152eca3
   languageName: node
   linkType: hard
 
