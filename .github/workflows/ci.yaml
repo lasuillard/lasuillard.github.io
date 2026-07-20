@@ -91,12 +91,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v6
-        with:
-          aws-region: ${{ vars.AWS_REGION }}
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-
       - name: Enable Corepack
         run: corepack enable
 
@@ -140,25 +134,3 @@ jobs:
             test-results/
             e2e/run-*.log
           retention-days: 7
-
-      - name: Upload Playwright report to S3
-        id: upload-playwright-report-s3
-        if: always()
-        env:
-          PLAYWRIGHT_REPORT_S3_PREFIX: playwright-report-${{ github.run_id }}
-        run: |
-          aws s3 cp --recursive \
-            playwright-report/ \
-            "s3://${{ vars.PLAYWRIGHT_REPORTS_BUCKET }}/${{ env.PLAYWRIGHT_REPORT_S3_PREFIX }}/"
-
-          report_index_url="https://${{ vars.PLAYWRIGHT_REPORTS_CDN }}/${{ env.PLAYWRIGHT_REPORT_S3_PREFIX }}/index.html"
-          cat <<EOF | tee ./playwright-report.md $GITHUB_STEP_SUMMARY
-          📊 Playwright test report is now available at [here](${report_index_url})
-          EOF
-
-      - name: Comment on PR
-        uses: thollander/actions-comment-pull-request@24bffb9b452ba05a4f3f77933840a6a841d1b32b # v3.0.1
-        if: always() && steps.upload-playwright-report-s3.outcome == 'success' && github.event_name == 'pull_request'
-        with:
-          comment-tag: playwright-report
-          file-path: ./playwright-report.md
