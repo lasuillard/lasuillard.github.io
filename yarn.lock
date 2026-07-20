@@ -2313,12 +2313,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@standard-schema/spec@npm:^1.0.0":
+  version: 1.1.0
+  resolution: "@standard-schema/spec@npm:1.1.0"
+  checksum: 10c0/d90f55acde4b2deb983529c87e8025fa693de1a5e8b49ecc6eb84d1fd96328add0e03d7d551442156c7432fd78165b2c26ff561b970a9a881f046abb78d6a526
+  languageName: node
+  linkType: hard
+
 "@sveltejs/acorn-typescript@npm:^1.0.5":
   version: 1.0.5
   resolution: "@sveltejs/acorn-typescript@npm:1.0.5"
   peerDependencies:
     acorn: ^8.9.0
   checksum: 10c0/5f5393ca3afc3d532baa3d418b51972ad26966ff352e13a46c6baa6d7099655acf2668be1d693e9daba2d3994a40b4c9a6b3157340e9cdfe2ffb52e4334630fd
+  languageName: node
+  linkType: hard
+
+"@sveltejs/acorn-typescript@npm:^1.0.9":
+  version: 1.0.11
+  resolution: "@sveltejs/acorn-typescript@npm:1.0.11"
+  peerDependencies:
+    acorn: ^8.9.0
+  checksum: 10c0/9d93f68ffd7ed339a8743af6d1540a2fd3195ff66015163c2c0359eef75cc960188e2ae4a70ec2987989321d9ed2317f315ec05041f7c9c75cf91e8dfba95be9
   languageName: node
   linkType: hard
 
@@ -2335,30 +2351,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sveltejs/kit@npm:^2.22.2":
-  version: 2.22.2
-  resolution: "@sveltejs/kit@npm:2.22.2"
+"@sveltejs/kit@npm:^2.70.1":
+  version: 2.70.1
+  resolution: "@sveltejs/kit@npm:2.70.1"
   dependencies:
-    "@sveltejs/acorn-typescript": "npm:^1.0.5"
+    "@standard-schema/spec": "npm:^1.0.0"
+    "@sveltejs/acorn-typescript": "npm:^1.0.9"
     "@types/cookie": "npm:^0.6.0"
-    acorn: "npm:^8.14.1"
+    acorn: "npm:^8.16.0"
     cookie: "npm:^0.6.0"
-    devalue: "npm:^5.1.0"
+    devalue: "npm:^5.8.1"
     esm-env: "npm:^1.2.2"
     kleur: "npm:^4.1.5"
     magic-string: "npm:^0.30.5"
     mrmime: "npm:^2.0.0"
-    sade: "npm:^1.8.1"
-    set-cookie-parser: "npm:^2.6.0"
+    set-cookie-parser: "npm:^3.0.0"
     sirv: "npm:^3.0.0"
-    vitefu: "npm:^1.0.6"
   peerDependencies:
-    "@sveltejs/vite-plugin-svelte": ^3.0.0 || ^4.0.0-next.1 || ^5.0.0 || ^6.0.0-next.0
+    "@opentelemetry/api": ^1.0.0
+    "@sveltejs/vite-plugin-svelte": ^3.0.0 || ^4.0.0-next.1 || ^5.0.0 || ^6.0.0-next.0 || ^7.0.0
     svelte: ^4.0.0 || ^5.0.0-next.0
-    vite: ^5.0.3 || ^6.0.0 || ^7.0.0-beta.0
+    typescript: ^5.3.3 || ^6.0.0
+    vite: ^5.0.3 || ^6.0.0 || ^7.0.0-beta.0 || ^8.0.0
+  peerDependenciesMeta:
+    "@opentelemetry/api":
+      optional: true
+    typescript:
+      optional: true
   bin:
     svelte-kit: svelte-kit.js
-  checksum: 10c0/dd5061ba8fb108a94f1791dcb63216bf81e198d13e84e0bd8694c4b32ca5e796eea836ec97af5af2bb0ee4ac774345e7b6a157aa907c5421756aed22327c2c44
+  checksum: 10c0/c510b42510622292b9ad34b048141634d92a1e6ff71f03dfc02c93fa2e7765be0b0a8bbc15101b8deae30a69cd36b8cba4b2ac4cfb3802bef1c037eac5ea689d
   languageName: node
   linkType: hard
 
@@ -3432,12 +3454,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.12.1, acorn@npm:^8.14.0, acorn@npm:^8.14.1, acorn@npm:^8.15.0, acorn@npm:^8.8.1":
+"acorn@npm:^8.12.1, acorn@npm:^8.14.0, acorn@npm:^8.15.0, acorn@npm:^8.8.1":
   version: 8.15.0
   resolution: "acorn@npm:8.15.0"
   bin:
     acorn: bin/acorn
   checksum: 10c0/dec73ff59b7d6628a01eebaece7f2bdb8bb62b9b5926dcad0f8931f2b8b79c2be21f6c68ac095592adb5adb15831a3635d9343e6a91d028bbe85d564875ec3ec
+  languageName: node
+  linkType: hard
+
+"acorn@npm:^8.16.0":
+  version: 8.17.0
+  resolution: "acorn@npm:8.17.0"
+  bin:
+    acorn: bin/acorn
+  checksum: 10c0/5dcefea5f8f023b6cc24cbe71fb5a8112b601d36c4fa07d14e4e6ffc2ee47383332c46b36c766d9437725aa6660156eae50efa0c838719823b50d7c327c4ed42
   languageName: node
   linkType: hard
 
@@ -4507,10 +4538,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"devalue@npm:^5.1.0":
-  version: 5.1.1
-  resolution: "devalue@npm:5.1.1"
-  checksum: 10c0/f6717a856fd54216959abd341cb189e47a9b37d72d8419e055ae77567ff4ed0fb683b1ffb6a71067f645adae5991bffabe6468a3e2385937bff49273e71c1f51
+"devalue@npm:^5.8.1":
+  version: 5.8.1
+  resolution: "devalue@npm:5.8.1"
+  checksum: 10c0/fad0c5aeb615e0ddea3385923389991652b285cd2adcd84e10f07a930f735127d94621751f7ef5249a7fe2c7c666ec7c02bb95c3901da337c91f45ef4da18dea
   languageName: node
   linkType: hard
 
@@ -6045,7 +6076,7 @@ __metadata:
     "@playwright/test": "npm:^1.53.2"
     "@sentry/sveltekit": "npm:^9.34.0"
     "@sveltejs/adapter-cloudflare": "npm:^7.0.4"
-    "@sveltejs/kit": "npm:^2.22.2"
+    "@sveltejs/kit": "npm:^2.70.1"
     "@sveltejs/vite-plugin-svelte": "npm:^5.1.0"
     "@tailwindcss/postcss": "npm:^4.1.11"
     "@tailwindcss/typography": "npm:^0.5.16"
@@ -8332,7 +8363,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sade@npm:^1.7.4, sade@npm:^1.8.1":
+"sade@npm:^1.7.4":
   version: 1.8.1
   resolution: "sade@npm:1.8.1"
   dependencies:
@@ -8373,10 +8404,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"set-cookie-parser@npm:^2.6.0":
-  version: 2.7.1
-  resolution: "set-cookie-parser@npm:2.7.1"
-  checksum: 10c0/060c198c4c92547ac15988256f445eae523f57f2ceefeccf52d30d75dedf6bff22b9c26f756bd44e8e560d44ff4ab2130b178bd2e52ef5571bf7be3bd7632d9a
+"set-cookie-parser@npm:^3.0.0":
+  version: 3.1.2
+  resolution: "set-cookie-parser@npm:3.1.2"
+  checksum: 10c0/ea3d4fba5affd57f2a4c2e5172d701c4c17645879f9fddf1331622ae556210d840cdcb6666f0d71288ad545e31db5927bf49696051928e0186e079588cd5ddb0
   languageName: node
   linkType: hard
 
