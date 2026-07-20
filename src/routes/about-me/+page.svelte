@@ -197,7 +197,7 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 					</div>
 					<div class="mt-3 flex justify-end">
 						{#each Object.entries(pw.links) as [platform, link] (link)}
-							{@const Icon = iconMap[platform]}
+							{@const Icon = iconMap[platform] as any}
 							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
 								<Icon class="h-7 w-7" />
 							</a>

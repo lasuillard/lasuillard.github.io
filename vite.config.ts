@@ -32,8 +32,7 @@ export default defineConfig({
 	},
 	server: {
 		fs: {
-			allow: ['static/**'],
-			deny: ['**.md']
+			allow: ['static/**']
 		}
 	},
 	ssr: {
