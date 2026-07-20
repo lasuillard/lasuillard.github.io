@@ -5,7 +5,6 @@ export const load: PageLoad = async ({ fetch }) => {
 	const data = await response.json();
 
 	// TODO(lasuillard): Better type annotation
-	// @ts-expect-error Don't care (for now)
 	const {
 		certificates,
 		educations,

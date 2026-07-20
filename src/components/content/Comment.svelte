@@ -2,27 +2,39 @@
 	import { currentTheme, Theme } from '$lib/theme';
 
 	let theme = $derived($currentTheme == Theme.Light ? 'github-light' : 'github-dark');
+	let container: HTMLDivElement | undefined = $state();
+
+	// eslint-disable-next-line jsdoc/require-jsdoc
+	function loadUtterances(node: HTMLDivElement) {
+		const script = document.createElement('script');
+		script.src = 'https://utteranc.es/client.js';
+		script.setAttribute('repo', 'lasuillard/lasuillard.github.io');
+		script.setAttribute('issue-term', 'pathname');
+		script.setAttribute('label', 'comment');
+		script.setAttribute('theme', theme);
+		script.setAttribute('crossorigin', 'anonymous');
+		script.async = true;
+		node.appendChild(script);
+
+		return {
+			destroy() {
+				node.innerHTML = '';
+			}
+		};
+	}
 </script>
 
 {#key theme}
-	<div data-testid="utterances" class="w-full">
-		<script
-			src="https://utteranc.es/client.js"
-			repo="lasuillard/lasuillard.github.io"
-			issue-term="pathname"
-			label="comment"
-			{theme}
-			crossorigin="anonymous"
-			async
-		>
-		</script>
-	</div>
+	<div data-testid="utterances" class="w-full" bind:this={container} use:loadUtterances></div>
 {/key}
 
 <style lang="postcss">
 	@reference "../../app.css";
 
 	:global(.utterances) {
-		@apply mx-auto mt-20 max-w-full;
+		margin-left: auto;
+		margin-right: auto;
+		margin-top: 5rem;
+		max-width: 100%;
 	}
 </style>

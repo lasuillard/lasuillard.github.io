@@ -197,8 +197,9 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 					</div>
 					<div class="mt-3 flex justify-end">
 						{#each Object.entries(pw.links) as [platform, link] (link)}
+							{@const href = link as string | undefined}
 							{@const Icon = iconMap[platform] as any}
-							<a href={link} target="_blank" class="btn btn-circle btn-ghost">
+							<a {href} target="_blank" class="btn btn-circle btn-ghost">
 								<Icon class="h-7 w-7" />
 							</a>
 						{/each}
@@ -218,12 +219,12 @@ Python을 이용한 백엔드 서비스 개발 경험을 가진 백엔드 개발
 </div>
 
 <style>
-	@reference "../../app.css";
-
 	h1 {
-		@apply text-5xl font-extrabold;
+		font-size: 3rem;
+		font-weight: 800;
 	}
 	h2 {
-		@apply text-3xl font-bold;
+		font-size: 1.875rem;
+		font-weight: 700;
 	}
 </style>
