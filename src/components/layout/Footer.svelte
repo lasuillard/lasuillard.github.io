@@ -17,7 +17,7 @@
 				</p>
 			</aside>
 			<nav class="mx-auto place-self-end pb-1 md:place-self-center">
-				<div class="grid grid-flow-col space-x-3 lg:space-x-2">
+				<div class="grid grid-flow-col space-x-1 lg:space-x-8">
 					<!-- GitHub -->
 					<a href="https://github.com/lasuillard" target="_blank" class="btn btn-circle btn-ghost">
 						<GitHub class="h-7 w-7 lg:h-8 lg:w-8" aria-label="Visit my GitHub profile" />
