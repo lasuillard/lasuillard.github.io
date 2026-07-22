@@ -1,7 +1,7 @@
 /* https://hangeul.naver.com/fonts/search?f=nanum (나눔고딕 D2coding) */
-@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic-coding.css') layer(base);
-
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic-coding.css');
 @import 'tailwindcss';
+
 @plugin 'daisyui' {
 	themes:
 		winter --default,
@@ -21,16 +21,14 @@
 	a {
 		@apply underline-offset-4;
 	}
-}
-
-::-webkit-scrollbar {
-	@apply h-2 w-2;
-}
-
-::-webkit-scrollbar-track {
-	@apply bg-base-100;
-}
-
-::-webkit-scrollbar-thumb {
-	@apply bg-secondary hover:bg-[color-mix(in_oklab,oklch(var(--s)),black_7%)];
+	/* Customize scrollbar */
+	::-webkit-scrollbar {
+		@apply h-2 w-2;
+	}
+	::-webkit-scrollbar-track {
+		@apply bg-base-100;
+	}
+	::-webkit-scrollbar-thumb {
+		@apply bg-secondary hover:bg-[color-mix(in_oklab,oklch(var(--s)),black_7%)];
+	}
 }
