@@ -3,8 +3,7 @@
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
 	const links = [
-		{ name: 'Home', href: '/' },
-		{ name: 'About Me', href: '/about-me' },
+		{ name: 'About Me', href: '/' },
 		{ name: 'Blog', href: '/blog' }
 	];
 
