@@ -1,3 +1,4 @@
+/* Hide external widgets such as utterances */
 iframe {
 	visibility: hidden;
 }

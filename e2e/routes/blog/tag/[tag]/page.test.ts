@@ -4,7 +4,7 @@ let page: Page;
 
 test.beforeAll('go to tag page', async ({ browser }) => {
 	page = await browser.newPage();
-	await page.goto('/blog/tag/Apple');
+	await page.goto('/blog/tag/Python');
 });
 
 test('visit page', async () => {
