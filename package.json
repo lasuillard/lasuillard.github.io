@@ -43,8 +43,8 @@
 	},
 	"devDependencies": {
 		"@codecov/vite-plugin": "1.9.1",
-		"@playwright/test": "1.53.2",
-		"@sentry/sveltekit": "^10.66.0",
+		"@playwright/test": "1.61.1",
+		"@sentry/sveltekit": "10.66.0",
 		"@sveltejs/adapter-static": "3.0.10",
 		"@sveltejs/kit": "2.22.2",
 		"@sveltejs/vite-plugin-svelte": "5.1.0",
