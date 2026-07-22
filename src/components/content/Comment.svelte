@@ -25,16 +25,20 @@
 </script>
 
 {#key theme}
-	<div data-testid="utterances" class="w-full" bind:this={container} use:loadUtterances></div>
+	<div data-testid="utterances" bind:this={container} use:loadUtterances></div>
 {/key}
 
 <style lang="postcss">
 	@reference "../../app.css";
 
+	/* Fix widget width going beyond the container */
+	:global(*) {
+		max-width: 100%;
+	}
+
 	:global(.utterances) {
 		margin-left: auto;
 		margin-right: auto;
 		margin-top: 5rem;
-		max-width: 100%;
 	}
 </style>
