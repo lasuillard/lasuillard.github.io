@@ -16,7 +16,7 @@
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 </script>
 
-<div data-testid="header-wrapper" class="bg-base-100">
+<div data-testid="header-wrapper" class="bg-base-100 sticky top-0 z-10 w-full">
 	<!-- Drawer container -->
 	<div class="drawer">
 		<input id="header-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
