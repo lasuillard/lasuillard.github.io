@@ -24,7 +24,7 @@ const processor = unified()
 	})
 	.use(rehypeSlug)
 	.use(rehypeAutolinkHeadings, { behavior: 'wrap' })
-	.use(rehypeHighlight);
+	.use(rehypeHighlight, { detect: true });
 
 /**
  * Parses given markdown string.
