@@ -1,5 +1,5 @@
-/* https://hangeul.naver.com/font/nanum */
-@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic.css') layer(base);
+/* https://hangeul.naver.com/fonts/search?f=nanum (나눔고딕 D2coding) */
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic-coding.css') layer(base);
 
 @import 'tailwindcss';
 @plugin 'daisyui' {
@@ -13,7 +13,9 @@
 @layer base {
 	html {
 		@apply scroll-pt-4 scroll-smooth;
-		font-family: 'NanumGothic', ui-monospace;
+		font-family:
+			'NanumGothicCodingLigature', 'NanumGothicCodingLigatureBold', 'NanumGothicCoding',
+			'NanumGothicCodingBold', ui-monospace;
 	}
 	/* Give some space between text and underline */
 	a {
