@@ -19,19 +19,19 @@
 			return;
 		}
 
-		// Monkey-patching footnote label (add emoji and translate)
-		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
-		if (!footnoteLabel) {
-			console.debug('Footnote label not found. Skipping patching.');
-			return;
-		}
-		footnoteLabel.innerHTML = '각주'; // TODO: I18n
-		footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
-
 		import('mermaid').then(({ default: mermaid }) => {
 			console.debug('Mermaid loaded. Running...');
 			mermaid.run();
 		});
+
+		// Monkey-patching footnote label (add emoji and translate)
+		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
+		if (footnoteLabel) {
+			footnoteLabel.innerHTML = '각주'; // TODO: I18n
+			footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
+		} else {
+			console.debug('Footnote label not found. Skipping patching.');
+		}
 	});
 </script>
 
@@ -100,7 +100,7 @@
 		}
 		/* Center Mermaid diagram horizontally */
 		& :global(pre.mermaid svg) {
-			@apply mx-auto;
+			@apply mx-auto p-2;
 		}
 	}
 </style>
