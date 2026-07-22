@@ -1,7 +1,6 @@
 # Project Instructions
 
-- Static site / personal tech blog hosted on GitHub Pages
-- Built with SvelteKit + adapter-static
+Check [README.md](./README.md) and [CONTRIBUTING.md](./CONTRIBUTING.md) to understand the project and its structure.
 
 ## Build and Test Commands
 

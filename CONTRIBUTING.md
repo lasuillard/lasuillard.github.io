@@ -22,6 +22,9 @@ This project uses the following tech stack:
 
 - `e2e/`: End-to-end tests using Playwright
 - `src/`: Source code
+  - `src/components/`: Reusable components
+  - `src/lib/`: Shared logic
+  - `src/routes/`: Page routes
 - `static/`: Static assets
   - `static/posts`: Markdown files and assets for blog posts
 - `tests/`: Unit tests
