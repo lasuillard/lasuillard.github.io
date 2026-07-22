@@ -99,8 +99,8 @@ export default {
 		timeout: 10 * 1000,
 		toHaveScreenshot: {
 			maxDiffPixelRatio: 0.025, // 2.5%
-			// ? Perhaps `fullPage` option is not supported here?
-			stylePath: './e2e/screenshot.css'
+			stylePath: './e2e/screenshot.css',
+			animations: 'disabled'
 		}
 	}
 } satisfies PlaywrightTestConfig;
