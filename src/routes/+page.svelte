@@ -1,51 +1,67 @@
 <script lang="ts">
-	// TODO: Automate generating profile image (hash email by md5)
-	// https://gravatar.com/site/implement/images/
-	let profileImage = 'https://www.gravatar.com/avatar/ff482bc4abad770478cc7bd36cb490fd';
-	let size = 384; // px
+	import { browser } from '$app/environment';
+	import QRCode from '$components/content/QRCode.svelte';
+
+	let profileImage = '/profile.jpg';
+	const pageURL = browser ? window.location.href.split('#')[0] : null;
 </script>
 
-<div class="pt-12">
-	<div class="grid grid-cols-1 space-y-8 space-x-4 lg:grid-cols-3">
-		<div class="flex">
-			<div class="avatar mx-auto">
-				<div
-					class="m-auto h-fit w-48 rounded-full bg-linear-to-r from-rose-600 via-fuchsia-400 to-yellow-400 p-0.5 lg:w-56"
-				>
-					<!-- svelte-ignore a11y_img_redundant_alt -->
-					<!-- BUG: https://github.com/sveltejs/language-tools/issues/524 -->
-					<img
-						class="mask mask-circle"
-						src={`${profileImage}?s=${size}`}
-						alt="My gravatar profile image"
-					/>
-				</div>
+<div class="mx-auto xl:max-w-[50rem]">
+	<div class="grid grid-cols-2 items-center gap-x-8 gap-y-8 lg:grid-cols-[auto_1fr]">
+		<!-- Profile image -->
+		<div
+			class="avatar order-1 col-span-1 flex justify-center lg:col-span-1 lg:row-span-2 lg:row-start-1 lg:pr-4"
+		>
+			<div class="h-fit w-36 rounded-lg bg-sky-900 p-0.5 sm:w-48">
+				<!-- svelte-ignore a11y_img_redundant_alt -->
+				<!-- BUG: https://github.com -->
+				<img class="mask rounded-md" src={profileImage} alt="Profile image" />
 			</div>
 		</div>
-		<div class="max-lg:text-center lg:col-span-2">
-			<h1 class="mb-8 text-4xl font-bold">이유찬</h1>
-			<h2 class="mb-4 text-xl font-semibold">게으른 개발자입니다.</h2>
-			<div class="leading-8">
-				<p>Python 백엔드 개발자입니다.</p>
-				<p>대한민국 경기도 고양시에 거주하고 있습니다.</p>
-				<p>웹 기반 서비스 백엔드 구축 및 운영 경험이 있습니다.</p>
-				<div class="divider"></div>
-				<div class="mt-3 grid grid-flow-col px-2 lg:justify-items-start">
-					<a class="link-hover text-lg" href="/about-me">About Me</a>
-					<a class="link-hover text-lg" href="/blog">Blog</a>
-				</div>
+
+		<!-- QR code -->
+		<div
+			class="order-2 col-span-1 flex w-full justify-center lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:justify-end"
+		>
+			{#if pageURL}
+				<QRCode text={pageURL} width={140} />
+			{:else}
+				<canvas width={140}></canvas>
+			{/if}
+		</div>
+
+		<!-- Title -->
+		<div
+			class="order-3 col-span-2 text-center lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:pr-36 lg:text-left"
+		>
+			<h2 class="text-2xl font-semibold">게으른 개발자, 이유찬입니다.</h2>
+		</div>
+
+		<!-- Bio -->
+		<div
+			class="order-4 col-span-2 w-full px-4 max-lg:text-center lg:col-span-1 lg:col-start-2 lg:row-start-2 lg:px-0"
+		>
+			<p class="my-4 text-center">…</p>
+			<div class="text-justify leading-8 lg:text-left">
+				<p>
+					소프트웨어 엔지니어 이유찬입니다. 여러 회사에서 Python과 Django, AWS 서비스를 활용하여 웹
+					서비스를 구축하고 운영해왔습니다.
+				</p>
+				<br />
+				<p>
+					평소 언어를 막론하고 여러 사이드 프로젝트를 개발하고 있습니다. 라이브러리 패키지, CLI
+					도구, 컨테이너 이미지, Prometheus Exporter, 그리고 크롬 브라우저 확장 프로그램 등을 만들고
+					공유하고 있습니다.
+				</p>
+				<br />
+				<p>
+					게으른 개발자를 지향합니다. 지루하고 반복적인 작업을 적극적으로 자동화하고 그보다 더
+					가치있는 일에 시간을 할애하는 것을 중요하게 생각합니다. 단순히 코드를 작성하기보다
+					사용자에게 가치 있는 제품과 경험을 전달하는 것을 중요하게 여깁니다.
+				</p>
+				<br />
+				<p>취미로는 클라이밍🧗을 즐깁니다.</p>
 			</div>
 		</div>
 	</div>
 </div>
-
-<style>
-	@keyframes typing {
-		from {
-			width: 0;
-		}
-		to {
-			width: 100%;
-		}
-	}
-</style>

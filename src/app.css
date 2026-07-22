@@ -1,11 +1,11 @@
-/* https://hangeul.naver.com/font/nanum */
-@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic.css') layer(base);
-
+/* https://hangeul.naver.com/fonts/search?f=nanum (나눔고딕 D2coding) */
+@import url('https://hangeul.pstatic.net/hangeul_static/css/nanum-gothic-coding.css');
 @import 'tailwindcss';
+
 @plugin 'daisyui' {
 	themes:
-		winter --default,
-		night --prefersdark;
+		retro --default,
+		black --prefersdark;
 }
 
 @config '../tailwind.config.js';
@@ -13,22 +13,22 @@
 @layer base {
 	html {
 		@apply scroll-pt-4 scroll-smooth;
-		font-family: 'NanumGothic', ui-monospace;
+		font-family:
+			'NanumGothicCodingLigature', 'NanumGothicCodingLigatureBold', 'NanumGothicCoding',
+			'NanumGothicCodingBold', ui-monospace;
 	}
 	/* Give some space between text and underline */
 	a {
 		@apply underline-offset-4;
 	}
-}
-
-::-webkit-scrollbar {
-	@apply h-2 w-2;
-}
-
-::-webkit-scrollbar-track {
-	@apply bg-base-100;
-}
-
-::-webkit-scrollbar-thumb {
-	@apply bg-secondary hover:bg-[color-mix(in_oklab,oklch(var(--s)),black_7%)];
+	/* Customize scrollbar */
+	::-webkit-scrollbar {
+		@apply h-2 w-2;
+	}
+	::-webkit-scrollbar-track {
+		@apply bg-base-100;
+	}
+	::-webkit-scrollbar-thumb {
+		@apply bg-secondary hover:bg-[color-mix(in_oklab,oklch(var(--s)),black_7%)];
+	}
 }

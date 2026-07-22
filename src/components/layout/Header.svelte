@@ -3,8 +3,7 @@
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
 	const links = [
-		{ name: 'Home', href: '/' },
-		{ name: 'About Me', href: '/about-me' },
+		{ name: 'About Me', href: '/' },
 		{ name: 'Blog', href: '/blog' }
 	];
 
@@ -16,14 +15,14 @@
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 </script>
 
-<div data-testid="header-wrapper" class="bg-base-100">
+<div data-testid="header-wrapper" class="bg-base-200 sticky top-0 z-10 w-full">
 	<!-- Drawer container -->
 	<div class="drawer">
 		<input id="header-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
 
 		<div class="drawer-content flex flex-col">
 			<!-- Header -->
-			<header class="navbar z-10 w-full px-12 py-6" data-testid="header">
+			<header class="navbar z-10 w-full px-12 py-3" data-testid="header">
 				<!-- Drawer button -->
 				<div class="flex-none md:hidden">
 					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->

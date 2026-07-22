@@ -10,7 +10,7 @@ it('render with parsed content', async () => {
 	const { content } = await parse(`# Lorem Ipsum
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
-	const { container } = render(Markdown, { content });
+	const { container } = render(Markdown, { content, children: undefined });
 	expect(container.innerHTML).toMatchInlineSnapshot(`
 		"<!----><!----><h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
 		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"

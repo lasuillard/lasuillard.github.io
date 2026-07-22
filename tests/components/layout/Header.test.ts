@@ -2,24 +2,17 @@
 import Header from '$components/layout/Header.svelte';
 import { render } from '@testing-library/svelte';
 import { expect } from 'vitest';
-import { it } from '^/tests/_helpers/vitest';
+import { it } from '../../_helpers/vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Header);
 	expect(getByTestId('header')).toBeTruthy();
 });
 
-it('has a link to home', () => {
-	const { getAllByText } = render(Header);
-	getAllByText('Home').forEach((elem) => {
-		expect(elem.getAttribute('href')).toEqual('/');
-	});
-});
-
-it('has a link to about', () => {
+it('has a link to about me', () => {
 	const { getAllByText } = render(Header);
 	getAllByText('About Me').forEach((elem) => {
-		expect(elem.getAttribute('href')).toEqual('/about-me');
+		expect(elem.getAttribute('href')).toEqual('/');
 	});
 });
 

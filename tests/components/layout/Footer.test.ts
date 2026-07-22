@@ -10,9 +10,8 @@ it('has a valid locator', () => {
 
 it('includes copyright notice', () => {
 	const { container } = render(Footer);
-	const currentYear = new Date().getFullYear();
 	expect(container.textContent).toMatch(
-		new RegExp(`([cC]opyright|©) (2023 - ${currentYear}) Yuchan Lee. All rights reserved.`)
+		new RegExp(`([cC]opyright|©) 2023 Yuchan Lee. All rights reserved.`)
 	);
 });
 

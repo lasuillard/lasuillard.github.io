@@ -97,7 +97,10 @@ export async function parse(
 	markdown: string,
 	options: { filepath: string }
 ): Promise<{ frontMatter: unknown; content: string }> {
-	const baseDir = path.dirname(options.filepath).replace(/^\/static/, '');
+	const baseDir = path
+		.dirname(options.filepath)
+		.replace(__PROJECT_ROOT__, '')
+		.replace(/^\/static/, '');
 
 	// Function to rewrite URLs relative to the markdown file's base directory.
 	const resolveUrl = (url: string) => {

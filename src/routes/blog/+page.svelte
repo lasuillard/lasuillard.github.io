@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Markdown from '$components/content/Markdown.svelte';
 	import Search from '$components/utility/Search.svelte';
-	import { formatDistance } from 'date-fns';
+	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
 
@@ -48,13 +48,14 @@
 									class="h-92 w-full rounded-xs object-contain lg:h-64 lg:w-96"
 								/>
 								<div class="mt-4 flex flex-1 flex-col lg:mt-2 lg:ml-16">
-									<h2 class="mb-0 text-3xl">
+									<h2 class="mb-0 text-center text-2xl lg:text-left">
 										<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
 									</h2>
-									<p class="text-gray-500">
-										<time datetime={publicationDate.toISOString()} role="time"
-											>{formatDistance(publicationDate, new Date(), { addSuffix: true })}</time
-										>
+									<p class="mt-1 text-end text-gray-500 lg:text-left">
+										<time datetime={publicationDate.toISOString()} role="time">
+											{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
+											({format(publicationDate, 'yyyy년 M월 d일')})
+										</time>
 									</p>
 									<div class="mt-4">
 										<Markdown>{summary}</Markdown>

@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-cloudflare';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 // https://kit.svelte.dev/docs/configuration
@@ -10,15 +10,8 @@ const config = {
 
 	kit: {
 		// https://kit.svelte.dev/docs/adapters
-		adapter: adapter({
-			fallback: 'spa',
-			routes: {
-				include: ['/*'],
-				exclude: ['<all>']
-			}
-		}),
+		adapter: adapter(),
 		alias: {
-			'^/*': './*',
 			'~/*': './src/*',
 			'$components/*': './src/components/*',
 			'$routes/*': './src/routes/*',

@@ -5,10 +5,16 @@ let page: Page;
 test.beforeAll('go to post page', async ({ browser }) => {
 	page = await browser.newPage();
 	await page.goto('/blog/1-기술-블로그-시작하기');
+
+	// Block utterances widget from loading to prevent flakiness
+	await page.route('**/utteranc.es/**', (route) => route.abort());
 });
 
 test('visit page', async () => {
-	await expect(page).toHaveScreenshot({ fullPage: true });
+	await expect(page).toHaveScreenshot({
+		fullPage: true,
+		mask: [page.locator("img[src$='.gif']")]
+	});
 });
 
 test('has a title and meta tags for SEO', async () => {

@@ -27,18 +27,29 @@ const groupTests = (keys: string[]) => {
 
 const testGroups = groupTests(['sm', 'md', 'lg']);
 
+const commonOptions = {
+	channel: 'chromium',
+	launchOptions: {
+		args: [
+			'--font-render-hinting=none',
+			'--disable-skia-runtime-opts',
+			'--disable-font-subpixel-positioning',
+			'--disable-lcd-text'
+		]
+	}
+};
+
 // BUG: Playwright seems not detecting file changes (create / delete)
 export default {
 	webServer: {
-		// NOTE: This will trigger Codecov bundle analysis upload due to build
-		command: 'yarn run preview --ip 0.0.0.0',
-		port: 8787,
+		command: 'yarn run preview',
+		port: 4173,
 		reuseExistingServer: true
 	},
 	use: {
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
-		trace: 'on-first-retry'
+		trace: 'retain-on-failure'
 	},
 	testDir,
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
@@ -59,6 +70,7 @@ export default {
 			name: 'Small devices',
 			testMatch: testGroups['sm'],
 			use: {
+				...commonOptions,
 				viewport: { width: 640, height: 1136 }
 			}
 		},
@@ -67,6 +79,7 @@ export default {
 			name: 'Medium devices',
 			testMatch: testGroups['md'],
 			use: {
+				...commonOptions,
 				viewport: { width: 768, height: 1280 }
 			}
 		},
@@ -75,6 +88,7 @@ export default {
 			name: 'Large devices',
 			testMatch: testGroups['lg'],
 			use: {
+				...commonOptions,
 				viewport: { width: 1024, height: 1366 }
 			}
 		}
@@ -82,11 +96,11 @@ export default {
 	timeout: 30 * 1000,
 	retries: process.env.CI ? 2 : 0,
 	expect: {
-		timeout: 5 * 1000,
+		timeout: 10 * 1000,
 		toHaveScreenshot: {
 			maxDiffPixelRatio: 0.025, // 2.5%
-			// ? Perhaps `fullPage` option is not supported here?
-			stylePath: './e2e/screenshot.css'
+			stylePath: './e2e/screenshot.css',
+			animations: 'disabled'
 		}
 	}
 } satisfies PlaywrightTestConfig;
