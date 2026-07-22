@@ -247,7 +247,7 @@ jobs:
 
 - `jq -c --arg ws "${{ github.workspace }}/" '[.[] | select(.path | contains("/projects/")) | {name: .name, path: (.path | ltrimstr($ws))}]'`
 
-  앞서 명령어는 모든 변경된 패키지 목록을 출력하므로 `jq`를 사용해서 변경된 패키지 중 **projects** 디렉토리에 있는 패키지만 집어냅니다.
+  앞서 명령어는 모든 변경된 패키지 목록을 출력하므로 `jq`를 사용해서 변경된 패키지 중 `projects` 디렉토리에 있는 패키지만 집어냅니다.
 
 이후 배포 매트릭스는 각 프로젝트를 빌드하여 배포하게 됩니다.
 
@@ -295,7 +295,7 @@ jobs:
 
     스크립트 프로젝트가 사용하는 서비스에 해당하는 API(People, Calendar, Sheets, Gmail API 등) 또한 사용 설정해야 합니다.
 
-2.  Apps Script API의 **관리** 버튼을 누르고 **OAuth 동의 화면** 구성을 끝마칩니다. 데스크톱 앱 유형의 클라이언트를 생성하고 클라이언트 비밀 정보를 JSON 파일로 다운로드하여 보관(e.g. **creds.json**)해둡니다.
+2.  Apps Script API의 **관리** 버튼을 누르고 **OAuth 동의 화면** 구성을 끝마칩니다. 데스크톱 앱 유형의 클라이언트를 생성하고 클라이언트 비밀 정보를 JSON 파일로 다운로드하여 보관(e.g. `creds.json`)해둡니다.
 
     ![OAuth 클라이언트 생성](./assets/clasp-oauth-client.png)
 
@@ -324,7 +324,7 @@ jobs:
 
 이후 프로젝트를 다시 배포한 뒤, `clasp run-function <초기화 함수 이름>`으로 배포 후 초기화 작업을 실행합니다. 저는 `post*` 라이프사이클 스크립트로 정의해서 배포 후 자동 실행되게끔 했습니다.
 
-추가로, 게시 상태가 **테스트 중**인 앱의 OAuth2.0 인증 정보는 7일마다 만료([참고 문서](https://developers.google.com/identity/protocols/oauth2?hl=ko))되어 도중에 **invalid_grant** 오류를 맞닥뜨릴 수 있습니다. 이 경우 게시 상태를 **프로덕션 단계**로 변경해야 만료되는 것을 막을 수 있습니다.
+추가로, 게시 상태가 **테스트 중**인 앱의 OAuth2.0 인증 정보는 7일마다 만료([참고 문서](https://developers.google.com/identity/protocols/oauth2?hl=ko))되어 도중에 `invalid_grant` 오류를 맞닥뜨릴 수 있습니다. 이 경우 게시 상태를 **프로덕션 단계**로 변경해야 만료되는 것을 막을 수 있습니다.
 
 ## 🐞 문제 해결
 

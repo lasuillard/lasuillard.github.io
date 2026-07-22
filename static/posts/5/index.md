@@ -26,7 +26,7 @@ Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기�
 
 개발 컨테이너는 로컬, 원격 및 클라우드 환경에서 다양한 도구를 통해 실행될 수 있습니다. 잘 알려진 도구로는 Visual Studio Code, GitHub Codespaces, GitPod, JetBrains IDE 등이 있습니다.
 
-또한 개발 컨테이너는 Docker 외에도 다양한 호환 도구(OrbStack, Podman 등)를 지원합니다. 다양한 템플릿([Dev Container Templates](https://containers.dev/templates))을 이용하거나 직접 설정 파일(**devcontainer.json**)을 추가하여 컨테이너화된 개발 환경을 시작할 수 있습니다. 또한 [Dev Container Features](https://containers.dev/features)를 활용하여 특정 도구의 설치 및 설정을 재사용할 수도 있습니다.
+또한 개발 컨테이너는 Docker 외에도 다양한 호환 도구(OrbStack, Podman 등)를 지원합니다. 다양한 템플릿([Dev Container Templates](https://containers.dev/templates))을 이용하거나 직접 설정 파일(`devcontainer.json`)을 추가하여 컨테이너화된 개발 환경을 시작할 수 있습니다. 또한 [Dev Container Features](https://containers.dev/features)를 활용하여 특정 도구의 설치 및 설정을 재사용할 수도 있습니다.
 
 ## 🎣 언제 활용하면 좋을까?
 
@@ -164,8 +164,8 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 
     모든 개발 컨테이너에 공통적으로 설치할 Dev Container Feature 목록입니다.
 
-- 개인 쉘 스크립트, 바이너리 도구 및 설정 파일(**.gitconfig**, **.vimrc** 등)은 Dotfiles를 활용하세요.
-- 작업 공간에서 **강제되어야** 하는 설정은 VS Code 워크스페이스 설정(**.vscode/settings.json**)을 활용할 수 있지만, 꼭 필요한 최소한의 설정만을 공유하세요. 이는 프로젝트 정책에 기반해야 합니다.
+- 개인 쉘 스크립트, 바이너리 도구 및 설정 파일(`.gitconfig`, `.vimrc` 등)은 Dotfiles를 활용하세요.
+- 작업 공간에서 **강제되어야** 하는 설정은 VS Code 워크스페이스 설정(`.vscode/settings.json`)을 활용할 수 있지만, 꼭 필요한 최소한의 설정만을 공유하세요. 이는 프로젝트 정책에 기반해야 합니다.
 - 필요하다면 [Multi-root Workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces) 기능을 활용하여 워크스페이스 설정 또한 오버라이드할 수 있습니다.
 - `\*.example` 패턴을 활용하세요.
 
