@@ -70,7 +70,9 @@
 						>
 							{#each searchResults as result (result.id)}
 								<li class="font-bold">
-									<a href="/blog/{result.id}">{result['metadata.title']}</a>
+									<a href="/blog/{result.id}-{result['metadata.slug']}"
+										>{result['metadata.title']}</a
+									>
 								</li>
 							{/each}
 						</ol>

@@ -43,7 +43,7 @@ it('shows matching results for given query', async ({ user }) => {
 	expect(resultsContainer).toBeTruthy();
 	expect(component.getByText('Uno terra errat')).toMatchInlineSnapshot(`
 		<a
-		  href="/blog/1"
+		  href="/blog/1-uno-terra-errat"
 		>
 		  Uno terra errat
 		</a>

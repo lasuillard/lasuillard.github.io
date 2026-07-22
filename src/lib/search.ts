@@ -19,7 +19,7 @@ export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 			'metadata.tags'
 		],
 		idField: 'metadata.id',
-		storeFields: ['metadata.title', 'metadata.publicationDate', 'metadata.tags'],
+		storeFields: ['metadata.title', 'metadata.slug', 'metadata.publicationDate', 'metadata.tags'],
 		extractField: (document, fieldName) => {
 			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
 		}

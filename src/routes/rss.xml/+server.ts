@@ -24,7 +24,7 @@ export const GET: RequestHandler = async ({ fetch }) => {
     ${allPosts
 			.map((post) => {
 				// TODO: Description from post metadata (description or excerpt)
-				const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}`);
+				const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
 				return `<item>
             <guid isPermaLink="true">${postLink}</guid>
             <title>${post.metadata.title}</title>
