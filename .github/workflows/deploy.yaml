@@ -4,6 +4,14 @@ on:
   push:
     branches: [main]
 
+  # Manual trigger
+  workflow_dispatch: {}
+
+  # Scheduled deploy
+  schedule:
+    - cron: '0 0 * * *'
+      timezone: Asia/Seoul
+
 concurrency:
   group: ${{ github.workflow }}
   cancel-in-progress: false
