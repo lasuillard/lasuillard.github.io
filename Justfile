@@ -39,7 +39,7 @@ test:
 # Run end-to-end tests
 e2e:
     yarn run build
-    yarn run e2e-docker
+    yarn run e2e --update-snapshots
 
 # Apply autofixes
 fix:
@@ -55,7 +55,8 @@ run:
     yarn run dev
 
 # Preview the website
-preview: build
+preview:
+    yarn run build
     yarn run preview
 
 alias pre := preview
