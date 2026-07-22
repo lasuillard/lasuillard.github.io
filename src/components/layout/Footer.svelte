@@ -13,7 +13,7 @@
 					© 2023 Yuchan Lee. All rights reserved.<br />
 					Made with <a href="https://kit.svelte.dev/" target="_blank" class="link">SvelteKit</a>,
 					hosted on
-					<a href="https://www.cloudflare.com/" target="_blank" class="link">Cloudflare</a>.
+					<a href="https://pages.github.com/" target="_blank" class="link">GitHub Pages</a>.
 				</p>
 			</aside>
 			<nav class="mx-auto place-self-end pb-1 md:place-self-center">
