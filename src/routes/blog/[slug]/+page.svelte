@@ -2,11 +2,11 @@
 	import Comment from '$components/content/Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
-	import { format } from 'date-fns';
+	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
 	const { metadata, content } = data;
-	const { title, publicationDate, tags } = metadata;
+	const { title, publicationDate, summary, tags, preview } = metadata;
 
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
@@ -44,18 +44,37 @@
 			{/if}
 		</div>
 		<div class="mx-auto max-w-none lg:max-w-[50rem]">
-			<h1 class="text-center text-4xl font-bold md:text-5xl">{title}</h1>
-			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
-				Published at {format(publicationDate, 'yyyy.MM.dd')}
-			</p>
-			<div class="mt-4 ml-2 md:mt-6">
-				{#each tags as tag (tag)}
-					<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
-						<a href="/blog/tag/{tag}">
-							{tag}
-						</a>
+			<div class="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
+				{#if preview}
+					<img
+						src={preview}
+						alt="Preview"
+						class="h-auto w-full flex-shrink-0 rounded-xs object-contain sm:h-48 sm:w-48"
+					/>
+				{/if}
+				<div class="flex flex-col items-center sm:items-start lg:ml-8">
+					<h1 class="text-2xl font-bold md:text-3xl">{title}</h1>
+					{#if summary}
+						<p class="mt-2 text-center font-light text-gray-500 sm:text-left md:mt-4 md:text-lg">
+							{summary}
+						</p>
+					{/if}
+					<p class="mt-4 font-light sm:text-left md:text-base">
+						<time datetime={publicationDate.toISOString()} role="time">
+							{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
+							({format(publicationDate, 'yyyy년 M월 d일')})
+						</time>
+					</p>
+					<div class="mt-4">
+						{#each tags as tag (tag)}
+							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
+								<a href="/blog/tag/{tag}">
+									{tag}
+								</a>
+							</div>
+						{/each}
 					</div>
-				{/each}
+				</div>
 			</div>
 			<div class="divider mb-6"></div>
 			<!-- Embedded TOC for small screen -->
