@@ -65,7 +65,9 @@
 				{/if}
 			</div>
 			<div bind:this={contentWrapper}>
-				<article class="prose prose-sm lg:prose-base mt-12 max-w-none break-words lg:max-w-[60vw]">
+				<article
+					class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words lg:max-w-[50rem]"
+				>
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
