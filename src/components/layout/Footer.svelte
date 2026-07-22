@@ -3,8 +3,6 @@
 	import Gmail from '$components/icon/Gmail.svelte';
 	import LinkedIn from '$components/icon/LinkedIn.svelte';
 	import RSS from '$components/icon/RSS.svelte';
-
-	const currentYear = new Date().getFullYear();
 </script>
 
 <div data-testid="footer" class="bg-base-200 sticky top-[100vh] mt-20 px-2 py-4 lg:mt-32">
@@ -12,7 +10,7 @@
 		<footer class="footer px-3 py-2 md:px-12 md:py-8">
 			<aside class="mx-auto items-center">
 				<p class=" text-sm leading-6 font-light md:text-base md:leading-8">
-					© 2023 - {currentYear} Yuchan Lee. All rights reserved.<br />
+					© 2023 Yuchan Lee. All rights reserved.<br />
 					Made with <a href="https://kit.svelte.dev/" target="_blank" class="link">SvelteKit</a>,
 					hosted on
 					<a href="https://www.cloudflare.com/" target="_blank" class="link">Cloudflare</a>.
