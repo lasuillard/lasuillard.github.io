@@ -56,19 +56,19 @@
 					/>
 				{/if}
 				<div class="flex flex-col items-center sm:items-start lg:ml-8">
-					<h1 class="text-2xl font-bold md:text-3xl">{title}</h1>
-					{#if summary}
-						<p class="mt-2 text-center font-light text-gray-500 sm:text-left md:mt-4 md:text-lg">
-							{summary}
-						</p>
-					{/if}
-					<p class="mt-4 font-light sm:text-left md:text-base">
+					<h1 class="mx-auto text-center text-2xl font-bold md:text-3xl">{title}</h1>
+					<p class="mt-4 ml-auto text-center font-light md:text-base">
 						<time datetime={publicationDate.toISOString()} role="time">
 							{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
 							({format(publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
-					<div class="mt-4">
+					{#if summary}
+						<p class="mt-2 text-center font-light text-gray-500 md:mt-4 md:text-lg">
+							{summary}
+						</p>
+					{/if}
+					<div class="mx-auto mt-4 flex flex-wrap justify-center">
 						{#each tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
 								<a href="/blog/tag/{tag}">

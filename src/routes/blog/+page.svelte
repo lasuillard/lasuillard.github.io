@@ -48,7 +48,7 @@
 									class="h-92 w-full rounded-xs object-contain lg:h-64 lg:w-96"
 								/>
 								<div class="mt-4 flex flex-1 flex-col lg:mt-2 lg:ml-16">
-									<h2 class="mb-0 text-3xl">
+									<h2 class="mb-0 text-2xl">
 										<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
 									</h2>
 									<p class="text-gray-500">
