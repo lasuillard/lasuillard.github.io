@@ -43,7 +43,7 @@
 				<Toc content={contentWrapper} class="h-md:sticky h-md:top-[10%] h-lg:top-[20%]" />
 			{/if}
 		</div>
-		<div class="mx-auto max-w-full">
+		<div class="mx-auto max-w-none lg:max-w-[50rem]">
 			<h1 class="text-center text-4xl font-bold md:text-5xl">{title}</h1>
 			<p class="mt-4 text-end font-light md:mt-10 md:text-xl">
 				Published at {format(publicationDate, 'yyyy.MM.dd')}
@@ -65,9 +65,7 @@
 				{/if}
 			</div>
 			<div bind:this={contentWrapper}>
-				<article
-					class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words lg:max-w-[50rem]"
-				>
+				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
