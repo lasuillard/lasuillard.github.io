@@ -78,6 +78,10 @@
 	@reference "../../../app.css";
 
 	article {
+		& :global(figure figcaption) {
+			@apply text-center;
+		}
+
 		/* Center image and add some shadow for visual recognition */
 		& :global(img) {
 			@apply mx-auto shadow-md;
