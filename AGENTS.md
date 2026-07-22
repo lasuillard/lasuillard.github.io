@@ -11,8 +11,8 @@ Check [README.md](./README.md) and [CONTRIBUTING.md](./CONTRIBUTING.md) to under
 - Format: `yarn run fmt`
 - Type check: `yarn run check` (svelte-check + svelte-kit sync)
 - Unit tests: `yarn test`
-- E2E tests: `yarn run build && yarn run e2e-docker`
-- CI checks: `yarn run fmt && yarn run lint && yarn run check && yarn test && yarn run build && yarn run e2e-docker`
+- E2E tests: `yarn run build && yarn run e2e`
+- CI checks: `yarn run fmt && yarn run lint && yarn run check && yarn test && yarn run build && yarn run e2e`
 - Fix lint/format issues: `yarn run lint:fix && yarn run fmt`
 
 ## Definition of Done
@@ -22,7 +22,7 @@ A task is complete when ALL of the following pass:
 1. `yarn run fmt` exits 0
 2. `yarn run lint && yarn run check` exits 0
 3. `yarn test` exits 0 with no failures
-4. `yarn run build && yarn run e2e-docker` exits 0 with no failures (if the change affects UI/rendering)
+4. `yarn run build && yarn run e2e` exits 0 with no failures (if the change affects UI/rendering)
 5. Build succeeds: `yarn build` exits 0
 6. Changed files have been staged and committed
 
@@ -42,7 +42,7 @@ A task is complete when ALL of the following pass:
 - Check for security issues in dependencies: `yarn audit`
 - Verify the build succeeds: `yarn build`
 - Verify unit tests pass: `yarn test`
-- For UI/end-to-end changes, run Playwright: `yarn run build && yarn run e2e-docker`
+- For UI/end-to-end changes, run Playwright: `yarn run build && yarn run e2e`
 - Ensure type checking passes: `yarn run check`
 
 ## When Blocked
