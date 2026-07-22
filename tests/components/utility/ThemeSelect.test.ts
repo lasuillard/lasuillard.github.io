@@ -4,7 +4,7 @@ import { Theme, getTheme, initTheme } from '$lib/theme';
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { beforeEach, expect } from 'vitest';
-import { it } from '^/tests/_helpers/vitest';
+import { it } from '../../_helpers/vitest';
 
 beforeEach(() => {
 	initTheme();

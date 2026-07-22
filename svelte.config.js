@@ -12,7 +12,6 @@ const config = {
 		// https://kit.svelte.dev/docs/adapters
 		adapter: adapter(),
 		alias: {
-			'^/*': './*',
 			'~/*': './src/*',
 			'$components/*': './src/components/*',
 			'$routes/*': './src/routes/*',

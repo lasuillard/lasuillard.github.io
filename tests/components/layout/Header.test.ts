@@ -2,7 +2,7 @@
 import Header from '$components/layout/Header.svelte';
 import { render } from '@testing-library/svelte';
 import { expect } from 'vitest';
-import { it } from '^/tests/_helpers/vitest';
+import { it } from '../../_helpers/vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Header);

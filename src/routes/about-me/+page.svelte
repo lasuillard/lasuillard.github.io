@@ -2,10 +2,10 @@
 	import { browser } from '$app/environment';
 	import Markdown from '$components/content/Markdown.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
-	import Docker from '^/src/components/icon/Docker.svelte';
-	import GitHub from '^/src/components/icon/GitHub.svelte';
-	import Npm from '^/src/components/icon/npm.svelte';
-	import PyPi from '^/src/components/icon/PyPI.svelte';
+	import Docker from '$components/icon/Docker.svelte';
+	import GitHub from '$components/icon/GitHub.svelte';
+	import Npm from '$components/icon/npm.svelte';
+	import PyPi from '$components/icon/PyPI.svelte';
 	import { format, isSameYear } from 'date-fns';
 	import { onMount } from 'svelte';
 

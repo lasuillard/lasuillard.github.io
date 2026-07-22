@@ -3,9 +3,9 @@ import Search from '$components/utility/Search.svelte';
 import { Post } from '$lib/post';
 import { initEngine } from '$lib/search';
 import { render } from '@testing-library/svelte';
-import { it } from '^/tests/_helpers/vitest';
 import { tick } from 'svelte';
 import { expect } from 'vitest';
+import { it } from '../../_helpers/vitest';
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Search);
