@@ -38,9 +38,12 @@
 <div>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
-		<div class="ml-8 hidden max-lg:-mr-8 xl:order-last xl:block">
+		<div class="ml-12 hidden max-lg:-mr-8 xl:order-last xl:block">
 			{#if contentIsReady}
-				<Toc content={contentWrapper} class="h-md:sticky h-md:top-[10%] h-lg:top-[20%]" />
+				<Toc
+					content={contentWrapper}
+					class="h-md:sticky h-md:top-[10%] h-lg:top-[20vh] min-w-[20vw]"
+				/>
 			{/if}
 		</div>
 		<div class="mx-auto max-w-none lg:max-w-[50rem]">
