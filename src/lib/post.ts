@@ -3,7 +3,7 @@ import { z } from 'zod';
 /** Expected and required metadata for posts. */
 export const Metadata = z
 	.object({
-		id: z.string({ coerce: true }).regex(
+		id: z.coerce.string().regex(
 			// Only alphanumeric characters are allowed for the ID to prevent conflicts with slug in the URL.
 			/^[0-9a-zA-Z]+/
 		),
