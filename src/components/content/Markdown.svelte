@@ -3,9 +3,11 @@
 
 	let {
 		// Parsed front matter and content
+		// eslint-disable-next-line no-useless-assignment
 		frontMatter = $bindable(undefined),
 		content = $bindable(''),
 		// Whether the content is ready to be displayed
+		// eslint-disable-next-line no-useless-assignment
 		ready = $bindable(false),
 		// Child elements to render if no content is provided
 		children
