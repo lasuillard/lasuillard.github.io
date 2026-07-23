@@ -41,6 +41,7 @@
 	},
 	"devDependencies": {
 		"@codecov/vite-plugin": "2.0.1",
+		"@eslint/js": "10.0.1",
 		"@playwright/test": "1.61.1",
 		"@sentry/sveltekit": "10.66.0",
 		"@sveltejs/adapter-static": "3.0.10",
