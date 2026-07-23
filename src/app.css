@@ -10,6 +10,10 @@
 
 @config '../tailwind.config.js';
 
+@custom-variant h-sm (@media (min-height: 480px));
+@custom-variant h-md (@media (min-height: 640px));
+@custom-variant h-lg (@media (min-height: 768px));
+
 @layer base {
 	html {
 		@apply scroll-pt-4 scroll-smooth;
