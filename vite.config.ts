@@ -7,7 +7,6 @@ import type { PluginOption } from 'vite';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
-	// @ts-expect-error Typed badly?
 	plugins: [
 		sentrySvelteKit({
 			sourceMapsUploadOptions: {
@@ -47,7 +46,6 @@ export default defineConfig({
 			junit: './junit.xml'
 		},
 		coverage: {
-			all: true,
 			include: ['src/components/**', 'src/lib/**'],
 			exclude: ['src/**.d.ts'],
 			reporter: ['text', 'clover', 'html']
