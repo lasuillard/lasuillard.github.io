@@ -45,7 +45,7 @@
 		"@sentry/sveltekit": "10.66.0",
 		"@sveltejs/adapter-static": "3.0.10",
 		"@sveltejs/kit": "2.70.1",
-		"@sveltejs/vite-plugin-svelte": "5.1.1",
+		"@sveltejs/vite-plugin-svelte": "7.2.0",
 		"@tailwindcss/postcss": "4.3.3",
 		"@tailwindcss/typography": "0.5.20",
 		"@tailwindcss/vite": "4.3.3",
