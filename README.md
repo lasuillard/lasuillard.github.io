@@ -6,6 +6,6 @@ My personal blog.
 
 This project is a static website built with [SvelteKit](https://kit.svelte.dev/) and hosted on GitHub Pages.
 
-🧑‍💻 Development
+## 🧑‍💻 Development
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for development instructions.
