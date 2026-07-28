@@ -100,7 +100,8 @@
 		<a class="join-item btn btn-sm" href="/blog?page={currentPage + 1}" aria-label="Next page"
 			>&gt;</a
 		>
-		<a class="join-item btn btn-sm" href="/blog?page={totalPages}" aria-label="Last page">&gt;&gt;</a
+		<a class="join-item btn btn-sm" href="/blog?page={totalPages}" aria-label="Last page"
+			>&gt;&gt;</a
 		>
 	{/if}
 </div>
