@@ -1,5 +1,4 @@
 ---
-id: 11
 title: 다시 GitHub Pages로 블로그 배포하기
 publicationDate: 2026-07-28T17:14:40.000+09:00
 preview: ./preview.png
