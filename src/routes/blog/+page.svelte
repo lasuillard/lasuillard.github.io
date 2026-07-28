@@ -1,12 +1,15 @@
 <script lang="ts">
 	import Markdown from '$components/content/Markdown.svelte';
+	import Pagination from '$components/utility/Pagination.svelte';
 	import Search from '$components/utility/Search.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
 
-	const { allPosts } = data;
-	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());
+	let paginatedPosts = $derived(data.paginatedPosts);
+	let currentPage = $derived(data.currentPage);
+	let totalPages = $derived(data.totalPages);
+	let allTags = $derived(new Set(data.allPosts.map((post) => post.metadata.tags).flat()));
 </script>
 
 <div>
@@ -37,9 +40,14 @@
 
 		<!-- Posts -->
 		<section data-testid="posts" class="xl:col-span-3">
+			<!-- Top Pagination -->
+			<div class="mb-12 flex justify-center">
+				<Pagination {currentPage} {totalPages} />
+			</div>
+
 			<div class="flex flex-col space-y-32">
-				{#if allPosts.length}
-					{#each allPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if paginatedPosts.length}
+					{#each paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -77,8 +85,11 @@
 					<p class="text-lg">There is no post yet.</p>
 				{/if}
 			</div>
-		</section>
 
-		<!-- TODO: Pagination -->
+			<!-- Bottom Pagination -->
+			<div class="mt-16 flex justify-center">
+				<Pagination {currentPage} {totalPages} />
+			</div>
+		</section>
 	</div>
 </div>
