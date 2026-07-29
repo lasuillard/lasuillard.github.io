@@ -93,11 +93,7 @@
 				</article>
 			</div>
 			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
-				<SeriesWidget
-					seriesName={metadata.series}
-					{seriesPosts}
-					currentPostId={metadata.id}
-				/>
+				<SeriesWidget seriesName={metadata.series} {seriesPosts} currentPostId={metadata.id} />
 			{/if}
 			<Comment />
 		</div>

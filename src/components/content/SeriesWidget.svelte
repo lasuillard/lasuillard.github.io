@@ -18,25 +18,25 @@
 </script>
 
 <div
-	class="my-8 rounded-xs border border-base-300 bg-base-100 p-6 shadow-sm"
+	class="border-base-300 bg-base-100 my-8 rounded-xs border p-6 shadow-sm"
 	data-testid="series-widget"
 >
-	<h3 class="mb-4 flex items-center gap-2 text-lg font-bold text-base-content">
+	<h3 class="text-base-content mb-4 flex items-center gap-2 text-lg font-bold">
 		<span class="text-secondary">📁</span> Series: <span class="text-secondary">{seriesName}</span>
 	</h3>
 	<ul class="space-y-3">
 		{#each sortedPosts as post (post.metadata.id)}
 			<li class="flex items-center justify-between text-sm">
 				{#if post.metadata.id === currentPostId}
-					<div class="flex items-center gap-2 font-semibold text-secondary">
+					<div class="text-secondary flex items-center gap-2 font-semibold">
 						<span>👉</span>
 						<span class="underline underline-offset-4">{post.metadata.title}</span>
-						<span class="badge badge-secondary badge-xs rounded-xs ml-1">Current</span>
+						<span class="badge badge-secondary badge-xs ml-1 rounded-xs">Current</span>
 					</div>
 				{:else}
 					<a
 						href="/blog/{post.metadata.id}-{post.metadata.slug}"
-						class="link link-hover text-base-content transition-colors hover:text-secondary"
+						class="link link-hover text-base-content hover:text-secondary transition-colors"
 					>
 						{post.metadata.title}
 					</a>
