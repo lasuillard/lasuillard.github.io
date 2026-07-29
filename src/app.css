@@ -46,7 +46,9 @@
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	background-color: #1e1e2e; /* Cozy dark editor background */
 	overflow: hidden;
-	box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+	box-shadow:
+		0 4px 6px -1px rgba(0, 0, 0, 0.1),
+		0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .code-block-wrapper pre {
@@ -61,12 +63,12 @@
 }
 
 .code-line {
-	@apply inline-block min-w-full pl-3 pr-3 -ml-3 -mr-3 border-l-4 border-transparent;
+	@apply -mr-3 -ml-3 inline-block min-w-full border-l-4 border-transparent pr-3 pl-3;
 }
 
 .numbered-code-line::before {
 	content: attr(data-line-number);
-	@apply inline-block w-6 mr-4 text-right text-base-content/40 select-none;
+	@apply text-base-content/40 mr-4 inline-block w-6 text-right select-none;
 }
 
 .highlighted-code-line {
