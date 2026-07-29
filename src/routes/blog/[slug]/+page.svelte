@@ -71,7 +71,7 @@
 					<div class="mx-auto mt-4 flex flex-wrap justify-center">
 						{#each tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
-								<a href="/blog/tag/{tag}">
+								<a href="/blog?tag={tag}">
 									{tag}
 								</a>
 							</div>

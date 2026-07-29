@@ -1,12 +1,39 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Search from '$components/utility/Search.svelte';
+	import { titleWithSuffix } from '$lib/meta';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
 
 	const { allPosts } = data;
 	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());
+
+	let selectedTag = $derived($page.url.searchParams.get('tag'));
+	let filteredPosts = $derived(
+		selectedTag
+			? allPosts.filter((post) =>
+					post.metadata.tags.map((t) => t.toLowerCase()).includes(selectedTag.toLowerCase())
+				)
+			: allPosts
+	);
+
+	$effect(() => {
+		const title = selectedTag ? titleWithSuffix(selectedTag) : titleWithSuffix('Blog');
+		document.title = title;
+
+		const metaDesc = document.querySelector('meta[name="description"]');
+		if (metaDesc) {
+			metaDesc.setAttribute(
+				'content',
+				selectedTag
+					? `My writing about ${selectedTag}.`
+					: (data.meta?.description ||
+						'My writing about almost everything but primarily on S/W development.')
+			);
+		}
+	});
 </script>
 
 <div>
@@ -21,9 +48,11 @@
 					{#if allTags.size}
 						{#each allTags as tag (tag)}
 							<span
-								class="badge badge-secondary badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
+								class="badge {selectedTag?.toLowerCase() === tag.toLowerCase()
+									? 'badge-primary'
+									: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 							>
-								<a href="/blog/tag/{tag}">
+								<a href={selectedTag?.toLowerCase() === tag.toLowerCase() ? '/blog' : `/blog?tag=${tag}`}>
 									{tag}
 								</a>
 							</span>
@@ -38,8 +67,8 @@
 		<!-- Posts -->
 		<section data-testid="posts" class="xl:col-span-3">
 			<div class="flex flex-col space-y-32">
-				{#if allPosts.length}
-					{#each allPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if filteredPosts.length}
+					{#each filteredPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -63,9 +92,17 @@
 									<div class="mt-6">
 										{#each tags as tag (tag)}
 											<span
-												class="badge badge-secondary badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
+												class="badge {selectedTag?.toLowerCase() === tag.toLowerCase()
+													? 'badge-primary'
+													: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 											>
-												<a href="/blog/tag/{tag}">{tag}</a>
+												<a
+													href={selectedTag?.toLowerCase() === tag.toLowerCase()
+														? '/blog'
+														: `/blog?tag=${tag}`}
+												>
+													{tag}
+												</a>
 											</span>
 										{/each}
 									</div>
@@ -73,6 +110,8 @@
 							</div>
 						</div>
 					{/each}
+				{:else if selectedTag}
+					<p class="text-lg">There is no post with tag "{selectedTag}".</p>
 				{:else}
 					<p class="text-lg">There is no post yet.</p>
 				{/if}
