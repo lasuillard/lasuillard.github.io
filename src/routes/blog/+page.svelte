@@ -29,8 +29,8 @@
 				'content',
 				selectedTag
 					? `My writing about ${selectedTag}.`
-					: (data.meta?.description ||
-						'My writing about almost everything but primarily on S/W development.')
+					: data.meta?.description ||
+							'My writing about almost everything but primarily on S/W development.'
 			);
 		}
 	});
@@ -52,7 +52,11 @@
 									? 'badge-primary'
 									: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 							>
-								<a href={selectedTag?.toLowerCase() === tag.toLowerCase() ? '/blog' : `/blog?tag=${tag}`}>
+								<a
+									href={selectedTag?.toLowerCase() === tag.toLowerCase()
+										? '/blog'
+										: `/blog?tag=${tag}`}
+								>
 									{tag}
 								</a>
 							</span>
