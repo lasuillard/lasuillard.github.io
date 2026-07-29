@@ -2,10 +2,11 @@
 	import Comment from '$components/content/Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
+	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
-	const { metadata, content } = data;
+	const { metadata, content, seriesPosts } = data;
 	const { title, publicationDate, summary, tags, preview } = metadata;
 
 	// HTML element binding used for generating ToC
@@ -91,6 +92,13 @@
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
+			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
+				<SeriesWidget
+					seriesName={metadata.series}
+					{seriesPosts}
+					currentPostId={metadata.id}
+				/>
+			{/if}
 			<Comment />
 		</div>
 	</div>
