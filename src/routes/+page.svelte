@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import QRCode from '$components/content/QRCode.svelte';
+	import Markdown from '$components/content/Markdown.svelte';
+	import { format, formatDistanceStrict } from 'date-fns';
+
+	let { data } = $props();
+	const { recentPosts } = data;
 
 	let profileImage = '/profile.jpg';
 	const pageURL = browser ? window.location.href.split('#')[0] : null;
@@ -62,6 +67,42 @@
 				<br />
 				<p>취미로는 클라이밍🧗을 즐깁니다.</p>
 			</div>
+		</div>
+	</div>
+
+	<!-- Recent Posts Section -->
+	<div class="border-base-content/10 mt-20 border-t pt-10" data-testid="recent-posts">
+		<h3 class="mb-8 text-2xl font-bold max-lg:text-center">Recent Posts</h3>
+		<div class="flex flex-col space-y-12">
+			{#if recentPosts && recentPosts.length}
+				{#each recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags } } (id)}
+					<div class="flex flex-col">
+						<h4 class="mb-1 text-xl font-semibold max-lg:text-center">
+							<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
+						</h4>
+						<p class="mb-2 text-sm text-gray-500 max-lg:text-center lg:text-left">
+							<time datetime={publicationDate.toISOString()} role="time">
+								{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
+								({format(publicationDate, 'yyyy년 M월 d일')})
+							</time>
+						</p>
+						<div class="text-justify leading-7 max-lg:text-center lg:text-left">
+							<Markdown>{summary}</Markdown>
+						</div>
+						<div class="mt-3 flex flex-wrap max-lg:justify-center">
+							{#each tags as tag (tag)}
+								<span
+									class="badge badge-secondary badge-xs md:badge-sm mr-2 mb-2 rounded-xs font-semibold"
+								>
+									<a href="/blog/tag/{tag}">{tag}</a>
+								</span>
+							{/each}
+						</div>
+					</div>
+				{/each}
+			{:else}
+				<p class="text-lg max-lg:text-center">There is no post yet.</p>
+			{/if}
 		</div>
 	</div>
 </div>
