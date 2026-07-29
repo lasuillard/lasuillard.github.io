@@ -18,6 +18,7 @@
 
 	onMount(async () => {
 		if (content) {
+			ready = true;
 			return;
 		}
 		({ content } = await import('$lib/markdown').then(({ parse }) =>
