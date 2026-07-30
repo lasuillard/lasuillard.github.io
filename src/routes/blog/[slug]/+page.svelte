@@ -3,6 +3,7 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
+	import { tick } from 'svelte';
 
 	let { data } = $props();
 	const { metadata, content } = data;
@@ -11,6 +12,7 @@
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
 	let contentIsReady = $state(false);
+	let activeId = $state('');
 
 	// Take action when the content is ready
 	$effect(() => {
@@ -33,6 +35,61 @@
 			console.debug('Footnote label not found. Skipping patching.');
 		}
 	});
+
+	$effect(() => {
+		if (!contentIsReady || !contentWrapper) {
+			return;
+		}
+
+		// Scroll to element if hash is present in URL on mount
+		tick().then(() => {
+			const hash = window.location.hash;
+			if (hash) {
+				const element = document.querySelector(hash);
+				if (element) {
+					element.scrollIntoView({ behavior: 'smooth' });
+				}
+			}
+		});
+
+		const handleScroll = () => {
+			if (!contentWrapper) return;
+			const headings = [...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')] as HTMLElement[];
+			if (headings.length === 0) return;
+
+			let currentActive: HTMLElement | null = null;
+			for (const heading of headings) {
+				const rect = heading.getBoundingClientRect();
+				// A heading is active if it's above a threshold from the top
+				if (rect.top <= 120) {
+					currentActive = heading;
+				} else {
+					break;
+				}
+			}
+
+			// If scrolled to the very bottom, activate the last heading
+			const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
+			if (isAtBottom && headings.length > 0) {
+				currentActive = headings[headings.length - 1];
+			}
+
+			const nextHash = currentActive ? `#${currentActive.id}` : '';
+			if (nextHash !== window.location.hash) {
+				history.replaceState(null, '', nextHash || window.location.pathname + window.location.search);
+			}
+			activeId = nextHash;
+		};
+
+		// Run once initially to set the active section based on starting scroll position
+		handleScroll();
+
+		window.addEventListener('scroll', handleScroll, { passive: true });
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	});
 </script>
 
 <div>
@@ -42,6 +99,7 @@
 			{#if contentIsReady}
 				<Toc
 					content={contentWrapper}
+					{activeId}
 					class="h-md:sticky h-md:top-[10%] h-lg:top-[20vh] min-w-[20vw]"
 				/>
 			{/if}
@@ -83,7 +141,7 @@
 			<!-- Embedded TOC for small screen -->
 			<div class="xl:hidden">
 				{#if contentIsReady}
-					<Toc content={contentWrapper} class="mb-6" />
+					<Toc content={contentWrapper} {activeId} class="mb-6" />
 				{/if}
 			</div>
 			<div bind:this={contentWrapper}>
