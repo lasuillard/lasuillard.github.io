@@ -55,9 +55,9 @@
 						class="h-auto w-full flex-shrink-0 rounded-xs object-contain sm:h-48 sm:w-48"
 					/>
 				{/if}
-				<div class="flex flex-1 w-full flex-col items-center lg:ml-8">
+				<div class="flex w-full flex-1 flex-col items-center lg:ml-8">
 					<h1 class="mx-auto text-center text-2xl font-bold md:text-3xl">{title}</h1>
-					<p class="mt-4 mx-auto text-center font-light md:text-base">
+					<p class="mx-auto mt-4 text-center font-light md:text-base">
 						<time datetime={publicationDate.toISOString()} role="time">
 							{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
 							({format(publicationDate, 'yyyy년 M월 d일')})
@@ -68,7 +68,9 @@
 							{summary}
 						</p>
 					{/if}
-					<div class="mx-auto mt-4 flex flex-wrap justify-center sm:self-start sm:justify-start sm:mx-0">
+					<div
+						class="mx-auto mt-4 flex flex-wrap justify-center sm:mx-0 sm:justify-start sm:self-start"
+					>
 						{#each tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
 								<a href="/blog/tag/{tag}">
