@@ -54,7 +54,9 @@
 
 		const handleScroll = () => {
 			if (!contentWrapper) return;
-			const headings = [...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')] as HTMLElement[];
+			const headings = [
+				...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')
+			] as HTMLElement[];
 			if (headings.length === 0) return;
 
 			let currentActive: HTMLElement | null = null;
@@ -69,14 +71,19 @@
 			}
 
 			// If scrolled to the very bottom, activate the last heading
-			const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
+			const isAtBottom =
+				window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
 			if (isAtBottom && headings.length > 0) {
 				currentActive = headings[headings.length - 1];
 			}
 
 			const nextHash = currentActive ? `#${currentActive.id}` : '';
 			if (nextHash !== window.location.hash) {
-				history.replaceState(null, '', nextHash || window.location.pathname + window.location.search);
+				history.replaceState(
+					null,
+					'',
+					nextHash || window.location.pathname + window.location.search
+				);
 			}
 			activeId = nextHash;
 		};

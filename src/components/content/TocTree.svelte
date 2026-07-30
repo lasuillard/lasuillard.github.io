@@ -19,7 +19,10 @@
 
 <div data-testid="toc-tree" {...rest}>
 	<p class="mb-1.5 font-light">
-		<a class={isActive ? 'link-hover link font-bold underline text-secondary' : 'link-hover link'} href={link}>{heading}</a>
+		<a
+			class={isActive ? 'link-hover link text-secondary font-bold underline' : 'link-hover link'}
+			href={link}>{heading}</a
+		>
 	</p>
 	<ul>
 		{#each tree.children as child (child.data.textContent)}
