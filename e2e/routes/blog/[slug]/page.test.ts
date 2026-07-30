@@ -13,10 +13,7 @@ test.beforeAll('go to post page', async ({ browser }) => {
 test('visit page', async () => {
 	await expect(page).toHaveScreenshot({
 		fullPage: true,
-		mask: [
-			page.locator("img[src$='.gif']"),
-			page.locator('img[alt="hits"]')
-		]
+		mask: [page.locator("img[src$='.gif']"), page.locator('img[alt="hits"]')]
 	});
 });
 

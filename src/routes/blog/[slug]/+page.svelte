@@ -66,7 +66,10 @@
 					<div class="mt-2 ml-auto flex justify-center sm:justify-start">
 						<a href="https://myhits.vercel.app" target="_blank" rel="noopener noreferrer">
 							<img
-								src="https://myhits.vercel.app/api/hit/{encodeURIComponent('https://lasuillard.github.io/blog/' + (metadata.slug ? `${metadata.id}-${metadata.slug}` : metadata.id))}?color=blue&label=hits&size=small"
+								src="https://myhits.vercel.app/api/hit/{encodeURIComponent(
+									'https://lasuillard.github.io/blog/' +
+										(metadata.slug ? `${metadata.id}-${metadata.slug}` : metadata.id)
+								)}?color=blue&label=hits&size=small"
 								alt="hits"
 							/>
 						</a>
