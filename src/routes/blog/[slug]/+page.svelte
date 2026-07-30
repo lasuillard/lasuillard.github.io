@@ -63,6 +63,14 @@
 							({format(publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
+					<div class="mt-2 ml-auto flex justify-center sm:justify-start">
+						<a href="https://myhits.vercel.app" target="_blank" rel="noopener noreferrer">
+							<img
+								src="https://myhits.vercel.app/api/hit/{encodeURIComponent('https://lasuillard.github.io/blog/' + (metadata.slug ? `${metadata.id}-${metadata.slug}` : metadata.id))}?color=blue&label=hits&size=small"
+								alt="hits"
+							/>
+						</a>
+					</div>
 					{#if summary}
 						<p class="mt-2 text-center font-light text-gray-500 md:mt-4 md:text-lg">
 							{summary}
