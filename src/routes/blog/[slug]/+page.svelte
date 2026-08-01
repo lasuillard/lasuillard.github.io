@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Comment from '$components/content/Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
@@ -63,14 +64,14 @@
 							({format(publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
-					<div class="mt-2 ml-auto flex justify-center sm:justify-start">
+					<div class="mt-2 ml-auto flex h-[20px] justify-center sm:justify-start">
 						<a href="https://myhits.vercel.app" target="_blank" rel="noopener noreferrer">
 							<img
 								src="https://myhits.vercel.app/api/hit/{encodeURIComponent(
-									'https://lasuillard.github.io/blog/' +
-										(metadata.slug ? `${metadata.id}-${metadata.slug}` : metadata.id)
+									$page.url.href
 								)}?color=blue&label=hits&size=small"
 								alt="hits"
+								class="h-[20px]"
 							/>
 						</a>
 					</div>
