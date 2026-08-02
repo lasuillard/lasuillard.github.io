@@ -15,7 +15,8 @@
 	let contentWrapper: HTMLElement | undefined = $state();
 	let contentIsReady = $state(false);
 	let activeId = $state('');
-	let isAutoScrolling = $state(false);
+	let initialScrollDone = $state(false);
+	let isClickScrolling = $state(false);
 	let clickScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	// Take action when the content is ready
@@ -57,7 +58,8 @@
 		const initialHash = window.location.hash;
 
 		const handleScroll = () => {
-			if (isAutoScrolling) return;
+			if (initialHash && !initialScrollDone) return;
+			if (isClickScrolling) return;
 			if (!contentWrapper) return;
 
 			const headings = Array.from(contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6') || []);
@@ -105,13 +107,13 @@
 					const id = decodedHash.slice(1);
 					const element = document.getElementById(id) || document.querySelector(decodedHash);
 					if (element) {
-						isAutoScrolling = true;
 						activeId = initialHash;
 
 						let userInteracted = false;
 						const cancelScroll = () => {
 							userInteracted = true;
-							isAutoScrolling = false;
+							initialScrollDone = true;
+							handleScroll();
 						};
 
 						// Listen for interactions that indicate the user wants control
@@ -163,22 +165,23 @@
 							if (!userInteracted) {
 								element.scrollIntoView({ behavior: 'smooth' });
 								setTimeout(() => {
-									isAutoScrolling = false;
+									initialScrollDone = true;
 									handleScroll();
-								}, 1000);
+								}, 1500);
 							} else {
-								isAutoScrolling = false;
+								initialScrollDone = true;
+								handleScroll();
 							}
 						});
 					} else {
-						isAutoScrolling = false;
+						initialScrollDone = true;
 					}
 				} catch (e) {
 					console.error('Failed to scroll to hash:', e);
-					isAutoScrolling = false;
+					initialScrollDone = true;
 				}
 			} else {
-				isAutoScrolling = false;
+				initialScrollDone = true;
 			}
 		});
 
@@ -195,11 +198,11 @@
 				if (element) {
 					activeId = href;
 					replaceStateBrowser(href);
-					isAutoScrolling = true;
+					isClickScrolling = true;
 					element.scrollIntoView({ behavior: 'smooth' });
 					if (clickScrollTimeout) clearTimeout(clickScrollTimeout);
 					clickScrollTimeout = setTimeout(() => {
-						isAutoScrolling = false;
+						isClickScrolling = false;
 					}, 1000);
 				}
 			}
