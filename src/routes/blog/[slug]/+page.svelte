@@ -46,7 +46,7 @@
 		const initialHash = window.location.hash;
 		let isInitialScroll = !!initialHash;
 		let isManualScrolling = false;
-		let scrollTimeout: NodeJS.Timeout | undefined;
+		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 		// Scroll to element if hash is present in URL on mount
 		tick().then(() => {
