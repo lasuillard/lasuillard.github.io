@@ -38,13 +38,12 @@ export class PostRepository {
 					filepath: resolvedPath
 				});
 
-				const idMatch = filepath.match(/\/static\/posts\/([^/]+)\/index\.md$/);
-				const id = idMatch ? idMatch[1] : undefined;
+				// Get the ID from the filepath
+				const [, id] = filepath.match(/\/static\/posts\/([^/]+)\/index\.md$/) || [];
 
-				const frontMatterObj =
-					typeof frontMatter === 'object' && frontMatter !== null ? frontMatter : {};
+				// Parse metadata
 				const metadata = Metadata.parse({
-					...frontMatterObj,
+					...frontMatter,
 					id
 				});
 
