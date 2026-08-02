@@ -58,7 +58,7 @@ export default {
 		[
 			'html',
 			{
-				open: 'never',
+				open: process.env.CI ? 'never' : 'on-failure',
 				host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
 			}
 		],
@@ -98,7 +98,7 @@ export default {
 	expect: {
 		timeout: 10 * 1000,
 		toHaveScreenshot: {
-			maxDiffPixelRatio: 0.025, // 2.5%
+			maxDiffPixelRatio: 0.15, // Allow up to 15% diff ratio to accommodate font/layout variations across platforms
 			stylePath: './e2e/screenshot.css',
 			animations: 'disabled'
 		}

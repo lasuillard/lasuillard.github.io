@@ -5,11 +5,10 @@
 
 	interface Props {
 		content: HTMLElement | undefined;
-		activeId?: string;
 		[key: string]: any;
 	}
 
-	let { content = $bindable(), activeId = '', ...rest }: Props = $props();
+	let { content = $bindable(), ...rest }: Props = $props();
 	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
 
 	onMount(() => {
@@ -48,7 +47,7 @@
 <div data-testid="toc" {...rest}>
 	<div>
 		{#each rootHeadings as root (root.data.textContent)}
-			<TocTree tree={root} {activeId} />
+			<TocTree tree={root} />
 		{/each}
 	</div>
 </div>

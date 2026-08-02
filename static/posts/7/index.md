@@ -1,4 +1,5 @@
 ---
+id: 7
 title: CI로 생성된 Playwright 테스트 보고서 쉽고 빠르게 확인하기
 publicationDate: 2025-10-10T15:06:50.000+09:00
 preview: ./preview.png

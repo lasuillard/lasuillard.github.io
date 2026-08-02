@@ -5,7 +5,8 @@
 
 	let { data } = $props();
 
-	let allTags = $derived(new Set(data.allPosts.map((post) => post.metadata.tags).flat()));
+	const { allPosts } = data;
+	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());
 </script>
 
 <div>
@@ -37,8 +38,8 @@
 		<!-- Posts -->
 		<section data-testid="posts" class="xl:col-span-3">
 			<div class="flex flex-col space-y-32">
-				{#if data.allPosts.length}
-					{#each data.allPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if allPosts.length}
+					{#each allPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img

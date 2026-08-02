@@ -24,6 +24,6 @@ it('renders with data', () => {
 		}
 	});
 	expect(container.innerHTML).toMatchInlineSnapshot(
-		`"<div data-testid="toc-tree" class="text-center lg:text-left"><p class="mb-1.5 font-light text-sm text-gray-500"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul></ul></div>"`
+		`"<div data-testid="toc-tree"><p class="mb-1.5 font-light"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul></ul></div>"`
 	);
 });

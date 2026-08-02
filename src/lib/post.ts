@@ -12,8 +12,7 @@ export const Metadata = z
 		publicationDate: z.coerce.date(),
 		preview: z.string(),
 		summary: z.string(),
-		tags: z.array(z.string()),
-		series: z.string().optional()
+		tags: z.array(z.string())
 	})
 	.strict();
 
