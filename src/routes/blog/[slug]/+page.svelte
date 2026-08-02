@@ -45,6 +45,8 @@
 
 		const initialHash = window.location.hash;
 		let isInitialScroll = !!initialHash;
+		let isManualScrolling = false;
+		let scrollTimeout: NodeJS.Timeout | undefined;
 
 		// Scroll to element if hash is present in URL on mount
 		tick().then(() => {
@@ -117,6 +119,7 @@
 		});
 
 		const handleScroll = () => {
+			if (isManualScrolling) return;
 			if (!contentWrapper) return;
 			const headings = [
 				...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')
@@ -155,13 +158,50 @@
 			}
 		};
 
+		const handleScrollEnd = () => {
+			isManualScrolling = false;
+			if (scrollTimeout) {
+				clearTimeout(scrollTimeout);
+				scrollTimeout = undefined;
+			}
+		};
+
+		const handleAnchorClick = (e: MouseEvent) => {
+			const target = e.target as HTMLElement;
+			const anchor = target.closest('a');
+			if (!anchor) return;
+
+			const href = anchor.getAttribute('href');
+			if (href && href.startsWith('#')) {
+				e.preventDefault();
+				const id = decodeURIComponent(href.slice(1));
+				const element = document.getElementById(id);
+				if (element) {
+					isManualScrolling = true;
+					if (scrollTimeout) clearTimeout(scrollTimeout);
+					scrollTimeout = setTimeout(() => {
+						isManualScrolling = false;
+					}, 1500); // 1.5s fallback in case scrollend doesn't fire
+
+					activeId = href;
+					replaceState(href, {});
+					element.scrollIntoView({ behavior: 'smooth' });
+				}
+			}
+		};
+
 		// Run once initially to set the active section based on starting scroll position
 		handleScroll();
 
 		window.addEventListener('scroll', handleScroll, { passive: true });
+		window.addEventListener('scrollend', handleScrollEnd, { passive: true });
+		window.addEventListener('click', handleAnchorClick);
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
+			window.removeEventListener('scrollend', handleScrollEnd);
+			window.removeEventListener('click', handleAnchorClick);
+			if (scrollTimeout) clearTimeout(scrollTimeout);
 		};
 	});
 </script>
