@@ -4,7 +4,8 @@
 	import Toc from '$components/content/Toc.svelte';
 	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
-
+	import { tick } from 'svelte';
+	import { replaceState } from '$app/navigation';
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
 		return data;
@@ -13,6 +14,7 @@
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
 	let contentIsReady = $state(false);
+	let activeId = $state('');
 
 	// Take action when the content is ready
 	$effect(() => {
@@ -35,6 +37,133 @@
 			console.debug('Footnote label not found. Skipping patching.');
 		}
 	});
+
+	$effect(() => {
+		if (!contentIsReady || !contentWrapper) {
+			return;
+		}
+
+		const initialHash = window.location.hash;
+		let isInitialScroll = !!initialHash;
+
+		// Scroll to element if hash is present in URL on mount
+		tick().then(() => {
+			if (initialHash) {
+				try {
+					const decodedHash = decodeURIComponent(initialHash);
+					const id = decodedHash.slice(1);
+					const element = document.getElementById(id) || document.querySelector(decodedHash);
+					if (element) {
+						let userInteracted = false;
+						const cancelScroll = () => {
+							userInteracted = true;
+						};
+
+						// Listen for interactions that indicate the user wants control
+						window.addEventListener('wheel', cancelScroll, { once: true, passive: true });
+						window.addEventListener('touchstart', cancelScroll, { once: true, passive: true });
+						window.addEventListener(
+							'keydown',
+							(e) => {
+								if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown'].includes(e.code)) {
+									cancelScroll();
+								}
+							},
+							{ once: true, passive: true }
+						);
+
+						const images = Array.from(contentWrapper?.querySelectorAll('img') || []);
+						const promises = images.map((img) => {
+							if (img.complete || img.loading === 'lazy') return Promise.resolve();
+							return new Promise((resolve) => {
+								img.addEventListener('load', resolve, { once: true });
+								img.addEventListener('error', resolve, { once: true });
+							});
+						});
+
+						// Wait for Utterances widget to load and resize
+						const utterancesContainer = document.querySelector('[data-testid="utterances"]');
+						if (utterancesContainer) {
+							promises.push(
+								new Promise((resolve) => {
+									const handleMessage = (event: MessageEvent) => {
+										if (event.origin !== 'https://utteranc.es') return;
+										if (event.data && event.data.type === 'resize') {
+											window.removeEventListener('message', handleMessage);
+											resolve(null);
+										}
+									};
+									window.addEventListener('message', handleMessage);
+								})
+							);
+						}
+
+						Promise.race([
+							Promise.all(promises),
+							new Promise((resolve) => setTimeout(resolve, 2000))
+						]).then(() => {
+							window.removeEventListener('wheel', cancelScroll);
+							window.removeEventListener('touchstart', cancelScroll);
+
+							if (!userInteracted) {
+								element.scrollIntoView({ behavior: 'smooth' });
+							}
+						});
+					}
+				} catch (e) {
+					console.error('Failed to scroll to hash:', e);
+				}
+			}
+		});
+
+		const handleScroll = () => {
+			if (!contentWrapper) return;
+			const headings = [
+				...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')
+			] as HTMLElement[];
+			if (headings.length === 0) return;
+
+			let currentActive: HTMLElement | null = null;
+			for (const heading of headings) {
+				const rect = heading.getBoundingClientRect();
+				// A heading is active if it's above a threshold from the top
+				if (rect.top <= 120) {
+					currentActive = heading;
+				} else {
+					break;
+				}
+			}
+
+			// If scrolled to the very bottom, activate the last heading
+			const isAtBottom =
+				window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
+			if (isAtBottom && headings.length > 0) {
+				currentActive = headings[headings.length - 1];
+			}
+
+			const nextHash = currentActive ? `#${currentActive.id}` : '';
+
+			if (isInitialScroll && nextHash === '') {
+				activeId = initialHash;
+				return;
+			}
+			isInitialScroll = false;
+
+			if (nextHash !== activeId) {
+				replaceState(nextHash || window.location.pathname + window.location.search, {});
+				activeId = nextHash;
+			}
+		};
+
+		// Run once initially to set the active section based on starting scroll position
+		handleScroll();
+
+		window.addEventListener('scroll', handleScroll, { passive: true });
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	});
 </script>
 
 <div>
@@ -44,6 +173,7 @@
 			{#if contentIsReady}
 				<Toc
 					content={contentWrapper}
+					{activeId}
 					class="h-md:sticky h-md:top-[10%] h-lg:top-[20vh] min-w-[20vw]"
 				/>
 			{/if}
@@ -85,7 +215,7 @@
 			<!-- Embedded TOC for small screen -->
 			<div class="mb-6 flex justify-center lg:hidden">
 				{#if contentIsReady}
-					<Toc content={contentWrapper} />
+					<Toc content={contentWrapper} {activeId} />
 				{/if}
 			</div>
 			<div bind:this={contentWrapper}>
@@ -114,6 +244,9 @@
 			@apply mx-auto shadow-md;
 		}
 		/* No underline for heading links */
+		& :global(:where(h1, h2, h3, h4, h5, h6)) {
+			scroll-margin-top: 80px;
+		}
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
 			@apply no-underline;
 		}
