@@ -5,7 +5,7 @@
 	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 	import { tick } from 'svelte';
-	import { replaceState } from '$app/navigation';
+
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
 		return data;
@@ -38,6 +38,15 @@
 		}
 	});
 
+	/**
+	 * Use native browser history replaceState instead of SvelteKit's replaceState to avoid unwanted
+	 * scrolling when updating the URL hash for the Table of Contents during scroll.
+	 * @param url - The URL or hash to set.
+	 */
+	function replaceStateBrowser(url: string) {
+		history.replaceState(null, '', url);
+	}
+
 	$effect(() => {
 		if (!contentIsReady || !contentWrapper) {
 			return;
@@ -45,6 +54,8 @@
 
 		const initialHash = window.location.hash;
 		let isInitialScroll = !!initialHash;
+		let isManualScrolling = false;
+		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 		// Scroll to element if hash is present in URL on mount
 		tick().then(() => {
@@ -117,6 +128,7 @@
 		});
 
 		const handleScroll = () => {
+			if (isManualScrolling) return;
 			if (!contentWrapper) return;
 			const headings = [
 				...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')
@@ -150,8 +162,40 @@
 			isInitialScroll = false;
 
 			if (nextHash !== activeId) {
-				replaceState(nextHash || window.location.pathname + window.location.search, {});
+				replaceStateBrowser(nextHash || window.location.pathname + window.location.search);
 				activeId = nextHash;
+			}
+		};
+
+		const handleScrollEnd = () => {
+			isManualScrolling = false;
+			if (scrollTimeout) {
+				clearTimeout(scrollTimeout);
+				scrollTimeout = undefined;
+			}
+		};
+
+		const handleAnchorClick = (e: MouseEvent) => {
+			const target = e.target as HTMLElement;
+			const anchor = target.closest('a');
+			if (!anchor) return;
+
+			const href = anchor.getAttribute('href');
+			if (href && href.startsWith('#')) {
+				e.preventDefault();
+				const id = decodeURIComponent(href.slice(1));
+				const element = document.getElementById(id);
+				if (element) {
+					isManualScrolling = true;
+					if (scrollTimeout) clearTimeout(scrollTimeout);
+					scrollTimeout = setTimeout(() => {
+						isManualScrolling = false;
+					}, 1500); // 1.5s fallback in case scrollend doesn't fire
+
+					activeId = href;
+					replaceStateBrowser(href);
+					element.scrollIntoView({ behavior: 'smooth' });
+				}
 			}
 		};
 
@@ -159,9 +203,14 @@
 		handleScroll();
 
 		window.addEventListener('scroll', handleScroll, { passive: true });
+		window.addEventListener('scrollend', handleScrollEnd, { passive: true });
+		window.addEventListener('click', handleAnchorClick);
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
+			window.removeEventListener('scrollend', handleScrollEnd);
+			window.removeEventListener('click', handleAnchorClick);
+			if (scrollTimeout) clearTimeout(scrollTimeout);
 		};
 	});
 </script>
