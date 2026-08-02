@@ -21,7 +21,7 @@ test('renders recent posts section with 3 to 5 posts', async () => {
 	await expect(recentPostsSection).toBeVisible();
 
 	const heading = recentPostsSection.locator('h3');
-	await expect(heading).toHaveText('Recent Posts');
+	await expect(heading).toHaveText('최근 게시글');
 
 	const postCount = await recentPostsSection.locator('h4').count();
 	expect(postCount).toBeGreaterThanOrEqual(3);

@@ -7,8 +7,8 @@ export const load: PageLoad = async ({ fetch }) => {
 	const data = await response.json();
 	const allPosts = z.array(Post).parse(data);
 
-	// Get recent 5 posts (or 3-5)
-	const recentPosts = allPosts.slice(0, 5);
+	// Get recent 3 posts
+	const recentPosts = allPosts.slice(0, 3);
 
 	return {
 		meta: {
