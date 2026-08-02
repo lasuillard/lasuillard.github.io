@@ -1,6 +1,7 @@
 ---
 id: 6
 title: Django로 블로그 다시 만들기
+series: '기술 블로그 운영하기'
 publicationDate: 2025-10-10T14:36:24.000+09:00
 preview: ./preview.png
 summary: >

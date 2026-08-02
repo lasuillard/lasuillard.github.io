@@ -22,16 +22,16 @@
 	data-testid="series-widget"
 >
 	<h3 class="text-base-content mb-4 flex items-center gap-2 text-lg font-bold">
-		<span class="text-secondary">📁</span> Series: <span class="text-secondary">{seriesName}</span>
+		<span>📁</span> <span>{seriesName}</span>
 	</h3>
 	<ul class="space-y-3">
 		{#each sortedPosts as post (post.metadata.id)}
 			<li class="flex items-center justify-between text-sm">
 				{#if post.metadata.id === currentPostId}
-					<div class="text-secondary flex items-center gap-2 font-semibold">
+					<div class="text-base-content flex items-center gap-2 font-semibold">
 						<span>👉</span>
 						<span class="underline underline-offset-4">{post.metadata.title}</span>
-						<span class="badge badge-secondary badge-xs ml-1 rounded-xs">Current</span>
+						<span class="badge badge-outline badge-xs ml-1 rounded-xs">Current</span>
 					</div>
 				{:else}
 					<a
