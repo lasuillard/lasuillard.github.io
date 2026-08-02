@@ -2,12 +2,14 @@
 	import Comment from '$components/content/Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from '$components/content/Toc.svelte';
+	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 	import { tick } from 'svelte';
 	import { replaceState } from '$app/navigation';
 	let { data } = $props();
-	const { metadata, content } = data;
-	const { title, publicationDate, summary, tags, preview } = metadata;
+	const { metadata, content, seriesPosts } = $derived.by(() => {
+		return data;
+	});
 
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
@@ -52,6 +54,24 @@
 					const id = decodedHash.slice(1);
 					const element = document.getElementById(id) || document.querySelector(decodedHash);
 					if (element) {
+						let userInteracted = false;
+						const cancelScroll = () => {
+							userInteracted = true;
+						};
+
+						// Listen for interactions that indicate the user wants control
+						window.addEventListener('wheel', cancelScroll, { once: true, passive: true });
+						window.addEventListener('touchstart', cancelScroll, { once: true, passive: true });
+						window.addEventListener(
+							'keydown',
+							(e) => {
+								if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown'].includes(e.code)) {
+									cancelScroll();
+								}
+							},
+							{ once: true, passive: true }
+						);
+
 						const images = Array.from(contentWrapper?.querySelectorAll('img') || []);
 						const promises = images.map((img) => {
 							if (img.complete || img.loading === 'lazy') return Promise.resolve();
@@ -82,7 +102,12 @@
 							Promise.all(promises),
 							new Promise((resolve) => setTimeout(resolve, 2000))
 						]).then(() => {
-							element.scrollIntoView({ behavior: 'smooth' });
+							window.removeEventListener('wheel', cancelScroll);
+							window.removeEventListener('touchstart', cancelScroll);
+
+							if (!userInteracted) {
+								element.scrollIntoView({ behavior: 'smooth' });
+							}
 						});
 					}
 				} catch (e) {
@@ -144,7 +169,7 @@
 <div>
 	<div class="flex">
 		<!-- Side TOC for large screen -->
-		<div class="ml-12 hidden max-lg:-mr-8 xl:order-last xl:block">
+		<div class="ml-12 hidden lg:order-last lg:block">
 			{#if contentIsReady}
 				<Toc
 					content={contentWrapper}
@@ -154,29 +179,29 @@
 			{/if}
 		</div>
 		<div class="mx-auto max-w-none lg:max-w-[50rem]">
-			<div class="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
-				{#if preview}
+			<div class="mt-6 flex flex-col items-center gap-4 sm:gap-6">
+				{#if metadata.preview}
 					<img
-						src={preview}
+						src={metadata.preview}
 						alt="Preview"
 						class="h-auto w-full flex-shrink-0 rounded-xs object-contain sm:h-48 sm:w-48"
 					/>
 				{/if}
-				<div class="flex flex-col items-center sm:items-start lg:ml-8">
-					<h1 class="mx-auto text-center text-2xl font-bold md:text-3xl">{title}</h1>
-					<p class="mt-4 ml-auto text-center font-light md:text-base">
-						<time datetime={publicationDate.toISOString()} role="time">
-							{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
-							({format(publicationDate, 'yyyy년 M월 d일')})
+				<div class="flex w-full flex-1 flex-col items-center">
+					<h1 class="text-center text-2xl font-bold md:text-3xl">{metadata.title}</h1>
+					<p class="mt-4 text-center font-light md:text-base">
+						<time datetime={metadata.publicationDate.toISOString()} role="time">
+							{formatDistanceStrict(metadata.publicationDate, new Date(), { addSuffix: true })}
+							({format(metadata.publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
-					{#if summary}
+					{#if metadata.summary}
 						<p class="mt-2 text-center font-light text-gray-500 md:mt-4 md:text-lg">
-							{summary}
+							{metadata.summary}
 						</p>
 					{/if}
-					<div class="mx-auto mt-4 flex flex-wrap justify-center">
-						{#each tags as tag (tag)}
+					<div class="mt-4 flex flex-wrap justify-center">
+						{#each metadata.tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
 								<a href="/blog/tag/{tag}">
 									{tag}
@@ -188,9 +213,9 @@
 			</div>
 			<div class="divider mb-6"></div>
 			<!-- Embedded TOC for small screen -->
-			<div class="xl:hidden">
+			<div class="mb-6 flex justify-center lg:hidden">
 				{#if contentIsReady}
-					<Toc content={contentWrapper} {activeId} class="mb-6" />
+					<Toc content={contentWrapper} {activeId} />
 				{/if}
 			</div>
 			<div bind:this={contentWrapper}>
@@ -198,6 +223,9 @@
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
+			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
+				<SeriesWidget seriesName={metadata.series} {seriesPosts} currentPostId={metadata.id} />
+			{/if}
 			<Comment />
 		</div>
 	</div>
