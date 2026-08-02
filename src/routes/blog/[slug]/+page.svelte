@@ -15,6 +15,8 @@
 	let contentWrapper: HTMLElement | undefined = $state();
 	let contentIsReady = $state(false);
 	let activeId = $state('');
+	let isAutoScrolling = $state(false);
+	let clickScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 	// Take action when the content is ready
 	$effect(() => {
@@ -54,6 +56,47 @@
 
 		const initialHash = window.location.hash;
 
+		const handleScroll = () => {
+			if (isAutoScrolling) return;
+			if (!contentWrapper) return;
+
+			const headings = Array.from(contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6') || []);
+			if (headings.length === 0) return;
+
+			let currentActiveId = '';
+			for (let i = headings.length - 1; i >= 0; i--) {
+				const heading = headings[i];
+				const rect = heading.getBoundingClientRect();
+				if (rect.top <= 100) {
+					const id = heading.id;
+					if (id) {
+						currentActiveId = '#' + id;
+						break;
+					}
+				}
+			}
+
+			if (currentActiveId !== activeId) {
+				activeId = currentActiveId;
+				if (currentActiveId) {
+					replaceStateBrowser(currentActiveId);
+				} else {
+					replaceStateBrowser(window.location.pathname + window.location.search);
+				}
+			}
+		};
+
+		let ticking = false;
+		const onScroll = () => {
+			if (!ticking) {
+				window.requestAnimationFrame(() => {
+					handleScroll();
+					ticking = false;
+				});
+				ticking = true;
+			}
+		};
+
 		// Scroll to element if hash is present in URL on mount
 		tick().then(() => {
 			if (initialHash) {
@@ -62,9 +105,13 @@
 					const id = decodedHash.slice(1);
 					const element = document.getElementById(id) || document.querySelector(decodedHash);
 					if (element) {
+						isAutoScrolling = true;
+						activeId = initialHash;
+
 						let userInteracted = false;
 						const cancelScroll = () => {
 							userInteracted = true;
+							isAutoScrolling = false;
 						};
 
 						// Listen for interactions that indicate the user wants control
@@ -115,12 +162,23 @@
 
 							if (!userInteracted) {
 								element.scrollIntoView({ behavior: 'smooth' });
+								setTimeout(() => {
+									isAutoScrolling = false;
+									handleScroll();
+								}, 1000);
+							} else {
+								isAutoScrolling = false;
 							}
 						});
+					} else {
+						isAutoScrolling = false;
 					}
 				} catch (e) {
 					console.error('Failed to scroll to hash:', e);
+					isAutoScrolling = false;
 				}
+			} else {
+				isAutoScrolling = false;
 			}
 		});
 
@@ -137,15 +195,23 @@
 				if (element) {
 					activeId = href;
 					replaceStateBrowser(href);
+					isAutoScrolling = true;
 					element.scrollIntoView({ behavior: 'smooth' });
+					if (clickScrollTimeout) clearTimeout(clickScrollTimeout);
+					clickScrollTimeout = setTimeout(() => {
+						isAutoScrolling = false;
+					}, 1000);
 				}
 			}
 		};
 
 		window.addEventListener('click', handleAnchorClick);
+		window.addEventListener('scroll', onScroll, { passive: true });
 
 		return () => {
 			window.removeEventListener('click', handleAnchorClick);
+			window.removeEventListener('scroll', onScroll);
+			if (clickScrollTimeout) clearTimeout(clickScrollTimeout);
 		};
 	});
 </script>

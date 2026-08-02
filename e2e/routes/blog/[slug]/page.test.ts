@@ -92,3 +92,63 @@ test.describe('Series widget', () => {
 		await expect(thirdItem.locator('a')).toBeVisible();
 	});
 });
+
+test.describe('Section tracking and auto-scroll', () => {
+	test('tracks current section in URL and highlights in ToC on scroll', async ({ page }) => {
+		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
+		await page.route('**/utteranc.es/**', (route) => route.abort());
+
+		// Wait for content and TOC to be ready and visible
+		const toc = page.locator('[data-testid="toc"]:visible').first();
+		await expect(toc).toBeVisible();
+
+		// Initially, the hash in URL should be empty
+		expect(page.url()).not.toContain('#');
+
+		// Dynamically find the first heading link in ToC
+		const headingLink = toc.locator('a[href^="#"]').first();
+		const href = await headingLink.getAttribute('href');
+		expect(href).toBeTruthy();
+		const id = href!.slice(1);
+
+		const targetHeading = page.locator(`[id="${id}"]`);
+		await expect(targetHeading).toBeVisible();
+
+		// Scroll heading to the top of the viewport
+		await targetHeading.evaluate((el) => el.scrollIntoView({ block: 'start' }));
+
+		// Wait for URL hash tracking to trigger and match
+		const encodedId = encodeURIComponent(decodeURIComponent(id));
+		await expect(page).toHaveURL(new RegExp('.*#' + encodedId));
+
+		// The matching link in ToC should be highlighted (bold/underline)
+		await expect(headingLink).toHaveClass(/font-bold/);
+		await expect(headingLink).toHaveClass(/underline/);
+	});
+
+	test('automatically scrolls to section and highlights in ToC on visit', async ({ page }) => {
+		// First visit without hash to dynamically fetch the first heading's hash
+		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
+		await page.route('**/utteranc.es/**', (route) => route.abort());
+
+		const toc = page.locator('[data-testid="toc"]:visible').first();
+		await expect(toc).toBeVisible();
+
+		const headingLink = toc.locator('a[href^="#"]').first();
+		const targetHash = await headingLink.getAttribute('href');
+		expect(targetHash).toBeTruthy();
+
+		// Now visit the page directly with the anchor hash
+		await page.goto(`/blog/11-다시-git-hub-pages로-블로그-배포하기${targetHash}`);
+
+		// Locate the heading link in ToC and assert it has highlighted style
+		const activeHeadingLink = page.locator(`[data-testid="toc"]:visible a[href="${targetHash}"]`).first();
+		await expect(activeHeadingLink).toBeVisible();
+		await expect(activeHeadingLink).toHaveClass(/font-bold/);
+		await expect(activeHeadingLink).toHaveClass(/underline/);
+
+		// Assert we scrolled past the top (window.scrollY > 0)
+		const scrollY = await page.evaluate(() => window.scrollY);
+		expect(scrollY).toBeGreaterThan(100);
+	});
+});
