@@ -2867,7 +2867,7 @@ highlight.js@11.11.1, highlight.js@~11.11.0:
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.11.1.tgz#fca06fa0e5aeecf6c4d437239135fabc15213585"
   integrity sha512-Xwwo44whKBVCYoliBQwaPvtd/2tYFkRQtXDWj1nackaV2JPXx3L0+Jvd8/qCJ2p+ML0/XVkJ2q+Mr+UVdpJK5w==
 
-highlightjs-svelte@^1.0.6:
+highlightjs-svelte@1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/highlightjs-svelte/-/highlightjs-svelte-1.0.6.tgz#e8bfc616478f8acecdef73e7e15a65b083c1ef40"
   integrity sha512-aXuBPz8df3sOXg90q8rRcBLyxIR8ozPU39a6tJ2rpJUjjd9brRIr55aC0IccW4gsPhQxZ+B3rFugdXsg9/ckDw==
@@ -4169,7 +4169,7 @@ rehype-autolink-headings@7.1.0:
     unified "^11.0.0"
     unist-util-visit "^5.0.0"
 
-rehype-highlight-code-lines@^1.2.4:
+rehype-highlight-code-lines@1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/rehype-highlight-code-lines/-/rehype-highlight-code-lines-1.2.4.tgz#f0ffd02eac9205bdbe44f17bd56fe1330db955f1"
   integrity sha512-uaPtrwyl2vCKqvJ6JW+1gjWukxuz2ETrt6hpsDuRuk9FXreMSEevG0UJBiL5FsBMdV3FwTAa+FAwDQfkiRbQQA==

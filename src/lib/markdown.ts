@@ -5,6 +5,7 @@ import rehypeHighlightCodeLines from 'rehype-highlight-code-lines';
 import rehypeMermaid from 'rehype-mermaid';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
+import { common } from 'lowlight';
 // @ts-expect-error - highlightjs-svelte has no types
 import hljsSvelte from 'highlightjs-svelte/dist/index.mjs';
 import powershell from 'highlight.js/lib/languages/powershell';
@@ -74,6 +75,7 @@ const processor = unified()
 	.use(rehypeHighlight, {
 		detect: true,
 		languages: {
+			...common,
 			powershell,
 			svelte: svelteLanguage
 		}
