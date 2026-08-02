@@ -53,9 +53,6 @@
 		}
 
 		const initialHash = window.location.hash;
-		let isInitialScroll = !!initialHash;
-		let isManualScrolling = false;
-		let scrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
 		// Scroll to element if hash is present in URL on mount
 		tick().then(() => {
@@ -127,54 +124,6 @@
 			}
 		});
 
-		const handleScroll = () => {
-			if (isManualScrolling) return;
-			if (!contentWrapper) return;
-			const headings = [
-				...contentWrapper.querySelectorAll('h1, h2, h3, h4, h5, h6')
-			] as HTMLElement[];
-			if (headings.length === 0) return;
-
-			let currentActive: HTMLElement | null = null;
-			for (const heading of headings) {
-				const rect = heading.getBoundingClientRect();
-				// A heading is active if it's above a threshold from the top
-				if (rect.top <= 120) {
-					currentActive = heading;
-				} else {
-					break;
-				}
-			}
-
-			// If scrolled to the very bottom, activate the last heading
-			const isAtBottom =
-				window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 20;
-			if (isAtBottom && headings.length > 0) {
-				currentActive = headings[headings.length - 1];
-			}
-
-			const nextHash = currentActive ? `#${currentActive.id}` : '';
-
-			if (isInitialScroll && nextHash === '') {
-				activeId = initialHash;
-				return;
-			}
-			isInitialScroll = false;
-
-			if (nextHash !== activeId) {
-				replaceStateBrowser(nextHash || window.location.pathname + window.location.search);
-				activeId = nextHash;
-			}
-		};
-
-		const handleScrollEnd = () => {
-			isManualScrolling = false;
-			if (scrollTimeout) {
-				clearTimeout(scrollTimeout);
-				scrollTimeout = undefined;
-			}
-		};
-
 		const handleAnchorClick = (e: MouseEvent) => {
 			const target = e.target as HTMLElement;
 			const anchor = target.closest('a');
@@ -186,12 +135,6 @@
 				const id = decodeURIComponent(href.slice(1));
 				const element = document.getElementById(id);
 				if (element) {
-					isManualScrolling = true;
-					if (scrollTimeout) clearTimeout(scrollTimeout);
-					scrollTimeout = setTimeout(() => {
-						isManualScrolling = false;
-					}, 1500); // 1.5s fallback in case scrollend doesn't fire
-
 					activeId = href;
 					replaceStateBrowser(href);
 					element.scrollIntoView({ behavior: 'smooth' });
@@ -199,18 +142,10 @@
 			}
 		};
 
-		// Run once initially to set the active section based on starting scroll position
-		handleScroll();
-
-		window.addEventListener('scroll', handleScroll, { passive: true });
-		window.addEventListener('scrollend', handleScrollEnd, { passive: true });
 		window.addEventListener('click', handleAnchorClick);
 
 		return () => {
-			window.removeEventListener('scroll', handleScroll);
-			window.removeEventListener('scrollend', handleScrollEnd);
 			window.removeEventListener('click', handleAnchorClick);
-			if (scrollTimeout) clearTimeout(scrollTimeout);
 		};
 	});
 </script>
