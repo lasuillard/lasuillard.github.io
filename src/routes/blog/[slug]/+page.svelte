@@ -5,7 +5,7 @@
 	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 	import { tick } from 'svelte';
-	import { replaceState } from '$app/navigation';
+
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
 		return data;
@@ -37,6 +37,15 @@
 			console.debug('Footnote label not found. Skipping patching.');
 		}
 	});
+
+	/**
+	 * Use native browser history replaceState instead of SvelteKit's replaceState to avoid unwanted
+	 * scrolling when updating the URL hash for the Table of Contents during scroll.
+	 * @param url - The URL or hash to set.
+	 */
+	function replaceStateBrowser(url: string) {
+		history.replaceState(null, '', url);
+	}
 
 	$effect(() => {
 		if (!contentIsReady || !contentWrapper) {
@@ -153,7 +162,7 @@
 			isInitialScroll = false;
 
 			if (nextHash !== activeId) {
-				replaceState(nextHash || window.location.pathname + window.location.search, {});
+				replaceStateBrowser(nextHash || window.location.pathname + window.location.search);
 				activeId = nextHash;
 			}
 		};
@@ -184,7 +193,7 @@
 					}, 1500); // 1.5s fallback in case scrollend doesn't fire
 
 					activeId = href;
-					replaceState(href, {});
+					replaceStateBrowser(href);
 					element.scrollIntoView({ behavior: 'smooth' });
 				}
 			}
