@@ -37,7 +37,15 @@ export class PostRepository {
 					// e.g. ../../posts/1/index.md -> /posts/1/index.md
 					filepath: resolvedPath
 				});
-				const metadata = Metadata.parse(frontMatter);
+
+				// Get the ID from the filepath
+				const [, id] = filepath.match(/\/static\/posts\/([^/]+)\/index\.md$/) || [];
+
+				// Parse metadata
+				const metadata = Metadata.parse({
+					...frontMatter,
+					id
+				});
 
 				// ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.
 				const slug = _.kebabCase(metadata.title);
