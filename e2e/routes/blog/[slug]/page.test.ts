@@ -142,7 +142,9 @@ test.describe('Section tracking and auto-scroll', () => {
 		await page.goto(`/blog/11-다시-git-hub-pages로-블로그-배포하기${targetHash}`);
 
 		// Locate the heading link in ToC and assert it has highlighted style
-		const activeHeadingLink = page.locator(`[data-testid="toc"]:visible a[href="${targetHash}"]`).first();
+		const activeHeadingLink = page
+			.locator(`[data-testid="toc"]:visible a[href="${targetHash}"]`)
+			.first();
 		await expect(activeHeadingLink).toBeVisible();
 		await expect(activeHeadingLink).toHaveClass(/font-bold/);
 		await expect(activeHeadingLink).toHaveClass(/underline/);
