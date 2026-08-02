@@ -10,6 +10,13 @@
 	const { allPosts } = data;
 	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());
 
+	const tagCounts: Record<string, number> = {};
+	for (const post of allPosts) {
+		for (const tag of post.metadata.tags) {
+			tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+		}
+	}
+
 	let selectedTag = $derived($page.url.searchParams.get('tag'));
 	let filteredPosts = $derived(
 		selectedTag
@@ -57,7 +64,7 @@
 										? '/blog'
 										: `/blog?tag=${tag}`}
 								>
-									{tag}
+									{tag} ({tagCounts[tag]})
 								</a>
 							</span>
 						{/each}
