@@ -5,10 +5,12 @@
 	interface Props {
 		tree: TreeNode<HTMLElement>;
 		activeId?: string;
+		isFloating?: boolean;
+		isHovered?: boolean;
 		[key: string]: any;
 	}
 
-	let { tree, activeId = '', ...rest }: Props = $props();
+	let { tree, activeId = '', isFloating = false, isHovered = false, ...rest }: Props = $props();
 
 	const heading = $derived(tree.data.textContent);
 
@@ -25,20 +27,46 @@
 				? 'font-medium text-sm'
 				: 'font-light text-sm text-gray-500'
 	);
+
+	// Line styling for idle floating state
+	let lineWidthClass = $derived(
+		tagName === 'h1' || tagName === 'h2' ? 'w-6' : tagName === 'h3' ? 'w-4' : 'w-2.5'
+	);
+
+	let lineIndentClass = $derived(
+		tagName === 'h1' || tagName === 'h2' ? 'ml-0' : tagName === 'h3' ? 'ml-2' : 'ml-4'
+	);
 </script>
 
-<div data-testid="toc-tree" class="text-center lg:text-left" {...rest}>
-	<p class="mb-1.5 {fontClass}">
-		<a
-			class={isActive ? 'link-hover link text-secondary font-bold underline' : 'link-hover link'}
-			href={link}>{heading}</a
-		>
-	</p>
-	<ul>
-		{#each tree.children as child (child.data.textContent)}
-			<li class="lg:ml-8">
-				<TocTree tree={child} {activeId} />
-			</li>
-		{/each}
-	</ul>
-</div>
+{#if isFloating && !isHovered}
+	<div data-testid="toc-tree" class="flex flex-col items-start {lineIndentClass} my-1" {...rest}>
+		<div
+			class="h-1 {lineWidthClass} rounded-full transition-all duration-200 {isActive
+				? 'bg-secondary h-1.5 shadow-xs'
+				: 'bg-base-content/25'}"
+		></div>
+	</div>
+	{#each tree.children as child (child.data.textContent)}
+		<TocTree tree={child} {activeId} {isFloating} {isHovered} />
+	{/each}
+{:else}
+	<div
+		data-testid="toc-tree"
+		class={isFloating ? 'mb-2 text-left' : 'text-center lg:text-left'}
+		{...rest}
+	>
+		<p class="mb-1.5 {fontClass}">
+			<a
+				class={isActive ? 'link-hover link text-secondary font-bold underline' : 'link-hover link'}
+				href={link}>{heading}</a
+			>
+		</p>
+		<ul class={isFloating ? 'ml-4' : ''}>
+			{#each tree.children as child (child.data.textContent)}
+				<li class={isFloating ? '' : 'lg:ml-8'}>
+					<TocTree tree={child} {activeId} {isFloating} {isHovered} />
+				</li>
+			{/each}
+		</ul>
+	</div>
+{/if}

@@ -6,11 +6,13 @@
 	interface Props {
 		content: HTMLElement | undefined;
 		activeId?: string;
+		isFloating?: boolean;
 		[key: string]: any;
 	}
 
-	let { content = $bindable(), activeId = '', ...rest }: Props = $props();
+	let { content = $bindable(), activeId = '', isFloating = false, ...rest }: Props = $props();
 	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
+	let isHovered = $state(false);
 
 	onMount(() => {
 		if (!content) {
@@ -45,10 +47,30 @@
 	});
 </script>
 
-<div data-testid="toc" {...rest}>
+<div
+	data-testid="toc"
+	class={isFloating
+		? 'fixed top-1/3 right-4 z-50 cursor-pointer select-none ' +
+			(isHovered
+				? 'rounded-box border-base-content/10 bg-base-100/95 max-h-[60vh] max-w-[80vw] overflow-y-auto border p-4 shadow-xl backdrop-blur-xs'
+				: 'border-transparent bg-transparent p-2 shadow-none')
+		: ''}
+	onmouseenter={() => {
+		if (isFloating) isHovered = true;
+	}}
+	onmouseleave={() => {
+		if (isFloating) isHovered = false;
+	}}
+	onclick={() => {
+		if (isFloating) {
+			isHovered = !isHovered;
+		}
+	}}
+	{...rest}
+>
 	<div>
 		{#each rootHeadings as root (root.data.textContent)}
-			<TocTree tree={root} {activeId} />
+			<TocTree tree={root} {activeId} {isFloating} {isHovered} />
 		{/each}
 	</div>
 </div>

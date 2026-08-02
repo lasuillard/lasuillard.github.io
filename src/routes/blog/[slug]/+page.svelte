@@ -196,12 +196,12 @@
 				</div>
 			</div>
 			<div class="divider mb-6"></div>
-			<!-- Embedded TOC for small screen -->
-			<div class="mb-6 flex justify-center lg:hidden">
-				{#if contentIsReady}
-					<Toc content={contentWrapper} {activeId} />
-				{/if}
-			</div>
+			<!-- Floating/Hoverable TOC for small screens -->
+			{#if contentIsReady}
+				<div class="lg:hidden">
+					<Toc content={contentWrapper} {activeId} isFloating={true} />
+				</div>
+			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
