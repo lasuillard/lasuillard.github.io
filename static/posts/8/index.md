@@ -1,5 +1,4 @@
 ---
-id: 8
 title: GitHub Actions을 활용하여 메트릭 수집하기
 publicationDate: 2025-10-10T15:25:34.000+09:00
 preview: ./preview.png

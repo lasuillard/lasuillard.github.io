@@ -1,3 +1,4 @@
+import type { Metadata } from '$lib/post';
 import path from 'node:path';
 import { URL } from 'node:url';
 import remarkFrontmatter from 'remark-frontmatter';
@@ -96,7 +97,7 @@ const baseProcessor = unified()
 export async function parse(
 	markdown: string,
 	options: { filepath: string }
-): Promise<{ frontMatter: unknown; content: string }> {
+): Promise<{ frontMatter: Partial<Metadata>; content: string }> {
 	const baseDir = path
 		.dirname(options.filepath)
 		.replace(__PROJECT_ROOT__, '')
@@ -120,8 +121,7 @@ export async function parse(
 	const content = parsedResult.value.toString();
 
 	// Extract frontmatter
-	// TODO: Type the `frontMatter` properly
-	const frontMatter: any = parsedResult.data.frontMatter || {};
+	const frontMatter: Partial<Metadata> = parsedResult.data.frontMatter || {};
 
 	// Resolve preview URL in frontmatter
 	if (frontMatter.preview !== undefined) {
