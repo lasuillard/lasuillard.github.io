@@ -19,7 +19,7 @@
 		if (link === activeId) return true;
 		try {
 			return decodeURIComponent(link) === decodeURIComponent(activeId);
-		} catch (e) {
+		} catch {
 			return false;
 		}
 	});
