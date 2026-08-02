@@ -5,8 +5,6 @@
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
-	const { metadata, content } = data;
-	const { title, publicationDate, summary, tags, preview } = metadata;
 
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
@@ -48,28 +46,28 @@
 		</div>
 		<div class="mx-auto max-w-none lg:max-w-[50rem]">
 			<div class="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:gap-6">
-				{#if preview}
+				{#if data.metadata.preview}
 					<img
-						src={preview}
+						src={data.metadata.preview}
 						alt="Preview"
 						class="h-auto w-full flex-shrink-0 rounded-xs object-contain sm:h-48 sm:w-48"
 					/>
 				{/if}
 				<div class="flex flex-col items-center sm:items-start lg:ml-8">
-					<h1 class="mx-auto text-center text-2xl font-bold md:text-3xl">{title}</h1>
+					<h1 class="mx-auto text-center text-2xl font-bold md:text-3xl">{data.metadata.title}</h1>
 					<p class="mt-4 ml-auto text-center font-light md:text-base">
-						<time datetime={publicationDate.toISOString()} role="time">
-							{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
-							({format(publicationDate, 'yyyy년 M월 d일')})
+						<time datetime={data.metadata.publicationDate.toISOString()} role="time">
+							{formatDistanceStrict(data.metadata.publicationDate, new Date(), { addSuffix: true })}
+							({format(data.metadata.publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
-					{#if summary}
+					{#if data.metadata.summary}
 						<p class="mt-2 text-center font-light text-gray-500 md:mt-4 md:text-lg">
-							{summary}
+							{data.metadata.summary}
 						</p>
 					{/if}
 					<div class="mx-auto mt-4 flex flex-wrap justify-center">
-						{#each tags as tag (tag)}
+						{#each data.metadata.tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
 								<a href="/blog/tag/{tag}">
 									{tag}
@@ -88,7 +86,7 @@
 			</div>
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
-					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
+					<Markdown bind:ready={contentIsReady}>{data.content}</Markdown>
 				</article>
 			</div>
 			<Comment />
