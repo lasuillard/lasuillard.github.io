@@ -4,7 +4,7 @@
 	import Toc from '$components/content/Toc.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 	import { tick } from 'svelte';
-
+	import { replaceState } from '$app/navigation';
 	let { data } = $props();
 	const { metadata, content } = data;
 	const { title, publicationDate, summary, tags, preview } = metadata;
@@ -41,13 +41,52 @@
 			return;
 		}
 
+		const initialHash = window.location.hash;
+		let isInitialScroll = !!initialHash;
+
 		// Scroll to element if hash is present in URL on mount
 		tick().then(() => {
-			const hash = window.location.hash;
-			if (hash) {
-				const element = document.querySelector(hash);
-				if (element) {
-					element.scrollIntoView({ behavior: 'smooth' });
+			if (initialHash) {
+				try {
+					const decodedHash = decodeURIComponent(initialHash);
+					const id = decodedHash.slice(1);
+					const element = document.getElementById(id) || document.querySelector(decodedHash);
+					if (element) {
+						const images = Array.from(contentWrapper?.querySelectorAll('img') || []);
+						const promises = images.map((img) => {
+							if (img.complete || img.loading === 'lazy') return Promise.resolve();
+							return new Promise((resolve) => {
+								img.addEventListener('load', resolve, { once: true });
+								img.addEventListener('error', resolve, { once: true });
+							});
+						});
+
+						// Wait for Utterances widget to load and resize
+						const utterancesContainer = document.querySelector('[data-testid="utterances"]');
+						if (utterancesContainer) {
+							promises.push(
+								new Promise((resolve) => {
+									const handleMessage = (event: MessageEvent) => {
+										if (event.origin !== 'https://utteranc.es') return;
+										if (event.data && event.data.type === 'resize') {
+											window.removeEventListener('message', handleMessage);
+											resolve(null);
+										}
+									};
+									window.addEventListener('message', handleMessage);
+								})
+							);
+						}
+
+						Promise.race([
+							Promise.all(promises),
+							new Promise((resolve) => setTimeout(resolve, 2000))
+						]).then(() => {
+							element.scrollIntoView({ behavior: 'smooth' });
+						});
+					}
+				} catch (e) {
+					console.error('Failed to scroll to hash:', e);
 				}
 			}
 		});
@@ -78,14 +117,17 @@
 			}
 
 			const nextHash = currentActive ? `#${currentActive.id}` : '';
-			if (nextHash !== window.location.hash) {
-				history.replaceState(
-					null,
-					'',
-					nextHash || window.location.pathname + window.location.search
-				);
+
+			if (isInitialScroll && nextHash === '') {
+				activeId = initialHash;
+				return;
 			}
-			activeId = nextHash;
+			isInitialScroll = false;
+
+			if (nextHash !== activeId) {
+				replaceState(nextHash || window.location.pathname + window.location.search, {});
+				activeId = nextHash;
+			}
 		};
 
 		// Run once initially to set the active section based on starting scroll position
@@ -174,6 +216,9 @@
 			@apply mx-auto shadow-md;
 		}
 		/* No underline for heading links */
+		& :global(:where(h1, h2, h3, h4, h5, h6)) {
+			scroll-margin-top: 80px;
+		}
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
 			@apply no-underline;
 		}
