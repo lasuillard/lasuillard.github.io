@@ -106,8 +106,8 @@ jobs:
       - name: Get Playwright version
         id: playwright-version
         run: |
-          PLAYWRIGHT_VERSION="$(yarn exec --silent -- playwright --version | awk '{print $2}')"
-          echo "PLAYWRIGHT_VERSION=${PLAYWRIGHT_VERSION}" | tee --append "$GITHUB_ENV"
+          version="$(yarn exec --silent -- playwright --version | awk '{print $2}')"
+          echo "playwright-version=${version}" | tee --append "$GITHUB_OUTPUT"
 
       - name: Playwright cache
         id: playwright-cache
