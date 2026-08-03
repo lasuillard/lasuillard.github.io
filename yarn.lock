@@ -266,7 +266,7 @@
     unplugin "^1.10.1"
     zod "^3.22.4"
 
-"@codecov/sveltekit-plugin@^2.0.1":
+"@codecov/sveltekit-plugin@2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@codecov/sveltekit-plugin/-/sveltekit-plugin-2.0.1.tgz#d67f3bd6ff411bb7bd64a6f906a2f1bec5a12bff"
   integrity sha512-Dh3NnuT1lvys/NMb26W6j/EZ5aIdgIyPCN4oAGME4AIOrhqOe+eDNLxqDzzYZGHBT6F5LJHyCnWfCblNju9hjQ==
