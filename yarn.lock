@@ -266,7 +266,16 @@
     unplugin "^1.10.1"
     zod "^3.22.4"
 
-"@codecov/vite-plugin@2.0.1":
+"@codecov/sveltekit-plugin@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@codecov/sveltekit-plugin/-/sveltekit-plugin-2.0.1.tgz#d67f3bd6ff411bb7bd64a6f906a2f1bec5a12bff"
+  integrity sha512-Dh3NnuT1lvys/NMb26W6j/EZ5aIdgIyPCN4oAGME4AIOrhqOe+eDNLxqDzzYZGHBT6F5LJHyCnWfCblNju9hjQ==
+  dependencies:
+    "@codecov/bundler-plugin-core" "^2.0.1"
+    "@codecov/vite-plugin" "^2.0.1"
+    unplugin "^1.10.1"
+
+"@codecov/vite-plugin@^2.0.1":
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/@codecov/vite-plugin/-/vite-plugin-2.0.1.tgz#89b2c3cc235115a52c4fb514eea7e8238dae8490"
   integrity sha512-w7nGA9SSc0WECzn05yRrw3uN8293I620Kd9x97I0kyyxUjtWxCMmlgmAbS364gJZYvljd0A6iQyAigVV2dOX9A==
