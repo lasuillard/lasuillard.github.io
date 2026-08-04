@@ -95,8 +95,8 @@ test.describe('Series widget', () => {
 
 test.describe('Section tracking and auto-scroll', () => {
 	test('tracks current section in URL and highlights in ToC on scroll', async ({ page }) => {
-		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
 		await page.route('**/utteranc.es/**', (route) => route.abort());
+		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
 
 		// Wait for content and TOC to be ready and visible
 		const toc = page.locator('[data-testid="toc"]:visible').first();
@@ -128,8 +128,8 @@ test.describe('Section tracking and auto-scroll', () => {
 
 	test('automatically scrolls to section and highlights in ToC on visit', async ({ page }) => {
 		// First visit without hash to dynamically fetch the first heading's hash
-		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
 		await page.route('**/utteranc.es/**', (route) => route.abort());
+		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
 
 		const toc = page.locator('[data-testid="toc"]:visible').first();
 		await expect(toc).toBeVisible();

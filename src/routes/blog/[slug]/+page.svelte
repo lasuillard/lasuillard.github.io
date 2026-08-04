@@ -4,7 +4,7 @@
 	import Toc from '$components/content/Toc.svelte';
 	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
-	import { ScrollTracker } from './scroll-tracking.svelte';
+	import { ScrollTracker } from './scroll-tracking.svelte.js';
 
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {

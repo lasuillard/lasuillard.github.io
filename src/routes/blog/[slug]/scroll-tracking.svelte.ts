@@ -119,7 +119,12 @@ export class ScrollTracker {
 			return;
 		}
 		e.preventDefault();
-		const id = decodeURIComponent(href.slice(1) /* Remove leading # */);
+		let id: string;
+		try {
+			id = decodeURIComponent(href.slice(1) /* Remove leading # */);
+		} catch {
+			return;
+		}
 
 		// Find the element to scroll to
 		const element = document.getElementById(id);
@@ -144,6 +149,9 @@ export class ScrollTracker {
 		if (this.observer) {
 			this.observer.disconnect();
 			this.observer = null;
+		}
+		if (this.clickScrollTimeout) {
+			clearTimeout(this.clickScrollTimeout);
 		}
 	}
 }
@@ -189,11 +197,17 @@ function waitForUtterances(): Promise<unknown> | null {
 	}
 
 	return new Promise((resolve) => {
+		const timeout = setTimeout(() => {
+			window.removeEventListener('message', handleMessage);
+			resolve(null);
+		}, 3_000);
+
 		const handleMessage = (event: MessageEvent) => {
 			if (event.origin !== 'https://utteranc.es') {
 				return;
 			}
 			if (event.data && event.data.type === 'resize') {
+				clearTimeout(timeout);
 				window.removeEventListener('message', handleMessage);
 				resolve(null);
 			}
