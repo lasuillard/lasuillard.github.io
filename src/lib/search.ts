@@ -1,4 +1,7 @@
 import MiniSearch from 'minisearch';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkGfm from 'remark-gfm';
 
 let miniSearch: MiniSearch | undefined = undefined;
 
@@ -8,23 +11,32 @@ let miniSearch: MiniSearch | undefined = undefined;
  * @returns Cleaned text content.
  */
 export function cleanMarkdown(markdown: string): string {
-	let cleaned = markdown.replace(/```[a-z]*\n([\s\S]*?)\n```/g, '$1').replace(/`([^`]+)`/g, '$1');
+	const processor = unified().use(remarkParse).use(remarkGfm);
+	const tree = processor.parse(markdown);
 
-	// Strip HTML comments
-	cleaned = cleaned.replace(/<!--[\s\S]*?-->/g, '');
+	let result = '';
 
-	// Strip HTML tags safely, ensuring it starts with < and a letter or / to avoid stripping a < b
-	cleaned = cleaned.replace(/<\/?[a-z][^>]*>/gi, '');
+	/**
+	 * Visit nodes recursively to extract text.
+	 * @param node AST node
+	 */
+	function visit(node: any) {
+		if (node.type === 'text' || node.type === 'inlineCode' || node.type === 'code') {
+			result += node.value;
+		}
+		if (node.children) {
+			for (const child of node.children) {
+				visit(child);
+			}
+		}
+		if (['paragraph', 'heading', 'listItem', 'tableRow'].includes(node.type)) {
+			result += ' ';
+		}
+	}
 
-	return cleaned
-		.replace(/!\[(.*?)\]\((.*?)\)/g, '$1')
-		.replace(/\[(.*?)\]\((.*?)\)/g, '$1')
-		.replace(/^\s*[-*+]\s+/gm, '')
-		.replace(/^\s*\d+\.\s+/gm, '')
-		.replace(/^#+\s+/gm, '')
-		.replace(/[*_]{1,3}([^*_]+)[*_]{1,3}/g, '$1')
-		.replace(/\s+/g, ' ')
-		.trim();
+	visit(tree);
+
+	return result.replace(/\s+/g, ' ').trim();
 }
 
 /**
