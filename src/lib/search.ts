@@ -3,44 +3,6 @@ import MiniSearch from 'minisearch';
 let miniSearch: MiniSearch | undefined = undefined;
 
 /**
- * Strip HTML tags and comments character-by-character to avoid CodeQL regular-expression HTML-injection warning.
- * @param text The input text.
- * @returns Text with HTML tags and comments stripped.
- */
-function stripHtmlAndComments(text: string): string {
-	let result = '';
-	let inTag = false;
-	let i = 0;
-	while (i < text.length) {
-		if (text.startsWith('<!--', i)) {
-			const endIdx = text.indexOf('-->', i + 4);
-			if (endIdx !== -1) {
-				i = endIdx + 3;
-			} else {
-				i = text.length;
-			}
-			continue;
-		}
-		if (text[i] === '<') {
-			inTag = true;
-			i++;
-			continue;
-		}
-		if (text[i] === '>') {
-			inTag = false;
-			result += ' ';
-			i++;
-			continue;
-		}
-		if (!inTag) {
-			result += text[i];
-		}
-		i++;
-	}
-	return result;
-}
-
-/**
  * Clean up markdown tags, HTML elements, and formatting for better indexing.
  * @param markdown Raw markdown content.
  * @returns Cleaned text content.
@@ -48,7 +10,11 @@ function stripHtmlAndComments(text: string): string {
 export function cleanMarkdown(markdown: string): string {
 	let cleaned = markdown.replace(/```[a-z]*\n([\s\S]*?)\n```/g, '$1').replace(/`([^`]+)`/g, '$1');
 
-	cleaned = stripHtmlAndComments(cleaned);
+	// Strip HTML comments
+	cleaned = cleaned.replace(/<!--[\s\S]*?-->/g, '');
+
+	// Strip HTML tags safely, ensuring it starts with < and a letter or / to avoid stripping a < b
+	cleaned = cleaned.replace(/<\/?[a-z][^>]*>/gi, '');
 
 	return cleaned
 		.replace(/!\[(.*?)\]\((.*?)\)/g, '$1')
@@ -80,14 +46,26 @@ export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 
 	if (!posts) {
 		console.debug('Loading pre-built search index');
-		const response = await fetch('/api/search-index');
-		const data = await response.json();
-		miniSearch = MiniSearch.loadJS(data, options);
+		try {
+			const response = await fetch('/api/search-index');
+			if (!response.ok) {
+				throw new Error(`Failed to fetch search index: ${response.status} ${response.statusText}`);
+			}
+			const data = await response.json();
+			miniSearch = MiniSearch.loadJS(data, options);
+		} catch (error) {
+			console.error('Failed to load pre-built search index:', error);
+			miniSearch = new MiniSearch(options);
+		}
 	} else {
 		console.debug('Indexing documents on the fly');
 		miniSearch = new MiniSearch(options);
 		const cleanedPosts = posts.map((post) => ({
 			...post,
+			metadata: {
+				...post.metadata,
+				publicationDate: new Date(post.metadata.publicationDate).getTime()
+			},
 			content: cleanMarkdown(post.content || '')
 		}));
 		await miniSearch.addAllAsync(cleanedPosts);

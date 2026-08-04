@@ -19,6 +19,10 @@ export const GET = async () => {
 
 	const documents = allPosts.map((post) => ({
 		...post,
+		metadata: {
+			...post.metadata,
+			publicationDate: new Date(post.metadata.publicationDate).getTime()
+		},
 		content: cleanMarkdown(post.content || '')
 	}));
 
