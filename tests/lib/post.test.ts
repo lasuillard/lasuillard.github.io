@@ -29,4 +29,34 @@ describe('`Post` schema', () => {
 			content: 'Polar bear'
 		});
 	});
+
+	it('parses post metadata including optional series field', () => {
+		expect(
+			Post.parse({
+				metadata: {
+					id: 2,
+					title: 'Fanta and Sprite',
+					slug: 'fanta-and-sprite',
+					publicationDate: '2021-05-14T00:00:00.000+09:00',
+					preview: '/sprite.png',
+					summary: 'Another review.',
+					tags: ['beverage'],
+					series: 'Soda Chronicles'
+				},
+				content: 'Yummy'
+			})
+		).toEqual({
+			metadata: {
+				id: '2',
+				title: 'Fanta and Sprite',
+				slug: 'fanta-and-sprite',
+				publicationDate: new Date('2021-05-14T00:00:00.000+09:00'),
+				preview: '/sprite.png',
+				summary: 'Another review.',
+				tags: ['beverage'],
+				series: 'Soda Chronicles'
+			},
+			content: 'Yummy'
+		});
+	});
 });

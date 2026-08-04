@@ -7,15 +7,18 @@
 
 	let { data } = $props();
 
-	const { allPosts } = data;
-	const allTags = new Set(allPosts.map((post) => post.metadata.tags).flat());
+	let allPosts = $derived(data.allPosts);
+	let allTags = $derived(new Set(allPosts.map((post) => post.metadata.tags).flat()));
 
-	const tagCounts: Record<string, number> = {};
-	for (const post of allPosts) {
-		for (const tag of post.metadata.tags) {
-			tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+	let tagCounts = $derived.by(() => {
+		const counts: Record<string, number> = {};
+		for (const post of allPosts) {
+			for (const tag of post.metadata.tags) {
+				counts[tag] = (counts[tag] || 0) + 1;
+			}
 		}
-	}
+		return counts;
+	});
 
 	let selectedTag = $derived($page.url.searchParams.get('tag'));
 	let filteredPosts = $derived(
@@ -64,7 +67,7 @@
 										? '/blog'
 										: `/blog?tag=${tag}`}
 								>
-									{tag} ({tagCounts[tag]})
+									{tag} ({tagCounts[tag] || 0})
 								</a>
 							</span>
 						{/each}

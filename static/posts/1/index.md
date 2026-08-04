@@ -1,6 +1,6 @@
 ---
-id: 1
 title: 기술 블로그 시작하기
+series: '기술 블로그 운영하기'
 publicationDate: 2023-11-03T16:39:00.000+09:00
 preview: ./preview.png
 summary: >
