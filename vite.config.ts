@@ -1,4 +1,4 @@
-import { codecovVitePlugin } from '@codecov/vite-plugin';
+import { codecovSvelteKitPlugin } from '@codecov/sveltekit-plugin';
 import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
@@ -12,12 +12,13 @@ export default defineConfig({
 			sourceMapsUploadOptions: {
 				org: 'lasuillard',
 				project: 'lasuillard-github-io'
-			}
+			},
+			telemetry: false
 		}),
 		tailwindcss(),
 		sveltekit(),
 		svelteTesting() as PluginOption,
-		codecovVitePlugin({
+		codecovSvelteKitPlugin({
 			enableBundleAnalysis: true,
 			bundleName: 'lasuillard.github.io',
 			oidc: {
