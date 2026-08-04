@@ -4,7 +4,7 @@
 	import Toc from '$components/content/Toc.svelte';
 	import SeriesWidget from '$components/content/SeriesWidget.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
-	import { tick } from 'svelte';
+	import { ScrollTracker } from './scroll-tracking.svelte.js';
 
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
@@ -14,7 +14,8 @@
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
 	let contentIsReady = $state(false);
-	let activeId = $state('');
+
+	const scrollTracker = new ScrollTracker();
 
 	// Take action when the content is ready
 	$effect(() => {
@@ -38,117 +39,22 @@
 		}
 	});
 
-	/**
-	 * Use native browser history replaceState instead of SvelteKit's replaceState to avoid unwanted
-	 * scrolling when updating the URL hash for the Table of Contents during scroll.
-	 * @param url - The URL or hash to set.
-	 */
-	function replaceStateBrowser(url: string) {
-		history.replaceState(null, '', url);
-	}
-
 	$effect(() => {
-		if (!contentIsReady || !contentWrapper) {
+		if (!contentWrapper || !contentIsReady) {
 			return;
 		}
+		scrollTracker.doInit(contentWrapper);
 
-		const initialHash = window.location.hash;
-
-		// Scroll to element if hash is present in URL on mount
-		tick().then(() => {
-			if (initialHash) {
-				try {
-					const decodedHash = decodeURIComponent(initialHash);
-					const id = decodedHash.slice(1);
-					const element = document.getElementById(id) || document.querySelector(decodedHash);
-					if (element) {
-						let userInteracted = false;
-						const cancelScroll = () => {
-							userInteracted = true;
-						};
-
-						// Listen for interactions that indicate the user wants control
-						window.addEventListener('wheel', cancelScroll, { once: true, passive: true });
-						window.addEventListener('touchstart', cancelScroll, { once: true, passive: true });
-						window.addEventListener(
-							'keydown',
-							(e) => {
-								if (['ArrowUp', 'ArrowDown', 'Space', 'PageUp', 'PageDown'].includes(e.code)) {
-									cancelScroll();
-								}
-							},
-							{ once: true, passive: true }
-						);
-
-						const images = Array.from(contentWrapper?.querySelectorAll('img') || []);
-						const promises = images.map((img) => {
-							if (img.complete || img.loading === 'lazy') return Promise.resolve();
-							return new Promise((resolve) => {
-								img.addEventListener('load', resolve, { once: true });
-								img.addEventListener('error', resolve, { once: true });
-							});
-						});
-
-						// Wait for Utterances widget to load and resize
-						const utterancesContainer = document.querySelector('[data-testid="utterances"]');
-						if (utterancesContainer) {
-							promises.push(
-								new Promise((resolve) => {
-									const handleMessage = (event: MessageEvent) => {
-										if (event.origin !== 'https://utteranc.es') return;
-										if (event.data && event.data.type === 'resize') {
-											window.removeEventListener('message', handleMessage);
-											resolve(null);
-										}
-									};
-									window.addEventListener('message', handleMessage);
-								})
-							);
-						}
-
-						Promise.race([
-							Promise.all(promises),
-							new Promise((resolve) => setTimeout(resolve, 2000))
-						]).then(() => {
-							window.removeEventListener('wheel', cancelScroll);
-							window.removeEventListener('touchstart', cancelScroll);
-
-							if (!userInteracted) {
-								element.scrollIntoView({ behavior: 'smooth' });
-							}
-						});
-					}
-				} catch (e) {
-					console.error('Failed to scroll to hash:', e);
-				}
-			}
-		});
-
-		const handleAnchorClick = (e: MouseEvent) => {
-			const target = e.target as HTMLElement;
-			const anchor = target.closest('a');
-			if (!anchor) return;
-
-			const href = anchor.getAttribute('href');
-			if (href && href.startsWith('#')) {
-				e.preventDefault();
-				const id = decodeURIComponent(href.slice(1));
-				const element = document.getElementById(id);
-				if (element) {
-					activeId = href;
-					replaceStateBrowser(href);
-					element.scrollIntoView({ behavior: 'smooth' });
-				}
-			}
-		};
-
-		window.addEventListener('click', handleAnchorClick);
-
-		return () => {
-			window.removeEventListener('click', handleAnchorClick);
-		};
+		return () => scrollTracker.destroy();
 	});
 </script>
+
+<svelte:window
+	onclick={(e) => {
+		if (!contentWrapper) return;
+		scrollTracker.handleAnchorClick(e);
+	}}
+/>
 
 <div>
 	<div class="flex">
@@ -157,7 +63,7 @@
 			{#if contentIsReady}
 				<Toc
 					content={contentWrapper}
-					{activeId}
+					activeId={scrollTracker.activeId}
 					class="h-md:sticky h-md:top-[10%] h-lg:top-[20vh] min-w-[20vw]"
 				/>
 			{/if}
@@ -199,7 +105,7 @@
 			<!-- Embedded TOC for small screen -->
 			<div class="mb-6 flex justify-center lg:hidden">
 				{#if contentIsReady}
-					<Toc content={contentWrapper} {activeId} />
+					<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
 				{/if}
 			</div>
 			<div bind:this={contentWrapper}>
