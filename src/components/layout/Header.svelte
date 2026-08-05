@@ -1,5 +1,9 @@
 <script lang="ts">
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 	import Menu from '$components/icon/Menu.svelte';
+	import QrCode from '$components/icon/QrCode.svelte';
+	import QRCode from '$components/content/QRCode.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
 	const links = [
@@ -13,6 +17,8 @@
 	}
 
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
+
+	let currentURL = $derived(browser ? ($page?.url?.href || window.location.href) : '');
 </script>
 
 <div data-testid="header-wrapper" class="bg-base-200 sticky top-0 z-10 w-full">
@@ -55,7 +61,30 @@
 				</div>
 
 				<!-- Utility buttons -->
-				<div class="navbar-end flex-1">
+				<div class="navbar-end flex-1 gap-2">
+					<div class="dropdown dropdown-end dropdown-hover hidden md:inline-block" data-testid="qr-dropdown">
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
+							<QrCode class="h-7 w-7" />
+						</div>
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						<div
+							tabindex="0"
+							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-4 shadow-xl"
+						>
+							{#if currentURL}
+								<QRCode text={currentURL} width={140} />
+								<span
+									class="text-base-content/70 max-w-[140px] select-all truncate text-center text-xs font-semibold"
+									title={currentURL}
+								>
+									{currentURL}
+								</span>
+							{:else}
+								<canvas width={140}></canvas>
+							{/if}
+						</div>
+					</div>
 					<ThemeSelect />
 				</div>
 			</header>
@@ -71,11 +100,11 @@
 				class="flex min-h-screen w-full"
 				onclick={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
 			>
-				<ul class="menu m-auto text-2xl text-white">
+				<ul class="menu m-auto text-2xl text-white flex flex-col items-center gap-6">
 					{#each links as link (link.name)}
 						<li>
 							<a
-								class="w-fit"
+								class="w-fit mx-auto"
 								class:underline={currentPath === link.href}
 								href={link.href}
 								onclick={(/* Close drawer when link clicked */) => (drawerOpen = false)}
@@ -84,6 +113,20 @@
 							</a>
 						</li>
 					{/each}
+
+					<!-- Mobile Drawer QR Code -->
+					{#if drawerOpen && currentURL}
+						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
+						<li class="mt-8 flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
+							<div class="bg-white p-3 rounded-xl shadow-lg">
+								<QRCode text={currentURL} width={140} />
+							</div>
+							<span class="text-xs text-gray-300 max-w-[140px] truncate select-all" title={currentURL}>
+								{currentURL}
+							</span>
+						</li>
+					{/if}
 				</ul>
 			</div>
 		</div>

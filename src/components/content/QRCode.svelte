@@ -1,6 +1,5 @@
 <script lang="ts">
 	import QRCode from 'qrcode';
-	import { onMount } from 'svelte';
 
 	interface Props {
 		text: string;
@@ -11,7 +10,7 @@
 
 	let qrCode: HTMLElement | undefined = $state();
 
-	onMount(() => {
+	$effect(() => {
 		if (!qrCode) {
 			console.error('Canvas for QR Code not defined yet.');
 			return;
