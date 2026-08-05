@@ -16,16 +16,15 @@ test('has a title and meta tags for SEO', async () => {
 	expect(await page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
 });
 
-test('renders recent posts section with 3 to 5 posts', async () => {
+test('renders recent posts section with 3 posts', async () => {
 	const recentPostsSection = page.getByTestId('recent-posts');
 	await expect(recentPostsSection).toBeVisible();
 
 	const heading = recentPostsSection.locator('h3');
-	await expect(heading).toHaveText('최근 게시글');
+	await expect(heading).toHaveText('최근 쓴 글');
 
 	const postCount = await recentPostsSection.locator('h4').count();
-	expect(postCount).toBeGreaterThanOrEqual(3);
-	expect(postCount).toBeLessThanOrEqual(5);
+	expect(postCount).toBe(3);
 });
 
 test('list all tags with ref counts', () => test.fixme());
