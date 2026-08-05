@@ -66,7 +66,6 @@
 						class="dropdown dropdown-end dropdown-hover hidden md:inline-block"
 						data-testid="qr-dropdown"
 					>
-						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QrCode class="h-7 w-7" />
 						</div>
@@ -78,7 +77,7 @@
 							{#if currentURL}
 								<QRCode text={currentURL} width={140} />
 								<span
-									class="text-base-content/70 max-w-[140px] truncate text-center text-xs font-semibold select-all"
+									class="text-base-content/70 max-w-[140px] select-all truncate text-center text-xs font-semibold"
 									title={currentURL}
 								>
 									{currentURL}
@@ -126,7 +125,7 @@
 								<QRCode text={currentURL} width={140} />
 							</div>
 							<span
-								class="max-w-[140px] truncate text-xs text-gray-300 select-all"
+								class="max-w-[140px] select-all truncate text-xs text-gray-300"
 								title={currentURL}
 							>
 								{currentURL}
