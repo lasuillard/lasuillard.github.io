@@ -18,7 +18,7 @@
 
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 
-	let currentURL = $derived(browser ? ($page?.url?.href || window.location.href) : '');
+	let currentURL = $derived(browser ? $page?.url?.href || window.location.href : '');
 </script>
 
 <div data-testid="header-wrapper" class="bg-base-200 sticky top-0 z-10 w-full">
@@ -62,7 +62,10 @@
 
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1 gap-2">
-					<div class="dropdown dropdown-end dropdown-hover hidden md:inline-block" data-testid="qr-dropdown">
+					<div
+						class="dropdown dropdown-end dropdown-hover hidden md:inline-block"
+						data-testid="qr-dropdown"
+					>
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QrCode class="h-7 w-7" />
@@ -75,7 +78,7 @@
 							{#if currentURL}
 								<QRCode text={currentURL} width={140} />
 								<span
-									class="text-base-content/70 max-w-[140px] select-all truncate text-center text-xs font-semibold"
+									class="text-base-content/70 max-w-[140px] truncate text-center text-xs font-semibold select-all"
 									title={currentURL}
 								>
 									{currentURL}
@@ -100,11 +103,11 @@
 				class="flex min-h-screen w-full"
 				onclick={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
 			>
-				<ul class="menu m-auto text-2xl text-white flex flex-col items-center gap-6">
+				<ul class="menu m-auto flex flex-col items-center gap-6 text-2xl text-white">
 					{#each links as link (link.name)}
 						<li>
 							<a
-								class="w-fit mx-auto"
+								class="mx-auto w-fit"
 								class:underline={currentPath === link.href}
 								href={link.href}
 								onclick={(/* Close drawer when link clicked */) => (drawerOpen = false)}
@@ -119,10 +122,13 @@
 						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<li class="mt-8 flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
-							<div class="bg-white p-3 rounded-xl shadow-lg">
+							<div class="rounded-xl bg-white p-3 shadow-lg">
 								<QRCode text={currentURL} width={140} />
 							</div>
-							<span class="text-xs text-gray-300 max-w-[140px] truncate select-all" title={currentURL}>
+							<span
+								class="max-w-[140px] truncate text-xs text-gray-300 select-all"
+								title={currentURL}
+							>
 								{currentURL}
 							</span>
 						</li>
