@@ -30,7 +30,7 @@ export default ts.config(
 	...ts.configs.recommended,
 	prettier,
 	...svelte.configs.recommended,
-	jsdoc.configs['flat/recommended-typescript'],
+	jsdoc.configs['flat/recommended-mixed'],
 	{
 		languageOptions: {
 			globals: {
