@@ -2,11 +2,13 @@ import type { PlaywrightTestConfig } from '@playwright/test';
 
 const isCI = !!process.env.CI;
 
+const webserverPort = parseInt(process.env.__WEBSERVER_PORT || '4173');
+
 export default {
 	webServer: {
-		command: 'yarn run preview',
+		command: `yarn run preview --port '${webserverPort}'`,
 		reuseExistingServer: false,
-		url: 'http://localhost:4173/'
+		url: `http://localhost:${webserverPort}/`
 	},
 	use: {
 		channel: 'chromium',
@@ -19,7 +21,7 @@ export default {
 				'--disable-lcd-text'
 			]
 		},
-		baseURL: 'http://localhost:4173',
+		baseURL: `http://localhost:${webserverPort}`,
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
 		trace: 'retain-on-failure'
