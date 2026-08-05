@@ -4,10 +4,11 @@ let page: Page;
 
 test.beforeAll('go to post page', async ({ browser }) => {
 	page = await browser.newPage();
-	await page.goto('/blog/1-기술-블로그-시작하기');
 
 	// Block utterances widget from loading to prevent flakiness
 	await page.route('**/utteranc.es/**', (route) => route.abort());
+
+	await page.goto('/blog/1-기술-블로그-시작하기');
 });
 
 test('visit page', async () => {

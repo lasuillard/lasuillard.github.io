@@ -24,7 +24,7 @@ test('visit blog page and filter by tag', async ({ page }) => {
 	await expect(page).toHaveURL(/\/blog\?tag=SvelteKit/);
 
 	// Expect title to dynamically change
-	await expect(page).toHaveTitle(/SvelteKit • lasuillard's Blog/);
+	await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
 	// Expect the selected tag badge to be highlighted with badge-primary
 	await expect(svelteKitSpan).toHaveClass(/badge-primary/);

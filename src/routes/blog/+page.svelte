@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Search from '$components/utility/Search.svelte';
-	import { titleWithSuffix } from '$lib/meta';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
@@ -28,22 +27,6 @@
 				)
 			: allPosts
 	);
-
-	$effect(() => {
-		const title = selectedTag ? titleWithSuffix(selectedTag) : titleWithSuffix('Blog');
-		document.title = title;
-
-		const metaDesc = document.querySelector('meta[name="description"]');
-		if (metaDesc) {
-			metaDesc.setAttribute(
-				'content',
-				selectedTag
-					? `My writing about ${selectedTag}.`
-					: data.meta?.description ||
-							'My writing about almost everything but primarily on S/W development.'
-			);
-		}
-	});
 </script>
 
 <div>
@@ -65,7 +48,7 @@
 								<a
 									href={selectedTag?.toLowerCase() === tag.toLowerCase()
 										? '/blog'
-										: `/blog?tag=${tag}`}
+										: `/blog?tag=${encodeURIComponent(tag)}`}
 								>
 									{tag} ({tagCounts[tag] || 0})
 								</a>
@@ -113,9 +96,9 @@
 												<a
 													href={selectedTag?.toLowerCase() === tag.toLowerCase()
 														? '/blog'
-														: `/blog?tag=${tag}`}
+														: `/blog?tag=${encodeURIComponent(tag)}`}
 												>
-													{tag}
+													{tag} ({tagCounts[tag] || 0})
 												</a>
 											</span>
 										{/each}
