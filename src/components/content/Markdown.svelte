@@ -156,7 +156,7 @@
 
 	:global(.code-block-wrapper pre) {
 		margin: 0 !important;
-		padding: 1.25rem !important;
+		padding: 0rem !important;
 		background-color: transparent !important;
 		overflow-x: auto;
 	}
