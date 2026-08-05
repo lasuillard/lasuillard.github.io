@@ -4,7 +4,6 @@
 	let theme = $derived($currentTheme == Theme.Light ? 'github-light' : 'github-dark');
 	let container: HTMLDivElement | undefined = $state();
 
-	// eslint-disable-next-line jsdoc/require-jsdoc
 	function loadUtterances(node: HTMLDivElement) {
 		const script = document.createElement('script');
 		script.src = 'https://utteranc.es/client.js';

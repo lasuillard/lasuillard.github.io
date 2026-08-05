@@ -1,5 +1,5 @@
 import { PAGE_SIZE } from '$lib/constants';
-import { Post, getPaginatedPosts } from '$lib/post';
+import { Post } from '$lib/post';
 import { z } from 'zod';
 import type { PageLoad } from './$types';
 
@@ -22,7 +22,7 @@ export const load: PageLoad = async ({ fetch, url }) => {
 		currentPage = totalPages;
 	}
 
-	const paginatedPosts = getPaginatedPosts(allPosts, currentPage, PAGE_SIZE);
+	const paginatedPosts = allPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
 	return {
 		meta: {

@@ -12,7 +12,8 @@ export const Metadata = z
 		publicationDate: z.coerce.date(),
 		preview: z.string(),
 		summary: z.string(),
-		tags: z.array(z.string())
+		tags: z.array(z.string()),
+		series: z.string().optional()
 	})
 	.strict();
 
@@ -26,15 +27,3 @@ export const Post = z
 	.strict();
 
 export type Post = z.infer<typeof Post>;
-
-/**
- * Returns a slice of the posts array based on page and pageSize.
- * @param posts Sorted array of posts.
- * @param page 1-based page number.
- * @param pageSize Number of posts per page.
- * @returns Array of sliced posts.
- */
-export function getPaginatedPosts(posts: Post[], page: number, pageSize: number): Post[] {
-	const startIndex = (page - 1) * pageSize;
-	return posts.slice(startIndex, startIndex + pageSize);
-}
