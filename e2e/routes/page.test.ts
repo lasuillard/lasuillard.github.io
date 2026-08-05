@@ -27,11 +27,10 @@ test('renders recent posts section with 3 posts', async () => {
 	expect(postCount).toBe(3);
 });
 
-test('header has QR code dropdown on desktop', async () => {
+test('header has QR code dropdown on desktop', async ({}, testInfo) => {
 	const qrDropdown = page.getByTestId('qr-dropdown');
-	const isMobile = page.viewportSize()?.width && page.viewportSize()!.width < 768; // md breakpoint is 768px
 
-	if (!isMobile) {
+	if (testInfo.project.name !== 'Mobile L') {
 		await expect(qrDropdown).toBeVisible();
 
 		const qrCodeCanvas = qrDropdown.locator('[data-testid="qrcode"]');
@@ -43,9 +42,8 @@ test('header has QR code dropdown on desktop', async () => {
 	}
 });
 
-test('header has QR code inside drawer on mobile', async () => {
-	const isMobile = page.viewportSize()?.width && page.viewportSize()!.width < 768; // md breakpoint is 768px
-	if (isMobile) {
+test('header has QR code inside drawer on mobile', async ({}, testInfo) => {
+	if (testInfo.project.name === 'Mobile L') {
 		const drawerToggle = page.getByTestId('drawer-toggle');
 		await expect(drawerToggle).toBeVisible();
 

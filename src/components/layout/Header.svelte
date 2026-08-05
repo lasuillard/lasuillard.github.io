@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import Menu from '$components/icon/Menu.svelte';
-	import QrCode from '$components/icon/QrCode.svelte';
+	import QrCodeIcon from '$components/icon/QRCode.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
@@ -67,7 +67,7 @@
 						data-testid="qr-dropdown"
 					>
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
-							<QrCode class="h-7 w-7" />
+							<QrCodeIcon class="h-6 w-6" />
 						</div>
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
@@ -75,15 +75,15 @@
 							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-4 shadow-xl"
 						>
 							{#if currentURL}
-								<QRCode text={currentURL} width={140} />
+								<QRCode text={currentURL} width={126} />
 								<span
-									class="text-base-content/70 max-w-[140px] truncate text-center text-xs font-semibold select-all"
+									class="text-base-content/70 max-w-[126px] truncate text-center text-xs font-semibold select-all"
 									title={currentURL}
 								>
 									{currentURL}
 								</span>
 							{:else}
-								<canvas width={140}></canvas>
+								<canvas width={126}></canvas>
 							{/if}
 						</div>
 					</div>
@@ -122,10 +122,10 @@
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<li class="mt-8 flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
 							<div class="rounded-xl bg-white p-3 shadow-lg">
-								<QRCode text={currentURL} width={140} />
+								<QRCode text={currentURL} width={126} />
 							</div>
 							<span
-								class="max-w-[140px] truncate text-xs text-gray-300 select-all"
+								class="max-w-[126px] truncate text-xs text-gray-300 select-all"
 								title={currentURL}
 							>
 								{currentURL}
