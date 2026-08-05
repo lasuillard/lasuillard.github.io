@@ -7,8 +7,7 @@ summary: >
 tags:
   - Amazon Web Services
   - AWS CodeDeploy
-  - AWS EC2 Image Builder
-  - Infrastructure
+  - AWS EC2
   - Pulumi
   - Python
   - Selenium

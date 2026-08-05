@@ -58,16 +58,6 @@
 
 <div>
 	<div class="flex">
-		<!-- Side TOC for large screen -->
-		<div class="ml-12 hidden lg:order-last lg:block">
-			{#if contentIsReady}
-				<Toc
-					content={contentWrapper}
-					activeId={scrollTracker.activeId}
-					class="h-md:sticky h-md:top-[10%] h-lg:top-[20vh] min-w-[20vw]"
-				/>
-			{/if}
-		</div>
 		<div class="mx-auto max-w-none lg:max-w-[50rem]">
 			<div class="mt-6 flex flex-col items-center gap-4 sm:gap-6">
 				{#if metadata.preview}
@@ -93,7 +83,7 @@
 					<div class="mt-4 flex flex-wrap justify-center">
 						{#each metadata.tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
-								<a href="/blog/tag/{tag}">
+								<a href="/blog?tag={encodeURIComponent(tag)}">
 									{tag}
 								</a>
 							</div>
@@ -102,12 +92,10 @@
 				</div>
 			</div>
 			<div class="divider mb-6"></div>
-			<!-- Embedded TOC for small screen -->
-			<div class="mb-6 flex justify-center lg:hidden">
-				{#if contentIsReady}
-					<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
-				{/if}
-			</div>
+			<!-- Floating/Hoverable TOC -->
+			{#if contentIsReady}
+				<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
+			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>

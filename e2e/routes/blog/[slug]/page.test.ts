@@ -4,10 +4,11 @@ let page: Page;
 
 test.beforeAll('go to post page', async ({ browser }) => {
 	page = await browser.newPage();
-	await page.goto('/blog/1-기술-블로그-시작하기');
 
 	// Block utterances widget from loading to prevent flakiness
 	await page.route('**/utteranc.es/**', (route) => route.abort());
+
+	await page.goto('/blog/1-기술-블로그-시작하기');
 });
 
 test('visit page', async () => {
@@ -105,6 +106,9 @@ test.describe('Section tracking and auto-scroll', () => {
 		// Initially, the hash in URL should be empty
 		expect(page.url()).not.toContain('#');
 
+		// Hover to expand the floating ToC so links become visible
+		await toc.hover();
+
 		// Dynamically find the first heading link in ToC
 		const headingLink = toc.locator('a[href^="#"]').first();
 		const href = await headingLink.getAttribute('href');
@@ -134,12 +138,20 @@ test.describe('Section tracking and auto-scroll', () => {
 		const toc = page.locator('[data-testid="toc"]:visible').first();
 		await expect(toc).toBeVisible();
 
+		// Hover to expand the floating ToC so links become visible
+		await toc.hover();
+
 		const headingLink = toc.locator('a[href^="#"]').first();
 		const targetHash = await headingLink.getAttribute('href');
 		expect(targetHash).toBeTruthy();
 
 		// Now visit the page directly with the anchor hash
 		await page.goto(`/blog/11-다시-git-hub-pages로-블로그-배포하기${targetHash}`);
+
+		// Hover to expand the floating ToC so links become visible
+		const toc2 = page.locator('[data-testid="toc"]:visible').first();
+		await expect(toc2).toBeVisible();
+		await toc2.hover();
 
 		// Locate the heading link in ToC and assert it has highlighted style
 		const activeHeadingLink = page

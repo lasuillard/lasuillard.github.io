@@ -1,11 +1,36 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Search from '$components/utility/Search.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
 
-	let allTags = $derived(new Set(data.allPosts.map((post) => post.metadata.tags).flat()));
+	let allPosts = $derived(data.allPosts);
+	let allTags = $derived(
+		[...new Set(allPosts.map((post) => post.metadata.tags).flat())].sort((a, b) =>
+			a.localeCompare(b)
+		)
+	);
+
+	let tagCounts = $derived.by(() => {
+		const counts: Record<string, number> = Object.create(null);
+		for (const post of allPosts) {
+			for (const tag of post.metadata.tags) {
+				counts[tag] = (counts[tag] || 0) + 1;
+			}
+		}
+		return counts;
+	});
+
+	let selectedTag = $derived($page.url.searchParams.get('tag'));
+	let filteredPosts = $derived(
+		selectedTag
+			? allPosts.filter((post) =>
+					post.metadata.tags.map((t) => t.toLowerCase()).includes(selectedTag.toLowerCase())
+				)
+			: allPosts
+	);
 </script>
 
 <div>
@@ -17,13 +42,16 @@
 			<div data-testid="tags">
 				<h2 class="mt-10 mb-2 text-2xl uppercase">Tags</h2>
 				<div>
-					{#if allTags.size}
+					{#if allTags.length}
 						{#each allTags as tag (tag)}
+							{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
 							<span
-								class="badge badge-secondary badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
+								class="badge {isSelected
+									? 'badge-primary'
+									: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 							>
-								<a href="/blog/tag/{tag}">
-									{tag}
+								<a href={isSelected ? '/blog' : `/blog?tag=${encodeURIComponent(tag)}`}>
+									{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
 								</a>
 							</span>
 						{/each}
@@ -37,8 +65,8 @@
 		<!-- Posts -->
 		<section data-testid="posts" class="xl:col-span-3">
 			<div class="flex flex-col space-y-32">
-				{#if data.allPosts.length}
-					{#each data.allPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if filteredPosts.length}
+					{#each filteredPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -61,10 +89,15 @@
 									</div>
 									<div class="mt-6">
 										{#each tags as tag (tag)}
+											{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
 											<span
-												class="badge badge-secondary badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
+												class="badge {isSelected
+													? 'badge-primary'
+													: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 											>
-												<a href="/blog/tag/{tag}">{tag}</a>
+												<a href={isSelected ? '/blog' : `/blog?tag=${encodeURIComponent(tag)}`}>
+													{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
+												</a>
 											</span>
 										{/each}
 									</div>
@@ -72,8 +105,10 @@
 							</div>
 						</div>
 					{/each}
+				{:else if selectedTag}
+					<p class="text-center text-lg">"{selectedTag}"에 관한 글이 없습니다.</p>
 				{:else}
-					<p class="text-lg">There is no post yet.</p>
+					<p class="text-center text-lg">아직 쓴 글이 없습니다.</p>
 				{/if}
 			</div>
 		</section>
