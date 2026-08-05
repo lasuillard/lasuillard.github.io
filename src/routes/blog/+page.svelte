@@ -10,7 +10,7 @@
 	let allTags = $derived(new Set(allPosts.map((post) => post.metadata.tags).flat()));
 
 	let tagCounts = $derived.by(() => {
-		const counts: Record<string, number> = {};
+		const counts: Record<string, number> = Object.create(null);
 		for (const post of allPosts) {
 			for (const tag of post.metadata.tags) {
 				counts[tag] = (counts[tag] || 0) + 1;
