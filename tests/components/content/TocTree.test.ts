@@ -17,14 +17,13 @@ it('renders with data', () => {
 	const elem = document.createElement('div');
 	elem.innerHTML = '<a href="#lorem-ipsum">Lorem Ipsum</a>';
 
-	const { getByTestId } = render(TocTree, {
+	const { container } = render(TocTree, {
 		tree: {
 			data: elem,
 			children: []
-		},
-		isHovered: true
+		}
 	});
-	expect(getByTestId('toc-tree').outerHTML).toMatchInlineSnapshot(
-		`"<div data-testid="toc-tree" class="mb-2 text-left"><p class="mb-1.5 font-light text-sm text-gray-500"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul class="ml-4"></ul></div>"`
+	expect(container.innerHTML).toMatchInlineSnapshot(
+		`"<div data-testid="toc-tree"><p class="mb-1.5 font-light"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul></ul></div>"`
 	);
 });

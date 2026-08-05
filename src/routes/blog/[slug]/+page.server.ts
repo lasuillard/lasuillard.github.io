@@ -1,7 +1,6 @@
 import { Post } from '$lib/post';
 import { postRepository } from '$lib/server/post';
 import { error } from '@sveltejs/kit';
-import { z } from 'zod';
 import type { EntryGenerator, PageServerLoad } from './$types';
 
 export const entries: EntryGenerator = async () => {
@@ -27,23 +26,12 @@ export const load: PageServerLoad = async ({ fetch, params }) => {
 	const post = Post.parse(data);
 	const { metadata, content } = post;
 
-	let seriesPosts: Post[] = [];
-	if (metadata.series) {
-		const postsResponse = await fetch('/api/posts');
-		if (postsResponse.ok) {
-			const allPostsData = await postsResponse.json();
-			const allPosts = z.array(Post).parse(allPostsData);
-			seriesPosts = allPosts.filter((p) => p.metadata.series === metadata.series);
-		}
-	}
-
 	return {
 		meta: {
 			title: metadata.title,
 			description: metadata.summary
 		},
 		metadata,
-		content,
-		seriesPosts
+		content
 	};
 };

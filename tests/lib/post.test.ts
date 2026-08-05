@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Post } from '~/lib/post';
+import { Post, getPaginatedPosts } from '~/lib/post';
 
 describe('`Post` schema', () => {
 	it('parses given JSON object class', () => {
@@ -29,34 +29,32 @@ describe('`Post` schema', () => {
 			content: 'Polar bear'
 		});
 	});
+});
 
-	it('parses post metadata including optional series field', () => {
-		expect(
-			Post.parse({
-				metadata: {
-					id: 2,
-					title: 'Fanta and Sprite',
-					slug: 'fanta-and-sprite',
-					publicationDate: '2021-05-14T00:00:00.000+09:00',
-					preview: '/sprite.png',
-					summary: 'Another review.',
-					tags: ['beverage'],
-					series: 'Soda Chronicles'
-				},
-				content: 'Yummy'
-			})
-		).toEqual({
+describe('getPaginatedPosts', () => {
+	it('slices the posts array correctly', () => {
+		const dummyPost = (id: number) => ({
 			metadata: {
-				id: '2',
-				title: 'Fanta and Sprite',
-				slug: 'fanta-and-sprite',
-				publicationDate: new Date('2021-05-14T00:00:00.000+09:00'),
-				preview: '/sprite.png',
-				summary: 'Another review.',
-				tags: ['beverage'],
-				series: 'Soda Chronicles'
+				id: String(id),
+				title: `Post ${id}`,
+				slug: `post-${id}`,
+				publicationDate: new Date(),
+				preview: '',
+				summary: '',
+				tags: []
 			},
-			content: 'Yummy'
+			content: ''
 		});
+		const posts = Array.from({ length: 12 }, (_, i) => dummyPost(i + 1));
+
+		const page1 = getPaginatedPosts(posts, 1, 5);
+		expect(page1.length).toBe(5);
+		expect(page1[0].metadata.id).toBe('1');
+		expect(page1[4].metadata.id).toBe('5');
+
+		const page3 = getPaginatedPosts(posts, 3, 5);
+		expect(page3.length).toBe(2);
+		expect(page3[0].metadata.id).toBe('11');
+		expect(page3[1].metadata.id).toBe('12');
 	});
 });

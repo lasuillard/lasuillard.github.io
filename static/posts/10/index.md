@@ -1,4 +1,5 @@
 ---
+id: 10
 title: AWS 자격증 (SAP-C02) 합격 후기
 publicationDate: 2026-07-01T16:55:53.000+09:00
 preview: ./preview.png

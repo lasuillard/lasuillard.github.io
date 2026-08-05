@@ -1,4 +1,5 @@
 ---
+id: 9
 title: Google Apps Script로 작업 자동화하기
 publicationDate: 2026-05-18T19:38:16.000+09:00
 preview: ./preview.png

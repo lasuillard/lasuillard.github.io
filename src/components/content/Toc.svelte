@@ -5,13 +5,11 @@
 
 	interface Props {
 		content: HTMLElement | undefined;
-		activeId?: string;
 		[key: string]: any;
 	}
 
-	let { content = $bindable(), activeId = '', ...rest }: Props = $props();
+	let { content = $bindable(), ...rest }: Props = $props();
 	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
-	let isHovered = $state(false);
 
 	onMount(() => {
 		if (!content) {
@@ -46,28 +44,10 @@
 	});
 </script>
 
-<div
-	data-testid="toc"
-	class={'fixed top-1/3 right-4 z-50 cursor-pointer select-none ' +
-		(isHovered
-			? 'rounded-box border-base-content/10 bg-base-100/95 max-h-[60vh] max-w-[80vw] overflow-y-auto border p-4 shadow-xl backdrop-blur-xs'
-			: 'border-transparent bg-transparent p-2 shadow-none')}
-	onmouseenter={() => {
-		isHovered = true;
-	}}
-	onmouseleave={() => {
-		isHovered = false;
-	}}
-	onclick={(e) => {
-		const target = e.target as HTMLElement;
-		if (target.closest('a')) return;
-		isHovered = !isHovered;
-	}}
-	{...rest}
->
+<div data-testid="toc" {...rest}>
 	<div>
 		{#each rootHeadings as root (root.data.textContent)}
-			<TocTree tree={root} {activeId} {isHovered} />
+			<TocTree tree={root} />
 		{/each}
 	</div>
 </div>

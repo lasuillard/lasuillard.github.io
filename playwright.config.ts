@@ -1,69 +1,102 @@
 import type { PlaywrightTestConfig } from '@playwright/test';
+import * as glob from 'glob';
 
-const isCI = !!process.env.CI;
+const testDir = 'e2e';
 
-const webserverPort = parseInt(process.env.__WEBSERVER_PORT || '4173');
+// Test grouping for various device sizes; debug with `playwright test --list`.
+const groupTests = (keys: string[]) => {
+	const pattern = new RegExp(/.*?\.((.+)\.)?test\.ts/);
+	const testFiles = glob.sync(`${testDir}/**/*.{test,spec}.ts`);
+	const grouped: { [size: string]: string[] } = Object.fromEntries(keys.map((size) => [size, []]));
 
+	for (let filename of testFiles) {
+		// Escape some characters that might interfere with regex matching (`testMatch`)
+		filename = filename.replaceAll('[', '\\[').replaceAll(']', '\\]');
+
+		const match = filename.match(pattern) || [];
+		const size: string | undefined = match[2];
+		if (size) {
+			grouped[size].push(filename);
+		} else {
+			Object.values(grouped).forEach((arr) => arr.push(filename));
+		}
+	}
+
+	return grouped;
+};
+
+const testGroups = groupTests(['sm', 'md', 'lg']);
+
+const commonOptions = {
+	channel: 'chromium',
+	launchOptions: {
+		args: [
+			'--font-render-hinting=none',
+			'--disable-skia-runtime-opts',
+			'--disable-font-subpixel-positioning',
+			'--disable-lcd-text'
+		]
+	}
+};
+
+// BUG: Playwright seems not detecting file changes (create / delete)
 export default {
 	webServer: {
-		command: `yarn run preview --port '${webserverPort}'`,
-		reuseExistingServer: false,
-		url: `http://localhost:${webserverPort}/`
+		command: 'yarn run preview',
+		port: 4173,
+		reuseExistingServer: true
 	},
 	use: {
-		channel: 'chromium',
-		launchOptions: {
-			// Disable font rendering optimizations to avoid flakiness in screenshots
-			args: [
-				'--font-render-hinting=none',
-				'--disable-skia-runtime-opts',
-				'--disable-font-subpixel-positioning',
-				'--disable-lcd-text'
-			]
-		},
-		baseURL: `http://localhost:${webserverPort}`,
 		screenshot: 'only-on-failure',
 		video: 'retain-on-failure',
 		trace: 'retain-on-failure'
 	},
-	testDir: 'e2e',
+	testDir,
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
-
 	reporter: [
 		['list'],
 		[
 			'html',
 			{
-				open: 'never' // Use show-report to open the report in the browser
+				open: process.env.CI ? 'never' : 'on-failure',
+				host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
 			}
 		],
 		['junit', { outputFile: 'junit.xml' }]
 	],
 	projects: [
 		{
-			name: 'Mobile L',
+			// Phones
+			name: 'Small devices',
+			testMatch: testGroups['sm'],
 			use: {
-				viewport: { width: 425, height: 900 }
+				...commonOptions,
+				viewport: { width: 640, height: 1136 }
 			}
 		},
 		{
-			name: 'Tablet',
+			// Tablets
+			name: 'Medium devices',
+			testMatch: testGroups['md'],
 			use: {
-				viewport: { width: 768, height: 1024 }
+				...commonOptions,
+				viewport: { width: 768, height: 1280 }
 			}
 		},
 		{
-			name: 'Desktop',
+			// Laptops
+			name: 'Large devices',
+			testMatch: testGroups['lg'],
 			use: {
-				viewport: { width: 1280, height: 720 }
+				...commonOptions,
+				viewport: { width: 1024, height: 1366 }
 			}
 		}
 	],
-
-	timeout: 10 * 1_000,
-	retries: isCI ? 2 : 0,
+	timeout: 30 * 1000,
+	retries: process.env.CI ? 2 : 0,
 	expect: {
-		timeout: 10 * 1_000,
+		timeout: 10 * 1000,
 		toHaveScreenshot: {
 			maxDiffPixelRatio: 0.025, // 2.5%
 			stylePath: './e2e/screenshot.css',

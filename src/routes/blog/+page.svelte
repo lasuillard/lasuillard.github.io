@@ -6,6 +6,9 @@
 
 	let { data } = $props();
 
+	let paginatedPosts = $derived(data.paginatedPosts);
+	let currentPage = $derived(data.currentPage);
+	let totalPages = $derived(data.totalPages);
 	let allTags = $derived(new Set(data.allPosts.map((post) => post.metadata.tags).flat()));
 </script>
 
@@ -39,13 +42,13 @@
 		<section data-testid="posts" class="xl:col-span-3">
 			<!-- Top Pagination -->
 			<div class="mb-12 flex justify-center">
-				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
+				<Pagination {currentPage} {totalPages} testid="pagination-top" />
 			</div>
 
 			<div class="flex flex-col space-y-32">
-				{#if data.paginatedPosts.length}
-					{#each data.paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
-						<div>
+				{#if paginatedPosts.length}
+					{#each paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+						<div data-testid="post-item">
 							<div class="flex flex-col lg:flex-row">
 								<img
 									src={preview}
@@ -54,7 +57,11 @@
 								/>
 								<div class="mt-4 flex flex-1 flex-col lg:mt-2 lg:ml-16">
 									<h2 class="mb-0 text-center text-2xl lg:text-left">
-										<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
+										<a
+											href="/blog/{id}-{slug}"
+											class="link hover:text-secondary"
+											data-testid="post-title">{title}</a
+										>
 									</h2>
 									<p class="mt-1 text-end text-gray-500 lg:text-left">
 										<time datetime={publicationDate.toISOString()} role="time">
@@ -84,8 +91,8 @@
 			</div>
 
 			<!-- Bottom Pagination -->
-			<div class="mt-16 flex justify-center">
-				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
+			<div class="mt-12 flex justify-center">
+				<Pagination {currentPage} {totalPages} testid="pagination-bottom" />
 			</div>
 		</section>
 	</div>

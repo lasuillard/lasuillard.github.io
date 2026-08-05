@@ -22,6 +22,16 @@ it('renders correctly with given current and total pages', () => {
 	}
 });
 
+it('respects the testid prop when provided', () => {
+	const { getByTestId } = render(Pagination, {
+		currentPage: 1,
+		totalPages: 5,
+		testid: 'pagination-top'
+	});
+
+	expect(getByTestId('pagination-top')).toBeTruthy();
+});
+
 it('disables previous and first buttons on the first page', () => {
 	const { getByLabelText } = render(Pagination, {
 		currentPage: 1,
@@ -49,6 +59,7 @@ it('disables next and last buttons on the last page', () => {
 });
 
 it('prompts user and navigates when clicking on ... button with valid input', async ({ user }) => {
+	window.history.pushState({}, '', '/blog');
 	const promptMock = vi.fn().mockReturnValue('8');
 	const alertMock = vi.fn();
 	vi.stubGlobal('prompt', promptMock);
@@ -71,6 +82,7 @@ it('prompts user and navigates when clicking on ... button with valid input', as
 });
 
 it('shows alert and does not navigate when prompt input is invalid', async ({ user }) => {
+	window.history.pushState({}, '', '/blog');
 	const promptMock = vi.fn().mockReturnValue('999'); // invalid page number
 	const alertMock = vi.fn();
 	vi.stubGlobal('prompt', promptMock);

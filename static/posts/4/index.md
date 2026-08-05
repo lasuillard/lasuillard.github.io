@@ -1,4 +1,5 @@
 ---
+id: 4
 title: Windows Server에 Python 웹 스크래핑 애플리케이션 배포하기
 publicationDate: 2025-07-28T15:10:37.000+09:00
 preview: ./preview.png
