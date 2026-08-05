@@ -1,5 +1,4 @@
 ---
-id: 5
 title: 마음대로 쓰고 버리는 개발 컨테이너
 publicationDate: 2025-07-28T15:23:08.000+09:00
 preview: ./preview.png

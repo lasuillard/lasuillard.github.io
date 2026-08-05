@@ -6,9 +6,6 @@
 
 	let { data } = $props();
 
-	let paginatedPosts = $derived(data.paginatedPosts);
-	let currentPage = $derived(data.currentPage);
-	let totalPages = $derived(data.totalPages);
 	let allTags = $derived(new Set(data.allPosts.map((post) => post.metadata.tags).flat()));
 </script>
 
@@ -42,12 +39,12 @@
 		<section data-testid="posts" class="xl:col-span-3">
 			<!-- Top Pagination -->
 			<div class="mb-12 flex justify-center">
-				<Pagination {currentPage} {totalPages} />
+				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
 			</div>
 
 			<div class="flex flex-col space-y-32">
-				{#if paginatedPosts.length}
-					{#each paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if data.paginatedPosts.length}
+					{#each data.paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -88,7 +85,7 @@
 
 			<!-- Bottom Pagination -->
 			<div class="mt-16 flex justify-center">
-				<Pagination {currentPage} {totalPages} />
+				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
 			</div>
 		</section>
 	</div>
