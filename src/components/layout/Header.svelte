@@ -2,7 +2,7 @@
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
 	import Menu from '$components/icon/Menu.svelte';
-	import QrCodeIcon from '$components/icon/QRCode.svelte';
+	import QRCodeIcon from '$components/icon/QRCode.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
 
@@ -67,7 +67,7 @@
 						data-testid="qr-dropdown"
 					>
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
-							<QrCodeIcon class="h-6 w-6" />
+							<QRCodeIcon class="h-6 w-6" />
 						</div>
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
@@ -77,7 +77,7 @@
 							{#if currentURL}
 								<QRCode text={currentURL} width={126} />
 								<span
-									class="text-base-content/70 max-w-[126px] truncate text-center text-xs font-semibold select-all"
+									class="text-base-content/70 max-w-[126px] select-all truncate text-center text-xs font-semibold"
 									title={currentURL}
 								>
 									{currentURL}
@@ -125,7 +125,7 @@
 								<QRCode text={currentURL} width={126} />
 							</div>
 							<span
-								class="max-w-[126px] truncate text-xs text-gray-300 select-all"
+								class="max-w-[126px] select-all truncate text-xs text-gray-300"
 								title={currentURL}
 							>
 								{currentURL}
