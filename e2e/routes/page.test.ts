@@ -27,7 +27,8 @@ test('renders recent posts section with 3 posts', async () => {
 	expect(postCount).toBe(3);
 });
 
-test('header has QR code dropdown on desktop', async (_, testInfo) => {
+test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo) => {
+	expect(_page).toBeTruthy();
 	const qrDropdown = page.getByTestId('qr-dropdown');
 
 	if (testInfo.project.name !== 'Mobile L') {
@@ -42,7 +43,8 @@ test('header has QR code dropdown on desktop', async (_, testInfo) => {
 	}
 });
 
-test('header has QR code inside drawer on mobile', async (_, testInfo) => {
+test('header has QR code inside drawer on mobile', async ({ page: _page }, testInfo) => {
+	expect(_page).toBeTruthy();
 	if (testInfo.project.name === 'Mobile L') {
 		const drawerToggle = page.getByTestId('drawer-toggle');
 		await expect(drawerToggle).toBeVisible();
