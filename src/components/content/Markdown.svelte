@@ -7,7 +7,6 @@
 		frontMatter = $bindable(undefined),
 		content = $bindable(''),
 		// Whether the content is ready to be displayed
-		// eslint-disable-next-line no-useless-assignment
 		ready = $bindable(false),
 		// Child elements to render if no content is provided
 		children
@@ -95,8 +94,8 @@
 				copyBtn.className = 'code-copy-btn';
 				copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
 
-				const copyIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1h-4M8 7H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1v-4M8 7V5a1 1 0 011-1h4" /></svg>`;
-				const checkIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 text-[#11111b]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
+				const copyIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1h-4M8 7H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1v-4M8 7V5a1 1 0 011-1h4" /></svg>`;
+				const checkIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
 
 				copyBtn.innerHTML = copyIconSvg;
 
@@ -150,12 +149,9 @@
 		margin-top: 1.5rem;
 		margin-bottom: 1.5rem;
 		border-radius: 0.5rem;
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		border: 1px solid transparent;
 		background-color: #1e1e2e; /* Cozy dark editor background */
 		overflow: hidden;
-		box-shadow:
-			0 4px 6px -1px rgba(0, 0, 0, 0.1),
-			0 2px 4px -1px rgba(0, 0, 0, 0.06);
 	}
 
 	:global(.code-block-wrapper pre) {
@@ -217,11 +213,11 @@
 	:global(.code-badge) {
 		display: inline-flex;
 		align-items: center;
-		height: 1.25rem;
-		padding-left: 0.5rem;
-		padding-right: 0.5rem;
+		height: 1.875rem;
+		padding-left: 0.75rem;
+		padding-right: 0.75rem;
 		border-radius: 0.25rem;
-		font-size: 10px;
+		font-size: 0.875rem;
 		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
@@ -233,8 +229,8 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		height: 1.25rem;
-		width: 1.25rem;
+		height: 1.875rem;
+		width: 1.875rem;
 		border-radius: 0.25rem;
 		padding: 0;
 		border: none;
