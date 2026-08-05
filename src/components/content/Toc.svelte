@@ -61,8 +61,10 @@
 	onmouseleave={() => {
 		if (isFloating) isHovered = false;
 	}}
-	onclick={() => {
+	onclick={(e) => {
 		if (isFloating) {
+			const target = e.target as HTMLElement;
+			if (target.closest('a')) return;
 			isHovered = !isHovered;
 		}
 	}}

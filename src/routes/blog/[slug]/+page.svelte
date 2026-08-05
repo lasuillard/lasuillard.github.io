@@ -58,16 +58,6 @@
 
 <div>
 	<div class="flex">
-		<!-- Side TOC for large screen -->
-		<div class="ml-12 hidden lg:order-last lg:block">
-			{#if contentIsReady}
-				<Toc
-					content={contentWrapper}
-					activeId={scrollTracker.activeId}
-					class="h-md:sticky h-md:top-[10%] h-lg:top-[20vh] min-w-[20vw]"
-				/>
-			{/if}
-		</div>
 		<div class="mx-auto max-w-none lg:max-w-[50rem]">
 			<div class="mt-6 flex flex-col items-center gap-4 sm:gap-6">
 				{#if metadata.preview}
@@ -102,11 +92,9 @@
 				</div>
 			</div>
 			<div class="divider mb-6"></div>
-			<!-- Floating/Hoverable TOC for small screens -->
+			<!-- Floating/Hoverable TOC -->
 			{#if contentIsReady}
-				<div class="lg:hidden">
-					<Toc content={contentWrapper} activeId={scrollTracker.activeId} isFloating={true} />
-				</div>
+				<Toc content={contentWrapper} activeId={scrollTracker.activeId} isFloating={true} />
 			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
