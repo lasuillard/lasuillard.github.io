@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	interface Props {
 		currentPage: number;
@@ -7,6 +8,12 @@
 	}
 
 	let { currentPage, totalPages }: Props = $props();
+
+	function getPageUrl(pageNum: number | string) {
+		const url = new URL($page.url.href);
+		url.searchParams.set('page', pageNum.toString());
+		return url.pathname + url.search;
+	}
 
 	let visiblePages = $derived.by(() => {
 		const pages: (number | string)[] = [];
@@ -50,9 +57,9 @@
 	function handleGoToPage() {
 		const input = prompt(`Go to page (1-${totalPages}):`);
 		if (input === null) return;
-		const page = parseInt(input, 10);
-		if (!isNaN(page) && page >= 1 && page <= totalPages) {
-			goto(`/blog?page=${page}`);
+		const pageNum = parseInt(input, 10);
+		if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
+			goto(getPageUrl(pageNum));
 		} else {
 			alert(`Please enter a valid page number between 1 and ${totalPages}`);
 		}
@@ -65,8 +72,8 @@
 		<span class="join-item btn btn-sm btn-disabled" aria-label="First page">&lt;&lt;</span>
 		<span class="join-item btn btn-sm btn-disabled" aria-label="Previous page">&lt;</span>
 	{:else}
-		<a class="join-item btn btn-sm" href="/blog?page=1" aria-label="First page">&lt;&lt;</a>
-		<a class="join-item btn btn-sm" href="/blog?page={currentPage - 1}" aria-label="Previous page"
+		<a class="join-item btn btn-sm" href={getPageUrl(1)} aria-label="First page">&lt;&lt;</a>
+		<a class="join-item btn btn-sm" href={getPageUrl(currentPage - 1)} aria-label="Previous page"
 			>&lt;</a
 		>
 	{/if}
@@ -85,7 +92,7 @@
 		{:else}
 			<a
 				class="join-item btn btn-sm {currentPage === item ? 'btn-active' : ''}"
-				href="/blog?page={item}"
+				href={getPageUrl(item)}
 			>
 				{item}
 			</a>
@@ -97,11 +104,10 @@
 		<span class="join-item btn btn-sm btn-disabled" aria-label="Next page">&gt;</span>
 		<span class="join-item btn btn-sm btn-disabled" aria-label="Last page">&gt;&gt;</span>
 	{:else}
-		<a class="join-item btn btn-sm" href="/blog?page={currentPage + 1}" aria-label="Next page"
+		<a class="join-item btn btn-sm" href={getPageUrl(currentPage + 1)} aria-label="Next page"
 			>&gt;</a
 		>
-		<a class="join-item btn btn-sm" href="/blog?page={totalPages}" aria-label="Last page"
-			>&gt;&gt;</a
+		<a class="join-item btn btn-sm" href={getPageUrl(totalPages)} aria-label="Last page">&gt;&gt;</a
 		>
 	{/if}
 </div>

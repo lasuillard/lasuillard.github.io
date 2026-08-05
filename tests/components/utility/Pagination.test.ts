@@ -9,6 +9,15 @@ vi.mock('$app/navigation', () => ({
 	goto: vi.fn()
 }));
 
+vi.mock('$app/stores', () => ({
+	page: {
+		subscribe: (fn: any) => {
+			fn({ url: new URL('http://localhost/blog') });
+			return () => {};
+		}
+	}
+}));
+
 it('renders correctly with given current and total pages', () => {
 	const { getByTestId, queryAllByText } = render(Pagination, {
 		currentPage: 1,
