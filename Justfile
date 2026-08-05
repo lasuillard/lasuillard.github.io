@@ -39,7 +39,7 @@ test:
 # Run end-to-end tests
 e2e:
     yarn run build
-    yarn run e2e --update-snapshots || (yarn exec playwright show-report && exit 1)
+    PLAYWRIGHT_HTML_OPEN='on-failure' yarn run e2e --update-snapshots
 
 # Apply autofixes
 fix:
