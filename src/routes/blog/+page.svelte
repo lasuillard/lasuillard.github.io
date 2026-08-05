@@ -106,9 +106,9 @@
 						</div>
 					{/each}
 				{:else if selectedTag}
-					<p class="text-lg">There is no post with tag "{selectedTag}".</p>
+					<p class="text-center text-lg">"{selectedTag}"에 관한 글이 없습니다.</p>
 				{:else}
-					<p class="text-lg">There is no post yet.</p>
+					<p class="text-center text-lg">아직 쓴 글이 없습니다.</p>
 				{/if}
 			</div>
 		</section>
