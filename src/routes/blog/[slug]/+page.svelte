@@ -83,7 +83,7 @@
 					<div class="mt-4 flex flex-wrap justify-center">
 						{#each metadata.tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
-								<a href="/blog/tag/{tag}">
+								<a href="/blog?tag={encodeURIComponent(tag)}">
 									{tag}
 								</a>
 							</div>

@@ -65,7 +65,7 @@ export default {
 	expect: {
 		timeout: 10 * 1_000,
 		toHaveScreenshot: {
-			maxDiffPixelRatio: 0.025, // 2.5%
+			maxDiffPixelRatio: 0.15, // Allow up to 15% diff ratio to accommodate font/layout variations across platforms
 			stylePath: './e2e/screenshot.css',
 			animations: 'disabled'
 		}

@@ -7,7 +7,7 @@ summary: >
 tags:
   - Dev Container
   - Docker
-  - GitHub
+  - GitHub Codespaces
   - VS Code
 ---
 

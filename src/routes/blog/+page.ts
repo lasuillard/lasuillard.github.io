@@ -8,6 +8,13 @@ export const load: PageLoad = async ({ fetch, url }) => {
 	const data = await response.json();
 	const allPosts = z.array(Post).parse(data);
 
+	const tag = url.searchParams.get('tag');
+	const filteredPosts = tag
+		? allPosts.filter((post) =>
+				post.metadata.tags.map((t) => t.toLowerCase()).includes(tag.toLowerCase())
+			)
+		: allPosts;
+
 	const pageParam = url.searchParams.get('page');
 	let currentPage = 1;
 	if (pageParam) {
@@ -17,12 +24,15 @@ export const load: PageLoad = async ({ fetch, url }) => {
 		}
 	}
 
-	const totalPages = Math.max(1, Math.ceil(allPosts.length / PAGE_SIZE));
+	const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE));
 	if (currentPage > totalPages) {
 		currentPage = totalPages;
 	}
 
-	const paginatedPosts = allPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+	const paginatedPosts = filteredPosts.slice(
+		(currentPage - 1) * PAGE_SIZE,
+		currentPage * PAGE_SIZE
+	);
 
 	return {
 		meta: {
