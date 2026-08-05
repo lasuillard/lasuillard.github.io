@@ -58,7 +58,7 @@ export default {
 		}
 	],
 
-	timeout: 30 * 1_000,
+	timeout: 10 * 1_000,
 	retries: isCI ? 2 : 0,
 	expect: {
 		timeout: 10 * 1_000,
