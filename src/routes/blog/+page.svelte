@@ -7,7 +7,11 @@
 	let { data } = $props();
 
 	let allPosts = $derived(data.allPosts);
-	let allTags = $derived(new Set(allPosts.map((post) => post.metadata.tags).flat()));
+	let allTags = $derived(
+		[...new Set(allPosts.map((post) => post.metadata.tags).flat())].sort((a, b) =>
+			a.localeCompare(b)
+		)
+	);
 
 	let tagCounts = $derived.by(() => {
 		const counts: Record<string, number> = Object.create(null);
@@ -38,19 +42,16 @@
 			<div data-testid="tags">
 				<h2 class="mt-10 mb-2 text-2xl uppercase">Tags</h2>
 				<div>
-					{#if allTags.size}
+					{#if allTags.length}
 						{#each allTags as tag (tag)}
+							{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
 							<span
-								class="badge {selectedTag?.toLowerCase() === tag.toLowerCase()
+								class="badge {isSelected
 									? 'badge-primary'
 									: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 							>
-								<a
-									href={selectedTag?.toLowerCase() === tag.toLowerCase()
-										? '/blog'
-										: `/blog?tag=${encodeURIComponent(tag)}`}
-								>
-									{tag} ({tagCounts[tag] || 0})
+								<a href={isSelected ? '/blog' : `/blog?tag=${encodeURIComponent(tag)}`}>
+									{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
 								</a>
 							</span>
 						{/each}
@@ -88,17 +89,14 @@
 									</div>
 									<div class="mt-6">
 										{#each tags as tag (tag)}
+											{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
 											<span
-												class="badge {selectedTag?.toLowerCase() === tag.toLowerCase()
+												class="badge {isSelected
 													? 'badge-primary'
 													: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 											>
-												<a
-													href={selectedTag?.toLowerCase() === tag.toLowerCase()
-														? '/blog'
-														: `/blog?tag=${encodeURIComponent(tag)}`}
-												>
-													{tag} ({tagCounts[tag] || 0})
+												<a href={isSelected ? '/blog' : `/blog?tag=${encodeURIComponent(tag)}`}>
+													{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
 												</a>
 											</span>
 										{/each}
