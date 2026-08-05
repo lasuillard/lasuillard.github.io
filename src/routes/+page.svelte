@@ -5,7 +5,6 @@
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
-	const { recentPosts } = data;
 
 	let profileImage = '/profile.jpg';
 	const pageURL = browser ? window.location.href.split('#')[0] : null;
@@ -74,8 +73,8 @@
 	<div class="border-base-content/10 mt-20 border-t pt-10" data-testid="recent-posts">
 		<h3 class="mb-8 text-center text-2xl font-bold">최근 게시글</h3>
 		<div class="columns-1 gap-4 md:columns-3">
-			{#if recentPosts && recentPosts.length}
-				{#each recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags, preview } } (id)}
+			{#if data.recentPosts && data.recentPosts.length}
+				{#each data.recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags, preview } } (id)}
 					<div class="card bg-base-100 border-base-200 mb-4 break-inside-avoid border shadow-xl">
 						{#if preview}
 							<figure>
@@ -106,7 +105,7 @@
 					</div>
 				{/each}
 			{:else}
-				<p class="text-center text-sm">There is no post yet.</p>
+				<p class="text-center text-sm">작성된 게시글이 없습니다.</p>
 			{/if}
 		</div>
 	</div>

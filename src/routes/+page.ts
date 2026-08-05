@@ -1,3 +1,4 @@
+import { RECENT_POSTS_COUNT } from '$lib/constants';
 import { Post } from '$lib/post';
 import { z } from 'zod';
 import type { PageLoad } from './$types';
@@ -7,8 +8,8 @@ export const load: PageLoad = async ({ fetch }) => {
 	const data = await response.json();
 	const allPosts = z.array(Post).parse(data);
 
-	// Get recent 3 posts
-	const recentPosts = allPosts.slice(0, 3);
+	// Get recent posts (up to RECENT_POSTS_COUNT)
+	const recentPosts = allPosts.slice(0, RECENT_POSTS_COUNT);
 
 	return {
 		meta: {

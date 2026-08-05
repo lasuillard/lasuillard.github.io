@@ -37,6 +37,7 @@ A task is complete when ALL of the following pass:
 - To debug a specific test: `yarn test --testNamePattern "<test name pattern>"`
 - To run a single test file: `yarn test --run tests/path/to/file.test.ts`
 - Never create new blog posts or modify existing post metadata on your own (e.g., for test fixtures). Instead, request the user to do so.
+- Use Korean for all user-facing text (UI labels, messages, placeholders, etc.).
 
 ## When Reviewing Code
 
