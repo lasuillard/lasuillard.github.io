@@ -5,12 +5,11 @@
 	interface Props {
 		tree: TreeNode<HTMLElement>;
 		activeId?: string;
-		isFloating?: boolean;
 		isHovered?: boolean;
 		[key: string]: any;
 	}
 
-	let { tree, activeId = '', isFloating = false, isHovered = false, ...rest }: Props = $props();
+	let { tree, activeId = '', isHovered = false, ...rest }: Props = $props();
 
 	const heading = $derived(tree.data.textContent);
 
@@ -46,7 +45,7 @@
 	);
 </script>
 
-{#if isFloating && !isHovered}
+{#if !isHovered}
 	<div data-testid="toc-tree" class="flex flex-col items-start {lineIndentClass} my-1" {...rest}>
 		<div
 			class="h-1 {lineWidthClass} rounded-full transition-all duration-200 {isActive
@@ -55,24 +54,20 @@
 		></div>
 	</div>
 	{#each tree.children as child (child.data.textContent)}
-		<TocTree tree={child} {activeId} {isFloating} {isHovered} />
+		<TocTree tree={child} {activeId} {isHovered} />
 	{/each}
 {:else}
-	<div
-		data-testid="toc-tree"
-		class={isFloating ? 'mb-2 text-left' : 'text-center lg:text-left'}
-		{...rest}
-	>
+	<div data-testid="toc-tree" class="mb-2 text-left" {...rest}>
 		<p class="mb-1.5 {fontClass}">
 			<a
 				class={isActive ? 'link-hover link text-secondary font-bold underline' : 'link-hover link'}
 				href={link}>{heading}</a
 			>
 		</p>
-		<ul class={isFloating ? 'ml-4' : ''}>
+		<ul class="ml-4">
 			{#each tree.children as child (child.data.textContent)}
-				<li class={isFloating ? '' : 'lg:ml-8'}>
-					<TocTree tree={child} {activeId} {isFloating} {isHovered} />
+				<li>
+					<TocTree tree={child} {activeId} {isHovered} />
 				</li>
 			{/each}
 		</ul>

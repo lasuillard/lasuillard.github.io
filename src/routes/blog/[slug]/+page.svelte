@@ -94,7 +94,7 @@
 			<div class="divider mb-6"></div>
 			<!-- Floating/Hoverable TOC -->
 			{#if contentIsReady}
-				<Toc content={contentWrapper} activeId={scrollTracker.activeId} isFloating={true} />
+				<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
 			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
