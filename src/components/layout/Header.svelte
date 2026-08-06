@@ -77,7 +77,7 @@
 							{#if currentURL}
 								<QRCode text={currentURL} width={126} />
 								<span
-									class="text-base-content/70 max-w-[126px] truncate text-center text-xs font-semibold select-all"
+									class="text-base-content/70 max-w-[126px] text-center text-xs font-semibold break-all select-all"
 									title={currentURL}
 								>
 									{currentURL}
@@ -125,7 +125,7 @@
 								<QRCode text={currentURL} width={126} />
 							</div>
 							<span
-								class="max-w-[126px] truncate text-xs text-gray-300 select-all"
+								class="max-w-[126px] text-center text-xs break-all text-gray-300 select-all"
 								title={currentURL}
 							>
 								{currentURL}

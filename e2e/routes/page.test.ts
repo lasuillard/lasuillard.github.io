@@ -28,8 +28,8 @@ test('renders recent posts section with 3 posts', async () => {
 });
 
 test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo) => {
-	expect(_page).toBeTruthy();
-	const qrDropdown = page.getByTestId('qr-dropdown');
+	await _page.goto('/');
+	const qrDropdown = _page.getByTestId('qr-dropdown');
 
 	if (testInfo.project.name !== 'Mobile L') {
 		await expect(qrDropdown).toBeVisible();
@@ -44,14 +44,14 @@ test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo)
 });
 
 test('header has QR code inside drawer on mobile', async ({ page: _page }, testInfo) => {
-	expect(_page).toBeTruthy();
+	await _page.goto('/');
 	if (testInfo.project.name === 'Mobile L') {
-		const drawerToggle = page.getByTestId('drawer-toggle');
+		const drawerToggle = _page.getByTestId('drawer-toggle');
 		await expect(drawerToggle).toBeVisible();
 
 		await drawerToggle.click();
 
-		const qrCodeInDrawer = page.locator('.drawer-side [data-testid="qrcode"]');
+		const qrCodeInDrawer = _page.locator('.drawer-side [data-testid="qrcode"]');
 		await expect(qrCodeInDrawer).toBeVisible();
 	}
 });
