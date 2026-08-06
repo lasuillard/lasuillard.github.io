@@ -353,6 +353,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codecov/sveltekit-plugin@patch:@codecov/sveltekit-plugin@npm%3A2.0.1#~/.yarn/patches/@codecov-sveltekit-plugin-npm-2.0.1-3526bc8304.patch":
+  version: 2.0.1
+  resolution: "@codecov/sveltekit-plugin@patch:@codecov/sveltekit-plugin@npm%3A2.0.1#~/.yarn/patches/@codecov-sveltekit-plugin-npm-2.0.1-3526bc8304.patch::version=2.0.1&hash=956b75"
+  dependencies:
+    "@codecov/bundler-plugin-core": "npm:^2.0.1"
+    "@codecov/vite-plugin": "npm:^2.0.1"
+    unplugin: "npm:^1.10.1"
+  peerDependencies:
+    "@sveltejs/kit": 2.x
+    svelte: 4.x || 5.x
+  checksum: 10c0/611d0762e2c6af8feb5e9fcfab23484729e2735d9aabac8e2334ced912ed5b04d9a4b0f7454ac3aeb4ce1406061518fa6cf5a6a72eb6b6b9e77d89b0d5e0a25f
+  languageName: node
+  linkType: hard
+
 "@codecov/vite-plugin@npm:^2.0.1":
   version: 2.0.1
   resolution: "@codecov/vite-plugin@npm:2.0.1"
@@ -4701,7 +4715,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "lasuillard.github.io@workspace:."
   dependencies:
-    "@codecov/sveltekit-plugin": "npm:2.0.1"
+    "@codecov/sveltekit-plugin": "patch:@codecov/sveltekit-plugin@npm%3A2.0.1#~/.yarn/patches/@codecov-sveltekit-plugin-npm-2.0.1-3526bc8304.patch"
     "@eslint/js": "npm:10.0.1"
     "@playwright/test": "npm:1.62.1"
     "@sentry/sveltekit": "npm:10.69.0"
