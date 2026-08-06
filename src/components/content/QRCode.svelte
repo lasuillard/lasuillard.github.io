@@ -33,4 +33,11 @@
 	});
 </script>
 
-<canvas bind:this={qrCode} class="rounded-xl" data-testid="qrcode" title={text} {width}></canvas>
+<canvas
+	bind:this={qrCode}
+	class="rounded-xl"
+	data-testid="qrcode"
+	title={text}
+	{width}
+	style="width: {width}px; height: {width}px;"
+></canvas>

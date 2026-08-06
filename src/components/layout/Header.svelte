@@ -72,7 +72,7 @@
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
 							tabindex="0"
-							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-4 shadow-xl"
+							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex w-[158px] flex-col items-center gap-2 border p-4 shadow-xl"
 						>
 							{#if currentURL}
 								<QRCode text={currentURL} width={126} />
@@ -83,7 +83,7 @@
 									{currentURL}
 								</span>
 							{:else}
-								<canvas width={126}></canvas>
+								<canvas width={126} style="width: 126px; height: 126px;"></canvas>
 							{/if}
 						</div>
 					</div>
