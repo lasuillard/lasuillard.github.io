@@ -12,14 +12,14 @@ repos:
         name: eslint
         language: system
         types_or: [javascript, ts, svelte]
-        entry: yarn exec -- eslint
+        entry: npm exec -- eslint
         args: [--fix]
 
       - id: prettier
         name: prettier
         language: system
         types_or: [javascript, ts, svelte, json, yaml]
-        entry: yarn exec -- prettier
+        entry: npm exec -- prettier
         args: [--write]
 
       - id: sveltekit-sync
@@ -27,14 +27,14 @@ repos:
         language: system
         types_or: [javascript, ts, svelte]
         pass_filenames: false
-        entry: yarn exec -- svelte-kit sync
+        entry: npm exec -- svelte-kit sync
 
       - id: svelte-check
         name: svelte-check
         language: system
         types_or: [javascript, ts, svelte]
         pass_filenames: false
-        entry: yarn exec -- svelte-check
+        entry: npm exec -- svelte-check
         args: [--tsconfig, ./tsconfig.json]
 
       - id: vitest
@@ -42,4 +42,4 @@ repos:
         language: system
         types_or: [javascript, ts, svelte]
         pass_filenames: false
-        entry: yarn run test
+        entry: npm run test

@@ -8,7 +8,7 @@
 		"email": "lasuillard@gmail.com"
 	},
 	"scripts": {
-		"postinstall": "svelte-kit sync",
+		"postinstall": "patch-package && svelte-kit sync",
 		"dev": "vite dev --host",
 		"build": "vite build",
 		"build:watch": "vite build --watch",
@@ -33,13 +33,13 @@
 			"onFail": "error"
 		},
 		"packageManager": {
-			"name": "yarn",
-			"version": "4.14.1",
-			"onFail": "warn"
+			"name": "npm",
+			"version": ">=11",
+			"onFail": "error"
 		}
 	},
 	"devDependencies": {
-		"@codecov/sveltekit-plugin": "patch:@codecov/sveltekit-plugin@npm%3A2.0.1#~/.yarn/patches/@codecov-sveltekit-plugin-npm-2.0.1-3526bc8304.patch",
+		"@codecov/sveltekit-plugin": "2.0.1",
 		"@eslint/js": "10.0.1",
 		"@playwright/test": "1.62.1",
 		"@sentry/sveltekit": "10.69.0",
@@ -98,5 +98,9 @@
 		"vitest": "4.1.10",
 		"yaml": "2.9.0",
 		"zod": "4.4.3"
+	},
+	"allowScripts": {
+		"esbuild@0.25.12": true,
+		"@sentry/cli@2.58.6": true
 	}
 }
