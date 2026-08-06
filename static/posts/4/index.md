@@ -3,7 +3,7 @@ title: Windows Server에 Python 웹 스크래핑 애플리케이션 배포하기
 publicationDate: 2025-07-28T15:10:37.000+09:00
 preview: ./preview.png
 summary: >
-  AWS CodeDeploy를 이용하여 Windows Server에 Python 웹 스크래핑 애플리케이션을 배포해봅니다.
+  AWS CodeDeploy를 이용하여 EC2 Windows Server에 Python 웹 스크래핑 애플리케이션을 배포하기
 tags:
   - Amazon Web Services
   - AWS CodeDeploy
