@@ -93,6 +93,7 @@
 			<a
 				class="join-item btn btn-sm {currentPage === item ? 'btn-active' : ''}"
 				href={getPageUrl(item)}
+				data-sveltekit-noscroll
 			>
 				{item}
 			</a>
@@ -104,10 +105,17 @@
 		<span class="join-item btn btn-sm btn-disabled" aria-label="Next page">&gt;</span>
 		<span class="join-item btn btn-sm btn-disabled" aria-label="Last page">&gt;&gt;</span>
 	{:else}
-		<a class="join-item btn btn-sm" href={getPageUrl(currentPage + 1)} aria-label="Next page"
-			>&gt;</a
+		<a
+			class="join-item btn btn-sm"
+			href={getPageUrl(currentPage + 1)}
+			aria-label="Next page"
+			data-sveltekit-noscroll>&gt;</a
 		>
-		<a class="join-item btn btn-sm" href={getPageUrl(totalPages)} aria-label="Last page">&gt;&gt;</a
+		<a
+			class="join-item btn btn-sm"
+			href={getPageUrl(totalPages)}
+			aria-label="Last page"
+			data-sveltekit-noscroll>&gt;&gt;</a
 		>
 	{/if}
 </div>

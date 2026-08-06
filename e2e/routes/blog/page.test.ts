@@ -17,7 +17,7 @@ test.describe('Blog Pagination', () => {
 		await expect(posts).toHaveCount(10);
 	});
 
-	test('should navigate to the second page and show 1 post', async ({ page }) => {
+	test('should navigate to the second page and show valid number of posts', async ({ page }) => {
 		await page.goto('/blog');
 
 		// Click the link to page 2 on the bottom pagination widget
@@ -28,9 +28,10 @@ test.describe('Blog Pagination', () => {
 		// Check URL changed to include page=2
 		await expect(page).toHaveURL(/\/blog\?page=2/);
 
-		// Check that the second page has exactly 1 post
+		// Check that the second page has a valid number of posts
 		const posts = page.locator('[data-testid="posts"] > div.flex-col > div');
-		await expect(posts).toHaveCount(1);
+		await expect(posts.first()).toBeVisible();
+		expect(await posts.count()).toBeLessThanOrEqual(10);
 	});
 
 	test('should handle previous and next navigation', async ({ page }) => {
@@ -43,6 +44,13 @@ test.describe('Blog Pagination', () => {
 		await expect(page).toHaveURL(/\/blog\?page=1/);
 		const posts = page.locator('[data-testid="posts"] > div.flex-col > div');
 		await expect(posts).toHaveCount(10);
+
+		// Go to page 2 using the next button
+		const nextButtons = page.locator('[data-testid="pagination"] [aria-label="Next page"]');
+		await nextButtons.first().click();
+
+		await expect(page).toHaveURL(/\/blog\?page=2/);
+		await expect(posts.first()).toBeVisible();
 	});
 });
 

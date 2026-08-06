@@ -95,7 +95,7 @@ it('shows alert and does not navigate when prompt input is invalid', async ({ us
 
 	expect(promptMock).toHaveBeenCalled();
 	expect(alertMock).toHaveBeenCalled();
-	expect(goto).not.toHaveBeenCalledWith('/blog?page=999');
+	expect(goto).not.toHaveBeenCalled();
 
 	vi.unstubAllGlobals();
 });
