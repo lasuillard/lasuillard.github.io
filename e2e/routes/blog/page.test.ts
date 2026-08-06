@@ -62,20 +62,15 @@ test.describe('Blog Tag Filtering', () => {
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
 		// Get the tag span badge directly by filtering on text content
-		const svelteKitSpan = page
-			.locator('[data-testid="tags"] span')
-			.filter({ hasText: 'SvelteKit' });
-		await expect(svelteKitSpan).toBeVisible();
+		const tag = page.locator('[data-testid="tags"] span').filter({ hasText: 'SvelteKit' });
+		await expect(tag).toBeVisible();
 
 		// Check that the tag badge initially has badge-secondary and not badge-primary
-		await expect(svelteKitSpan).toHaveClass(/badge-secondary/);
-		await expect(svelteKitSpan).not.toHaveClass(/badge-primary/);
-
-		// Locate the anchor link inside the span
-		const svelteKitTag = svelteKitSpan.locator('a');
+		await expect(tag).toHaveClass(/badge-secondary/);
+		await expect(tag).not.toHaveClass(/badge-primary/);
 
 		// Click the tag to filter
-		await svelteKitTag.click();
+		await tag.click();
 
 		// Expect the URL to change to include the query parameter
 		await expect(page).toHaveURL(/\/blog\?tag=SvelteKit/);
@@ -84,11 +79,11 @@ test.describe('Blog Tag Filtering', () => {
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
 		// Expect the selected tag badge to be highlighted with badge-primary
-		await expect(svelteKitSpan).toHaveClass(/badge-primary/);
-		await expect(svelteKitSpan).not.toHaveClass(/badge-secondary/);
+		await expect(tag).toHaveClass(/badge-primary/);
+		await expect(tag).not.toHaveClass(/badge-secondary/);
 
 		// Click the tag again to clear/toggle the filter
-		await svelteKitTag.click();
+		await tag.click();
 
 		// Expect the URL to go back to /blog without query parameter
 		await expect(page).toHaveURL(/\/blog$/);
@@ -97,8 +92,8 @@ test.describe('Blog Tag Filtering', () => {
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
 		// Expect badge to return to badge-secondary
-		await expect(svelteKitSpan).toHaveClass(/badge-secondary/);
-		await expect(svelteKitSpan).not.toHaveClass(/badge-primary/);
+		await expect(tag).toHaveClass(/badge-secondary/);
+		await expect(tag).not.toHaveClass(/badge-primary/);
 	});
 
 	test('should preserve tag filter when navigating pages', async ({ page }) => {
