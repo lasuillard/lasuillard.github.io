@@ -11,7 +11,7 @@ This project is a personal tech blog built with [SvelteKit](https://kit.svelte.d
 This project uses the following tech stack:
 
 - [SvelteKit](https://svelte.dev/docs/kit/introduction) ([adapter-static](https://svelte.dev/docs/kit/adapter-static)) with [TypeScript](https://www.typescriptlang.org/)
-- [Yarn](https://yarnpkg.com/) as a package manager
+- [npm](https://www.npmjs.com/) as a package manager
 - [Tailwind](https://tailwindcss.com/) with [DaisyUI](https://daisyui.com/) for styling
 - [Vite](https://vite.dev/) for building
 - [ESLint](https://eslint.org/), [Prettier](https://prettier.io/) for linting and formatting
@@ -39,7 +39,7 @@ This repository uses [Nix Flakes](https://nix.dev/concepts/flakes.html) to manag
 - `pre-commit`
 - `just`
 - `nodejs_24` (JavaScript runtime)
-- `yarn`
+- `npm`
 
 Run `nix develop` to start the development environment, then run `just install` to install dependencies and set up Playwright.
 
