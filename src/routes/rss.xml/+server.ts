@@ -23,13 +23,12 @@ export const GET: RequestHandler = async ({ fetch }) => {
     <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
     ${allPosts
 			.map((post) => {
-				// TODO: Description from post metadata (description or excerpt)
 				const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
 				return `<item>
             <guid isPermaLink="true">${postLink}</guid>
             <title>${post.metadata.title}</title>
             <link>${postLink}</link>
-            <description>${post.metadata.title}</description>
+            <description>${post.metadata.summary}</description>
             <pubDate>${post.metadata.publicationDate.toUTCString()}</pubDate>
           </item>`;
 			})
