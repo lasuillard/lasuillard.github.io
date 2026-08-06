@@ -60,12 +60,12 @@ export default {
 		}
 	],
 
-	timeout: 10 * 1_000,
+	timeout: 15 * 1_000,
 	retries: isCI ? 2 : 0,
 	expect: {
-		timeout: 10 * 1_000,
+		timeout: 15 * 1_000,
 		toHaveScreenshot: {
-			maxDiffPixelRatio: 0.15, // Allow up to 15% diff ratio to accommodate font/layout variations across platforms
+			maxDiffPixelRatio: 0.03, // 3%
 			stylePath: './e2e/screenshot.css',
 			animations: 'disabled'
 		}

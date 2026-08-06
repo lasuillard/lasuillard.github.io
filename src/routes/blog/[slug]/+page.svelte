@@ -121,10 +121,11 @@
 		& :global(img) {
 			@apply mx-auto shadow-md;
 		}
-		/* No underline for heading links */
+		/* When scroll, ensure some visual spacing above headings */
 		& :global(:where(h1, h2, h3, h4, h5, h6)) {
-			scroll-margin-top: 80px;
+			@apply scroll-mt-16 md:scroll-mt-24 lg:scroll-mt-32;
 		}
+		/* No underline for heading links */
 		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
 			@apply no-underline;
 		}
