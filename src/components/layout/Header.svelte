@@ -19,6 +19,19 @@
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 
 	let currentURL = $derived(browser ? $page?.url?.href || window.location.href : '');
+
+	let copied = $state(false);
+
+	function handleCopy() {
+		if (browser && currentURL) {
+			navigator.clipboard.writeText(currentURL).then(() => {
+				copied = true;
+				setTimeout(() => {
+					copied = false;
+				}, 2000);
+			});
+		}
+	}
 </script>
 
 <div data-testid="header-wrapper" class="bg-base-200 sticky top-0 z-10 w-full">
@@ -72,18 +85,58 @@
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
 							tabindex="0"
-							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex w-[158px] flex-col items-center gap-2 border p-4 shadow-xl"
+							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex w-[221px] flex-col items-center gap-2 border p-4 shadow-xl"
 						>
 							{#if currentURL}
-								<QRCode text={currentURL} width={126} />
-								<span
-									class="text-base-content/70 max-w-[126px] text-center text-xs font-semibold break-all select-all"
-									title={currentURL}
-								>
-									{currentURL}
-								</span>
+								<QRCode text={currentURL} width={189} />
+								<div class="mt-1 flex w-full items-center justify-center gap-1">
+									<span
+										class="text-base-content/70 max-w-[145px] truncate text-center text-xs font-semibold select-all"
+										title={currentURL}
+									>
+										{currentURL}
+									</span>
+									<button
+										class="btn btn-xs btn-circle btn-ghost"
+										onclick={handleCopy}
+										aria-label="Copy URL"
+									>
+										{#if copied}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="2.5"
+												stroke="green"
+												class="h-3.5 w-3.5"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="m4.5 12.75 6 6 9-13.5"
+												/>
+											</svg>
+										{:else}
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke-width="2"
+												stroke="currentColor"
+												class="h-3.5 w-3.5"
+											>
+												<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+												/>
+											</svg>
+										{/if}
+									</button>
+								</div>
 							{:else}
-								<canvas width={126} style="width: 126px; height: 126px;"></canvas>
+								<canvas width={189} style="width: 189px; height: 189px;"></canvas>
 							{/if}
 						</div>
 					</div>
@@ -122,14 +175,54 @@
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<li class="mt-8 flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
 							<div class="rounded-xl bg-white p-3 shadow-lg">
-								<QRCode text={currentURL} width={126} />
+								<QRCode text={currentURL} width={189} />
 							</div>
-							<span
-								class="max-w-[126px] text-center text-xs break-all text-gray-300 select-all"
-								title={currentURL}
-							>
-								{currentURL}
-							</span>
+							<div class="mt-1 flex w-full max-w-[189px] items-center justify-center gap-1">
+								<span
+									class="max-w-[145px] truncate text-center text-xs text-gray-300 select-all"
+									title={currentURL}
+								>
+									{currentURL}
+								</span>
+								<button
+									class="btn btn-xs btn-circle btn-ghost text-gray-300 hover:text-white"
+									onclick={handleCopy}
+									aria-label="Copy URL"
+								>
+									{#if copied}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="2.5"
+											stroke="green"
+											class="h-3.5 w-3.5"
+										>
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="m4.5 12.75 6 6 9-13.5"
+											/>
+										</svg>
+									{:else}
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke-width="2"
+											stroke="currentColor"
+											class="h-3.5 w-3.5"
+										>
+											<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+											<path
+												stroke-linecap="round"
+												stroke-linejoin="round"
+												d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+											/>
+										</svg>
+									{/if}
+								</button>
+							</div>
 						</li>
 					{/if}
 				</ul>
