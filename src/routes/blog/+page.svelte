@@ -59,7 +59,7 @@
 		<!-- Posts -->
 		<section data-testid="posts" class="xl:col-span-3">
 			<!-- Top Pagination -->
-			<div class="mb-12 flex justify-center">
+			<div class="mb-20 flex justify-center">
 				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
 			</div>
 
@@ -112,7 +112,7 @@
 			</div>
 
 			<!-- Bottom Pagination -->
-			<div class="mt-16 flex justify-center">
+			<div class="mt-20 flex justify-center">
 				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
 			</div>
 		</section>
