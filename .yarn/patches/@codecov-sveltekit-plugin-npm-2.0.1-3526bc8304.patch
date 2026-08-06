@@ -1,7 +1,7 @@
-diff --git a/node_modules/@codecov/sveltekit-plugin/dist/index.mjs b/node_modules/@codecov/sveltekit-plugin/dist/index.mjs
-index 28cbe2d..6665b21 100644
---- a/node_modules/@codecov/sveltekit-plugin/dist/index.mjs
-+++ b/node_modules/@codecov/sveltekit-plugin/dist/index.mjs
+diff --git a/dist/index.mjs b/dist/index.mjs
+index 28cbe2d5b73463e933235462036c6ce5f49dcd7e..6665b21eec02104c85bb91b4e3555c376e20521c 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
 @@ -31,7 +31,8 @@ const sveltekitBundleAnalysisPlugin = ({
          output.originalBundleName,
          options.dir,
