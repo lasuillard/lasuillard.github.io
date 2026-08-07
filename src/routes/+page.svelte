@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Markdown from '$components/content/Markdown.svelte';
+	import { route } from '$lib/urls';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
@@ -77,7 +78,7 @@
 							<div class="card-actions mt-2">
 								{#each tags as tag (tag)}
 									<span class="badge badge-secondary badge-xs rounded-xs font-semibold">
-										<a href="/blog?tag={encodeURIComponent(tag)}">{tag}</a>
+										<a href={route('/blog', { query: { tag } })}>{tag}</a>
 									</span>
 								{/each}
 							</div>

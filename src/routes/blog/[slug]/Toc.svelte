@@ -1,5 +1,5 @@
 <script lang="ts">
-	import TocTree from '$components/content/TocTree.svelte';
+	import TocTree from './TocTree.svelte';
 	import { makeToc, type TreeNode, type TreeSource } from '$lib/toc';
 	import { onMount } from 'svelte';
 

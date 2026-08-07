@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import Toc from '$components/content/Toc.svelte';
+import Toc from '$routes/blog/[slug]/Toc.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 

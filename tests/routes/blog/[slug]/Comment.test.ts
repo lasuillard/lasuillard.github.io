@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import Comment from '$components/content/Comment.svelte';
+import Comment from '$routes/blog/[slug]/Comment.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, it } from 'vitest';
 

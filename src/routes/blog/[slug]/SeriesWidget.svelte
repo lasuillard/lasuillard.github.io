@@ -52,7 +52,3 @@
 		{/each}
 	</ul>
 </div>
-
-<style lang="postcss">
-	@reference "../../app.css";
-</style>

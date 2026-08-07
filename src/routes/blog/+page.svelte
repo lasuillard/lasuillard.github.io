@@ -1,8 +1,11 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Markdown from '$components/content/Markdown.svelte';
-	import Pagination from '$components/utility/Pagination.svelte';
-	import Search from '$components/utility/Search.svelte';
+	import Pagination from './Pagination.svelte';
+	import Search from './Search.svelte';
+	import { PAGE_SIZE } from '$lib/constants';
+	import { route } from '$lib/urls';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
@@ -25,6 +28,41 @@
 	});
 
 	let selectedTag = $derived($page.url.searchParams.get('tag'));
+
+	let filteredPosts = $derived(
+		selectedTag
+			? allPosts.filter((post) =>
+					post.metadata.tags.map((t) => t.toLowerCase()).includes(selectedTag!.toLowerCase())
+				)
+			: allPosts
+	);
+
+	let currentPage = $derived.by(() => {
+		const pageParam = $page.url.searchParams.get('page');
+		if (pageParam) {
+			const parsed = parseInt(pageParam, 10);
+			if (!isNaN(parsed) && parsed > 0) return parsed;
+		}
+		return 1;
+	});
+
+	let totalPages = $derived(Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE)));
+	let paginatedPosts = $derived(
+		filteredPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+	);
+
+	$effect(() => {
+		if (currentPage > totalPages) {
+			goto(
+				route('/blog', {
+					query: { tag: selectedTag ?? undefined, page: totalPages === 1 ? undefined : totalPages }
+				}),
+				{
+					replaceState: true
+				}
+			);
+		}
+	});
 </script>
 
 <div>
@@ -44,7 +82,7 @@
 									? 'badge-primary'
 									: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 							>
-								<a href={isSelected ? '/blog' : `/blog?tag=${encodeURIComponent(tag)}`}>
+								<a href={isSelected ? '/blog' : route('/blog', { query: { tag } })}>
 									{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
 								</a>
 							</span>
@@ -60,12 +98,12 @@
 		<section data-testid="posts" class="xl:col-span-3">
 			<!-- Top Pagination -->
 			<div class="mb-20 flex justify-center">
-				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
+				<Pagination {currentPage} {totalPages} />
 			</div>
 
 			<div class="flex flex-col space-y-32">
-				{#if data.paginatedPosts.length}
-					{#each data.paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if paginatedPosts.length}
+					{#each paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -94,7 +132,7 @@
 													? 'badge-primary'
 													: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
 											>
-												<a href={isSelected ? '/blog' : `/blog?tag=${encodeURIComponent(tag)}`}>
+												<a href={isSelected ? '/blog' : route('/blog', { query: { tag } })}>
 													{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
 												</a>
 											</span>
@@ -113,7 +151,7 @@
 
 			<!-- Bottom Pagination -->
 			<div class="mt-20 flex justify-center">
-				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
+				<Pagination {currentPage} {totalPages} />
 			</div>
 		</section>
 	</div>

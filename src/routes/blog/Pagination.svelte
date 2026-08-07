@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { unsafeRoute } from '$lib/urls';
 
 	interface Props {
 		currentPage: number;
@@ -10,9 +11,9 @@
 	let { currentPage, totalPages }: Props = $props();
 
 	function getPageUrl(pageNum: number | string) {
-		const url = new URL($page.url.href);
-		url.searchParams.set('page', pageNum.toString());
-		return url.pathname + url.search;
+		const params = Object.fromEntries($page.url.searchParams.entries());
+		params['page'] = pageNum.toString();
+		return unsafeRoute($page.url.pathname, params);
 	}
 
 	let visiblePages = $derived.by(() => {

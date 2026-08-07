@@ -1,8 +1,9 @@
 <script lang="ts">
-	import Comment from '$components/content/Comment.svelte';
+	import Comment from './Comment.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
-	import Toc from '$components/content/Toc.svelte';
-	import SeriesWidget from '$components/content/SeriesWidget.svelte';
+	import Toc from './Toc.svelte';
+	import SeriesWidget from './SeriesWidget.svelte';
+	import { route } from '$lib/urls';
 	import { format, formatDistanceStrict } from 'date-fns';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
 
@@ -83,7 +84,7 @@
 					<div class="mt-4 flex flex-wrap justify-center">
 						{#each metadata.tags as tag (tag)}
 							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
-								<a href="/blog?tag={encodeURIComponent(tag)}">
+								<a href={route('/blog', { query: { tag } })}>
 									{tag}
 								</a>
 							</div>

@@ -4,7 +4,7 @@
 	import Menu from '$components/icon/Menu.svelte';
 	import QRCodeIcon from '$components/icon/QRCode.svelte';
 	import QRCode from '$components/layout/QRCode.svelte';
-	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
+	import ThemeSelect from './ThemeSelect.svelte';
 
 	const links = [
 		{ name: 'About Me', href: '/' },
@@ -66,6 +66,7 @@
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QRCodeIcon class="h-6 w-6" />
 						</div>
+						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
 							tabindex="0"
 							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-2.5 shadow-xl"
