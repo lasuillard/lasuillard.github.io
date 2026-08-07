@@ -77,27 +77,27 @@
 
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1 gap-2">
-					<div
-						class="dropdown dropdown-end dropdown-hover hidden md:inline-block"
-						data-testid="qr-dropdown"
-					>
+					<div class="dropdown dropdown-end hidden md:inline-block" data-testid="qr-dropdown">
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QRCodeIcon class="h-6 w-6" />
 						</div>
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
 							tabindex="0"
-							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex w-max min-w-[233px] flex-col items-center gap-2 border p-2.5 shadow-xl"
+							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-2.5 shadow-xl"
+							style="width: 233px; min-width: 233px;"
 						>
 							{#if currentURL}
 								<QRCode text={currentURL} width={213} />
-								<div class="mt-1 flex w-full items-center justify-center gap-1">
-									<span
-										class="text-base-content/70 max-w-[170px] truncate text-left text-xs font-semibold select-all"
-										title={currentURL}
-									>
-										{currentURL}
-									</span>
+								<div class="mt-1 flex w-full items-center justify-between gap-1">
+									<div class="flex-1 overflow-hidden text-left">
+										<span
+											class="text-base-content/70 block truncate text-xs font-semibold select-all"
+											title={currentURL}
+										>
+											{currentURL}
+										</span>
+									</div>
 									<button
 										class="btn btn-xs btn-circle btn-ghost"
 										onclick={handleCopy}
@@ -133,37 +133,36 @@
 				class="flex min-h-screen w-full"
 				onclick={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
 			>
-				<ul class="menu m-auto flex flex-col items-center gap-6 text-2xl text-white">
-					{#each links as link (link.name)}
-						<li>
-							<a
-								class="mx-auto w-fit"
-								class:underline={currentPath === link.href}
-								href={link.href}
-								onclick={(/* Close drawer when link clicked */) => (drawerOpen = false)}
-							>
-								{link.name}
-							</a>
-						</li>
-					{/each}
+				<div class="m-auto flex flex-col items-center gap-8">
+					<ul class="menu flex flex-col items-center gap-6 text-2xl text-white">
+						{#each links as link (link.name)}
+							<li>
+								<a
+									class="mx-auto w-fit"
+									class:underline={currentPath === link.href}
+									href={link.href}
+									onclick={(/* Close drawer when link clicked */) => (drawerOpen = false)}
+								>
+									{link.name}
+								</a>
+							</li>
+						{/each}
+					</ul>
 
 					<!-- Mobile Drawer QR Code -->
 					{#if drawerOpen && currentURL}
-						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+						<!-- svelte-ignore a11y_no_static_element_interactions -->
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
-						<li class="mt-8 flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
+						<div class="flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
 							<div class="rounded-xl bg-white p-2 shadow-lg">
 								<QRCode text={currentURL} width={213} />
 							</div>
-							<div
-								class="mt-1 flex w-full max-w-[213px] min-w-[213px] items-center justify-center gap-1"
-							>
-								<span
-									class="max-w-[170px] truncate text-left text-xs text-gray-300 select-all"
-									title={currentURL}
-								>
-									{currentURL}
-								</span>
+							<div class="mt-1 flex items-center justify-between gap-1" style="width: 213px;">
+								<div class="flex-1 overflow-hidden text-center">
+									<span class="block truncate text-xs text-gray-300 select-all" title={currentURL}>
+										{currentURL}
+									</span>
+								</div>
 								<button
 									class="btn btn-xs btn-circle btn-ghost text-gray-300 hover:text-white"
 									onclick={handleCopy}
@@ -176,9 +175,9 @@
 									{/if}
 								</button>
 							</div>
-						</li>
+						</div>
 					{/if}
-				</ul>
+				</div>
 			</div>
 		</div>
 	</div>
