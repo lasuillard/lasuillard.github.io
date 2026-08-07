@@ -3,7 +3,7 @@ title: 마음대로 쓰고 버리는 개발 컨테이너
 publicationDate: 2025-07-28T15:23:08.000+09:00
 preview: ./preview.png
 summary: >
-  Dev Container를 활용하여 언제든지 쉽게 재현 가능하고 격리된, 나만의 개발 환경을 만들어봅니다.
+  Dev Container를 활용하여 언제든지 쉽게 재현 가능하고 격리된, 나만의 개발 환경 만들기
 tags:
   - Dev Container
   - Docker
