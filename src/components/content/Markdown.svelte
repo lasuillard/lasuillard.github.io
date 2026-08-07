@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { onMount, tick, mount, unmount } from 'svelte';
-	import Copy from '$components/icon/Copy.svelte';
-	import Check from '$components/icon/Check.svelte';
+	import CopyIcon from '$components/icon/Copy.svelte';
+	import CheckIcon from '$components/icon/Check.svelte';
 
 	let {
 		// Parsed front matter and content
@@ -96,7 +96,7 @@
 				copyBtn.className = 'code-copy-btn';
 				copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
 
-				let iconComponent = mount(Copy, {
+				let iconComponent = mount(CopyIcon, {
 					target: copyBtn,
 					props: { class: 'h-5 w-5' }
 				});
@@ -116,14 +116,14 @@
 						await navigator.clipboard.writeText(text);
 
 						unmount(iconComponent);
-						iconComponent = mount(Check, {
+						iconComponent = mount(CheckIcon, {
 							target: copyBtn,
 							props: { class: 'h-5 w-5 text-slate-900' }
 						});
 						copyBtn.classList.add('copied');
 						setTimeout(() => {
 							unmount(iconComponent);
-							iconComponent = mount(Copy, {
+							iconComponent = mount(CopyIcon, {
 								target: copyBtn,
 								props: { class: 'h-5 w-5' }
 							});

@@ -23,7 +23,7 @@ test('renders recent posts section with 3 posts', async () => {
 	const heading = recentPostsSection.locator('h3');
 	await expect(heading).toHaveText('최근 쓴 글');
 
-	const postCount = await recentPostsSection.locator('h4').count();
+	const postCount = await recentPostsSection.locator('h2.card-title').count();
 	expect(postCount).toBe(3);
 });
 
@@ -36,7 +36,7 @@ test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo)
 
 		const qrCodeCanvas = qrDropdown.locator('[data-testid="qrcode"]');
 
-		await qrDropdown.locator('role=button[name="QR Code"]').hover();
+		await qrDropdown.locator('role=button[name="QR Code"]').click();
 		await expect(qrCodeCanvas).toBeVisible();
 	} else {
 		await expect(qrDropdown).not.toBeVisible();

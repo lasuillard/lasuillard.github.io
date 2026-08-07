@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Search from '$components/icon/Search.svelte';
+	import SearchIcon from '$components/icon/Search.svelte';
 	import { getEngine } from '$lib/search';
 	import { quoteJoin } from '$lib/utils';
 	import type { SearchResult, Suggestion } from 'minisearch';
@@ -10,6 +10,44 @@
 	let searchText = writable('');
 	let searchResults: SearchResult[] = $state([]);
 	let suggestions: Suggestion[] = $state([]);
+
+	let isFocused = $state(false);
+	let activeIndex = $state(-1);
+
+	// Reset active index when results change
+	$effect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+		searchResults; // track
+		activeIndex = -1;
+	});
+
+	function handleFocusIn() {
+		isFocused = true;
+	}
+
+	function handleFocusOut(e: FocusEvent) {
+		const container = e.currentTarget as HTMLElement;
+		if (!container.contains(e.relatedTarget as Node)) {
+			isFocused = false;
+		}
+	}
+
+	function handleKeydown(e: KeyboardEvent) {
+		if (!searchResults.length) return;
+		if (e.key === 'ArrowDown') {
+			e.preventDefault();
+			activeIndex = Math.min(activeIndex + 1, searchResults.length - 1);
+		} else if (e.key === 'ArrowUp') {
+			e.preventDefault();
+			activeIndex = Math.max(activeIndex - 1, 0);
+		} else if (e.key === 'Enter' && activeIndex >= 0) {
+			e.preventDefault();
+			const result = searchResults[activeIndex];
+			window.location.href = `/blog/${result.id}-${result['metadata.slug']}`;
+		} else if (e.key === 'Escape') {
+			isFocused = false;
+		}
+	}
 
 	searchText.subscribe((value) => {
 		if (!value) {
@@ -45,21 +83,26 @@
 </script>
 
 <div data-testid="search" class="mb-2 w-64">
-	<div class="group relative flex items-center space-x-2">
+	<div
+		class="group relative flex items-center space-x-2"
+		onfocusin={handleFocusIn}
+		onfocusout={handleFocusOut}
+	>
 		<div class="w-full" role="search">
-			<div class="absolute mt-[9px] ml-[11px]">
-				<Search class="h-4 w-4 stroke-gray-400" />
-			</div>
 			<!-- TODO: Add button to clear search text -->
 			<!-- TODO: Auto-fill suggestion (tab key?) -->
-			<input
-				type="text"
-				placeholder="Search"
-				bind:value={$searchText}
-				class="input input-bordered h-8 w-full pl-8 placeholder:font-light"
-			/>
+			<label class="input input-bordered flex h-10 items-center gap-2">
+				<SearchIcon class="h-4 w-4 stroke-gray-400" />
+				<input
+					type="text"
+					placeholder="Search"
+					bind:value={$searchText}
+					onkeydown={handleKeydown}
+					class="grow placeholder:font-light"
+				/>
+			</label>
 			<div
-				class="dropdown absolute top-[135%] right-0 z-1 w-full {$searchText.length > 0
+				class="dropdown absolute top-[135%] right-0 z-1 w-full {$searchText.length > 0 && isFocused
 					? 'dropdown-open'
 					: ''}"
 			>
@@ -68,8 +111,8 @@
 						<ol
 							class="menu dropdown-content bg-base-200 w-full space-y-2 rounded-xs shadow-xl hover:visible!"
 						>
-							{#each searchResults as result (result.id)}
-								<li class="font-bold">
+							{#each searchResults as result, i (result.id)}
+								<li class="font-bold {i === activeIndex ? 'bg-base-300' : ''}">
 									<a href="/blog/{result.id}-{result['metadata.slug']}"
 										>{result['metadata.title']}</a
 									>

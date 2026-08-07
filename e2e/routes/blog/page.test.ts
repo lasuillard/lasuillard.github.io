@@ -31,7 +31,9 @@ test.describe('Blog Pagination', () => {
 		// Check that the second page has a valid number of posts
 		const posts = page.locator('[data-testid="posts"] > div.flex-col > div');
 		await expect(posts.first()).toBeVisible();
-		expect(await posts.count()).toBeLessThanOrEqual(10);
+		await expect(async () => {
+			expect(await posts.count()).toBeLessThanOrEqual(10);
+		}).toPass();
 	});
 
 	test('should handle previous and next navigation', async ({ page }) => {
