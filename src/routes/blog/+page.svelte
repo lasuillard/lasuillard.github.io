@@ -37,7 +37,9 @@
 			: allPosts
 	);
 
-	let currentPage = $derived.by(() => {
+	let totalPages = $derived(Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE)));
+
+	let rawPage = $derived.by(() => {
 		const pageParam = $page.url.searchParams.get('page');
 		if (pageParam) {
 			const parsed = parseInt(pageParam, 10);
@@ -46,13 +48,14 @@
 		return 1;
 	});
 
-	let totalPages = $derived(Math.max(1, Math.ceil(filteredPosts.length / PAGE_SIZE)));
+	let currentPage = $derived(Math.min(rawPage, totalPages));
+
 	let paginatedPosts = $derived(
 		filteredPosts.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 	);
 
 	$effect(() => {
-		if (currentPage > totalPages) {
+		if (rawPage > totalPages) {
 			goto(
 				route('/blog', {
 					query: { tag: selectedTag ?? undefined, page: totalPages === 1 ? undefined : totalPages }

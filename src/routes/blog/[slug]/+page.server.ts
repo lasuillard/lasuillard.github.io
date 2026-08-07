@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 	const post = await postRepository.findPostById(id);
 	if (!post) {
-		throw error(404, { message: `Failed to fetch post.` });
+		throw error(404, { message: `글을 찾을 수 없습니다.` });
 	}
 
 	const { metadata, content } = post;
