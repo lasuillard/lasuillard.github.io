@@ -8,9 +8,9 @@
 </script>
 
 <div class="mx-auto xl:max-w-[50rem]">
-	<div class="grid grid-cols-1 items-center gap-x-8 gap-y-8 lg:grid-cols-[auto_1fr]">
+	<div class="grid grid-cols-1 items-center gap-y-8">
 		<!-- Profile image -->
-		<div class="avatar col-span-1 flex justify-center lg:row-span-2 lg:row-start-1 lg:pr-4">
+		<div class="avatar col-span-1 flex justify-center">
 			<div class="h-fit w-36 rounded-lg bg-sky-900 p-0.5 sm:w-48">
 				<!-- svelte-ignore a11y_img_redundant_alt -->
 				<!-- BUG: https://github.com -->
@@ -19,14 +19,14 @@
 		</div>
 
 		<!-- Title -->
-		<div class="text-center lg:col-start-2 lg:row-start-1 lg:text-left">
+		<div class="text-center">
 			<h2 class="text-2xl font-semibold">게으른 개발자, 이유찬입니다.</h2>
 		</div>
 
 		<!-- Bio -->
-		<div class="w-full px-4 max-lg:text-center lg:col-start-2 lg:row-start-2 lg:px-0">
+		<div class="w-full px-4 text-center">
 			<p class="my-4 text-center">…</p>
-			<div class="text-justify leading-8 lg:text-left">
+			<div class="text-justify leading-8">
 				<p>
 					소프트웨어 엔지니어 이유찬입니다. 여러 회사에서 Python과 Django, AWS 서비스를 활용하여 웹
 					서비스를 구축하고 운영해왔습니다.
@@ -77,7 +77,7 @@
 							<div class="card-actions mt-2">
 								{#each tags as tag (tag)}
 									<span class="badge badge-secondary badge-xs rounded-xs font-semibold">
-										<a href="/blog/tag/{tag}">{tag}</a>
+										<a href="/blog?tag={encodeURIComponent(tag)}">{tag}</a>
 									</span>
 								{/each}
 							</div>
