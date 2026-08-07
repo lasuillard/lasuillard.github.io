@@ -5,13 +5,14 @@ import remarkGfm from 'remark-gfm';
 
 let miniSearch: MiniSearch | undefined = undefined;
 
+const processor = unified().use(remarkParse).use(remarkGfm);
+
 /**
  * Clean up markdown tags, HTML elements, and formatting for better indexing.
  * @param markdown Raw markdown content.
  * @returns Cleaned text content.
  */
 export function cleanMarkdown(markdown: string): string {
-	const processor = unified().use(remarkParse).use(remarkGfm);
 	const tree = processor.parse(markdown);
 
 	let result = '';
