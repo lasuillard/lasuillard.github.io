@@ -27,4 +27,33 @@ test('renders recent posts section with 3 posts', async () => {
 	expect(postCount).toBe(3);
 });
 
+test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo) => {
+	await _page.goto('/');
+	const qrDropdown = _page.getByTestId('qr-dropdown');
+
+	if (testInfo.project.name !== 'Mobile L') {
+		await expect(qrDropdown).toBeVisible();
+
+		const qrCodeCanvas = qrDropdown.locator('[data-testid="qrcode"]');
+
+		await qrDropdown.locator('role=button[name="QR Code"]').hover();
+		await expect(qrCodeCanvas).toBeVisible();
+	} else {
+		await expect(qrDropdown).not.toBeVisible();
+	}
+});
+
+test('header has QR code inside drawer on mobile', async ({ page: _page }, testInfo) => {
+	await _page.goto('/');
+	if (testInfo.project.name === 'Mobile L') {
+		const drawerToggle = _page.getByTestId('drawer-toggle');
+		await expect(drawerToggle).toBeVisible();
+
+		await drawerToggle.click();
+
+		const qrCodeInDrawer = _page.locator('.drawer-side [data-testid="qrcode"]');
+		await expect(qrCodeInDrawer).toBeVisible();
+	}
+});
+
 test('list all tags with ref counts', () => test.fixme());

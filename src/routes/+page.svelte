@@ -1,21 +1,16 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import QRCode from '$components/content/QRCode.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 
 	let { data } = $props();
 
 	let profileImage = '/profile.jpg';
-	const pageURL = browser ? window.location.href.split('#')[0] : null;
 </script>
 
 <div class="mx-auto xl:max-w-[50rem]">
-	<div class="grid grid-cols-2 items-center gap-x-8 gap-y-8 lg:grid-cols-[auto_1fr]">
+	<div class="grid grid-cols-1 items-center gap-x-8 gap-y-8 lg:grid-cols-[auto_1fr]">
 		<!-- Profile image -->
-		<div
-			class="avatar order-1 col-span-1 flex justify-center lg:col-span-1 lg:row-span-2 lg:row-start-1 lg:pr-4"
-		>
+		<div class="avatar col-span-1 flex justify-center lg:row-span-2 lg:row-start-1 lg:pr-4">
 			<div class="h-fit w-36 rounded-lg bg-sky-900 p-0.5 sm:w-48">
 				<!-- svelte-ignore a11y_img_redundant_alt -->
 				<!-- BUG: https://github.com -->
@@ -23,28 +18,13 @@
 			</div>
 		</div>
 
-		<!-- QR code -->
-		<div
-			class="order-2 col-span-1 flex w-full justify-center lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:justify-end"
-		>
-			{#if pageURL}
-				<QRCode text={pageURL} width={140} />
-			{:else}
-				<canvas width={140}></canvas>
-			{/if}
-		</div>
-
 		<!-- Title -->
-		<div
-			class="order-3 col-span-2 text-center lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:pr-36 lg:text-left"
-		>
+		<div class="text-center lg:col-start-2 lg:row-start-1 lg:text-left">
 			<h2 class="text-2xl font-semibold">게으른 개발자, 이유찬입니다.</h2>
 		</div>
 
 		<!-- Bio -->
-		<div
-			class="order-4 col-span-2 w-full px-4 max-lg:text-center lg:col-span-1 lg:col-start-2 lg:row-start-2 lg:px-0"
-		>
+		<div class="w-full px-4 max-lg:text-center lg:col-start-2 lg:row-start-2 lg:px-0">
 			<p class="my-4 text-center">…</p>
 			<div class="text-justify leading-8 lg:text-left">
 				<p>

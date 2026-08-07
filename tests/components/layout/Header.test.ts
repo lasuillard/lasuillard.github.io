@@ -28,6 +28,11 @@ it('contains theme selector', () => {
 	expect(getByTestId('theme-select')).toBeTruthy();
 });
 
+it('contains QR code dropdown', () => {
+	const { getByTestId } = render(Header);
+	expect(getByTestId('qr-dropdown')).toBeTruthy();
+});
+
 it('closes drawer when clicking outside of it', async ({ user }) => {
 	const component = render(Header, { drawerOpen: true });
 
