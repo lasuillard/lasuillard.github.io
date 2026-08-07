@@ -3,10 +3,8 @@
 	import { browser } from '$app/environment';
 	import Menu from '$components/icon/Menu.svelte';
 	import QRCodeIcon from '$components/icon/QRCode.svelte';
-	import QRCode from '$components/content/QRCode.svelte';
+	import QRCode from '$components/layout/QRCode.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
-	import Check from '$components/icon/Check.svelte';
-	import Copy from '$components/icon/Copy.svelte';
 
 	const links = [
 		{ name: 'About Me', href: '/' },
@@ -21,19 +19,6 @@
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 
 	let currentURL = $derived(browser ? $page?.url?.href || window.location.href : '');
-
-	let copied = $state(false);
-
-	function handleCopy() {
-		if (browser && currentURL) {
-			navigator.clipboard.writeText(currentURL).then(() => {
-				copied = true;
-				setTimeout(() => {
-					copied = false;
-				}, 2000);
-			});
-		}
-	}
 </script>
 
 <div data-testid="header-wrapper" class="bg-base-200 sticky top-0 z-10 w-full">
@@ -81,41 +66,12 @@
 						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QRCodeIcon class="h-6 w-6" />
 						</div>
-						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
 							tabindex="0"
 							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-2.5 shadow-xl"
-							style="width: 233px; min-width: 233px;"
+							style="width: 249px; min-width: 249px;"
 						>
-							{#if currentURL}
-								<QRCode text={currentURL} width={213} />
-								<div class="mt-1 flex w-full items-center justify-between gap-1">
-									<div class="flex-1 overflow-hidden text-left">
-										<span
-											class="text-base-content/70 block truncate text-xs font-semibold select-all"
-											title={currentURL}
-										>
-											{currentURL}
-										</span>
-									</div>
-									<button
-										class="btn btn-xs btn-circle btn-ghost"
-										onclick={handleCopy}
-										aria-label="Copy URL"
-									>
-										{#if copied}
-											<Check class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
-										{:else}
-											<Copy class="h-3.5 w-3.5" />
-										{/if}
-									</button>
-								</div>
-							{:else}
-								<canvas
-									width={213}
-									style="width: 213px; height: 213px; min-width: 213px; min-height: 213px;"
-								></canvas>
-							{/if}
+							<QRCode url={currentURL} width={213} />
 						</div>
 					</div>
 					<ThemeSelect />
@@ -151,31 +107,7 @@
 
 					<!-- Mobile Drawer QR Code -->
 					{#if drawerOpen && currentURL}
-						<!-- svelte-ignore a11y_no_static_element_interactions -->
-						<!-- svelte-ignore a11y_click_events_have_key_events -->
-						<div class="flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
-							<div class="rounded-xl bg-white p-2 shadow-lg">
-								<QRCode text={currentURL} width={213} />
-							</div>
-							<div class="mt-1 flex items-center justify-between gap-1" style="width: 213px;">
-								<div class="flex-1 overflow-hidden text-center">
-									<span class="block truncate text-xs text-gray-300 select-all" title={currentURL}>
-										{currentURL}
-									</span>
-								</div>
-								<button
-									class="btn btn-xs btn-circle btn-ghost text-gray-300 hover:text-white"
-									onclick={handleCopy}
-									aria-label="Copy URL"
-								>
-									{#if copied}
-										<Check class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
-									{:else}
-										<Copy class="h-3.5 w-3.5" />
-									{/if}
-								</button>
-							</div>
-						</div>
+						<QRCode url={currentURL} width={213} />
 					{/if}
 				</div>
 			</div>
