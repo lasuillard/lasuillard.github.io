@@ -5,6 +5,8 @@
 	import QRCodeIcon from '$components/icon/QRCode.svelte';
 	import QRCode from '$components/content/QRCode.svelte';
 	import ThemeSelect from '$components/utility/ThemeSelect.svelte';
+	import Check from '$components/icon/Check.svelte';
+	import Copy from '$components/icon/Copy.svelte';
 
 	const links = [
 		{ name: 'About Me', href: '/' },
@@ -102,36 +104,9 @@
 										aria-label="Copy URL"
 									>
 										{#if copied}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width="2.5"
-												stroke="green"
-												class="h-3.5 w-3.5"
-											>
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="m4.5 12.75 6 6 9-13.5"
-												/>
-											</svg>
+											<Check class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
 										{:else}
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												fill="none"
-												viewBox="0 0 24 24"
-												stroke-width="2"
-												stroke="currentColor"
-												class="h-3.5 w-3.5"
-											>
-												<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-												<path
-													stroke-linecap="round"
-													stroke-linejoin="round"
-													d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-												/>
-											</svg>
+											<Copy class="h-3.5 w-3.5" />
 										{/if}
 									</button>
 								</div>
@@ -195,36 +170,9 @@
 									aria-label="Copy URL"
 								>
 									{#if copied}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="2.5"
-											stroke="green"
-											class="h-3.5 w-3.5"
-										>
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="m4.5 12.75 6 6 9-13.5"
-											/>
-										</svg>
+										<Check class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
 									{:else}
-										<svg
-											xmlns="http://www.w3.org/2000/svg"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke-width="2"
-											stroke="currentColor"
-											class="h-3.5 w-3.5"
-										>
-											<rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
-											<path
-												stroke-linecap="round"
-												stroke-linejoin="round"
-												d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-											/>
-										</svg>
+										<Copy class="h-3.5 w-3.5" />
 									{/if}
 								</button>
 							</div>

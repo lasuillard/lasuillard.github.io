@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
+	import { onMount, tick, mount, unmount } from 'svelte';
+	import Copy from '$components/icon/Copy.svelte';
+	import Check from '$components/icon/Check.svelte';
 
 	let {
 		// Parsed front matter and content
@@ -94,10 +96,10 @@
 				copyBtn.className = 'code-copy-btn';
 				copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
 
-				const copyIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3a1 1 0 011-1h10a1 1 0 011 1v12a1 1 0 01-1 1h-4M8 7H4a1 1 0 00-1 1v12a1 1 0 001 1h8a1 1 0 001-1v-4M8 7V5a1 1 0 011-1h4" /></svg>`;
-				const checkIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-slate-900" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>`;
-
-				copyBtn.innerHTML = copyIconSvg;
+				let iconComponent = mount(Copy, {
+					target: copyBtn,
+					props: { class: 'h-5 w-5' }
+				});
 
 				copyBtn.addEventListener('click', async () => {
 					try {
@@ -113,10 +115,18 @@
 
 						await navigator.clipboard.writeText(text);
 
-						copyBtn.innerHTML = checkIconSvg;
+						unmount(iconComponent);
+						iconComponent = mount(Check, {
+							target: copyBtn,
+							props: { class: 'h-5 w-5 text-slate-900' }
+						});
 						copyBtn.classList.add('copied');
 						setTimeout(() => {
-							copyBtn.innerHTML = copyIconSvg;
+							unmount(iconComponent);
+							iconComponent = mount(Copy, {
+								target: copyBtn,
+								props: { class: 'h-5 w-5' }
+							});
 							copyBtn.classList.remove('copied');
 						}, 2000);
 					} catch (err) {
