@@ -38,6 +38,6 @@ describe('hooks.client', () => {
 		const error = new Error('test error');
 		const event = {} as any;
 
-		expect(() => hooks.handleError({ error, event, status: 500, message: 'test' })).not.toThrow();
+		expect(() => hooks.handleError({ error, event })).not.toThrow();
 	});
 });
