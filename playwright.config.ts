@@ -7,7 +7,7 @@ const webserverPort = parseInt(process.env.__WEBSERVER_PORT || '4173');
 export default {
 	webServer: {
 		command: `npm run preview -- --port '${webserverPort}'`,
-		reuseExistingServer: false,
+		reuseExistingServer: !isCI,
 		url: `http://localhost:${webserverPort}/`
 	},
 	use: {
