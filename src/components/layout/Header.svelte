@@ -85,13 +85,13 @@
 						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
 						<div
 							tabindex="0"
-							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex w-[221px] flex-col items-center gap-2 border p-4 shadow-xl"
+							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex w-max min-w-[233px] flex-col items-center gap-2 border p-2.5 shadow-xl"
 						>
 							{#if currentURL}
-								<QRCode text={currentURL} width={189} />
+								<QRCode text={currentURL} width={213} />
 								<div class="mt-1 flex w-full items-center justify-center gap-1">
 									<span
-										class="text-base-content/70 max-w-[145px] truncate text-center text-xs font-semibold select-all"
+										class="text-base-content/70 max-w-[170px] truncate text-left text-xs font-semibold select-all"
 										title={currentURL}
 									>
 										{currentURL}
@@ -136,7 +136,10 @@
 									</button>
 								</div>
 							{:else}
-								<canvas width={189} style="width: 189px; height: 189px;"></canvas>
+								<canvas
+									width={213}
+									style="width: 213px; height: 213px; min-width: 213px; min-height: 213px;"
+								></canvas>
 							{/if}
 						</div>
 					</div>
@@ -174,12 +177,14 @@
 						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<li class="mt-8 flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
-							<div class="rounded-xl bg-white p-3 shadow-lg">
-								<QRCode text={currentURL} width={189} />
+							<div class="rounded-xl bg-white p-2 shadow-lg">
+								<QRCode text={currentURL} width={213} />
 							</div>
-							<div class="mt-1 flex w-full max-w-[189px] items-center justify-center gap-1">
+							<div
+								class="mt-1 flex w-full max-w-[213px] min-w-[213px] items-center justify-center gap-1"
+							>
 								<span
-									class="max-w-[145px] truncate text-center text-xs text-gray-300 select-all"
+									class="max-w-[170px] truncate text-left text-xs text-gray-300 select-all"
 									title={currentURL}
 								>
 									{currentURL}

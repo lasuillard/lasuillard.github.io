@@ -35,9 +35,9 @@
 
 <canvas
 	bind:this={qrCode}
-	class="rounded-xl"
+	class="shrink-0 rounded-xl"
 	data-testid="qrcode"
 	title={text}
 	{width}
-	style="width: {width}px; height: {width}px;"
+	style="width: {width}px; height: {width}px; min-width: {width}px; min-height: {width}px;"
 ></canvas>
