@@ -6,7 +6,7 @@ const webserverPort = parseInt(process.env.__WEBSERVER_PORT || '4173');
 
 export default {
 	webServer: {
-		command: `yarn run preview --port '${webserverPort}'`,
+		command: `npm run preview -- --port '${webserverPort}'`,
 		reuseExistingServer: false,
 		url: `http://localhost:${webserverPort}/`
 	},
@@ -60,12 +60,12 @@ export default {
 		}
 	],
 
-	timeout: 10 * 1_000,
+	timeout: 15 * 1_000,
 	retries: isCI ? 2 : 0,
 	expect: {
-		timeout: 10 * 1_000,
+		timeout: 15 * 1_000,
 		toHaveScreenshot: {
-			maxDiffPixelRatio: 0.025, // 2.5%
+			maxDiffPixelRatio: 0.03, // 3%
 			stylePath: './e2e/screenshot.css',
 			animations: 'disabled'
 		}

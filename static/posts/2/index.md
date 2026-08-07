@@ -3,7 +3,7 @@ title: 개발을 위한 데이터베이스
 publicationDate: 2024-06-14T21:10:02.000+09:00
 preview: ./preview.png
 summary: >
-  빠르고 쾌적한 개발을 위해 데이터를 안전하게 추출하기 위한 방법을 탐구합니다.
+  빠르고 쾌적한 개발을 위해 데이터를 안전하게 추출하기
 tags:
   - Amazon Web Services
   - AWS RDS

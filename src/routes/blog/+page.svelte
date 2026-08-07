@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import Markdown from '$components/content/Markdown.svelte';
+	import Pagination from '$components/utility/Pagination.svelte';
 	import Search from '$components/utility/Search.svelte';
 	import { format, formatDistanceStrict } from 'date-fns';
 
@@ -24,13 +25,6 @@
 	});
 
 	let selectedTag = $derived($page.url.searchParams.get('tag'));
-	let filteredPosts = $derived(
-		selectedTag
-			? allPosts.filter((post) =>
-					post.metadata.tags.map((t) => t.toLowerCase()).includes(selectedTag.toLowerCase())
-				)
-			: allPosts
-	);
 </script>
 
 <div>
@@ -64,9 +58,14 @@
 
 		<!-- Posts -->
 		<section data-testid="posts" class="xl:col-span-3">
+			<!-- Top Pagination -->
+			<div class="mb-20 flex justify-center">
+				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
+			</div>
+
 			<div class="flex flex-col space-y-32">
-				{#if filteredPosts.length}
-					{#each filteredPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
+				{#if data.paginatedPosts.length}
+					{#each data.paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
 						<div>
 							<div class="flex flex-col lg:flex-row">
 								<img
@@ -111,8 +110,11 @@
 					<p class="text-center text-lg">아직 쓴 글이 없습니다.</p>
 				{/if}
 			</div>
-		</section>
 
-		<!-- TODO: Pagination -->
+			<!-- Bottom Pagination -->
+			<div class="mt-20 flex justify-center">
+				<Pagination currentPage={data.currentPage} totalPages={data.totalPages} />
+			</div>
+		</section>
 	</div>
 </div>

@@ -1,15 +1,31 @@
 import type { Element, Root } from 'hast';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
+import rehypeHighlightCodeLines from 'rehype-highlight-code-lines';
 import rehypeMermaid from 'rehype-mermaid';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
+import { common } from 'lowlight';
+// @ts-expect-error - highlightjs-svelte has no types
+import hljsSvelte from 'highlightjs-svelte/dist/index.mjs';
+import powershell from 'highlight.js/lib/languages/powershell';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 import { SKIP, visit } from 'unist-util-visit';
+
+let svelteLanguage: any;
+try {
+	hljsSvelte({
+		registerLanguage: (name: string, fn: any) => {
+			svelteLanguage = fn;
+		}
+	});
+} catch (e) {
+	console.error('Failed to register highlightjs-svelte', e);
+}
 
 /**
  * Custom rehype plugin to wrap tables in a div with `overflow-x-auto`,
@@ -56,7 +72,17 @@ const processor = unified()
 	})
 	.use(rehypeSlug)
 	.use(rehypeAutolinkHeadings, { behavior: 'wrap' })
-	.use(rehypeHighlight, { detect: true });
+	.use(rehypeHighlight, {
+		detect: true,
+		languages: {
+			...common,
+			powershell,
+			svelte: svelteLanguage
+		}
+	})
+	.use(rehypeHighlightCodeLines, {
+		showLineNumbers: true
+	});
 
 /**
  * Parses given markdown string.
