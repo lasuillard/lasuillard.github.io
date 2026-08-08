@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import Pagination from '$components/utility/Pagination.svelte';
+import Pagination from '$routes/blog/Pagination.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, vi } from 'vitest';
 import { it } from '../../_helpers/vitest';

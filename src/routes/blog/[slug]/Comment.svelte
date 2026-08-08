@@ -28,7 +28,7 @@
 {/key}
 
 <style lang="postcss">
-	@reference "../../app.css";
+	@reference "../../../app.css";
 
 	/* Fix widget width going beyond the container */
 	:global(*) {

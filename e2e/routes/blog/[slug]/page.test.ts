@@ -100,7 +100,7 @@ test.describe('Section tracking and auto-scroll', () => {
 		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
 
 		// Wait for content and TOC to be ready and visible
-		const toc = page.locator('[data-testid="toc"]:visible').first();
+		const toc = page.getByTestId('toc').and(page.locator(':visible')).first();
 		await expect(toc).toBeVisible();
 
 		// Initially, the hash in URL should be empty
@@ -135,7 +135,7 @@ test.describe('Section tracking and auto-scroll', () => {
 		await page.route('**/utteranc.es/**', (route) => route.abort());
 		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
 
-		const toc = page.locator('[data-testid="toc"]:visible').first();
+		const toc = page.getByTestId('toc').and(page.locator(':visible')).first();
 		await expect(toc).toBeVisible();
 
 		// Hover to expand the floating ToC so links become visible
@@ -149,13 +149,15 @@ test.describe('Section tracking and auto-scroll', () => {
 		await page.goto(`/blog/11-다시-git-hub-pages로-블로그-배포하기${targetHash}`);
 
 		// Hover to expand the floating ToC so links become visible
-		const toc2 = page.locator('[data-testid="toc"]:visible').first();
+		const toc2 = page.getByTestId('toc').and(page.locator(':visible')).first();
 		await expect(toc2).toBeVisible();
 		await toc2.hover();
 
 		// Locate the heading link in ToC and assert it has highlighted style
 		const activeHeadingLink = page
-			.locator(`[data-testid="toc"]:visible a[href="${targetHash}"]`)
+			.getByTestId('toc')
+			.and(page.locator(':visible'))
+			.locator(`a[href="${targetHash}"]`)
 			.first();
 		await expect(activeHeadingLink).toBeVisible();
 		await expect(activeHeadingLink).toHaveClass(/font-bold/);

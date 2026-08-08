@@ -10,7 +10,7 @@ export const Metadata = z
 		title: z.string(),
 		slug: z.string().optional(),
 		publicationDate: z.coerce.date(),
-		preview: z.string(),
+		preview: z.string().optional().default('/no-image.svg'),
 		summary: z.string(),
 		tags: z.array(z.string()),
 		series: z.string().optional()

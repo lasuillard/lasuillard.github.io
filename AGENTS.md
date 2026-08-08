@@ -37,7 +37,7 @@ A task is complete when ALL of the following pass:
 - To debug a specific test: `npm run test --testNamePattern "<test name pattern>"`
 - To run a single test file: `npm run test --run tests/path/to/file.test.ts`
 - Never create new blog posts or modify existing post metadata on your own (e.g., for test fixtures). Instead, request the user to do so.
-- Use Korean for all user-facing text (UI labels, messages, placeholders, etc.).
+- Use Korean for all user-facing text (UI labels, messages, placeholders, etc.). Only translate user-facing text in source code.
 - Use Heroicons for icons by default. Always check if a required icon already exists in the `src/components/icon` directory before creating a new one. If the icon you are looking for does not exist, find one from the official Heroicons website and create a new component. Always set `data-testid="heroicons/<slug>"` on the `<svg>` element.
 
 ## When Reviewing Code

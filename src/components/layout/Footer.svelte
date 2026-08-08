@@ -1,8 +1,8 @@
 <script lang="ts">
-	import GitHub from '$components/icon/GitHub.svelte';
-	import Gmail from '$components/icon/Gmail.svelte';
-	import LinkedIn from '$components/icon/LinkedIn.svelte';
-	import RSS from '$components/icon/RSS.svelte';
+	import GitHubIcon from '$components/icon/GitHub.svelte';
+	import GmailIcon from '$components/icon/Gmail.svelte';
+	import LinkedInIcon from '$components/icon/LinkedIn.svelte';
+	import RSSIcon from '$components/icon/RSS.svelte';
 </script>
 
 <div data-testid="footer" class="bg-base-200 sticky top-[100vh] mt-20 px-2 py-4 lg:mt-32">
@@ -20,7 +20,7 @@
 				<div class="grid grid-flow-col space-x-1 lg:space-x-8">
 					<!-- GitHub -->
 					<a href="https://github.com/lasuillard" target="_blank" class="btn btn-circle btn-ghost">
-						<GitHub class="h-7 w-7 lg:h-8 lg:w-8" aria-label="Visit my GitHub profile" />
+						<GitHubIcon class="h-7 w-7 lg:h-8 lg:w-8" aria-label="Visit my GitHub profile" />
 					</a>
 
 					<!-- LinkedIn -->
@@ -29,7 +29,7 @@
 						target="_blank"
 						class="btn btn-circle btn-ghost"
 					>
-						<LinkedIn class="h-6 w-6 lg:h-7 lg:w-7" aria-label="Visit my LinkedIn profile" />
+						<LinkedInIcon class="h-6 w-6 lg:h-7 lg:w-7" aria-label="Visit my LinkedIn profile" />
 					</a>
 
 					<!-- Gmail -->
@@ -38,7 +38,7 @@
 						class="btn btn-circle btn-ghost"
 						aria-label="Send an email to me"
 					>
-						<Gmail class="h-8 w-8 items-center p-1 lg:h-9 lg:w-9" />
+						<GmailIcon class="h-8 w-8 items-center p-1 lg:h-9 lg:w-9" />
 					</a>
 
 					<!-- RSS -->
@@ -48,7 +48,7 @@
 						class="btn btn-circle btn-ghost self-center"
 						aria-label="RSS feeds"
 					>
-						<RSS class="h-8 w-8 lg:h-9 lg:w-9" />
+						<RSSIcon class="h-8 w-8 lg:h-9 lg:w-9" />
 					</a>
 				</div>
 			</nav>

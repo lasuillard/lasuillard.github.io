@@ -64,6 +64,11 @@ export class PostRepository {
 			}
 			return [];
 		});
+
+		this.posts.sort(
+			(a, b) => b.metadata.publicationDate.getTime() - a.metadata.publicationDate.getTime()
+		);
+
 		return this.posts;
 	}
 
