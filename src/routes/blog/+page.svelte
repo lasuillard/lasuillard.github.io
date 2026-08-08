@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import Markdown from '$components/content/Markdown.svelte';
+	import PostCard from '$components/content/PostCard.svelte';
+	import TagBadge from '$components/content/TagBadge.svelte';
 	import Pagination from './Pagination.svelte';
 	import Search from './Search.svelte';
 	import { PAGE_SIZE } from '$lib/constants';
 	import { route } from '$lib/urls';
-	import { format, formatDistanceStrict } from 'date-fns';
+	import { fade } from 'svelte/transition';
+	import { flip } from 'svelte/animate';
 
 	let { data } = $props();
 
@@ -69,80 +71,38 @@
 </script>
 
 <div>
-	<div class="grid grid-cols-1 xl:grid-cols-4">
-		<div class="mb-32">
+	<div class="grid grid-cols-1 items-start gap-8 lg:gap-12 xl:grid-cols-4 xl:gap-16">
+		<aside class="order-1 mb-8 w-full xl:sticky xl:top-24 xl:order-1 xl:col-span-1 xl:mb-0">
 			<Search />
 
 			<!-- All tags -->
 			<div data-testid="tags">
 				<h2 class="mt-10 mb-2 text-2xl uppercase">Tags</h2>
-				<div>
+				<div class="flex flex-wrap gap-2">
 					{#if allTags.length}
 						{#each allTags as tag (tag)}
 							{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
-							<span
-								class="badge {isSelected
-									? 'badge-primary'
-									: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
-							>
-								<a href={isSelected ? '/blog' : route('/blog', { query: { tag } })}>
-									{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
-								</a>
-							</span>
+							<TagBadge {tag} selected={isSelected} count={tagCounts[tag] || 0} showCount />
 						{/each}
 					{:else}
 						<p class="text-lg">There is no tag yet.</p>
 					{/if}
 				</div>
 			</div>
-		</div>
+		</aside>
 
 		<!-- Posts -->
-		<section data-testid="posts" class="xl:col-span-3">
+		<section data-testid="posts" class="order-2 w-full xl:order-2 xl:col-span-3">
 			<!-- Top Pagination -->
 			<div class="mb-20 flex justify-center">
 				<Pagination {currentPage} {totalPages} />
 			</div>
 
-			<div class="flex flex-col space-y-32">
+			<div class="flex flex-col space-y-12 lg:space-y-16">
 				{#if paginatedPosts.length}
-					{#each paginatedPosts as { metadata: { id, slug, title, publicationDate, preview, summary, tags } } (id)}
-						<div>
-							<div class="flex flex-col lg:flex-row">
-								<img
-									src={preview}
-									alt="Preview"
-									class="h-92 w-full rounded-xs object-contain lg:h-64 lg:w-96"
-								/>
-								<div class="mt-4 flex flex-1 flex-col lg:mt-2 lg:ml-16">
-									<h2 class="mb-0 text-center text-2xl lg:text-left">
-										<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
-									</h2>
-									<p class="mt-1 text-end text-gray-500 lg:text-left">
-										<time datetime={publicationDate.toISOString()} role="time">
-											{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
-											({format(publicationDate, 'yyyy년 M월 d일')})
-										</time>
-									</p>
-									<div class="mt-4">
-										<Markdown>{summary}</Markdown>
-									</div>
-									<div class="mt-6">
-										{#each tags as tag (tag)}
-											{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
-											<span
-												class="badge {isSelected
-													? 'badge-primary'
-													: 'badge-secondary'} badge-sm md:badge-md mr-2 mb-2 rounded-xs font-semibold"
-											>
-												<a href={isSelected ? '/blog' : route('/blog', { query: { tag } })}>
-													{tag} ({tagCounts[tag] || 0}){isSelected ? ' ×' : ''}
-												</a>
-											</span>
-										{/each}
-									</div>
-								</div>
-							</div>
+					{#each paginatedPosts as { metadata } (metadata.id)}
+						<div transition:fade={{ duration: 200 }} animate:flip={{ duration: 300 }}>
+							<PostCard {metadata} {selectedTag} variant="horizontal" />
 						</div>
 					{/each}
 				{:else if selectedTag}

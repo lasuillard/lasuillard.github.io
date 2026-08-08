@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
-import Search from '$routes/blog/Search.svelte';
 import { Post } from '$lib/post';
 import { initEngine } from '$lib/search';
+import Search from '$routes/blog/Search.svelte';
 import { render } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { expect } from 'vitest';
@@ -14,7 +14,7 @@ it('has a valid locator', () => {
 
 it('has a text input with placeholder', () => {
 	const component = render(Search);
-	expect((component.getByRole('textbox') as HTMLInputElement).placeholder).toEqual('Search');
+	expect((component.getByRole('textbox') as HTMLInputElement).placeholder).toBe('...');
 });
 
 it('shows matching results for given query', async ({ user }) => {

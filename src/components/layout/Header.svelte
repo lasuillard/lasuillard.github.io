@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import { browser } from '$app/environment';
-	import Menu from '$components/icon/Menu.svelte';
+	import MenuIcon from '$components/icon/Menu.svelte';
 	import QRCodeIcon from '$components/icon/QRCode.svelte';
 	import QRCode from '$components/layout/QRCode.svelte';
 	import ThemeSelect from './ThemeSelect.svelte';
@@ -39,7 +39,7 @@
 						data-testid="drawer-toggle"
 						aria-label="Menu"
 					>
-						<Menu class="h-7 w-7" />
+						<MenuIcon class="h-7 w-7" />
 					</label>
 				</div>
 
@@ -62,19 +62,17 @@
 
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1 gap-2">
-					<div class="dropdown dropdown-end hidden md:inline-block" data-testid="qr-dropdown">
-						<div tabindex="0" role="button" class="btn btn-circle btn-ghost" aria-label="QR Code">
+					<details class="dropdown dropdown-end hidden md:inline-block" data-testid="qr-dropdown">
+						<summary class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QRCodeIcon class="h-6 w-6" />
-						</div>
-						<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+						</summary>
 						<div
-							tabindex="0"
 							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-2.5 shadow-xl"
 							style="width: 249px; min-width: 249px;"
 						>
 							<QRCode url={currentURL} width={213} />
 						</div>
-					</div>
+					</details>
 					<ThemeSelect />
 				</div>
 			</header>

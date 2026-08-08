@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import QRCodeLibrary from 'qrcode';
-	import Check from '$components/icon/Check.svelte';
-	import Copy from '$components/icon/Copy.svelte';
+	import CheckIcon from '$components/icon/Check.svelte';
+	import CopyIcon from '$components/icon/Copy.svelte';
 
 	interface Props {
 		url: string;
@@ -66,9 +66,9 @@
 			</div>
 			<button class="btn btn-xs btn-circle btn-ghost" onclick={handleCopy} aria-label="Copy URL">
 				{#if copied}
-					<Check class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
+					<CheckIcon class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
 				{:else}
-					<Copy class="h-3.5 w-3.5" />
+					<CopyIcon class="h-3.5 w-3.5" />
 				{/if}
 			</button>
 		</div>

@@ -1,7 +1,5 @@
 <script lang="ts">
-	import Markdown from '$components/content/Markdown.svelte';
-	import { route } from '$lib/urls';
-	import { format, formatDistanceStrict } from 'date-fns';
+	import PostCard from '$components/content/PostCard.svelte';
 
 	let { data } = $props();
 
@@ -53,36 +51,14 @@
 	<!-- Recent Posts Section -->
 	<div class="border-base-content/10 mt-20 border-t pt-10" data-testid="recent-posts">
 		<h3 class="mb-8 text-center text-2xl font-bold">최근 쓴 글</h3>
-		<div class="columns-1 gap-4 md:columns-3">
+		<div class="flex flex-col gap-8">
 			{#if data.recentPosts && data.recentPosts.length}
 				{#each data.recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags, preview } } (id)}
-					<div class="card bg-base-100 border-base-200 mb-4 break-inside-avoid border shadow-xl">
-						{#if preview}
-							<figure>
-								<img src={preview} alt={title} class="w-full object-cover" />
-							</figure>
-						{/if}
-						<div class="card-body p-4 text-xs">
-							<h4 class="card-title text-base font-semibold">
-								<a href="/blog/{id}-{slug}" class="link hover:text-secondary">{title}</a>
-							</h4>
-							<p class="mb-1 text-gray-500">
-								<time datetime={publicationDate.toISOString()} role="time">
-									{formatDistanceStrict(publicationDate, new Date(), { addSuffix: true })}
-									({format(publicationDate, 'yyyy년 M월 d일')})
-								</time>
-							</p>
-							<div class="text-justify leading-snug">
-								<Markdown>{summary}</Markdown>
-							</div>
-							<div class="card-actions mt-2">
-								{#each tags as tag (tag)}
-									<span class="badge badge-secondary badge-xs rounded-xs font-semibold">
-										<a href={route('/blog', { query: { tag } })}>{tag}</a>
-									</span>
-								{/each}
-							</div>
-						</div>
+					<div class="break-inside-avoid">
+						<PostCard
+							metadata={{ id, slug, title, publicationDate, summary, tags, preview }}
+							variant="horizontal"
+						/>
 					</div>
 				{/each}
 			{:else}

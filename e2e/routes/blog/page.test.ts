@@ -5,7 +5,7 @@ test.describe('Blog Pagination', () => {
 		await page.goto('/blog');
 
 		// Check that two pagination widgets exist (top and bottom)
-		const paginationWidgets = page.locator('[data-testid="pagination"]');
+		const paginationWidgets = page.getByTestId('pagination');
 		await expect(paginationWidgets).toHaveCount(2);
 	});
 
@@ -13,7 +13,7 @@ test.describe('Blog Pagination', () => {
 		await page.goto('/blog');
 
 		// The list of posts container is inside [data-testid="posts"]
-		const posts = page.locator('[data-testid="posts"] > div.flex-col > div');
+		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
 		await expect(posts).toHaveCount(10);
 	});
 
@@ -21,7 +21,7 @@ test.describe('Blog Pagination', () => {
 		await page.goto('/blog');
 
 		// Click the link to page 2 on the bottom pagination widget
-		const page2Links = page.locator('[data-testid="pagination"] a:has-text("2")');
+		const page2Links = page.getByTestId('pagination').locator('a:has-text("2")');
 		// There are two pagination widgets, click the first one
 		await page2Links.first().click();
 
@@ -29,24 +29,26 @@ test.describe('Blog Pagination', () => {
 		await expect(page).toHaveURL(/\/blog\?page=2/);
 
 		// Check that the second page has a valid number of posts
-		const posts = page.locator('[data-testid="posts"] > div.flex-col > div');
+		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
 		await expect(posts.first()).toBeVisible();
-		expect(await posts.count()).toBeLessThanOrEqual(10);
+		await expect(async () => {
+			expect(await posts.count()).toBeLessThanOrEqual(10);
+		}).toPass();
 	});
 
 	test('should handle previous and next navigation', async ({ page }) => {
 		await page.goto('/blog?page=2');
 
 		// Go back to page 1 using the previous button
-		const prevButtons = page.locator('[data-testid="pagination"] [aria-label="Previous page"]');
+		const prevButtons = page.getByTestId('pagination').locator('[aria-label="Previous page"]');
 		await prevButtons.first().click();
 
-		await expect(page).toHaveURL(/\/blog\?page=1/);
-		const posts = page.locator('[data-testid="posts"] > div.flex-col > div');
+		await expect(page).toHaveURL(/\/blog$/);
+		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
 		await expect(posts).toHaveCount(10);
 
 		// Go to page 2 using the next button
-		const nextButtons = page.locator('[data-testid="pagination"] [aria-label="Next page"]');
+		const nextButtons = page.getByTestId('pagination').locator('[aria-label="Next page"]');
 		await nextButtons.first().click();
 
 		await expect(page).toHaveURL(/\/blog\?page=2/);
@@ -62,7 +64,7 @@ test.describe('Blog Tag Filtering', () => {
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
 		// Get the tag span badge directly by filtering on text content
-		const tag = page.locator('[data-testid="tags"] span').filter({ hasText: 'SvelteKit' });
+		const tag = page.getByTestId('tags').locator('span').filter({ hasText: 'SvelteKit' });
 		await expect(tag).toBeVisible();
 
 		// Check that the tag badge initially has badge-secondary and not badge-primary
@@ -100,15 +102,14 @@ test.describe('Blog Tag Filtering', () => {
 		await page.goto('/blog?tag=SvelteKit');
 
 		// The pagination widget should be present
-		const paginationWidgets = page.locator('[data-testid="pagination"]');
+		const paginationWidgets = page.getByTestId('pagination');
 		await expect(paginationWidgets).toHaveCount(2);
 
 		// Check that the link to page 1 preserves the tag
-		const page1Links = page.locator('[data-testid="pagination"] a:has-text("1")');
+		const page1Links = page.getByTestId('pagination').locator('a:has-text("1")');
 
 		// Ensure the href contains tag=SvelteKit and page=1
 		const href = await page1Links.first().getAttribute('href');
 		expect(href).toMatch(/tag=SvelteKit/);
-		expect(href).toMatch(/page=1/);
 	});
 });

@@ -23,21 +23,19 @@ test('renders recent posts section with 3 posts', async () => {
 	const heading = recentPostsSection.locator('h3');
 	await expect(heading).toHaveText('최근 쓴 글');
 
-	const postCount = await recentPostsSection.locator('h4').count();
+	const postCount = await recentPostsSection.locator('h2.card-title').count();
 	expect(postCount).toBe(3);
 });
 
 test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo) => {
 	await _page.goto('/');
-	const qrDropdown = _page.getByTestId('qr-dropdown');
+	const qrDropdown = _page.getByLabel('QR Code');
 
 	if (testInfo.project.name !== 'Mobile L') {
 		await expect(qrDropdown).toBeVisible();
 
-		const qrCodeCanvas = qrDropdown.locator('[data-testid="qrcode"]');
-
-		await qrDropdown.locator('role=button[name="QR Code"]').hover();
-		await expect(qrCodeCanvas).toBeVisible();
+		await qrDropdown.click();
+		await expect(_page.getByTestId('qrcode')).toBeVisible();
 	} else {
 		await expect(qrDropdown).not.toBeVisible();
 	}
@@ -51,7 +49,7 @@ test('header has QR code inside drawer on mobile', async ({ page: _page }, testI
 
 		await drawerToggle.click();
 
-		const qrCodeInDrawer = _page.locator('.drawer-side [data-testid="qrcode"]');
+		const qrCodeInDrawer = _page.locator('.drawer-side').getByTestId('qrcode');
 		await expect(qrCodeInDrawer).toBeVisible();
 	}
 });

@@ -1,9 +1,10 @@
 <script lang="ts">
 	import Comment from './Comment.svelte';
+	import TagBadge from '$components/content/TagBadge.svelte';
+	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from './Toc.svelte';
 	import SeriesWidget from './SeriesWidget.svelte';
-	import { route } from '$lib/urls';
 	import { format, formatDistanceStrict } from 'date-fns';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
 
@@ -65,12 +66,13 @@
 					<img
 						src={metadata.preview}
 						alt="Preview"
-						class="h-auto w-full flex-shrink-0 rounded-xs object-contain sm:h-48 sm:w-48"
+						class="h-auto w-full flex-shrink-0 rounded-lg object-contain sm:h-48 sm:w-48"
 					/>
 				{/if}
 				<div class="flex w-full flex-1 flex-col items-center">
 					<h1 class="text-center text-2xl font-bold md:text-3xl">{metadata.title}</h1>
 					<p class="mt-4 text-center font-light md:text-base">
+						<CalendarDaysIcon class="mr-1 inline-block h-5 w-5 align-text-bottom text-gray-500" />
 						<time datetime={metadata.publicationDate.toISOString()} role="time">
 							{formatDistanceStrict(metadata.publicationDate, new Date(), { addSuffix: true })}
 							({format(metadata.publicationDate, 'yyyy년 M월 d일')})
@@ -81,13 +83,9 @@
 							{metadata.summary}
 						</p>
 					{/if}
-					<div class="mt-4 flex flex-wrap justify-center">
+					<div class="mt-8 flex flex-wrap justify-center gap-2">
 						{#each metadata.tags as tag (tag)}
-							<div class="badge badge-secondary mr-2 mb-2 rounded-xs p-3 font-semibold">
-								<a href={route('/blog', { query: { tag } })}>
-									{tag}
-								</a>
-							</div>
+							<TagBadge {tag} />
 						{/each}
 					</div>
 				</div>
