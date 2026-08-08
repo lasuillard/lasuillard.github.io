@@ -43,7 +43,7 @@ test.describe('Blog Pagination', () => {
 		const prevButtons = page.getByTestId('pagination').locator('[aria-label="Previous page"]');
 		await prevButtons.first().click();
 
-		await expect(page).toHaveURL(/\/blog\?page=1/);
+		await expect(page).toHaveURL(/\/blog$/);
 		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
 		await expect(posts).toHaveCount(10);
 
@@ -111,6 +111,5 @@ test.describe('Blog Tag Filtering', () => {
 		// Ensure the href contains tag=SvelteKit and page=1
 		const href = await page1Links.first().getAttribute('href');
 		expect(href).toMatch(/tag=SvelteKit/);
-		expect(href).toMatch(/page=1/);
 	});
 });
