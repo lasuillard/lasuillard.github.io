@@ -102,7 +102,7 @@
 				{#if paginatedPosts.length}
 					{#each paginatedPosts as { metadata } (metadata.id)}
 						<div transition:fade={{ duration: 200 }} animate:flip={{ duration: 300 }}>
-							<PostCard {metadata} {selectedTag} {tagCounts} variant="horizontal" />
+							<PostCard {metadata} {selectedTag} variant="horizontal" />
 						</div>
 					{/each}
 				{:else if selectedTag}

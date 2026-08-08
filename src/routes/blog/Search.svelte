@@ -2,6 +2,8 @@
 	import SearchIcon from '$components/icon/Search.svelte';
 	import { getEngine } from '$lib/search';
 	import { quoteJoin } from '$lib/utils';
+	import { route } from '$lib/urls';
+	import { goto } from '$app/navigation';
 	import type { SearchResult, Suggestion } from 'minisearch';
 	import { writable } from 'svelte/store';
 
@@ -43,7 +45,7 @@
 		} else if (e.key === 'Enter' && activeIndex >= 0) {
 			e.preventDefault();
 			const result = searchResults[activeIndex];
-			window.location.href = `/blog/${result.id}-${result['metadata.slug']}`;
+			goto(route('/blog/[slug]', { params: { slug: `${result.id}-${result['metadata.slug']}` } }));
 		} else if (e.key === 'Escape') {
 			isFocused = false;
 		}
@@ -95,7 +97,7 @@
 				<SearchIcon class="h-4 w-4 stroke-gray-400" />
 				<input
 					type="text"
-					placeholder="Search"
+					placeholder="..."
 					bind:value={$searchText}
 					onkeydown={handleKeydown}
 					class="grow placeholder:font-light"

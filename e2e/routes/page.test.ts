@@ -29,15 +29,13 @@ test('renders recent posts section with 3 posts', async () => {
 
 test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo) => {
 	await _page.goto('/');
-	const qrDropdown = _page.getByTestId('qr-dropdown');
+	const qrDropdown = _page.getByLabel('QR Code');
 
 	if (testInfo.project.name !== 'Mobile L') {
 		await expect(qrDropdown).toBeVisible();
 
-		const qrCodeCanvas = qrDropdown.locator('[data-testid="qrcode"]');
-
-		await qrDropdown.locator('role=button[name="QR Code"]').click();
-		await expect(qrCodeCanvas).toBeVisible();
+		await qrDropdown.click();
+		await expect(_page.getByTestId('qrcode')).toBeVisible();
 	} else {
 		await expect(qrDropdown).not.toBeVisible();
 	}
