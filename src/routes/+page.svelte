@@ -51,13 +51,13 @@
 	<!-- Recent Posts Section -->
 	<div class="border-base-content/10 mt-20 border-t pt-10" data-testid="recent-posts">
 		<h3 class="mb-8 text-center text-2xl font-bold">최근 쓴 글</h3>
-		<div class="flex flex-col gap-8">
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
 			{#if data.recentPosts && data.recentPosts.length}
 				{#each data.recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags, preview } } (id)}
 					<div class="break-inside-avoid">
 						<PostCard
 							metadata={{ id, slug, title, publicationDate, summary, tags, preview }}
-							variant="horizontal"
+							variant="vertical"
 						/>
 					</div>
 				{/each}
