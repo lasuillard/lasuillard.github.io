@@ -49,7 +49,7 @@ test('header has QR code inside drawer on mobile', async ({ page: _page }, testI
 
 		await drawerToggle.click();
 
-		const qrCodeInDrawer = _page.locator('.drawer-side [data-testid="qrcode"]');
+		const qrCodeInDrawer = _page.locator('.drawer-side').getByTestId('qrcode');
 		await expect(qrCodeInDrawer).toBeVisible();
 	}
 });
