@@ -27,6 +27,13 @@
 
 	// Add styling based on heading level
 	let tagName = $derived(tree.data.tagName.toLowerCase());
+	let fontClass = $derived(
+		tagName === 'h1' || tagName === 'h2'
+			? 'font-semibold text-base'
+			: tagName === 'h3'
+				? 'font-medium text-sm'
+				: 'font-light text-sm text-gray-500'
+	);
 
 	// Line styling for idle floating state
 	let lineWidthClass = $derived(
@@ -51,7 +58,7 @@
 	{/each}
 {:else}
 	<div data-testid="toc-tree" class="mb-2 text-left" {...rest}>
-		<p class="mb-2 text-sm font-light text-gray-500">
+		<p class="mb-1.5 {fontClass}">
 			<a
 				class={isActive ? 'link-hover link text-secondary font-bold underline' : 'link-hover link'}
 				href={link}>{heading}</a

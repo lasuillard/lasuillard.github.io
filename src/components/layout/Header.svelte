@@ -19,16 +19,7 @@
 	let { currentPath = $bindable(undefined), drawerOpen = $bindable(false) }: Props = $props();
 
 	let currentURL = $derived(browser ? $page?.url?.href || window.location.href : '');
-	let qrDropdownDetails: HTMLDetailsElement | undefined = $state();
-
-	function handleClickOutside(event: MouseEvent) {
-		if (qrDropdownDetails?.open && !qrDropdownDetails.contains(event.target as Node)) {
-			qrDropdownDetails.removeAttribute('open');
-		}
-	}
 </script>
-
-<svelte:window onclick={handleClickOutside} />
 
 <div data-testid="header-wrapper" class="bg-base-200 sticky top-0 z-10 w-full">
 	<!-- Drawer container -->
@@ -71,11 +62,7 @@
 
 				<!-- Utility buttons -->
 				<div class="navbar-end flex-1 gap-2">
-					<details
-						bind:this={qrDropdownDetails}
-						class="dropdown dropdown-end hidden md:inline-block"
-						data-testid="qr-dropdown"
-					>
+					<details class="dropdown dropdown-end hidden md:inline-block" data-testid="qr-dropdown">
 						<summary class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QRCodeIcon class="h-6 w-6" />
 						</summary>

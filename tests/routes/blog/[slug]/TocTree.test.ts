@@ -25,6 +25,6 @@ it('renders with data', () => {
 		isHovered: true
 	});
 	expect(getByTestId('toc-tree').outerHTML).toMatchInlineSnapshot(
-		`"<div data-testid="toc-tree" class="mb-2 text-left"><p class="mb-2 text-sm font-light text-gray-500"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul class="ml-4"></ul></div>"`
+		`"<div data-testid="toc-tree" class="mb-2 text-left"><p class="mb-1.5 font-light text-sm text-gray-500"><a class="link-hover link" href="#lorem-ipsum">Lorem Ipsum</a></p> <ul class="ml-4"></ul></div>"`
 	);
 });

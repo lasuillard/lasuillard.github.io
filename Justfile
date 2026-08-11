@@ -34,7 +34,7 @@ lint:
 
 # Run all tests
 test:
-    npm run test -- --update
+    npm run test
 
 # Run end-to-end tests
 e2e:
