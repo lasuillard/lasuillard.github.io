@@ -13,21 +13,19 @@
 	let { data } = $props();
 
 	let allPosts = $derived(data.allPosts);
-	let allTags = $derived(
-		[...new Set(allPosts.map((post) => post.metadata.tags).flat())].sort((a, b) =>
-			a.localeCompare(b)
-		)
-	);
-
 	let tagCounts = $derived.by(() => {
 		const counts: Record<string, number> = Object.create(null);
-		for (const post of allPosts) {
-			for (const tag of post.metadata.tags) {
-				counts[tag] = (counts[tag] || 0) + 1;
+		for (let i = 0, len = allPosts.length; i < len; i++) {
+			const tags = allPosts[i].metadata.tags;
+			for (let j = 0, tLen = tags.length; j < tLen; j++) {
+				const tag = tags[j];
+				counts[tag] = (counts[tag] ?? 0) + 1;
 			}
 		}
 		return counts;
 	});
+
+	let allTags = $derived(Object.keys(tagCounts).sort((a, b) => a.localeCompare(b)));
 
 	let selectedTag = $derived($page.url.searchParams.get('tag'));
 
