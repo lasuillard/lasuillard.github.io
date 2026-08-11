@@ -5,9 +5,7 @@ import type { EntryGenerator, PageServerLoad } from './$types';
 
 export const entries: EntryGenerator = async () => {
 	const allPosts = await postRepository.getAllPosts();
-	const allSlugs = new Set(
-		allPosts.map((post) => `${post.metadata.id}-${post.metadata.slug}`).flat()
-	);
+	const allSlugs = new Set(allPosts.flatMap((post) => `${post.metadata.id}-${post.metadata.slug}`));
 
 	return Array.from(allSlugs).map((slug) => ({ slug }));
 };
