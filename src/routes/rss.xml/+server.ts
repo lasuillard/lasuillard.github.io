@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { postRepository } from '$lib/server/post';
+import { escapeXml } from '$lib/utils';
 
 export const prerender = true;
 
@@ -14,8 +15,8 @@ export const GET: RequestHandler = async () => {
 	const body = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${siteTitle}</title>
-    <description>${siteDescription}</description>
+    <title>${escapeXml(siteTitle)}</title>
+    <description>${escapeXml(siteDescription)}</description>
     <link>${siteUrl}</link>
     <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
     ${allPosts
@@ -23,9 +24,9 @@ export const GET: RequestHandler = async () => {
 				const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
 				return `<item>
             <guid isPermaLink="true">${postLink}</guid>
-            <title>${post.metadata.title}</title>
+            <title>${escapeXml(post.metadata.title)}</title>
             <link>${postLink}</link>
-            <description>${post.metadata.summary}</description>
+            <description>${escapeXml(post.metadata.summary)}</description>
             <pubDate>${post.metadata.publicationDate.toUTCString()}</pubDate>
           </item>`;
 			})
