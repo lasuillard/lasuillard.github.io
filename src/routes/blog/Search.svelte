@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SearchIcon from '$components/icon/Search.svelte';
+	import XMarkIcon from '$components/icon/XMark.svelte';
 	import { getEngine } from '$lib/search';
 	import { quoteJoin } from '$lib/utils';
 	import { route } from '$lib/urls';
@@ -9,12 +10,20 @@
 
 	const searchEngine = getEngine();
 
+	let searchInput: HTMLInputElement;
 	let searchText = writable('');
 	let searchResults: SearchResult[] = $state([]);
 	let suggestions: Suggestion[] = $state([]);
 
 	let isFocused = $state(false);
 	let activeIndex = $state(-1);
+
+	function clearSearch() {
+		$searchText = '';
+		if (searchInput) {
+			searchInput.focus();
+		}
+	}
 
 	// Reset active index when results change
 	$effect(() => {
@@ -91,17 +100,25 @@
 		onfocusout={handleFocusOut}
 	>
 		<div class="w-full" role="search">
-			<!-- TODO: Add button to clear search text -->
 			<!-- TODO: Auto-fill suggestion (tab key?) -->
 			<label class="input input-bordered flex h-10 items-center gap-2">
 				<SearchIcon class="h-4 w-4 stroke-gray-400" />
 				<input
+					bind:this={searchInput}
 					type="text"
 					placeholder="..."
 					bind:value={$searchText}
 					onkeydown={handleKeydown}
 					class="grow placeholder:font-light"
 				/>
+				<button
+					type="button"
+					aria-label="Clear search"
+					class="btn btn-ghost btn-circle btn-xs"
+					onclick={clearSearch}
+				>
+					<XMarkIcon class="h-4 w-4" />
+				</button>
 			</label>
 			<div
 				class="dropdown absolute top-[135%] right-0 z-1 w-full {$searchText.length > 0 && isFocused
