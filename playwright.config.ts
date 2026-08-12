@@ -6,7 +6,7 @@ const webserverPort = parseInt(process.env.__WEBSERVER_PORT || '4173');
 
 export default {
 	webServer: {
-		command: `yarn run preview -- --port '${webserverPort}'`,
+		command: `npm run preview -- --port '${webserverPort}'`,
 		reuseExistingServer: !isCI,
 		url: `http://localhost:${webserverPort}/`
 	},
