@@ -1,6 +1,6 @@
 ---
 title: 남이 만든 OpenAPI 스키마 테스트하기
-publicationDate: 2024-07-09T21:47:45.000+09:00
+publicationDate: 2024-07-09
 preview: ./preview.png
 summary: >
   API 클라이언트 코드 자동 생성을 위해 남이 만든 API 서버에 OpenAPI 스키마 붙여보기

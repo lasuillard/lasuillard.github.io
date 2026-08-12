@@ -1,6 +1,6 @@
 ---
 title: Google Apps Script로 작업 자동화하기
-publicationDate: 2026-05-18T19:38:16.000+09:00
+publicationDate: 2026-05-18
 preview: ./preview.png
 summary: >
   Google Apps Script로 귀찮은 반복 작업 자동화하기
