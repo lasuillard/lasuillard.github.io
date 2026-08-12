@@ -1,6 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { postRepository } from '$lib/server/post';
-import { Feed } from 'feed';
 
 export const prerender = true;
 
@@ -11,33 +10,31 @@ export const GET: RequestHandler = async () => {
 
 	const allPosts = await postRepository.getAllPosts();
 
-	const feed = new Feed({
-		title: siteTitle,
-		description: siteDescription,
-		id: siteUrl + '/',
-		link: siteUrl,
-		copyright: `Copyright ${new Date().getFullYear()}, ${siteTitle}`,
-		generator: 'Feed for Node.js',
-		feedLinks: {
-			rss: `${siteUrl}/rss.xml`
-		}
-	});
-
-	allPosts.forEach((post) => {
-		const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
-		feed.addItem({
-			title: post.metadata.title,
-			id: postLink,
-			link: postLink,
-			description: post.metadata.summary,
-			date: post.metadata.publicationDate
-		});
-	});
-
-	const body = feed.rss2();
-
+	// TODO: Generate RSS XML document from list of posts; https://www.w3schools.com/xml/xml_rss.asp
+	const body = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${siteTitle}</title>
+    <description>${siteDescription}</description>
+    <link>${siteUrl}</link>
+    <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
+    ${allPosts
+			.map((post) => {
+				const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
+				return `<item>
+            <guid isPermaLink="true">${postLink}</guid>
+            <title>${post.metadata.title}</title>
+            <link>${postLink}</link>
+            <description>${post.metadata.summary}</description>
+            <pubDate>${post.metadata.publicationDate.toUTCString()}</pubDate>
+          </item>`;
+			})
+			.join('')}
+  </channel>
+</rss>`;
 	const options = {
 		headers: {
+			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
 			'Cache-Control': 'max-age=0, s-maxage=3600',
 			'Content-Type': 'application/xml'
 		}

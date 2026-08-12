@@ -32,27 +32,3 @@ export function omitKeys(obj: any, keys: string[]): any {
 export function quoteJoin(values: unknown[]): string {
 	return values.map((value) => `"${value}"`).join(', ');
 }
-
-/**
- * Escapes special characters for XML.
- * @param unsafe String containing unsafe XML characters.
- * @returns Escaped XML string.
- */
-export function escapeXml(unsafe: string): string {
-	return unsafe.replace(/[<>&'"]/g, (c) => {
-		switch (c) {
-			case '<':
-				return '&lt;';
-			case '>':
-				return '&gt;';
-			case '&':
-				return '&amp;';
-			case "'":
-				return '&apos;';
-			case '"':
-				return '&quot;';
-			default:
-				return c;
-		}
-	});
-}
