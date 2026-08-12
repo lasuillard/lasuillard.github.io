@@ -1,6 +1,6 @@
 ---
 title: CI로 생성된 Playwright 테스트 보고서 쉽고 빠르게 확인하기
-publicationDate: 2025-10-10T15:06:50.000+09:00
+publicationDate: 2025-10-10
 preview: ./preview.png
 summary: >
   Playwright HTML 테스트 보고서를 브라우저에서 쉽고 빠르게 확인하기

@@ -1,7 +1,7 @@
 ---
 title: Django로 블로그 다시 만들기
-series: '기술 블로그 운영하기'
-publicationDate: 2025-10-10T14:36:24.000+09:00
+series: 기술 블로그 운영하기
+publicationDate: 2025-10-10
 preview: ./preview.png
 summary: >
   SvelteKit으로 만들었던 정적 웹 블로그를 Django로 완전히 다시 만든 이유
