@@ -7,13 +7,14 @@ summary: >
 tags:
   - Dev Container
   - Docker
+  - Dotfiles
   - GitHub Codespaces
   - VS Code
 ---
 
 다들 개발 환경은 어떻게 구성하고 관리하고 계신가요? 아마도 Python 가상 환경(venv), pyenv, nodenv, Poetry, uv, pipenv 등 여러 패키지 매니저나 환경 관리 도구를 활용하고 계실 것 같습니다. 저 역시 다양한 도구를 사용해봤지만, 최근에는 새 프로젝트를 시작할 때 개발 컨테이너 구성을 가장 우선시하고 있습니다.
 
-저는 간단한 토이 프로젝트를 시작할 때마다 개발 환경 구성에 많은 시간을 쏟곤 합니다. 하지만 개발 환경 구성에 너무 집중한 나머지, 정작 프로젝트 개발은 소홀해지는 경향이 있었습니다. 그리고 오래된 프로젝트를 다시 찾았을 때는 언어나 라이브러리 버전이 노후화되어 개발 환경을 다시 갱신해야 했습니다. 개발 컨테이너는 여러 프로젝트를 오가며 다시 온보딩하는 시간을 크게 줄여줬습니다. 이 외에도 Dependabot 등 의존성 관리 자동화 도구도 큰 도움이 되었습니다.
+저는 간단한 사이드 프로젝트를 시작할 때마다 개발 환경 구성에 많은 시간을 쏟곤 합니다. 하지만 개발 환경 구성에 너무 집중한 나머지, 정적 프로젝트 개발은 소홀해지는 경향이 있었습니다. 그리고 오래된 프로젝트를 다시 찾았을 때는 언어나 라이브러리 버전이 노후화되어 개발 환경을 다시 갱신해야 했습니다. 개발 컨테이너는 여러 프로젝트를 오가며 다시 온보딩하는 시간을 크게 줄여줬습니다. 이에 더해 Dependabot과 같은 의존성 관리 자동화 도구도 큰 도움이 되었습니다.
 
 이 글에서는 많은 시행착오를 통해 습득한 개발 컨테이너 활용 방법과 경험을 공유하고자 합니다.
 
@@ -33,45 +34,47 @@ Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기�
 
 ### 👍 권장 사용 사례
 
-- **팀 개발 환경 통일**
+- 팀 개발 환경 통일
 
   공동 작업자(동료)와 공통 개발 환경을 공유하고 관리할 수 있으며 **"Works on my machine"** 문제에 대한 해결책이 될 수 있습니다.
 
-- **복잡한 환경 구성 자동화**
+- 복잡한 환경 구성 자동화
 
   Lifecycle Scripts 및 Docker Compose를 활용하여 여러 의존 서비스(데이터베이스, 캐시 등)를 가진 복잡한 환경 구성을 보다 효과적으로 관리할 수 있습니다.
 
-- **일회용(Disposable) 개발 환경**
+- 일회용(Disposable) 개발 환경
 
   쉽게 쓰고 버릴 수 있는 개발 환경을 구축하여 필요에 따라 쉽게 재구성할 수 있습니다. 개발 환경에 문제가 생기면 다시 만들면 됩니다. 또한 개발 환경을 반복적으로 재구성하면서 개발 환경 개선의 기회를 모색할 수 있습니다.
 
-- **환경 격리**
+- 환경 격리
 
   호스트 환경으로부터의 격리 이점(도구 및 설정, 네트워크 충돌 방지 등)을 누릴 수 있습니다.
 
 ### 👎 권장하지 않는 사용 사례
 
-- **컨테이너 기술에 익숙하지 않은 경우**
+- 컨테이너 기술에 익숙하지 않은 경우
 
   컨테이너 기술이 굉장히 보편화되었지만, 구성 및 디버깅에 대한 러닝 커브가 분명히 존재합니다. 익숙하지 않다면 구성 및 관리에 많은 노력을 필요로 합니다.
 
   컨테이너는 어떤 환경에서든 잘 동작할 것처럼 보이지만, 실제로는 OS/CPU 아키텍처 등 하드웨어에 대한 고려가 필요합니다. 필수 패키지 설치가 실패하거나 정상적으로 동작하지 않는 문제가 생길 수 있습니다.
 
-- **도구 호환성 문제**
+- 도구 호환성 문제
 
   [개발 컨테이너 표준](https://containers.dev/)이 존재하지만, 이에 대한 IDE/코드 편집기 등 도구의 수용 수준은 차이가 있습니다. 모든 IDE/코드 편집기가 개발 컨테이너를 지원하는 것은 아니며, 지원하더라도 표준을 100% 지원하지 않을 수 있으므로 개발 환경 구성에 따른 동작 차이가 있을 수 있습니다.
 
-- **호스트 의존성이 높은 경우**
+- 호스트 의존성이 높은 경우
 
   호스트로부터 파일 시스템, 네트워크 등 많은 부분이 분리되므로 호스트의 자원(각종 파일, 소켓 등)을 적극적으로 활용해야 하는 경우 볼륨 설정 등을 통해 다시 명시적으로 연결해야 할 필요가 있습니다.
 
-- **하드웨어 요구 사항**
+- 하드웨어 요구 사항
 
   디스플레이 및 상호작용이 중요한 GUI/모바일 애플리케이션 개발을 위한 환경을 구성하고자 하는 경우, 높은 자원 요구 사항으로 인해 성능 저하, 필요 이상으로 복잡한 환경 구성 및 호환성 문제 등이 발생할 수 있습니다.
 
   이 경우 VM과 원격 SSH 연결([VS Code: Remote - SSH](https://code.visualstudio.com/docs/remote/ssh))을 활용하는 대안을 검토해보시기 바랍니다.
 
-- **보안 우려** 컨테이너 탈옥에 대한 가능성은 언제든지 열려 있습니다. Docker의 경우 [Rootless mode](https://docs.docker.com/engine/security/rootless/)를 활용할 수는 있지만 VM만큼 안전하지는 않습니다.
+- 보안 우려
+
+  컨테이너 탈옥에 대한 가능성은 언제든지 열려 있습니다. Docker의 경우 [Rootless mode](https://docs.docker.com/engine/security/rootless/)를 활용할 수는 있지만 VM만큼 안전하지는 않습니다.
 
 ## 🚀 예제와 함께 시작하기
 
@@ -80,7 +83,7 @@ Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기�
 로컬 환경에서 시작하고 싶다면 [VS Code 개발 컨테이너 공식 문서](https://code.visualstudio.com/docs/devcontainers/containers)를 참고하세요.
 
 1. 예제 코드 저장소([lasuillard/my-project-template](https://github.com/lasuillard/my-project-template/tree/df1e88dd0c57b6684cd0f12d4ae0e089d8388d02))를 엽니다. 이 저장소는 개발 컨테이너가 미리 구성된 개인 프로젝트 템플릿입니다. 공식 Dev Container Template 기능과는 상관없습니다.
-2. **Code - Codespaces - Create codespace on main**을 눌러 새 Codespaces를 시작합니다.
+2. Code - Codespaces - Create codespace on main을 눌러 새 Codespaces를 시작합니다.
 
    ![Create Codespaces](./assets/create-codespaces.png)
 
@@ -210,21 +213,10 @@ Settings Sync와는 다르게 작업 상황은 자동 저장되지 않으므로 
 
 하지만 Cloud Changes는 크고 많은 작업 사항을 저장하려 시도할 경우, API 제한에 걸려 저장이 실패할 수 있습니다. 따라서 작은 작업 단위로 저장하는 것을 권장합니다.
 
-## 💬 마치며
+## 💭 마치며
 
 제 주 코드 편집기는 VS Code이어서 VS Code를 중점적으로 설명했습니다. 하지만 개발 컨테이너는 VS Code에 국한되지 않고, JetBrains IDE, GitPod 등 개발 컨테이너를 지원하는 다양한 도구에서 활용할 수 있습니다. 다소 기능의 차이는 있겠지만요. 따라서 이 글에서 설명한 내용은 다른 도구에서도 유사하게 적용될 수 있습니다.
 
 저는 [Vagrant](https://developer.hashicorp.com/vagrant)와 [Ansible](https://github.com/ansible/ansible)을 활용하여 VM을 프로비저닝하여 개발 환경 전용 VM을 구축하고 그 안에서 개발 컨테이너를 구동합니다. [Tailscale](https://tailscale.com/)으로 복잡한 네트워킹을 단순화하고 SSH 에이전트 포워딩으로 SSH 키 관리를 일원화하며 Dotfiles 저장소로 개인화 설정을 쉽게 주입하고 관리합니다. 글은 VS Code를 중심으로 하지만, 제 개발 환경을 구성하는 기술은 특정 IDE에 종속되지 않는 것들입니다.
 
 개발 컨테이너는 편리한 기술이고, 활용 여지는 무궁무진합니다. 하지만 여느 도구나 그렇듯 모든 곳에 활용할 수 있는 만능 도구는 아닙니다. 프로젝트 성격과 요구 사항에 맞추어 적절히 조정한다면 강력한 도구임에는 의심의 여지가 없습니다.
-
-## 📚 참고 자료
-
-- [Development Containers](https://containers.dev/)
-- [Available Dev Container Templates](https://containers.dev/templates)
-- [Available Dev Container Features](https://containers.dev/features)
-- [VS Code - Developing inside a Container](https://code.visualstudio.com/docs/devcontainers/containers)
-- [VS Code - Remote Development using SSH](https://code.visualstudio.com/docs/remote/ssh)
-- [VS Code - Sharing Git credentials with your container](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials)
-- [VS Code - Settings Sync](https://code.visualstudio.com/docs/configure/settings-sync)
-- [VS Code - Multi-root Workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces)

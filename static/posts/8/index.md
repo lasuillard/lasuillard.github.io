@@ -7,6 +7,7 @@ summary: >
 tags:
   - GitHub Actions
   - Grafana
+  - Grafana Alloy
   - Prometheus
 ---
 
@@ -33,6 +34,8 @@ Grafana Cloud Free는 조건 없는 무료 사용량을 제공합니다. Cloud F
 ![GitHub Actions 워크플로](./assets/github-actions-workflow.png)
 
 구성은 Docker Compose를 활용했습니다. 1Password Exporter 말고도 관심 있는 다른 메트릭을 수집하기 위해 GitHub Exporter도 추가해보았습니다.
+
+### 🐳 Docker Compose 및 Alloy 구성
 
 ```yaml
 services:
@@ -113,6 +116,8 @@ jobs:
   <img src="./assets/metrics-flow.png", alt="메트릭 수집 흐름" />
   <figcaption>https://prometheus.io/blog/2021/11/16/agent/</figcaption>
 </figure>
+
+### 📝 실행 결과 확인하기
 
 GitHub Actions 워크플로를 작성하고 `on.schedule.cron` 설정으로 워크플로를 자동 실행하게 합니다. 제 경우에는 3시간에 한 번 실행하게 했습니다.
 

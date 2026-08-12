@@ -6,6 +6,7 @@ summary: >
   AWS Certified Solutions Architect - Professional 자격증 취득 과정 및 자잘한 팁
 tags:
   - Amazon Web Services
+  - Certification
 ---
 
 최근 클라우드 엔지니어링 직무 전환을 준비하고 있습니다. AWS에 대해 배울 겸 이직에 활용하기 위해 AWS 자격증을 준비하기로 결정했습니다. 시험 접수부터 합격 후 자격증 수령까지 2개월의 짧은 기록과 경험, 그리고 자잘한 팁에 대해 공유합니다.
@@ -24,19 +25,19 @@ AWS 환경에서 시스템을 설계, 구현 및 관리하는 기술과 능력�
 
 AWS는 시험 관리를 [Pearson](https://www.pearsonvue.com/us/en/test-takers.html)에 위탁하고 있습니다. SAP-C02의 응시료는 300 USD, 현재 환율로는 한화 약 47만원에 달합니다. 하지만 시험 응시료는 실시간 환율이 아니라 AWS에서 정하는 [응시료](https://aws.amazon.com/ko/certification/policies/before-testing/#Exam_pricing)(수수료 제외, 2026-07-01 기준 394,575 KRW)를 따릅니다. Pearson이나 Udemy와 같은 교육 기관에서 바우처를 판매하는 것을 심심찮게 볼 수 있으니, 할인 혜택을 꼭 챙기시길 바랍니다.
 
-시험 접수 시 꼭 챙겨야 할 혜택을 정리하면,
+시험 접수 시 꼭 챙겨야 할 혜택을 정리하면 다음과 같습니다.
 
-- 할인 바우처
+### 🎟️ 할인 바우처
 
-  ![할인 바우처](./assets/discount-voucher.png)
+![할인 바우처](./assets/discount-voucher.png)
 
-  저는 Pearson에서 판매하는 바우처를 구매하여 응시하였기에 50% 할인을 받을 수 있었습니다. 표기 금액은 수수료 제외 금액이며 수수료를 포함해 최종 결제된 금액은 26년 5월 7일 기준 221,833원입니다.
+저는 Pearson에서 판매하는 바우처를 구매하여 응시하였기에 50% 할인을 받을 수 있었습니다. 표기 금액은 수수료 제외 금액이며 수수료를 포함해 최종 결제된 금액은 26년 5월 7일 기준 221,833원입니다.
 
-  주의하실 사항은 바우처가 어떤 유형의 시험에 적용되는지 확인하셔야 합니다. 보통 Foundational / Associate / Professional, Specialty로 나뉘어 있습니다. Foundational 바우처는 Associate 시험을 응시하는 데 사용할 수 없습니다.
+주의하실 사항은 바우처가 어떤 유형의 시험에 적용되는지 확인하셔야 합니다. 보통 Foundational / Associate / Professional, Specialty로 나뉘어 있습니다. Foundational 바우처는 Associate 시험을 응시하는 데 사용할 수 없습니다.
 
-- ESL (English as a Second Language)
+### ⏱️ ESL (English as a Second Language)
 
-  영어가 모국어가 아닌 수험자는 ESL을 요청하여 30분의 추가 시험 시간을 받을 수 있습니다. 답안을 검토할 수 있는 귀중한 시간이니 꼭 신청하시길 바랍니다.
+영어가 모국어가 아닌 수험자는 ESL을 요청하여 30분의 추가 시험 시간을 받을 수 있습니다. 답안을 검토할 수 있는 귀중한 시간이니 꼭 신청하시길 바랍니다.
 
 온라인 응시도 가능하지만 저는 오프라인 시험장에 방문하여 응시하기로 했습니다. 발생할 수 있는 여러 문제(소음, 인터넷 연결 등)에 대해 신경을 덜 쓰고 싶었고, 적절한 긴장감과 잘 통제된 환경을 원했습니다.
 

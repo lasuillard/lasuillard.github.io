@@ -80,79 +80,79 @@ ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 통�
 
 이 과정에서 생소한 Windows Server와 씨름해야 했고, 여러 문제와 맞닥뜨렸습니다.
 
-- Windows 생태계
+### 🖥️ Windows 생태계의 난관
 
-  친숙하지 않은 PowerShell, 익숙하지 않은 Windows Server 등등.. 기존 경험을 그대로 적용할 수 없는 난관이 굉장히 많았습니다.
+PowerShell 경험이 전무하여 Windows Server를 구성하는 과정에서 많은 시행착오가 있었습니다. Windows Server는 Linux와 달리 패키지 관리자가 없고, 설치 및 구성 과정이 GUI 중심으로 되어 있어 자동화가 어려웠습니다. 또한 보안 정책과 권한 관리가 복잡하여 예상치 못한 문제들이 발생했습니다.
 
-- 웹 사이트 보안 프로그램이 자꾸 꺼지는 문제
+### 🔒 보안 프로그램 및 콘솔 세션 유지
 
-  연결된 RDP 세션이 없으면 보안 프로그램이 자꾸 꺼지는 문제가 있었습니다. 초기에는 RDP 세션을 유지하는 Linux EC2 인스턴스를 추가 배포했지만, 문제가 끊이지 않았고 한동안 마땅한 해결책을 찾지 못했습니다.
+연결된 RDP 세션이 없으면 보안 프로그램이 자꾸 꺼지는 문제가 있었습니다. 초기에는 RDP 세션을 유지하는 Linux EC2 인스턴스를 추가 배포했지만, 문제가 끊이지 않았고 한동안 마땅한 해결책을 찾지 못했습니다.
 
-  다른 우선순위가 높은 업무에 밀려 매번 직접 서버에 접속하여 문제를 임시로 해결하는 과정을 반복하다가, 결국 시간을 내어 추가 조사에 나섰습니다. 그 결과 보안 프로그램이 정상 동작하려면 활성화된 콘솔 세션이 필요하다는 것을 알게 되었습니다.
+다른 우선순위가 높은 업무에 밀려 매번 직접 서버에 접속하여 문제를 임시로 해결하는 과정을 반복하다가, 결국 시간을 내어 추가 조사에 나섰습니다. 그 결과 보안 프로그램이 정상 동작하려면 활성화된 콘솔 세션이 필요하다는 것을 알게 되었습니다.
 
-  RDP 세션을 연결한 뒤 다음 명령어로 현재 세션을 콘솔 세션으로 전환할 수 있습니다.
+RDP 세션을 연결한 뒤 다음 명령어로 현재 세션을 콘솔 세션으로 전환할 수 있습니다.
 
-  ```powershell
-  # Convert RDP session to console session
-  tscon %SESSIONNAME% /dest:console
-  ```
+```powershell
+# Convert RDP session to console session
+tscon %SESSIONNAME% /dest:console
+```
 
-  이후 RDP 연결이 끊기게 되지만 콘솔 세션은 유지되어 보안 프로그램이 상시 실행될 수 있게 합니다. 하지만 간혹 관리 및 디버깅을 위해 서버에 접속하거나 서버를 재시작해야 하는 경우가 있습니다. 이 경우 콘솔 세션을 수동으로 시작해주어야 하는데, 매번 이 과정을 수동으로 하다 보면 실수가 발생할 수도 있어 자동화하고자 했습니다.
+이후 RDP 연결이 끊기게 되지만 콘솔 세션은 유지되어 보안 프로그램이 상시 실행될 수 있게 합니다. 하지만 간혹 관리 및 디버깅을 위해 서버에 접속하거나 서버를 재시작해야 하는 경우가 있습니다. 이 경우 콘솔 세션을 수동으로 시작해주어야 하는데, 매번 이 과정을 수동으로 하다 보면 실수가 발생할 수도 있어 자동화하고자 했습니다.
 
-  그래서 찾은 방법은 [AutoLogon 기능을 활용](https://learn.microsoft.com/ko-kr/troubleshoot/windows-server/user-profiles-and-logon/turn-on-automatic-logon)하는 것이었습니다.
+그래서 찾은 방법은 [AutoLogon 기능을 활용](https://learn.microsoft.com/ko-kr/troubleshoot/windows-server/user-profiles-and-logon/turn-on-automatic-logon)하는 것이었습니다.
 
-  사용된 User Data의 일부입니다.
+사용된 User Data의 일부입니다.
 
-  ```powershell
-  # WARNING: Autologon user credentials stored to registry as plain text, without any encryption
-  $adminUsername = '...'
-  $adminPassword = '...'
+```powershell
+# WARNING: Autologon user credentials stored to registry as plain text, without any encryption
+$adminUsername = '...'
+$adminPassword = '...'
 
-  # Configure autologon
-  $registryPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
-  Set-ItemProperty -Path $registryPath -Name AutoAdminLogon -Value 1
-  Set-ItemProperty -Path $registryPath -Name DefaultUserName -Value $adminUsername
-  Set-ItemProperty -Path $registryPath -Name DefaultPassword -Value $adminPassword
-  Set-ItemProperty -Path $registryPath -Name ForceAutoLogon -Value 1
+# Configure autologon
+$registryPath = 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon'
+Set-ItemProperty -Path $registryPath -Name AutoAdminLogon -Value 1
+Set-ItemProperty -Path $registryPath -Name DefaultUserName -Value $adminUsername
+Set-ItemProperty -Path $registryPath -Name DefaultPassword -Value $adminPassword
+Set-ItemProperty -Path $registryPath -Name ForceAutoLogon -Value 1
 
-  # Reboot instance
-  # https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-reboot.html
-  exit 3010
-  ```
+# Reboot instance
+# https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-reboot.html
+exit 3010
+```
 
-  `ForceAutoLogon` 설정을 통해 유지보수 작업이 끝난 후 콘솔 세션이 자동으로 시작되도록 할 수 있습니다. 단, **자동 로그온은 보안상 위험할 수 있으므로 주의가 필요**합니다. EC2 User Data 및 서버 내 레지스트리에 관리자 계정 정보가 평문으로 저장되기 때문입니다.
+`ForceAutoLogon` 설정을 통해 유지보수 작업이 끝난 후 콘솔 세션이 자동으로 시작되도록 할 수 있습니다. 단, **자동 로그온은 보안상 위험할 수 있으므로 주의가 필요**합니다. EC2 User Data 및 서버 내 레지스트리에 관리자 계정 정보가 평문으로 저장되기 때문입니다.
 
-- Selenium 서버 시작하기
+### ⚙️ Selenium 서버 서비스 등록
 
-  보통 Selenium 서버는 `.jar` 파일로 제공되며 실행하기 위해 `java`가 필요합니다. Windows 서버는 바로 이용할 수 있는 패키지 관리 도구가 없습니다. 또한 장애가 발생했을 때 서버가 재시작되게끔 서비스로 등록하여야 합니다.
+보통 Selenium 서버는 `.jar` 파일로 제공되며 실행하기 위해 `java`가 필요합니다. Windows 서버는 바로 이용할 수 있는 패키지 관리 도구가 없습니다. 또한 장애가 발생했을 때 서버가 재시작되게끔 서비스로 등록하여야 합니다.
 
-  패키지 매니저로 Chocolatey를 이용하고 Java Runtime을 설치, NSSM을 이용하여 Selenium을 서비스로 등록해주었습니다.
+패키지 매니저로 Chocolatey를 이용하고 Java Runtime을 설치, NSSM을 이용하여 Selenium을 서비스로 등록해주었습니다.
 
-  다음 스크립트는 로컬 환경에서 Vagrant를 이용해 Windows Server VM을 생성할 때 사용했던, Selenium Node를 Selenium Hub (**192.168.0.2:4444**)에 등록하는 PowerShell 스크립트입니다.
+다음 스크립트는 로컬 환경에서 Vagrant를 이용해 Windows Server VM을 생성할 때 사용했던, Selenium Node를 Selenium Hub (**192.168.0.2:4444**)에 등록하는 PowerShell 스크립트입니다.
 
-  ```powershell
-  # Install via Chocolatey
-  choco install openjdk --yes
-  choco install nssm --yes
+```powershell
+# Install via Chocolatey
+choco install openjdk --yes
+choco install nssm --yes
 
-  # Download Selenium Server
-  Invoke-WebRequest `
-    -Uri 'https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.22.0/selenium-server-4.22.0.jar' `
-    -OutFile '.\selenium-server.jar'
+# Download Selenium Server
+Invoke-WebRequest `
+  -Uri 'https://github.com/SeleniumHQ/selenium/releases/download/selenium-4.22.0/selenium-server-4.22.0.jar' `
+  -OutFile '.\selenium-server.jar'
 
-  # Register Selenium Server as service using NSSM
-  $serviceName = 'Selenium Node'
-  nssm install $serviceName (Get-Command java).Source -jar "$workdir\selenium-server.jar" node --hub http://192.168.0.2:4444
-  nssm start $serviceName
+# Register Selenium Server as service using NSSM
+$serviceName = 'Selenium Node'
+nssm install $serviceName (Get-Command java).Source -jar "$workdir\selenium-server.jar" node --hub http://192.168.0.2:4444
+nssm start $serviceName
 
-  # Allow traffic
-  New-NetFirewallRule `
-    -DisplayName 'Selenium Node' `
-    -LocalPort 5555 `
-    -Action Allow `
-    -Protocol TCP `
-    -Direction Inbound
-  ```
+# Allow traffic
+New-NetFirewallRule `
+  -DisplayName 'Selenium Node' `
+  -LocalPort 5555 `
+  -Action Allow `
+  -Protocol TCP `
+  -Direction Inbound
+```
 
 모든 구현 과정에서 가장 귀찮았던 건 키 배열을 하나하나 뜯어내는 노가다 과정이었습니다. 이 작업을 위해 처음으로 Figma를 활용하게 되었네요.
 
@@ -329,7 +329,7 @@ Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거
   - 인프라 리소스 삭제(`pulumi destroy`) 중 일부 리소스 삭제 중 오류가 발생하여 수동 개입을 필요로 하고 있습니다.
   - EC2 Image Builder로 인한 외부 변경 사항(Launch Template)으로 인해 IaC 상태와 실제 상태 사이에 불일치가 발생합니다.
 
-## ☕ 마치며
+## 💭 마치며
 
 Elastic Beanstalk와 Lambda, ECS를 이용해 애플리케이션을 배포한 적이 있었지만 EC2 + CodeDeploy 조합은 처음이었습니다. 단일 EC2 인스턴스에 SSH(Session Manager 경유)를 이용해 배포한 적이 있으니 EC2 배포 경험이 없는 건 아니지만 이번 경우는 Windows Server였다는 점에서 더욱 특별합니다.
 

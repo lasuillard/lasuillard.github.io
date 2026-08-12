@@ -5,6 +5,7 @@ preview: ./preview.png
 summary: >
   Playwright HTML 테스트 보고서를 브라우저에서 쉽고 빠르게 확인하기
 tags:
+  - AWS CloudFront
   - AWS S3
   - GitHub Actions
   - Playwright
@@ -39,6 +40,8 @@ Playwright HTML 보고서를 브라우저에서 다운로드 과정 없이 쉽�
 - CloudFront 정액 요금제(Flat Rate Pricing, [2025년 11월에 출시](https://aws.amazon.com/ko/blogs/korea/introducing-flat-rate-pricing-plans-with-no-overages/))를 이용하면 과도한 요금 발생을 막을 수 있습니다. 다만 주의해야 할 점은, 정액 요금제로 전환한 CloudFront 인스턴스는 기존 종량 요금제로 전환해야 삭제할 수 있습니다.
 
 다른 프로젝트에서도 Playwright를 사용하고 있거나 앞으로도 사용할 계획이 있기 때문에 Pulumi로 그 구성을 정의해두고 다른 프로젝트에서도 재사용하기로 했습니다.
+
+### 📜 Pulumi를 활용한 인프라 정의
 
 ```python
 import pulumi_aws as aws

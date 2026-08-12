@@ -9,6 +9,7 @@ tags:
   - AWS CloudFront
   - AWS S3
   - Django
+  - Pulumi
   - Python
   - Railway
 ---
@@ -47,7 +48,7 @@ tags:
 | 배포 환경                         | Railway                                    |
 | 데이터베이스                      | PostgreSQL                                 |
 | 정적 / 미디어 파일 관리 및 호스팅 | S3 + CloudFront                            |
-| 지속적 통합 및 배포               | GitHub Actions                             |
+| CI/CD                             | GitHub Actions                             |
 | 그 외                             | Tailwind CSS, DaisyUI, HTMX,  Pulumi, etc. |
 
 - 별도의 분리된 FE 구성은 원하지 않았지만, Tailwind를 이용하기 위해 결국 프로젝트 내에 Node 프로젝트를 구성하게 되었습니다. 기존 블로그가 Tailwind + DaisyUI를 이용하고 있었기에 이번 마이그레이션 작업 크기를 줄이기 위해 가능한 많은 코드를 재사용하고자 했습니다.
@@ -75,6 +76,8 @@ tags:
 
 - ... 이 외에도 `ImageField` 미리보기, 탭, 색상 선택 및 WYSIWYG 위젯 등, 기능이 너무도 많아 모두 설명할 수는 없지만 작은 Django 어드민 라이브러리 10 ~ 20개 분량의 기능은 포함하고 있습니다. 또한 유명한 여러 라이브러리([django-import-export](https://github.com/django-import-export/django-import-export), [django-constance](https://github.com/jazzband/django-constance), [django-celery-beat](https://github.com/celery/django-celery-beat) 등)에 대한 지원도 포함합니다.
 
+### ✏️ 블로그 글 작성 및 관리
+
 블로그 글 작성과 관리를 위한 WYSIWYG 에디터로는 [TinyMCE](https://www.tiny.cloud/) ([django-tinymce](https://github.com/jazzband/django-tinymce))를 활용했습니다. 정적 및 미디어(첨부 파일, 이미지 등) 파일은 S3에 저장하고, CloudFront를 통해 제공합니다.
 
 ![TinyMCE 에디터](./assets/tinymce-editor.png)
@@ -98,9 +101,13 @@ def tinymce_upload(request: HttpRequest) -> JsonResponse:
    return JsonResponse({"location": file_instance.file.url})
 ```
 
-그리고 웹 페이지들은 Django View와 HTML 템플릿으로 구현했습니다. 분리된 FE/BE 개발 환경에서는 API를 정의, 구현 그리고 다시 통합하는 과정이 꽤 수고로웠는데 SSR에서는 그러한 소요가 많이 줄어들어 굉장히 편했습니다. Django SSR만을 이용하여 웹 프로젝트를 진행한 것은 처음이었는데 직관적이고 명료한 문법, 다양한 템플릿 태그 및 필터 지원 등, 유용한 디버깅 도구([django-debug-toolbar](https://github.com/django-commons/django-debug-toolbar))의 도움으로 구현 및 테스트 작성이 편리하여 많은 도움이 되었습니다. 일단 대부분의 기능은 구현했지만 당장 필요하지 않은 기능은 일단 제쳐두었습니다. 댓글이나 사이트 테마 같은 것들인데, 추후에 새로 만들 생각입니다. 이 외에도 HTMX처럼 기본적인 구성은 해 두었지만 쓰지 않은 라이브러리도 많습니다.
+### 🌐 Django SSR 및 UI 구현
 
-## 🛤️ [Railway](https://railway.com/?referralCode=sF5Y3U)에 Django 애플리케이션 배포하기
+그리고 웹 페이지들은 Django View와 HTML 템플릿으로 구현했습니다. 분리된 FE/BE 개발 환경에서는 API를 정의, 구현 그리고 다시 통합하는 과정이 꽤 수고로웠는데 SSR에서는 그러한 소요가 많이 줄어들어 굉장히 편했습니다. 
+
+Django SSR만을 이용하여 웹 프로젝트를 진행한 것은 처음이었는데 직관적이고 명료한 문법, 다양한 템플릿 태그 및 필터 지원 등, 유용한 디버깅 도구([django-debug-toolbar](https://github.com/django-commons/django-debug-toolbar))의 도움으로 구현 및 테스트 작성이 편리하여 많은 도움이 되었습니다. 일단 대부분의 기능은 구현했지만 당장 필요하지 않은 기능은 일단 제쳐두었습니다. 댓글이나 사이트 테마 같은 것들인데, 추후에 새로 만들 생각입니다. 이 외에도 HTMX처럼 기본적인 구성은 해 두었지만 쓰지 않은 라이브러리도 많습니다.
+
+## 🛤️ Railway에 Django 애플리케이션 배포하기
 
 애플리케이션 및 데이터베이스는 Railway에 배포했습니다. Railway는 사용성 좋은 웹 기반 UI를 제공합니다. 쉽게 서비스를 배포하고 서로 연계할 수 있습니다. 흥미로운 점은 청구되는 비용은 CPU / 메모리 / 네트워크 이그레스 / 볼륨의 **실제** 사용량에 기반한다는 것입니다.
 
@@ -109,6 +116,8 @@ def tinymce_upload(request: HttpRequest) -> JsonResponse:
 처음 AWS EC2를 이용할 때 사용량 기반 과금이라는 말에 CPU / 메모리 실제 사용량 기반으로 오해했던 일이 있었는데, 흥미롭게도 Railway의 과금은 실제 사용량에 기반합니다. 또한 서버리스 실행 옵션도 있어 자주 사용하지 않는 (예: 개발 환경) 서비스는 요금을 최소화할 수도 있습니다.
 
 ![서버리스 절전 모드](./assets/railway-serverless-sleep.png)
+
+### ⚡ 서버리스 및 비용 구조
 
 서버리스 구성에는 별도로 애플리케이션에서 해 주어야 할 일이 없습니다. Railway에서 알아서 처리해줍니다. 해야 할 일은 **Enable Serverless** 설정을 건드는 것 뿐입니다.
 
@@ -120,16 +129,18 @@ def tinymce_upload(request: HttpRequest) -> JsonResponse:
 
 ![Railway 사용 비용](./assets/railway-cost.png)
 
-Railway의 단점은, 첫 번째로 공식 IaC Provider가 없다는 것입니다. Terraform 및 Pulumi Provider가 없기에 [railway-community-provider](https://registry.terraform.io/providers/terraform-community-providers/railway/latest/docs/resources/service)를 이용해야 합니다. Pulumi는 지원하지 않기 때문에 Pulumi에서 이용하려면 [Terraform Providers](https://www.pulumi.com/docs/iac/get-started/terraform/terraform-providers/) 브릿지를 이용해야 합니다.
+### ⚠️ Railway 배포 시 고려사항
 
-두 번째는 무료 사용자 플랜이 없습니다. 30일의 체험 기간 동안 $5의 크레딧을 제공하며 이는 테스트에 충분한 양이지만 이후에는 최소 $5/월(Hobby Plan) 비용을 지불해야 합니다. 굉장히 작은 서비스를 부담 없이 배포하고 싶으시다면 [Supabase](https://supabase.com/) 또한 고려해보세요. 꽤 괜찮은 무료 사용량을 제공합니다.
+Railway의 단점은 다음과 같습니다.
 
-세 번째는 빌드 / 배포 전후로 커스텀 가능한 부분이 많이 없다는 것입니다. 제 간단한 블로그 서비스를 배포하는 데에는 큰 문제는 없었지만, 복잡한 배포 라이프사이클을 요구하는 경우 설정에 좀 더 공을 들이거나 빌드 및 배포를 직접 구현해야 할 것 같네요.
+- 첫 번째로 공식 IaC Provider가 없다는 것입니다. Terraform 및 Pulumi Provider가 없기에 [railway-community-provider](https://registry.terraform.io/providers/terraform-community-providers/railway/latest/docs/resources/service)를 이용해야 합니다. Pulumi는 지원하지 않기 때문에 Pulumi에서 이용하려면 [Terraform Providers](https://www.pulumi.com/docs/iac/get-started/terraform/terraform-providers/) 브릿지를 이용해야 합니다.
+- 두 번째는 무료 사용자 플랜이 없습니다. 30일의 체험 기간 동안 $5의 크레딧을 제공하며 이는 테스트에 충분한 양이지만 이후에는 최소 $5/월(Hobby Plan) 비용을 지불해야 합니다. 굉장히 작은 서비스를 부담 없이 배포하고 싶으시다면 [Supabase](https://supabase.com/) 또한 고려해보세요. 꽤 괜찮은 무료 사용량을 제공합니다.
+- 세 번째는 빌드 / 배포 전후로 커스텀 가능한 부분이 많이 없다는 것입니다. 제 간단한 블로그 서비스를 배포하는 데에는 큰 문제는 없었지만, 복잡한 배포 라이프사이클을 요구하는 경우 설정에 좀 더 공을 들이거나 빌드 및 배포를 직접 구현해야 할 것 같네요.
 
 ## 💭 마치며
 
 사이트를 재작성하는 데에는 1달 정도 걸렸습니다. 생각해보면 Django SSR만으로 웹 사이트를 구현한 적이 없었습니다. 대학을 다니던 때에는 SPA 열풍이 불고 있었고, 저 또한 그 흐름에 휩쓸려 Django REST Framework와 Vue.js 2로 처음 웹 개발을 시작했던 기억이 납니다. 그 이후로 SSR을 쓸 일이 잘 없었습니다.
 
-그리고  Django는 충분히 좋은 프레임워크라는 사실을 재차 확인하게 되었습니다. SSR을 활용하는 것은 편리했고 문제 해결을 위해 찾아볼 수 있는 참고 자료도 굉장히 많아 큰 도움이 되었습니다. 어드민을 통해 필요한 대부분의 기능은 쉽고 빠르게 구현할 수 있었고, Unfold를 통해 어드민의 부족한 부분을 대거 보완할 수 있었습니다.
+그리고  Django는 충분히 좋은 프레임워크라는 사실을 재차 확인하게 되었습니다. SSR을 활용하는 것은 편리했고 문제 해결을 위해 찾아볼 수 있는 참고 자료도 굉장히 많아 큰 도움이 되었습니다. 어드민을 통해 필요한 대부분의 기능은 쉽고 빠르게 구현할 수 있었고, Unfold를 통해 어드민의 부족한 부분을 보완할 수 있었습니다.
 
 앞으로는 블로그 뿐만 아니라 개인적으로 이용하기 위한 여러 기능들을 구현하여 이용하려고 합니다.

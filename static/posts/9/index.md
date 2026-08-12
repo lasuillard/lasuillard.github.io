@@ -5,7 +5,9 @@ preview: ./preview.png
 summary: >
   Google Apps Script로 귀찮은 반복 작업 자동화하기
 tags:
+  - GitHub Actions
   - Google Apps Script
+  - Google Cloud
   - TypeScript
 ---
 
@@ -188,6 +190,8 @@ PNPM 연관 파일로 모노레포 패키지와 프로젝트 전역 의존 패�
 
 PNPM의 필터(`--filter`) 기능을 활용해 GitHub Actions 매트릭스로 변경된 프로젝트만 배포 작업을 동적으로 생성하기로 했습니다.
 
+### 📦 동적 배포 매트릭스 구성
+
 ```yaml
 name: Deploy
 
@@ -361,23 +365,23 @@ jobs:
 
 여러 간단한 GAS 프로젝트를 만들어보았습니다.
 
-- **cleanup-old-calendar-events**
+- cleanup-old-calendar-events
 
   오래된 Google Calendar 이벤트를 자동으로 삭제해줍니다.
 
-- **lunar-birthday**
+- lunar-birthday
 
   Google Calendar에서 지원되지 않는 음력 생일을 관리하기 위해 만들었습니다. 음력 생일을 양력으로 변환하여 캘린더에서 쉽게 확인할 수 있게 합니다.
 
   가령 음력 1970년 8월 1일 출생자의 2026년 생일은 6월 19일입니다. 작업이 완료되면 Google Calendar에서는 그 사람의 생일을 1970년 6월 19일로 바꿔 달력에서 그 해의 생일을 쉽게 확인할 수 있게 합니다. 과거 생일 이력은 남지 않지만 아직까지 필요한 적이 없었고, 필요하다면 생년월일을 고치는 대신 새로운 일정을 만들게 할 수도 있습니다.
 
-- **naver-notifications**
+- naver-notifications
 
   네이버 알림을 매번 들어가서 보기 너무 귀찮아서 만들었습니다. 네이버 알림을 스크래핑해서 매일 특정 시간에 Gmail로 요약을 보내줍니다.
 
   ![네이버 알림 요약](./assets/naver-notification.png)
 
-- **theclimb-routesetting-schedule**
+- theclimb-routesetting-schedule
 
   취미로 클라이밍을 하러 가기 전에 루트 세팅 일정을 확인하곤 하는데, SNS(인스타그램)나 네이버 블로그 등에 아래와 같은 루트 세팅 스케줄 이미지를 공지하곤 합니다.
 
@@ -389,7 +393,7 @@ jobs:
 
 각 GAS 스크립트 개발에는 GitHub Copilot을 적극적으로 활용하며 AI 활용 감각을 잡아가고자 했습니다. GitHub 웹 UI에서 이슈 할당과 PR 코멘트로 에이전트에게 작업을 맡기고 PR 리뷰로 피드백 루프를 거치며 기능을 개선해나갔습니다. GitHub의 에이전트 협업 흐름은 꽤 부드럽고 자연스러워서 마치 정말 동료 개발자와 원격으로 소통하며 작업한다는 느낌이 들었습니다. 어느 정도 아귀가 맞으면 마지막으로 코드를 직접 다듬으며 각 프로젝트를 마무리했습니다.
 
-## 🏁 마치며
+## 💭 마치며
 
 PNPM을 단순 패키지 매니저로 활용한 적은 있지만 모노레포를 관리하기 위해 활용한 건 이번이 처음입니다. 의존성 변경을 감지하는 기본 기능이 훌륭해서 많은 툴링 없이 원하는 자동화 구성을 만들기 편리했습니다.
 
