@@ -5,13 +5,14 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import Toc from './Toc.svelte';
 	import SeriesWidget from './SeriesWidget.svelte';
-	import { format, formatDistanceStrict } from 'date-fns';
+	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
 
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
 		return data;
 	});
+	const today = new Date();
 
 	// HTML element binding used for generating ToC
 	let contentWrapper: HTMLElement | undefined = $state();
@@ -74,7 +75,9 @@
 					<p class="mt-4 text-center font-light md:text-base">
 						<CalendarDaysIcon class="mr-1 inline-block h-5 w-5 align-text-bottom text-gray-500" />
 						<time datetime={metadata.publicationDate.toISOString()} role="time">
-							{formatDistanceStrict(metadata.publicationDate, new Date(), { addSuffix: true })}
+							{isSameDay(metadata.publicationDate, today)
+								? '오늘'
+								: formatDistanceStrict(metadata.publicationDate, today, { addSuffix: true })}
 							({format(metadata.publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>

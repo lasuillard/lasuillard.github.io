@@ -1,7 +1,7 @@
 <script lang="ts">
 	import TagBadge from './TagBadge.svelte';
 	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
-	import { format, formatDistanceStrict } from 'date-fns';
+	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
 	import type { Metadata } from '$lib/post';
 	import { route } from '$lib/urls';
 
@@ -12,6 +12,7 @@
 	}
 
 	let { metadata, selectedTag = null, variant = 'horizontal' }: Props = $props();
+	const today = new Date();
 	const postUrl = $derived(
 		route('/blog/[slug]', { params: { slug: `${metadata.id}-${metadata.slug}` } })
 	);
@@ -43,7 +44,9 @@
 		<p class="text-gray-500 {variant === 'vertical' ? 'mb-1' : 'mt-1'}">
 			<CalendarDaysIcon class="mb-1 inline-block h-4 w-4" />
 			<time datetime={metadata.publicationDate.toISOString()} role="time">
-				{formatDistanceStrict(metadata.publicationDate, new Date(), { addSuffix: true })}
+				{isSameDay(metadata.publicationDate, today)
+					? '오늘'
+					: formatDistanceStrict(metadata.publicationDate, today, { addSuffix: true })}
 				({format(metadata.publicationDate, 'yyyy년 M월 d일')})
 			</time>
 		</p>
