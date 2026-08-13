@@ -1,6 +1,6 @@
 ---
 title: GitHub Actions을 활용하여 메트릭 수집하기
-publicationDate: 2025-10-10T15:25:34.000+09:00
+publicationDate: 2025-10-10
 preview: ./preview.png
 summary: >
   GitHub Actions를 활용해서 소규모 메트릭 데이터를 Push 방식으로 수집해보기

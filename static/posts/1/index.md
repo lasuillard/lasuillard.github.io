@@ -1,7 +1,7 @@
 ---
 title: 기술 블로그 시작하기
-series: '기술 블로그 운영하기'
-publicationDate: 2023-11-03T16:39:00.000+09:00
+series: 기술 블로그 운영하기
+publicationDate: 2023-11-03
 preview: ./preview.png
 summary: >
   SvelteKit으로 마크다운 기반 정적 웹 블로그 만들기

@@ -1,7 +1,7 @@
 ---
 title: 다시 GitHub Pages로 블로그 배포하기
-series: '기술 블로그 운영하기'
-publicationDate: 2026-07-28T17:14:40.000+09:00
+series: 기술 블로그 운영하기
+publicationDate: 2026-07-28
 preview: ./preview.png
 summary: >
   Railway에서 다시 GitHub Pages로 돌아가게 된 이유
