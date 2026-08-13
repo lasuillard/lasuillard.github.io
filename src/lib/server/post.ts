@@ -66,7 +66,10 @@ export class PostRepository {
 		});
 
 		this.posts.sort(
-			(a, b) => b.metadata.publicationDate.getTime() - a.metadata.publicationDate.getTime()
+			(a, b) =>
+				// Sort by publicationDate descending, then by id descending
+				b.metadata.publicationDate.getTime() - a.metadata.publicationDate.getTime() ||
+				b.metadata.id.localeCompare(a.metadata.id)
 		);
 
 		return this.posts;

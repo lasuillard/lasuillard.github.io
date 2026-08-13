@@ -5,17 +5,20 @@ preview: ./preview.png
 summary: >
   Playwright HTML 테스트 보고서를 브라우저에서 쉽고 빠르게 확인하기
 tags:
+  - AWS CloudFront
   - AWS S3
   - GitHub Actions
   - Playwright
   - Pulumi
 ---
 
-여러 작은 사이드 프로젝트을 하다 보면 테스트 환경 구성에 많은 시간을 투자하곤 합니다. 사이드 프로젝트 개발 전반에 Test-first TDD를 준수할 생각은 없지만 테스트 자동화를 구축해두고 언제든 테스트를 추가할 수 있게끔 만드는 편입니다. 산만한 저는 자잘한 프로젝트를 많이 해보는 편이라 언제 손을 놓아도 언제든 다시 작업할 수 있는 개발 환경을 만들어두려고 노력하는 편입니다.
+여러 작은 사이드 프로젝트를 하다 보면 테스트 환경 구성에 많은 시간을 투자하곤 합니다. Test-first TDD를 엄격히 따르는 편은 아닙니다. 하지만 산만한 저는 자잘한 프로젝트를 많이 해보는 편이라, 언제 손을 놓아도 언제든 다시 작업할 수 있는 개발 환경을 갖추는 것이 특히 중요합니다.
 
-기능에 사용자 UI가 포함되는 경우에는 종단 간 테스트를 위해 Playwright를 이용해보고 있는데, GitHub에서 테스트 결과를 확인하는 것이 불편하다고 느끼고 있었습니다. 매번 워크플로 아티팩트를 다운로드하는 대신 PR에서 링크를 열고 바로 HTML 테스트 보고서를 확인할 수 있으면 좋겠다고 생각했죠.
+기능에 UI가 포함되는 경우에는 종단 간 테스트를 위해 Playwright를 이용하고 있습니다. 하지만 매번 GitHub에서 테스트 결과를 직접 확인하는 것은 꽤 불편하게 느껴졌습니다.
 
-이번에는 Playwright 테스트 리포트를 AWS S3을 활용하여 GitHub PR에서 쉽고 빠르게 확인하는 간단한 워크플로에 대해 공유합니다.
+워크플로 아티팩트를 다운로드하는 대신, PR에서 링크를 열고 바로 HTML 테스트 보고서를 확인할 수 있으면 좋겠다고 생각했습니다.
+
+이번에는 AWS S3와 CloudFront를 활용하여 Playwright 테스트 리포트를 브라우저에서 쉽고 빠르게 확인하는 간단한 워크플로에 대해 이야기하려고 합니다.
 
 ## 🎭 Playwright
 
@@ -25,18 +28,27 @@ tags:
 
 Playwright를 선택하게 된 데에는 다음과 같은 이유가 있습니다:
 
-- 제가 써봤던 비슷한 다른 도구들, Cypress나 Puppeteer, Selenium과 비교했을 때 가장 구성 및 실행이 편리했습니다. 브라우저 및 시스템 의존성 설치를 대부분 알아서 관리해줍니다.
+- Cypress나 Puppeteer, Selenium과 비교했을 때 가장 구성 및 실행이 편리했습니다. 브라우저 및 시스템 의존성 설치를 알아서 합니다.
+
 - 브라우저 UI 및 다양한 확장(VS Code Extension, MCP)을 지원하며 좋은 사용 경험을 제공합니다.
+
 - 공식 문서가 잘 관리되어 있으며 생태계가 활발합니다. 참고할 수 있는 글과 문서가 굉장히 풍부하며 Microsoft에서 관리하므로 짧은 시일 내에 문제가 발생할 가능성이 적습니다.
 
-## 🪣 S3 버킷과 CloudFront CDN 생성하기
+## 🪣 임시 웹 호스팅
 
-Playwright HTML 보고서를 브라우저에서 다운로드 과정 없이 쉽고 빠르게 확인하려면 간단한 정적 호스팅이 필요합니다. 임시 웹 페이지 호스팅이 간단해야 하고 여러 PR에서 생성된 보고서를 확인할 수 있어야 합니다. 또한 오래된 웹 페이지를 자동 만료시킬 수 있다면 더욱 편리하겠죠. 그래서 AWS S3와 CloudFront를 활용하기로 했습니다.
+Playwright HTML 보고서를 브라우저에서 다운로드 과정 없이 쉽고 빠르게 확인하려면 간단한 정적 호스팅이 필요합니다. 임시 웹 페이지 호스팅이 간단해야 하고, 여러 PR에서 생성된 보고서를 쉽게 확인할 수 있어야 합니다.
 
-- 꼭 S3의 정적 웹 호스팅 기능이 아니더라도 CloudFront를 이용하여 디렉토리 단위의 정적 웹 호스팅은 가능하므로 여러 PR에서 생성된 보고서에 대한 임시 웹 페이지를 호스팅할 수 있습니다. 복잡한 라우팅이 필요하다면 Lambda@Edge도 활용할 수 있겠죠.
-- S3 라이프사이클 규칙을 통해 오래된 보고서는 자동으로 삭제할 수 있으니, 비용 절감에도 도움이 됩니다.
+또한 오래된 웹 페이지를 자동 만료시킬 수 있다면 더욱 편리하겠죠. 
+
+이 모두를 만족하는 가장 가성비 좋은 솔루션은 AWS S3와 CloudFront입니다.
+
+- S3 라이프사이클 규칙을 통해 오래된 보고서는 자동으로 삭제할 수 있어 비용 발생을 최소화할 수 있습니다.
+
 - S3를 외부에 노출하지 않고 CloudFront를 통해 접근하기 때문에 S3에 대한 공격을 대거 미연에 방지할 수 있습니다.
-- CloudFront 정액 요금제(Flat Rate Pricing, [2025년 11월에 출시](https://aws.amazon.com/ko/blogs/korea/introducing-flat-rate-pricing-plans-with-no-overages/))를 이용하면 과도한 요금 발생을 막을 수 있습니다. 다만 주의해야 할 점은, 정액 요금제로 전환한 CloudFront 인스턴스는 기존 종량 요금제로 전환해야 삭제할 수 있습니다.
+
+- CloudFront 정액 요금제(Flat Rate Pricing, [2025년 11월에 출시](https://aws.amazon.com/ko/blogs/korea/introducing-flat-rate-pricing-plans-with-no-overages/))를 이용하면 과도한 요금 발생을 막을 수 있습니다. 주의해야 할 점은, 정액 요금제로 전환한 CloudFront 인스턴스는 기존 종량 요금제로 전환해야 삭제할 수 있다는 점입니다.
+
+### 📜 Pulumi 인프라 정의
 
 다른 프로젝트에서도 Playwright를 사용하고 있거나 앞으로도 사용할 계획이 있기 때문에 Pulumi로 그 구성을 정의해두고 다른 프로젝트에서도 재사용하기로 했습니다.
 
@@ -162,9 +174,9 @@ aws.s3.BucketCorsConfiguration(
 )
 ```
 
-이 외에도 GitHub Actions 변수 자원을 관리하는 코드가 있어 GitHub Actions 환경으로 변수 및 비밀값 삽입 또한 Pulumi에서 처리하고 있습니다. AWS 인프라에 인증하기 위한 OIDC 구성 등도 포함해서요.
+이 외에도 GitHub Actions 변수 자원을 관리하는 코드가 있어 GitHub Actions 환경으로 변수 및 비밀값 삽입 또한 Pulumi에서 처리하고 있습니다. AWS 인프라에 인증하기 위한 OIDC 구성 등도 Pulumi에서 관리하고 있습니다.
 
-## ⚙️ Playwright HTML 리포트 설정하기
+## ⚙️ Playwright HTML 리포트 생성하기
 
 테스트 후 HTML 리포트를 생성하도록 Playwright 설정을 갱신해야 할 필요가 있습니다. `$.reporter` 설정을 변경하여 HTML 리포트를 생성하도록 해줍니다.
 
@@ -188,7 +200,7 @@ aws.s3.BucketCorsConfiguration(
 
 생성된 리포트는 `playwright-report/` 디렉토리에 저장됩니다. 남은 것은 이 파일을 S3에 업로드하는 것 뿐입니다.
 
-## 📰 S3에 HTML 리포트 호스팅하기
+## 📰 테스트 리포트 업로드하기
 
 이제 CI 워크플로 내용을 갱신하여 HTML 리포트를 S3에 업로드하고 [thollander/actions-comment-pull-request](https://github.com/thollander/actions-comment-pull-request)를 이용하여 PR에 댓글을 남깁니다. [AWS OIDC](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws)를 이용하여 임시 인증 정보를 발급받은 뒤 S3에 업로드하며, 업로드를 위한 IAM 정책은 연관된 IAM 역할에 극히 제한적으로 부여되어 있습니다.
 
@@ -239,25 +251,32 @@ steps:
 ```
 
 테스트가 완료되면 PR에 댓글이 달립니다.
+
 ![PR 테스트 결과 댓글](./assets/pr-comment.png)
 
-링크를 클릭하면 보고서를 바로 확인할 수 있습니다. 테스트 케이스의 상세 내용 또한 확인할 수 있습니다.![테스트 케이스 상세 결과](./assets/test-case-detail.png)
+링크를 클릭하면 보고서를 바로 확인할 수 있습니다. 테스트 케이스의 상세 내용 또한 확인할 수 있습니다.
+
+![테스트 케이스 상세 결과](./assets/test-case-detail.png)
 
 실패한 테스트 케이스의 경우 Playwright 설정에 따라 트레이스, 스크린샷 스냅샷의 변경 상세 등이 테스트 결과 상세에 포함되어 자세한 내용을 확인할 수 있습니다.
 
 ![Playwright 트레이스](./assets/playwright-trace.png)
 
+## 🤔 아쉬운 점
+
+- Playwright를 필요로 하는 프로젝트마다 워크플로를 각자 구성해야 하고, 워크플로에 AWS 접근 권한을 부여해야 하며, 프로젝트별로 인프라 리소스를 각각 관리해야 합니다.
+
+  그래서 GitHub App이나 커스텀 GitHub Action을 만들어서 여러 프로젝트에서 재사용하는 방식을 고려하고 있습니다.
+
+- PR에서 스냅샷을 업데이트할 수 있다면 좀 더 편리할 것 같습니다. 이번에는 다루지 않았지만 앞으로 필요해질 것 같습니다.
+
+- 개발 환경과 CI 환경 사이의 불일치를 해소해야 합니다. 저는 Docker를 이용해 Playwright 테스트를 실행하고 있지만, 이 방법은 Docker 빌드로 인해 테스트 실행 시간이 길어지는 단점이 있습니다.
+
 ## 💭 마치며
 
-간단한 자동화지만 이후에 테스트 결과 확인이 굉장히 빠르고 쉬워졌습니다. 하지만 여전히 더 개선했으면 하는 점들은 많이 있어서 앞으로 다음과 같은 점들을 추가로 개선하며 글을 보완하려고 합니다.
+간단한 자동화지만 Playwright 테스트 리포트를 브라우저에서 쉽고 빠르게 확인할 수 있어 편리해졌습니다. 또한 오래된 보고서는 자동으로 삭제되므로 비용 발생을 최소화할 수 있습니다. 하지만 제한된 확장성은 여전히 발목을 잡고 있습니다. 다음에는 여러 프로젝트에 쉽게 재사용할 수 있는 GitHub App이나 커스텀 GitHub Action을 만들어 글로 정리해보려고 합니다.
 
-- 여러 프로젝트에서 쉽게 재사용할 수 있는 방식(GitHub App, Custom GitHub Action 등)도 구상 중입니다. 구성을 복사하여 붙여넣는 것보다 좀 더 나은 방식을 찾아보려고 합니다.
-- PR에서 스냅샷을 업데이트할 수 있다면 좀 더 편리할 것 같네요. 이번에는 다루지 않았지만 앞으로 필요해질 것 같습니다.
-- 저는 개발 환경과 CI 환경 사이의 불일치를 해소하기 위해 Docker를 이용해 Playwright 테스트를 실행하고 있습니다. 기회가 된다면 이 구성에 관해서도 공유해보겠습니다.
-
-제 개인 프로젝트([lasuillard/raindrop-sync-chrome](https://github.com/lasuillard/raindrop-sync-chrome))에서 사용 중이니 [여기](https://github.com/lasuillard/raindrop-sync-chrome/blob/d0cf2d3bb54372c90a5441831499075ca0512811/.github/workflows/ci.yaml#L75-L156)서 워크플로를 확인하실 수 있습니다.
-
-## 🔗 참고 문서
+## 🔗 참고한 글
 
 - [https://afsalbacker.medium.com/access-playwright-trace-viewer-reports-online-via-amazon-s3-51fd365d80f6](https://afsalbacker.medium.com/access-playwright-trace-viewer-reports-online-via-amazon-s3-51fd365d80f6)
 - [https://medium.com/@haleywardo/streamlining-playwright-visual-regression-testing-with-github-actions-e077fd33c27c](https://medium.com/@haleywardo/streamlining-playwright-visual-regression-testing-with-github-actions-e077fd33c27c)

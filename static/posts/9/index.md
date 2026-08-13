@@ -5,17 +5,21 @@ preview: ./preview.png
 summary: >
   Google Apps Script로 귀찮은 반복 작업 자동화하기
 tags:
+  - GitHub Actions
   - Google Apps Script
+  - Google Cloud
   - TypeScript
 ---
 
-반복되는 귀찮은 일에 지쳤던 적 있으신가요? 캘린더에서 지원되지 않는 음력 생일을 등록하느라 귀찮았던 일, 다시는 보지 않을 오래된 캘린더 일정을 삭제하는 일, 매일같이 어떤 웹 사이트에 로그인해서 알림을 확인하는 일... 누구나 매일, 매주, 매달 혹은 매년 반복하는 작업이 있을 겁니다. 필요하지만 간단한 작업일수록 귀찮은 법이죠. 저도 오랫동안 시달리던 귀찮은 작업들이 있었고, 벼르고 벼르다 이 귀찮은 일들을 자동화하고자 결심했습니다.
+반복되는 귀찮은 일에 지쳤던 적 있으신가요? 캘린더에서 지원되지 않는 음력 생일을 등록하느라 귀찮았던 일, 다시는 보지 않을 오래된 캘린더 일정을 삭제하는 일, 매일같이 어떤 웹 사이트에 로그인해서 알림을 확인하는 일...
 
-그리고 작업 자동화에는 Google Apps Script 만한 게 없었습니다. 저는 이메일(Gmail)부터 일정 관리(Google Calendar / Tasks), 문서 작업(Google Sheets / Docs), 파일 관리(Google Drive) 등 다양한 Google Workspace 제품을 이용하고 있는데, 대부분의 반복 작업도 이 위에서 이루어지기 때문입니다.
+누구나 매일, 매주, 매달 혹은 매년 반복하는 작업이 있을 겁니다. 필요하지만 간단한 작업일수록 귀찮은 법이죠. 저도 오랫동안 시달리던 귀찮은 작업들이 있었고, 벼르고 벼르다 이 귀찮은 일들을 자동화하고자 결심했습니다.
+
+그리고 작업 자동화에는 Google Apps Script 만한 게 없었습니다. 저는 이메일(Gmail)부터 일정 관리(Google Calendar / Tasks), 문서 작업(Google Sheets / Docs), 파일 관리(Google Drive) 등 다양한 Google Workspace 제품을 이용하고 있습니다. 대부분의 반복 작업도 이 환경 위에서 이루어지기 때문입니다.
 
 ## 🤖 Google Apps Script
 
-[Apps Script](https://developers.google.com/apps-script) (이하 GAS)는 Google Drive에 의해 제공되는 클라우드 기반 자바스크립트 플랫폼입니다. Google 제품 전반에 걸쳐 손쉽게 연동되고 다양한 자동화 작업을 수행할 수 있습니다.
+[Google Apps Script](https://developers.google.com/apps-script) (이하 GAS)는 Google Drive에 의해 제공되는 클라우드 기반 자바스크립트 플랫폼입니다. Google 제품 전반에 걸쳐 손쉽게 연동되고 다양한 자동화 작업을 수행할 수 있습니다.
 
 ### 👍 장점
 
@@ -55,7 +59,7 @@ tags:
 
   ![Apps Script 프로젝트](./assets/apps-script-project.png)
 
-  하지만 Apps Script 함수를 스크립트 에디터 밖에서 호출하는 등 일부 고급 기능을 이용하려면 사용자의 Google Cloud 프로젝트를 연결해야 합니다. 구성과 관리가 조금 번거로워질 뿐, 연결 자체로 별도 요금이 발생하지는 않습니다.
+  하지만 Apps Script 함수를 스크립트 에디터 밖에서 호출하는 등 일부 고급 기능을 이용하려면, 사용자의 Google Cloud 프로젝트를 연결해야 합니다. 구성과 관리가 조금 번거로워질 뿐, 연결 자체로 별도 요금이 발생하지는 않습니다.
 
 ## ☄️ 개발 환경 구성하기
 
@@ -170,13 +174,17 @@ $ tree -a --gitignore -I .git --sort name --dirsfirst
 
 PNPM 연관 파일로 모노레포 패키지와 프로젝트 전역 의존 패키지 카탈로그를 관리합니다.
 
-개발에 TypeScript를 사용하고 변경 사항은 굉장히 사소한 것을 제외하고 모두 PR을 거칩니다. GitHub Actions 파이프라인을 거쳐 Prettier, ESLint로 코드 품질을 검사하고 Vitest로 자동화 테스트를 실행합니다. PR이 병합되면 [ESBuild](https://esbuild.github.io/)와 [tsup](https://github.com/egoist/tsup)로 빌드한 뒤 [clasp](https://github.com/google/CLASP) CLI로 Apps Script에 배포됩니다.
+개발에 TypeScript를 사용하고, 변경 사항은 굉장히 사소한 것을 제외하고 모두 PR을 거칩니다. GitHub Actions 파이프라인을 거쳐 Prettier, ESLint로 코드 품질을 검사하고 Vitest로 자동화 테스트를 실행합니다.
+
+PR이 병합되면 [ESBuild](https://esbuild.github.io/)와 [tsup](https://github.com/egoist/tsup)으로 빌드한 뒤, [clasp](https://github.com/google/CLASP) CLI로 Apps Script에 배포됩니다.
 
 ## ⚙️ 설정 관리
 
 프로젝트 설정은 속성 서비스 ([Properties Service](https://developers.google.com/apps-script/guides/properties))를 이용합니다. 내부용 / 개인용 스크립트 프로젝트에서 쉽고 빠르게 사용할 수 있어 좋은 선택입니다.![속성 서비스 설정](./assets/properties-service.png)
 
-하지만 매번 스크립트 설정에 가서 설정을 바꾸는 것은 귀찮기에 애드온으로 관리하기로 했습니다. 설정을 저장하기 전에 검증할 수도 있고, 작업 수동 실행 등 여러 편의 기능을 구현해서 쓸 수 있습니다. 다만 개인용 / 내부용 프로젝트가 아닌 대중에 공개될 프로젝트라면 스크립트 속성(`ScriptProperties`)을 불특정 다수에게 노출하고 수정 가능하게 하는 건 부적합합니다. `UserProperties`를 사용하세요.
+하지만 매번 스크립트 설정에 가서 설정을 바꾸는 것은 귀찮기에, 애드온으로 관리하기로 했습니다. 설정을 저장하기 전에 검증할 수도 있고, 작업 수동 실행 등 여러 편의 기능을 구현해서 쓸 수 있습니다.
+
+다만 개인용 / 내부용 프로젝트가 아닌 대중에 공개될 프로젝트라면 스크립트 속성(`ScriptProperties`)을 불특정 다수에게 노출하고 수정 가능하게 하는 건 부적합합니다. 이 경우에는 `UserProperties`가 권장됩니다.
 
 ![애드온 UI](./assets/addon-ui.png)
 
@@ -187,6 +195,8 @@ PNPM 연관 파일로 모노레포 패키지와 프로젝트 전역 의존 패�
 초기 배포 구성은 `pnpm run --recursive`로 모든 프로젝트를 변경 사항이 없어도 배포하고 있었습니다. 하지만 사소한 변경 사항, 심지어는 전혀 관련이 없는 변경 사항에도 모든 프로젝트를 배포하는 것은 낭비였고 변경된 프로젝트만 배포하길 원했습니다.
 
 PNPM의 필터(`--filter`) 기능을 활용해 GitHub Actions 매트릭스로 변경된 프로젝트만 배포 작업을 동적으로 생성하기로 했습니다.
+
+### 📦 동적 배포 매트릭스 구성
 
 ```yaml
 name: Deploy
@@ -286,7 +296,9 @@ jobs:
 
 ## 🪝 배포 후 초기화 자동 실행하기
 
-`clasp run-function` 도구를 이용하여 배포 후 초기화(주로 트리거)를 자동 실행하고자 했으나 새 스크립트 프로젝트는 기본적으로 `scripts.run` API를 사용할 수 없다는 문제가 있었습니다. `scripts.run` API를 사용하고자 할 경우 사용자는 본인의 Google Cloud 프로젝트를 연결하고 여러 설정을 끝마쳐야 합니다.
+`clasp run-function` 도구를 이용하여 배포 후 초기화(주로 트리거)를 자동 실행하고자 했으나, 새 스크립트 프로젝트는 기본적으로 `scripts.run` API를 사용할 수 없다는 문제가 있었습니다.
+
+`scripts.run` API를 사용하고자 할 경우, 사용자는 본인의 Google Cloud 프로젝트를 연결하고 여러 설정을 끝마쳐야 합니다.
 
 1.  Google Cloud 프로젝트를 만들고 Apps Script API를 사용 설정합니다.
 
@@ -355,29 +367,29 @@ jobs:
 
     ![권한 요청](./assets/authorize.png)
 
-    다른 애드온이 필요한 모든 권한을 요청할 수도 있겠지만 각 스크립트 프로젝트가 독립된 경계를 유지하도록 남겨두면 언젠가 필요할 때 쉽게 프로젝트를 분리할 수도 있고, 디버깅도 용이할 것이라 생각되어 지금 구현을 유지하기로 했습니다.
+    다른 애드온이 필요한 모든 권한을 미리 요청할 수도 있겠지만, 각 스크립트 프로젝트가 독립된 경계를 유지하도록 남겨두면 언젠가 필요할 때 쉽게 프로젝트를 분리할 수도 있습니다. 디버깅 또한 용이할 것이라 생각되어 지금의 구현을 유지하기로 했습니다.
 
 ## 🖼️ 만들어 본 것들
 
 여러 간단한 GAS 프로젝트를 만들어보았습니다.
 
-- **cleanup-old-calendar-events**
+- cleanup-old-calendar-events
 
   오래된 Google Calendar 이벤트를 자동으로 삭제해줍니다.
 
-- **lunar-birthday**
+- lunar-birthday
 
   Google Calendar에서 지원되지 않는 음력 생일을 관리하기 위해 만들었습니다. 음력 생일을 양력으로 변환하여 캘린더에서 쉽게 확인할 수 있게 합니다.
 
   가령 음력 1970년 8월 1일 출생자의 2026년 생일은 6월 19일입니다. 작업이 완료되면 Google Calendar에서는 그 사람의 생일을 1970년 6월 19일로 바꿔 달력에서 그 해의 생일을 쉽게 확인할 수 있게 합니다. 과거 생일 이력은 남지 않지만 아직까지 필요한 적이 없었고, 필요하다면 생년월일을 고치는 대신 새로운 일정을 만들게 할 수도 있습니다.
 
-- **naver-notifications**
+- naver-notifications
 
   네이버 알림을 매번 들어가서 보기 너무 귀찮아서 만들었습니다. 네이버 알림을 스크래핑해서 매일 특정 시간에 Gmail로 요약을 보내줍니다.
 
   ![네이버 알림 요약](./assets/naver-notification.png)
 
-- **theclimb-routesetting-schedule**
+- theclimb-routesetting-schedule
 
   취미로 클라이밍을 하러 가기 전에 루트 세팅 일정을 확인하곤 하는데, SNS(인스타그램)나 네이버 블로그 등에 아래와 같은 루트 세팅 스케줄 이미지를 공지하곤 합니다.
 
@@ -389,7 +401,7 @@ jobs:
 
 각 GAS 스크립트 개발에는 GitHub Copilot을 적극적으로 활용하며 AI 활용 감각을 잡아가고자 했습니다. GitHub 웹 UI에서 이슈 할당과 PR 코멘트로 에이전트에게 작업을 맡기고 PR 리뷰로 피드백 루프를 거치며 기능을 개선해나갔습니다. GitHub의 에이전트 협업 흐름은 꽤 부드럽고 자연스러워서 마치 정말 동료 개발자와 원격으로 소통하며 작업한다는 느낌이 들었습니다. 어느 정도 아귀가 맞으면 마지막으로 코드를 직접 다듬으며 각 프로젝트를 마무리했습니다.
 
-## 🏁 마치며
+## 💭 마치며
 
 PNPM을 단순 패키지 매니저로 활용한 적은 있지만 모노레포를 관리하기 위해 활용한 건 이번이 처음입니다. 의존성 변경을 감지하는 기본 기능이 훌륭해서 많은 툴링 없이 원하는 자동화 구성을 만들기 편리했습니다.
 
