@@ -11,7 +11,7 @@ tags:
   - Prometheus
 ---
 
-Rust 기초를 배워볼 생각으로 간단한 애플리케이션([1password-exporter](https://github.com/lasuillard/1password-exporter))을 만든 적이 있었습니다. 1Password 사용량 메트릭을 수집하는 Prometheus Exporter인데요.
+Rust 기초를 배워볼 생각으로 간단한 애플리케이션([1password-exporter](https://github.com/lasuillard-s/1password-exporter))을 만든 적이 있었습니다. 1Password 사용량 메트릭을 수집하는 Prometheus Exporter입니다.
 
 수집한 메트릭을 저장 및 시각화하기 위해 Grafana Cloud Free를 활용했지만 Exporter와 에이전트(Grafana Alloy)가 수시로 동작할 서버가 필요했습니다. 로컬 서버에서 켜두거나 클라우드에 호스팅하는 대신 GitHub Actions를 활용한다면 월간 무료 제공 사용량 내에서 비용 발생 없이 메트릭을 수집할 수 있을 것 같다는 생각이 들었습니다.
 
@@ -23,13 +23,13 @@ Rust 기초를 배워볼 생각으로 간단한 애플리케이션([1password-ex
 
 ![Grafana Cloud 무료 플랜](./assets/grafana-cloud.png)
 
-Grafana Cloud Free는 조건 없는 무료 사용량을 제공합니다. Cloud Free 플랜 사용자는 데이터 저장 상한도 적고(10K 메트릭, 50GB 로그/트레이스 등&hellip;) 보존 기간도 14일로 매우 짧으니 실 운영 서비스에는 적합하지 않지만 간단한 개인 프로젝트를 운영하며 모니터링 시스템 연동 및 사용 경험을 쌓기에는 충분한 양이라 생각이 드네요.
+Grafana Cloud Free는 조건 없는 무료 사용량을 제공합니다. Cloud Free 플랜 사용자는 데이터 저장 상한도 적고(10K 메트릭, 50GB 로그/트레이스 등&hellip;) 보존 기간도 14일로 매우 짧으니 실 운영 서비스에는 적합하지 않지만 간단한 개인 프로젝트를 운영하며 모니터링 시스템 연동 및 사용 경험을 쌓기에는 충분한 양이라 생각합니다.
 
-나중에는 더 오랜 기간 메트릭을 보존했으면 하는 생각은 있지만, 지금 당장은 이 정도면 충분했습니다.
+나중에는 더 오랜 기간 메트릭을 보존했으면 하는 생각은 있지만, 지금 당장은 이 정도로도 충분했습니다.
 
 ## 🔀 GitHub Actions로 메트릭 수집 및 전달하기
 
-이제 Exporter를 실행하고 이 메트릭을 수집, 전달하기 위해 GitHub Actions 인프라를 활용했습니다. 1Password 개인 계정의 사용량은 굉장히 변화가 더디기 때문에 수집 빈도가 뜸해도 상관 없었습니다. 많아도 1\~2시간에 한 번만 수집해도 충분했죠. GitHub는 무료 사용자의 비공개 저장소에도 월 2,000분(공개 저장소는 무제한)의 실행 시간을 제공하니 1시간에 1번, 약 1\~2분 소모한다고 가정했을 때 월 1,000분 정도면 충분할 겁니다.
+이제 Exporter를 실행하고 이 메트릭을 수집, 전달하기 위해 GitHub Actions 인프라를 활용했습니다. 1Password 개인 계정의 사용량은 굉장히 변화가 더디기 때문에 수집 빈도가 뜸해도 상관 없었습니다. 많아도 1 \~ 2시간에 한 번만 수집해도 충분했죠. GitHub는 무료 사용자의 비공개 저장소에도 월 2,000분(공개 저장소는 무제한)의 실행 시간을 제공하니 1시간에 1번, 약 1 \~ 2분 소모한다고 가정했을 때 월 1,000분 정도면 충분합니다.
 
 ![GitHub Actions 워크플로](./assets/github-actions-workflow.png)
 
@@ -108,9 +108,9 @@ jobs:
             | prom-write --url http://localhost:8080/api/v1/metrics/write -f -
 ```
 
-`prom-write`를 활용하는 데에는 나름의 이유가 있는데, Alloy가 일정 시간마다 메트릭을 수집하여 전달하기를 낙관적으로 기다리기보다는 정확히 1번만 메트릭을 보낼 수 없을까 싶었거든요. `sleep`으로 기다린 뒤 Alloy 컨테이너를 종료하면 Graceful Shutdown 과정에서 메트릭 버퍼를 비울 테니 큰 차이는 없을 테지만, 개인적인 호기심이었습니다.
+`prom-write`를 활용하는 데에는 나름의 이유가 있습니다. Alloy가 일정 시간마다 메트릭을 수집하여 전달하기를 낙관적으로 기다리기보다는 정확히 1번만 메트릭을 보낼 수 있으면 좋겠다고 생각했습니다. `sleep`으로 기다린 뒤 Alloy 컨테이너를 종료하면 Graceful Shutdown 과정에서 버퍼를 비울 테니 큰 차이는 없을 테지만, 개인적인 호기심이었습니다.
 
-대개 수집 에이전트가 대상 애플리케이션으로부터 메트릭을 수집하여 전달하는 다음과 같은 구조가 일반적입니다.
+수집 에이전트가 대상 애플리케이션으로부터 메트릭을 수집하여 전달하는 다음과 같은 구조가 일반적입니다.
 
 <figure>
   <img src="./assets/metrics-flow.png", alt="메트릭 수집 흐름" />
@@ -130,9 +130,9 @@ Grafana에서 시각화된 결과를 확인합니다.
 
 ## 💭 마치며
 
-지금은 GitHub Actions를 이용하고 있지 않습니다. 1시간에 1번, 1분씩 소모해도 이어도 월 720분을 소모하게 되는데 수집 주기가 짧을 수록 CI 시간을 빠르게 소모하기 때문입니다. 여러 Exporter를 더 추가하게 될텐데, CI 시간이 남아나질 않을 것은 자명했죠.
+지금은 GitHub Actions를 이용하고 있지 않습니다. 1시간에 1번, 1분씩 소모해도 이어도 월 720분을 소모하게 되는데 수집 주기가 짧을 수록 CI 시간을 빠르게 소모하기 때문입니다. 여러 Exporter를 더 추가하게 될텐데, CI 시간이 남아나질 않을 것은 불 보듯 뻔했습니다.
 
-또 이러한 사용 방식은 [GitHub 약관](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features)에 위배될 가능성도 있습니다. 해석의 여지는 있겠지만요.
+또 이러한 사용 방식은 해석의 여지는 있으나 [GitHub 약관](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features)에 위배될 가능성도 있습니다.
 
 > If using GitHub-hosted runners, any other activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
 

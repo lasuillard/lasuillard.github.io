@@ -17,7 +17,7 @@ tags:
 
 ## 🤖 Google Apps Script
 
-[Apps Script](https://developers.google.com/apps-script) (이하 GAS)는 Google Drive에 의해 제공되는 클라우드 기반 자바스크립트 플랫폼입니다. Google 제품 전반에 걸쳐 손쉽게 연동되고 다양한 자동화 작업을 수행할 수 있습니다.
+[Google Apps Script](https://developers.google.com/apps-script) (이하 GAS)는 Google Drive에 의해 제공되는 클라우드 기반 자바스크립트 플랫폼입니다. Google 제품 전반에 걸쳐 손쉽게 연동되고 다양한 자동화 작업을 수행할 수 있습니다.
 
 ### 👍 장점
 
@@ -172,7 +172,7 @@ $ tree -a --gitignore -I .git --sort name --dirsfirst
 
 PNPM 연관 파일로 모노레포 패키지와 프로젝트 전역 의존 패키지 카탈로그를 관리합니다.
 
-개발에 TypeScript를 사용하고 변경 사항은 굉장히 사소한 것을 제외하고 모두 PR을 거칩니다. GitHub Actions 파이프라인을 거쳐 Prettier, ESLint로 코드 품질을 검사하고 Vitest로 자동화 테스트를 실행합니다. PR이 병합되면 [ESBuild](https://esbuild.github.io/)와 [tsup](https://github.com/egoist/tsup)로 빌드한 뒤 [clasp](https://github.com/google/CLASP) CLI로 Apps Script에 배포됩니다.
+개발에 TypeScript를 사용하고 변경 사항은 굉장히 사소한 것을 제외하고 모두 PR을 거칩니다. GitHub Actions 파이프라인을 거쳐 Prettier, ESLint로 코드 품질을 검사하고 Vitest로 자동화 테스트를 실행합니다. PR이 병합되면 [ESBuild](https://esbuild.github.io/)와 [tsup](https://github.com/egoist/tsup)으로 빌드한 뒤 [clasp](https://github.com/google/CLASP) CLI로 Apps Script에 배포됩니다.
 
 ## ⚙️ 설정 관리
 

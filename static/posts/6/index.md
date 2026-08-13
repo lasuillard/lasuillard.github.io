@@ -14,9 +14,7 @@ tags:
   - Railway
 ---
 
-이전에 블로그를 SvelteKit으로 만든 적이 있습니다. SvelteKit으로 작성한 마크다운 기반 블로그로, 처음에는 GitHub Pages에 배포하여 운영했었죠.
-
-나중에는 Cloudflare Workers로 옮겨가며 이런저런 실험도 하고 추가 기능도 구현해 나갔었지만, 점차 정적 웹 페이지의 한계 및 불편함으로 전환을 계속 고려하고 있었습니다.
+이전에 블로그를 SvelteKit으로 만든 적이 있습니다. SvelteKit으로 작성한 마크다운 기반 블로그로, 처음에는 GitHub Pages에 배포하여 운영했었죠. 나중에는 Cloudflare Workers로 옮겨가며 이런저런 실험도 하고 추가 기능도 구현해 나갔었지만, 점차 정적 웹 페이지의 한계 및 불편함으로 전환을 계속 고려하고 있었습니다.
 
 그리고 이번에 블로그를 Django로 완전히 다시 작성하게 되어 그 경험을 공유하려고 합니다.
 
@@ -40,10 +38,11 @@ tags:
 
 ## 🧰 테크 스택
 
-나름 고민 끝에 다음과 같은 스택을 구상했습니다.
+다음과 같은 스택을 구상했습니다.
 
-| 프로그래밍 언어                   | Python 3                                   |
+| 항목                              | 선택 기술                                       |
 | --------------------------------- | ------------------------------------------ |
+| 프로그래밍 언어                   | Python 3                                   |
 | 프레임워크                        | Django                                     |
 | 배포 환경                         | Railway                                    |
 | 데이터베이스                      | PostgreSQL                                 |
@@ -51,9 +50,14 @@ tags:
 | CI/CD                             | GitHub Actions                             |
 | 그 외                             | Tailwind CSS, DaisyUI, HTMX,  Pulumi, etc. |
 
+크게 특별할 것 없는 Django 기반 웹 프로젝트 구성입니다.
+
 - 별도의 분리된 FE 구성은 원하지 않았지만, Tailwind를 이용하기 위해 결국 프로젝트 내에 Node 프로젝트를 구성하게 되었습니다. 기존 블로그가 Tailwind + DaisyUI를 이용하고 있었기에 이번 마이그레이션 작업 크기를 줄이기 위해 가능한 많은 코드를 재사용하고자 했습니다.
+
 - 배포 환경은 기존 Cloudflare Workers에서 Railway로 옮겼습니다. Railway는 몇개월 전 우연히 접하게 된 이후 계속 눈여겨 보고 있었는데, 이번에 써볼만한 명분(?)이 생긴 셈입니다.
-- 정적 파일 호스팅은 AWS S3와 CloudFront를 활용했습니다. S3만 이용할 수도 있지만 최근 들어 Denial of Wallet Attack 사례를 자주 접하게 되면서 최소한의 보호 계층을 추가하고자 했습니다.
+
+- 정적 파일 호스팅은 AWS S3와 CloudFront를 활용했습니다. S3만 이용할 수도 있지만 최근 들어 DoW (Denial of Wallet) 피해 사례를 자주 접하게 되면서 최소한의 보호 계층을 추가하고자 했습니다.
+
 - 인프라 리소스는 별도의 코드 저장소에서 Pulumi를 활용하여 관리하고 있습니다. 블로그 외에도 제 개인 프로젝트 전반의 인프라를 관리하는 곳입니다.
 
 ## 🏗️ 컨텐츠 에디터
@@ -74,11 +78,11 @@ tags:
 
   ![커맨드 기능](./assets/command-feature.png)
 
-- ... 이 외에도 `ImageField` 미리보기, 탭, 색상 선택 및 WYSIWYG 위젯 등, 기능이 너무도 많아 모두 설명할 수는 없지만 작은 Django 어드민 라이브러리 10 ~ 20개 분량의 기능은 포함하고 있습니다. 또한 유명한 여러 라이브러리([django-import-export](https://github.com/django-import-export/django-import-export), [django-constance](https://github.com/jazzband/django-constance), [django-celery-beat](https://github.com/celery/django-celery-beat) 등)에 대한 지원도 포함합니다.
+이 외에도 `ImageField` 미리보기, 탭, 색상 선택 및 WYSIWYG 위젯 등, 기능이 너무도 많아 모두 설명할 수는 없지만 작은 Django 어드민 라이브러리 10 ~ 20개 분량의 기능은 포함하고 있습니다. 또한 유명한 여러 라이브러리([django-import-export](https://github.com/django-import-export/django-import-export), [django-constance](https://github.com/jazzband/django-constance), [django-celery-beat](https://github.com/celery/django-celery-beat) 등)에 대한 지원도 포함합니다.
 
 ### ✏️ 블로그 글 작성 및 관리
 
-블로그 글 작성과 관리를 위한 WYSIWYG 에디터로는 [TinyMCE](https://www.tiny.cloud/) ([django-tinymce](https://github.com/jazzband/django-tinymce))를 활용했습니다. 정적 및 미디어(첨부 파일, 이미지 등) 파일은 S3에 저장하고, CloudFront를 통해 제공합니다.
+블로그 글 작성과 관리를 위해 WYSIWYG 에디터로 [TinyMCE](https://www.tiny.cloud/) ([django-tinymce](https://github.com/jazzband/django-tinymce))를 선택했습니다. 정적 및 미디어(첨부 파일, 이미지 등) 파일은 S3에 저장하고, CloudFront를 통해 제공합니다.
 
 ![TinyMCE 에디터](./assets/tinymce-editor.png)
 
@@ -109,7 +113,7 @@ Django SSR만을 이용하여 웹 프로젝트를 진행한 것은 처음이었�
 
 ## 🛤️ Railway에 Django 애플리케이션 배포하기
 
-애플리케이션 및 데이터베이스는 Railway에 배포했습니다. Railway는 사용성 좋은 웹 기반 UI를 제공합니다. 쉽게 서비스를 배포하고 서로 연계할 수 있습니다. 흥미로운 점은 청구되는 비용은 CPU / 메모리 / 네트워크 이그레스 / 볼륨의 **실제** 사용량에 기반한다는 것입니다.
+애플리케이션 및 데이터베이스는 Railway에 배포했습니다. Railway는 사용성 좋은 웹 기반 UI를 제공합니다. 쉽게 서비스를 배포하고 서로 연계할 수 있습니다. 흥미로운 점은 청구되는 비용은 CPU, 메모리, 네트워크 이그레스, 볼륨의 **실제** 사용량에 기반한다는 것입니다.
 
 ![Railway 대시보드](./assets/railway-dashboard.png)
 
@@ -123,24 +127,32 @@ Django SSR만을 이용하여 웹 프로젝트를 진행한 것은 처음이었�
 
 ![서버리스 활성화 설정](./assets/railway-enable-serverless.png)
 
-**Infra-\*** 서비스는 Pulumi IaC를 통해 관리하는 일부 설정값(S3 버킷 이름, IAM 인증 정보 등)을 전달하기 위한 빈 중간 서비스로, [Railway 변수 참조 기능](https://docs.railway.com/reference/variables#reference-variables)으로 설정값을 참조하여 이용합니다. Pulumi를 통해 관리되는 인프라 리소스임을 명확히하고 애플리케이션에서 분리함으로써 서로 영향 범위를 최소화하기 위해 위함입니다.
+`Infra-*` 서비스는 Pulumi IaC를 통해 관리하는 일부 설정값(S3 버킷 이름, IAM 인증 정보 등)을 전달하기 위한 빈 중간 서비스로, [Railway 변수 참조 기능](https://docs.railway.com/reference/variables#reference-variables)으로 설정값을 참조하여 이용합니다. Pulumi를 통해 관리되는 인프라 리소스임을 명확히하고 애플리케이션에서 분리함으로써 서로 영향 범위를 최소화하기 위해 위함입니다.
 
 실제 서비스 재작성 중 발생한 비용은 0.5 USD에 불과했고, Celery를 추가로 구성한 지금은 월 4~5 USD정도 크레딧(Hobby 플랜에는 매달 $5의 크레딧 포함)을 사용하고 있습니다. 거기에 사용량 제한을 걸 수도 있어서 과도한 비용 발생을 막을 수 있습니다.
 
 ![Railway 사용 비용](./assets/railway-cost.png)
 
-### ⚠️ Railway 배포 시 고려사항
+### ⚠️ Railway의 단점
 
-Railway의 단점은 다음과 같습니다.
+Railway의 사소한 단점들은 다음과 같습니다.
 
-- 첫 번째로 공식 IaC Provider가 없다는 것입니다. Terraform 및 Pulumi Provider가 없기에 [railway-community-provider](https://registry.terraform.io/providers/terraform-community-providers/railway/latest/docs/resources/service)를 이용해야 합니다. Pulumi는 지원하지 않기 때문에 Pulumi에서 이용하려면 [Terraform Providers](https://www.pulumi.com/docs/iac/get-started/terraform/terraform-providers/) 브릿지를 이용해야 합니다.
-- 두 번째는 무료 사용자 플랜이 없습니다. 30일의 체험 기간 동안 $5의 크레딧을 제공하며 이는 테스트에 충분한 양이지만 이후에는 최소 $5/월(Hobby Plan) 비용을 지불해야 합니다. 굉장히 작은 서비스를 부담 없이 배포하고 싶으시다면 [Supabase](https://supabase.com/) 또한 고려해보세요. 꽤 괜찮은 무료 사용량을 제공합니다.
-- 세 번째는 빌드 / 배포 전후로 커스텀 가능한 부분이 많이 없다는 것입니다. 제 간단한 블로그 서비스를 배포하는 데에는 큰 문제는 없었지만, 복잡한 배포 라이프사이클을 요구하는 경우 설정에 좀 더 공을 들이거나 빌드 및 배포를 직접 구현해야 할 것 같네요.
+- 공식 IaC Provider 부재
+
+  Terraform 및 Pulumi Provider가 없기에 [railway-community-provider](https://registry.terraform.io/providers/terraform-community-providers/railway/latest/docs/resources/service)를 이용해야 합니다. Pulumi는 지원하지 않기 때문에 Pulumi에서 이용하려면 [Terraform Providers](https://www.pulumi.com/docs/iac/get-started/terraform/terraform-providers/) 브릿지를 이용해야 합니다.
+
+- 무료 사용자 플랜이 없음
+
+  30일의 체험 기간 동안 $5의 크레딧을 제공하며 이는 테스트에 충분한 양이지만 이후에는 최소 $5/월(Hobby Plan) 비용을 지불해야 합니다. 굉장히 작은 서비스를 부담 없이 배포하고 싶으시다면 [Supabase](https://supabase.com/) 또한 고려해보세요. 꽤 괜찮은 무료 사용량을 제공합니다.
+
+- 빌드 및 배포 전/후 제한적 커스텀
+
+  제 간단한 블로그 서비스를 배포하는 데에는 큰 문제는 없었지만, 복잡한 배포 라이프사이클을 요구하는 경우 설정에 좀 더 공을 들이거나 빌드 및 배포를 직접 구현해야 할 것 같네요.
 
 ## 💭 마치며
 
-사이트를 재작성하는 데에는 1달 정도 걸렸습니다. 생각해보면 Django SSR만으로 웹 사이트를 구현한 적이 없었습니다. 대학을 다니던 때에는 SPA 열풍이 불고 있었고, 저 또한 그 흐름에 휩쓸려 Django REST Framework와 Vue.js 2로 처음 웹 개발을 시작했던 기억이 납니다. 그 이후로 SSR을 쓸 일이 잘 없었습니다.
+사이트를 재작성하는 데에는 1달 정도 걸렸습니다. 생각해보면 Django SSR만으로 웹 사이트를 구현한 적이 없었습니다. 학부생 시절에는 SPA 열풍이 불고 있었고, 저 또한 그 흐름에 휩쓸려 Django REST Framework와 Vue.js 2로 처음 웹 개발을 시작했던 기억이 납니다. 그 이후로 SSR을 쓸 일이 거의 없었습니다. SPA가 표준 웹 개발 방식처럼 여겨졌고, SSR은 구식이라는 인식이 강했기 때문입니다.
 
-그리고  Django는 충분히 좋은 프레임워크라는 사실을 재차 확인하게 되었습니다. SSR을 활용하는 것은 편리했고 문제 해결을 위해 찾아볼 수 있는 참고 자료도 굉장히 많아 큰 도움이 되었습니다. 어드민을 통해 필요한 대부분의 기능은 쉽고 빠르게 구현할 수 있었고, Unfold를 통해 어드민의 부족한 부분을 보완할 수 있었습니다.
+또한 Django는 충분히 좋은 프레임워크라는 사실을 재차 확인하게 되었습니다. SSR은 직관적이고 단순했고 REST API의 정의 및 연동이 필요하지 않아 작업량이 크게 줄었습니다. 문제 해결을 위해 찾아볼 수 있는 참고 자료도 굉장히 많아 큰 도움이 되었습니다. 어드민을 통해 필요한 관리 기능을 쉽고 빠르게 구현할 수 있었고, Unfold를 통해 어드민의 아쉬운 부분들을 보완할 수 있었습니다.
 
 앞으로는 블로그 뿐만 아니라 개인적으로 이용하기 위한 여러 기능들을 구현하여 이용하려고 합니다.
