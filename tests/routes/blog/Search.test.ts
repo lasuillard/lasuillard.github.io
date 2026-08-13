@@ -41,14 +41,39 @@ it('shows matching results for given query', async ({ user }) => {
 
 	const resultsContainer = component.container.querySelector('ol.menu');
 	expect(resultsContainer).toBeTruthy();
-	expect(component.getByText('Uno terra errat')).toMatchInlineSnapshot(`
-		<a
-		  href="/blog/1-uno-terra-errat"
-		>
-		  Uno terra errat
-		</a>
-	`);
-	expect(component.getByText('Uno terra errat')).toBeTruthy();
+
+	const titleElement = component.getByText('Uno terra errat');
+	expect(titleElement).toBeTruthy();
+	expect(titleElement.tagName).toBe('SPAN');
+});
+
+it('highlights matching terms in the snippet', async ({ user }) => {
+	const testPost = Post.parse({
+		metadata: {
+			id: '1',
+			slug: 'uno-terra-errat',
+			title: 'Uno terra errat',
+			publicationDate: new Date(),
+			preview: '/posts/preview.png',
+			summary: 'A test summary',
+			tags: ['uno', 'terra', 'errat']
+		},
+		content:
+			'Lorem ipsum dolor sit amet with uniquephrase inside content. Nulla nec purus ut est fermentum aliquam.'
+	});
+	await initEngine([testPost]);
+	const component = render(Search);
+
+	const input = component.getByRole('textbox') as HTMLInputElement;
+	await user.click(input);
+	await user.keyboard('uniquephrase');
+	await tick();
+
+	// Check that the snippet container displays the text
+	const markElement = component.container.querySelector('mark');
+	expect(markElement).toBeTruthy();
+	expect(markElement?.textContent).toBe('uniquephrase');
+	expect(markElement?.className).toContain('text-primary');
 });
 
 it('shows no results for non-matching query', async ({ user }) => {

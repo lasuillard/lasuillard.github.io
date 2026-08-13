@@ -18,6 +18,94 @@
 	let isFocused = $state(false);
 	let activeIndex = $state(-1);
 
+	function getSnippetFragments(
+		content: string,
+		terms: string[],
+		snippetLength = 150
+	): { text: string; isMatch: boolean }[] {
+		if (!content) return [];
+
+		// Find the first matching term in content
+		let bestMatchIndex = -1;
+		let matchedTerm = '';
+
+		const lowerContent = content.toLowerCase();
+		for (const term of terms) {
+			const index = lowerContent.indexOf(term.toLowerCase());
+			if (index !== -1 && (bestMatchIndex === -1 || index < bestMatchIndex)) {
+				bestMatchIndex = index;
+				matchedTerm = term;
+			}
+		}
+
+		let text: string;
+		let start: number;
+		let end: number;
+
+		if (bestMatchIndex === -1) {
+			// Fallback to beginning of content
+			text = content.slice(0, snippetLength);
+			if (content.length > snippetLength) {
+				text += '...';
+			}
+		} else {
+			const matchLength = matchedTerm.length;
+			const idealBefore = Math.floor((snippetLength - matchLength) / 2);
+
+			start = Math.max(0, bestMatchIndex - idealBefore);
+			end = Math.min(content.length, start + snippetLength);
+
+			if (end === content.length) {
+				start = Math.max(0, end - snippetLength);
+			}
+
+			text = content.slice(start, end);
+			if (start > 0) {
+				text = '...' + text;
+			}
+			if (end < content.length) {
+				text = text + '...';
+			}
+		}
+
+		// Now split text into fragments based on terms
+		const sortedTerms = [...terms]
+			.filter((t) => t.trim() !== '')
+			.sort((a, b) => b.length - a.length);
+
+		if (sortedTerms.length === 0) {
+			return [{ text, isMatch: false }];
+		}
+
+		const escapedTerms = sortedTerms.map((term) => term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+		const regex = new RegExp(`(${escapedTerms.join('|')})`, 'gi');
+
+		const parts = text.split(regex);
+		const termSet = new Set(terms.map((t) => t.toLowerCase()));
+
+		return parts
+			.map((part) => ({
+				text: part,
+				isMatch: termSet.has(part.toLowerCase())
+			}))
+			.filter((part) => part.text !== '');
+	}
+
+	let processedResults = $derived(
+		searchResults.map((result) => {
+			const terms = result.terms || [];
+			const content = (result as any).content || '';
+			const snippetFragments = getSnippetFragments(content, terms, 150);
+			const res = result as any;
+			return {
+				id: res.id,
+				slug: res['metadata.slug'],
+				title: res['metadata.title'],
+				snippetFragments
+			};
+		})
+	);
+
 	function clearSearch() {
 		$searchText = '';
 		if (searchInput) {
@@ -71,13 +159,17 @@
 			return;
 		}
 
-		searchResults = searchEngine.search(value, { fuzzy: 0.15 });
-		searchResults.sort(
+		const results = searchEngine.search(value, {
+			fuzzy: (term) => (term.length > 3 ? 0.1 : false)
+		});
+		results.sort(
 			// FIXME: Get results type annotated
 			(a, b) =>
 				b['metadata.publicationDate'] - a['metadata.publicationDate'] ||
 				a['metadata.title'].localeCompare(b['metadata.title'])
 		);
+		searchResults = results.slice(0, 5);
+
 		console.debug(
 			`Searching for "${value}": ${quoteJoin(searchResults.map((result) => result.id))}`
 		);
@@ -121,7 +213,8 @@
 				</button>
 			</label>
 			<div
-				class="dropdown absolute top-[135%] right-0 z-1 w-full {$searchText.length > 0 && isFocused
+				class="dropdown absolute top-[135%] right-0 z-1 w-[20rem] max-w-[90vw] sm:w-[26rem] md:w-[32rem] {$searchText.length >
+					0 && isFocused
 					? 'dropdown-open'
 					: ''}"
 			>
@@ -130,11 +223,34 @@
 						<ol
 							class="menu dropdown-content bg-base-200 w-full space-y-2 rounded-xs shadow-xl hover:visible!"
 						>
-							{#each searchResults as result, i (result.id)}
-								<li class="font-bold {i === activeIndex ? 'bg-base-300' : ''}">
-									<a href="/blog/{result.id}-{result['metadata.slug']}"
-										>{result['metadata.title']}</a
+							{#each processedResults as result, i (result.id)}
+								<li class={i === activeIndex ? 'bg-base-300' : ''}>
+									<a
+										href="/blog/{result.id}-{result.slug}"
+										class="flex flex-col items-start gap-1 p-3 font-normal"
 									>
+										<span
+											class="text-base-content block w-full truncate text-left text-sm font-bold"
+										>
+											{result.title}
+										</span>
+										{#if result.snippetFragments && result.snippetFragments.length > 0}
+											<p
+												class="text-base-content/70 line-clamp-2 w-full text-left text-xs leading-relaxed font-normal"
+											>
+												{#each result.snippetFragments as fragment, idx (idx)}
+													{#if fragment.isMatch}
+														<mark
+															class="bg-primary/20 text-primary dark:text-primary-content rounded-xs px-0.5 font-semibold"
+															>{fragment.text}</mark
+														>
+													{:else}
+														{fragment.text}
+													{/if}
+												{/each}
+											</p>
+										{/if}
+									</a>
 								</li>
 							{/each}
 						</ol>

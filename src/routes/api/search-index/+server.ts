@@ -11,7 +11,13 @@ export const GET = async () => {
 	const miniSearch = new MiniSearch({
 		fields: ['metadata.slug', 'metadata.title', 'metadata.tags', 'content'],
 		idField: 'metadata.id',
-		storeFields: ['metadata.title', 'metadata.slug', 'metadata.publicationDate', 'metadata.tags'],
+		storeFields: [
+			'metadata.title',
+			'metadata.slug',
+			'metadata.publicationDate',
+			'metadata.tags',
+			'content'
+		],
 		extractField: (document: any, fieldName: string) => {
 			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
 		}
