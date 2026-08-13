@@ -11,11 +11,15 @@ tags:
   - Vitest
 ---
 
-평소 북마크와 하이라이트를 관리하기 위해 [Raindrop](https://raindrop.io/)을 이용하고 있습니다. 하지만 Chrome 북마크 동기화를 지원하지 않아 항상 아쉽다고 생각하고 있었습니다. Chrome 북마크를 이용하면 북마크 바에서 자주 사용하는 북마크를 바로 이용할 수 있고 검색 또한 훨씬 빠르기 때문입니다.
+평소 북마크와 웹 페이지 하이라이트를 [Raindrop](https://raindrop.io/)에서 관리하고 있습니다. 특정 기기나 브라우저에 종속되지 않고 태그를 비롯한 편리한 기능을 이용할 수 있으며, 북마크를 공유하거나 공개할 수도 있습니다.
 
-목마른 자가 우물을 파는 법이라고, 결국 Chrome 확장 프로그램을 직접 만들게 되었습니다. 하지만 Raindrop API를 이용하던 중 공식 API 문서에 많은 문제점을 발견하게 되었는데, API 명세 자체가 설명이 미흡하거나 실제 API 호출 결과와 다르기까지 했습니다. 차라리 직접 OpenAPI 스키마를 정의하는 편이 낫겠다는 생각이 들 정도였습니다.
+다만 아쉬운 점은 Chrome 북마크 동기화를 지원하지 않는다는 점입니다. Chrome 북마크를 이용하면 북마크 바에서 자주 사용하는 북마크를 바로 이용할 수 있고 검색 또한 훨씬 빠르며, [Albert](https://albertlauncher.github.io/)나 [Flow Launcher](https://www.flowlauncher.com/)와 같은 퀵 런처를 이용해 북마크를 바로 검색할 수도 있기 때문입니다.
 
-조금 생각해보니 직접 스키마를 정의해서 쓰는 것이 의외로 나쁘지 않은 생각인 듯 했습니다. 스키마를 한 번 만들어두면 언어를 막론하고 코드 생성기를 이용해 코드를 자동 생성할 수 있을 것이고, 다른 프로젝트에서도 쉽게 재사용할 수 있으니까요. 그렇게 만든 것이 [lasuillard/raindrop-client](https://github.com/lasuillard/raindrop-client)입니다.
+목마른 자가 우물을 파는 법이라고, 결국 Chrome 확장 프로그램을 직접 만들게 되었습니다. 하지만 Raindrop API를 이용하던 중 [공식 API 문서](https://developer.raindrop.io/)에서 많은 문제점을 발견하게 되었습니다. API 명세 자체가 설명이 미흡하거나, 실제 API 호출 결과와 다르기까지 했습니다.
+
+차라리 직접 OpenAPI 스키마를 정의하는 편이 낫겠다는 생각이 들 정도였습니다.
+
+조금 생각해보니 직접 스키마를 정의해서 쓰는 것이 의외로 나쁘지 않은 생각인 듯 했습니다. 스키마를 한 번 만들어두면 언어를 막론하고 코드 생성기를 이용해 코드를 자동 생성할 수 있을 것이고, 다른 프로젝트에서도 쉽게 재사용할 수 있습니다. 그렇게 만든 것이 [lasuillard/raindrop-client](https://github.com/lasuillard-s/raindrop-client)입니다.
 
 ## ❓ OpenAPI란?
 
@@ -23,7 +27,7 @@ tags:
 
 ![Swagger](./assets/swagger.png)
 
-Swagger는 OpenAPI 문서를 기반으로 자동 생성된 웹 기반 API 클라이언트의 대표적인 예시입니다. OpenAPI를 사용하면 여러 장점이 있습니다.
+Swagger는 OpenAPI 문서를 기반으로 자동 생성된 웹 기반 API 문서이자 클라이언트의 대표적인 예시입니다. OpenAPI를 사용하면 여러 장점이 있습니다.
 
 - 이해관계자간에 서로 소통하기 위한 정형화된 방법을 제공
 
@@ -41,9 +45,9 @@ OpenAPI를 활용하는 대표적인 Python 프레임워크는 [FastAPI](https:
 
 ### 🪛 OpenAPI Generator
 
-[OpenAPI Generator](https://openapi-generator.tech/)는 OpenAPI 스키마로부터 API 클라이언트 및 서버 코드를 생성하는 도구입니다. Mustache 템플릿 언어를 통해 [다양한 언어와 프레임워크를 지원](https://openapi-generator.tech/docs/generators)하며 사용자 정의 템플릿을 이용할 수도 있습니다. OpenAPI Generator로 생성된 코드 예시는 다음과 같습니다.
+[OpenAPI Generator](https://openapi-generator.tech/)는 OpenAPI 스키마로부터 API 클라이언트 및 서버 코드를 생성하는 도구입니다. [Mustache](https://mustache.github.io/) 템플릿 언어를 통해 [다양한 언어와 프레임워크를 지원](https://openapi-generator.tech/docs/generators)하며 사용자 정의 템플릿을 이용할 수도 있습니다. OpenAPI Generator로 생성된 코드 예시는 다음과 같습니다.
 
-```ts
+```typescript
 /**
 * AuthenticationApi - functional programming interface
 * @export
@@ -68,7 +72,7 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
 
 이렇게 생성된 코드는 다음과 같이 이용할 수 있습니다.
 
-```ts
+```typescript
 // Create Axios instance
 const instance = axios.create();
 const rateLimited = rateLimit(instance, { maxRPS: 5 });
@@ -86,7 +90,9 @@ console.log(response.data);
 
 ## 🧪 스키마 테스트하기
 
-OpenAPI 스키마를 가져다 쓰는 경우라면 스키마를 굳이 까다롭게 테스트할 필요가 없습니다. 보통 서버를 구현하는 측에서 테스트하기 때문입니다. 하지만 이번엔 조금 상황이 특별합니다. Raindrop에서 제공하는 OpenAPI 스키마가 없고 스키마를 직접 제3자인 제가 작성하기 때문입니다. 그래서 실제로 작성한 스키마의 요청과 응답이 예상대로인지 확인할 필요가 있습니다.
+OpenAPI 스키마를 가져다 쓰는 경우라면 스키마를 굳이 까다롭게 테스트할 필요가 없습니다. 보통 서버를 구현하는 측에서 테스트하기 때문입니다.
+
+하지만 이번엔 상황이 조금 특별합니다. Raindrop에서 제공하는 OpenAPI 스키마가 없고, 제3자인 제가 스키마를 직접 작성하기 때문입니다. 그래서 실제로 작성한 스키마의 요청과 응답이 예상대로인지 확인할 필요가 있습니다.
 
 - 동작(데이터) 테스트
 
@@ -106,7 +112,7 @@ OpenAPI 스키마를 가져다 쓰는 경우라면 스키마를 굳이 까다롭
 
 Schemathesis는 꽤나 매력적이었지만 최종적으로 이용할 수는 없었습니다.
 
-1. API Fuzzing을 이용하여 테스트 중 많은 API 호출을 보내게 됩니다. 직접 구축하고 관리하는 서버라면 괜찮겠지만 실 서비스에 대해 많은 API 호출을 보내는 것은 IP 또는 계정 차단, 레이트 제한 가능성이 있습니다.
+1. API Fuzzing을 이용하여 테스트 중 많은 API 호출을 보내게 됩니다. 직접 구축하고 관리하는 서버라면 괜찮겠지만, 실 서비스에 대해 많은 API 호출을 보내면 IP 또는 계정이 차단될 가능성이 있습니다.
 2. 실 서비스 대신 모의 서버(e.g. Mockoon)를 구성해서 테스트 데이터셋을 관리하고자 하였으나 너무 구성이 복잡해졌고 UI를 통한 데이터의 변경 및 갱신이 불편했습니다.
 3. Schemathesis를 커스터마이징하기 위해서는 Python을 이용해야 하는데 현재 프로젝트는 TypeScript를 이용하므로 언어를 추가하는 것은 구성을 필요 이상으로 복잡하게 만든다고 판단했습니다.
 
@@ -116,11 +122,11 @@ Schemathesis는 꽤나 매력적이었지만 최종적으로 이용할 수는 �
 
 결국 API 호출, 호출 내역을 캐싱하고 스냅샷을 이용해 기본 API 동작을 테스트하기로 했습니다. Python에서는 [pytest-recording](https://github.com/kiwicom/pytest-recording)을 이용하지만 Node에서도 비슷한 기능을 제공하는 [Polly.js](https://github.com/Netflix/pollyjs)를 찾을 수 있었습니다.
 
-Polly.js는 Netflix에서 공개한 오픈 소스로, HTTP 트래픽을 녹화, 재생 및 스텁(Stub)하는 기능을 제공합니다. JavaScript로 작성되어 있으며 특정 프레임워크에 의존하지 않는 독립적인 라이브러리입니다.
+Polly.js는 Netflix에서 공개한 오픈소스로, HTTP 트래픽을 녹화, 재생 및 스텁(Stub)하는 기능을 제공합니다. JavaScript로 작성되어 있으며 특정 프레임워크에 의존하지 않는 독립적인 라이브러리입니다.
 
 그리고 Vitest의 Fixture 기능을 이용해서 pytest와 거의 동일한 방식으로 여러 테스트 의존성 주입을 비교적 편하게 관리할 수 있습니다.
 
-```ts
+```typescript
 import NodeHTTPAdapter from '@pollyjs/adapter-node-http';
 import { Polly } from '@pollyjs/core';
 import FSPersister from '@pollyjs/persister-fs';
@@ -161,17 +167,19 @@ Polly.js가 요청을 분석해서 그 요청이 기존에 이미 녹화되어 �
 
 가능한 테스트 데이터 관리를 편하게 하기 위해 스냅샷으로부터 스키마 테스트가 가능하게 하고자 했습니다. 또한 임의의 JSON 문자열에 대해 타입 체크를 할 수 있는 방법을 찾지 못했기에 대안을 모색해야 했습니다.
 
-1.  스냅샷 생성 시 문자열이 아니라 객체를 그대로 삽입할 수 있도록 커스텀 스냅샷 구현을 작성
+- 커스텀 스냅샷 구현 작성
 
-    스냅샷 구현의 소스 코드를 뜯어보니 스냅샷을 삽입할 때 테스트 파일을 수정하게끔 구현되어 있었습니다. 조금 손보면 문자열이 아닌 객체를 그대로 저장하는 것 또한 가능해 보였습니다.
+  스냅샷 생성 시 문자열이 아니라 객체를 그대로 삽입할 수 있도록 구현
 
-2.  스냅샷 생성 중 타입 체크를 위한 테스트 파일을 동적으로 생성
+- 동적 타입 테스트 생성
 
-    테스트 라이브러리를 커스터마이징하기엔 너무 버거워질 것 같아 테스트를 생성하는 것이 훨씬 간단할 듯 했습니다.
+  스냅샷 생성 중 타입 체크를 위한 테스트 파일을 동적으로 생성
 
-구현과 관리를 단순히 하기 위에 후자를 택했습니다. 그리고 지금 사용중인 Vitest 테스트 프레임워크에서 스냅샷이 갱신될 때 동작을 주입하기 위해 Snapshot Serializer를 이용해야 했습니다.
+#### 💡 동적 타입 테스트 생성
 
-```ts
+구현과 관리를 단순히 하기 위에 후자를 택했습니다. 그리고 지금 사용중인 Vitest 테스트 프레임워크에서 스냅샷이 갱신될 때 동작을 주입하기 위해 (본래 API의 사용 목적은 아닌 듯 하지만, 다른 방도가 없었기에) Snapshot Serializer를 이용했습니다.
+
+```typescript
 export async function generateTypeTest(
 	{ task, expect }: { task: Task; expect: ExpectStatic },
 	use: Use<RegisterHook>
@@ -198,7 +206,7 @@ export async function generateTypeTest(
 
 여기에 테스트를 생성하는 코드를 삽입하여 타입 테스트를 동적으로 생성합니다.
 
-```ts
+```typescript
 function generateTest(dir: string, item: CreateTest): string {
 	const filepath = path.join(dir, `${item.testId}.test-d.ts`);
 	const content = `\
@@ -220,7 +228,7 @@ it('${item.testId}', () => {
 
 테스트가 실행되고 나면 아래와 같은 테스트 파일이 생성되며 커밋하여 소스 코드의 일부로 관리됩니다.
 
-```ts
+```typescript
 it('parseURL', async ({ client, expect, generateTypeTest }) => {
 	const response = await client.import.parseURL('https://example.com');
 
@@ -245,13 +253,10 @@ it('parseURL', async ({ client, expect, generateTypeTest }) => {
 
 먼저 단위 테스트 코드가 실행되어야 타입 테스트 코드가 생성되므로 두 테스트를 별도 과정으로 나누어 실행하게 됩니다.
 
-## 📡 정리하며
+## 💭 마치며
 
-OpenAPI 스키마의 관리 주체가 이번 경우처럼 서비스 제공자가 아닌 제3자인 이번 경우에는 고려해야 할 사항이 많았습니다. 스키마를 만들면 끝인 것이 아니라 지속적으로 변경 사항을 추적하기 위한 자동화도 고안해야 할 필요가 있구요.
+OpenAPI 스키마의 관리 주체가 서비스 제공자가 아닌 제3자인 이번 경우에는 고려해야 할 사항이 많았습니다. 스키마를 만들면 끝인 것이 아니라, 지속적으로 변경 사항을 추적하기 위한 자동화도 고안할 필요가 있습니다.
 
-raindrop-client는 Raindrop Sync for Chrome 프로젝트를 위해 만들어졌습니다. 이직 전 잠시 쉬던 중 시작했고 이직 후 짬을 내지 못해 프로젝트가 시작한 지 너무 오랜 기간 진전되지 못했지만 이제 기본적으로 동작하는 프로토타입을 만들기 위해 좀 더 많은 노력을 기울이고 있습니다. 일과 다른 공부로 바쁘지만 틈틈이 짬을 내려고 합니다.
+raindrop-client는 [Raindrop Sync for Chrome](https://github.com/lasuillard-s/raindrop-sync-chrome) 프로젝트를 위해 만들어졌습니다. 이직 전 잠시 쉬던 중 시작했고, 이직 후 짬을 내지 못해 프로젝트가 시작된 지 너무 오랜 기간 동안 진전되지 못했습니다.
 
-관련된 프로젝트는 모두 공개된 오픈 소스이니 관심이 있다면 둘러보시길 바랍니다.
-
-- [https://github.com/lasuillard/raindrop-sync-chrome](https://github.com/lasuillard/raindrop-sync-chrome)
-- [https://github.com/lasuillard/raindrop-client](https://github.com/lasuillard/raindrop-client)
+하지만 이제 기본적으로 동작하는 프로토타입을 만들기 위해 좀 더 많은 노력을 기울이고 있습니다. 일과 다른 공부로 바쁘지만, 틈틈이 짬을 내어 완성해 보려고 합니다.
