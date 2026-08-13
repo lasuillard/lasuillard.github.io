@@ -20,10 +20,12 @@
 
 	let currentURL = $derived(browser ? $page?.url?.href || window.location.href : '');
 	let qrDropdownDetails: HTMLDetailsElement | undefined = $state();
+	let isOpen = $state(false);
 
 	function handleClickOutside(event: MouseEvent) {
 		if (qrDropdownDetails?.open && !qrDropdownDetails.contains(event.target as Node)) {
 			qrDropdownDetails.removeAttribute('open');
+			isOpen = false;
 		}
 	}
 </script>
@@ -75,12 +77,18 @@
 						bind:this={qrDropdownDetails}
 						class="dropdown dropdown-end hidden md:inline-block"
 						data-testid="qr-dropdown"
+						ontoggle={() => {
+							isOpen = qrDropdownDetails?.open ?? false;
+						}}
 					>
 						<summary class="btn btn-circle btn-ghost" aria-label="QR Code">
 							<QRCodeIcon class="h-6 w-6" />
 						</summary>
 						<div
-							class="dropdown-content bg-base-100 border-base-200 rounded-box z-20 mt-2 flex flex-col items-center gap-2 border p-2.5 shadow-xl"
+							class={'dropdown-content rounded-box z-20 mt-2 flex flex-col items-center gap-2 transition-all duration-300 select-none ' +
+								(isOpen
+									? 'bg-base-100/95 border-base-200 scale-100 border p-2.5 opacity-100 shadow-xl backdrop-blur-xs'
+									: 'scale-95 border-transparent bg-transparent p-1 opacity-0 shadow-none backdrop-blur-none')}
 							style="width: 249px; min-width: 249px;"
 						>
 							<QRCode url={currentURL} width={213} />
