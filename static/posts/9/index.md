@@ -11,9 +11,11 @@ tags:
   - TypeScript
 ---
 
-반복되는 귀찮은 일에 지쳤던 적 있으신가요? 캘린더에서 지원되지 않는 음력 생일을 등록하느라 귀찮았던 일, 다시는 보지 않을 오래된 캘린더 일정을 삭제하는 일, 매일같이 어떤 웹 사이트에 로그인해서 알림을 확인하는 일... 누구나 매일, 매주, 매달 혹은 매년 반복하는 작업이 있을 겁니다. 필요하지만 간단한 작업일수록 귀찮은 법이죠. 저도 오랫동안 시달리던 귀찮은 작업들이 있었고, 벼르고 벼르다 이 귀찮은 일들을 자동화하고자 결심했습니다.
+반복되는 귀찮은 일에 지쳤던 적 있으신가요? 캘린더에서 지원되지 않는 음력 생일을 등록하느라 귀찮았던 일, 다시는 보지 않을 오래된 캘린더 일정을 삭제하는 일, 매일같이 어떤 웹 사이트에 로그인해서 알림을 확인하는 일...
 
-그리고 작업 자동화에는 Google Apps Script 만한 게 없었습니다. 저는 이메일(Gmail)부터 일정 관리(Google Calendar / Tasks), 문서 작업(Google Sheets / Docs), 파일 관리(Google Drive) 등 다양한 Google Workspace 제품을 이용하고 있는데, 대부분의 반복 작업도 이 위에서 이루어지기 때문입니다.
+누구나 매일, 매주, 매달 혹은 매년 반복하는 작업이 있을 겁니다. 필요하지만 간단한 작업일수록 귀찮은 법이죠. 저도 오랫동안 시달리던 귀찮은 작업들이 있었고, 벼르고 벼르다 이 귀찮은 일들을 자동화하고자 결심했습니다.
+
+그리고 작업 자동화에는 Google Apps Script 만한 게 없었습니다. 저는 이메일(Gmail)부터 일정 관리(Google Calendar / Tasks), 문서 작업(Google Sheets / Docs), 파일 관리(Google Drive) 등 다양한 Google Workspace 제품을 이용하고 있습니다. 대부분의 반복 작업도 이 환경 위에서 이루어지기 때문입니다.
 
 ## 🤖 Google Apps Script
 
@@ -57,7 +59,7 @@ tags:
 
   ![Apps Script 프로젝트](./assets/apps-script-project.png)
 
-  하지만 Apps Script 함수를 스크립트 에디터 밖에서 호출하는 등 일부 고급 기능을 이용하려면 사용자의 Google Cloud 프로젝트를 연결해야 합니다. 구성과 관리가 조금 번거로워질 뿐, 연결 자체로 별도 요금이 발생하지는 않습니다.
+  하지만 Apps Script 함수를 스크립트 에디터 밖에서 호출하는 등 일부 고급 기능을 이용하려면, 사용자의 Google Cloud 프로젝트를 연결해야 합니다. 구성과 관리가 조금 번거로워질 뿐, 연결 자체로 별도 요금이 발생하지는 않습니다.
 
 ## ☄️ 개발 환경 구성하기
 
@@ -172,13 +174,17 @@ $ tree -a --gitignore -I .git --sort name --dirsfirst
 
 PNPM 연관 파일로 모노레포 패키지와 프로젝트 전역 의존 패키지 카탈로그를 관리합니다.
 
-개발에 TypeScript를 사용하고 변경 사항은 굉장히 사소한 것을 제외하고 모두 PR을 거칩니다. GitHub Actions 파이프라인을 거쳐 Prettier, ESLint로 코드 품질을 검사하고 Vitest로 자동화 테스트를 실행합니다. PR이 병합되면 [ESBuild](https://esbuild.github.io/)와 [tsup](https://github.com/egoist/tsup)으로 빌드한 뒤 [clasp](https://github.com/google/CLASP) CLI로 Apps Script에 배포됩니다.
+개발에 TypeScript를 사용하고, 변경 사항은 굉장히 사소한 것을 제외하고 모두 PR을 거칩니다. GitHub Actions 파이프라인을 거쳐 Prettier, ESLint로 코드 품질을 검사하고 Vitest로 자동화 테스트를 실행합니다.
+
+PR이 병합되면 [ESBuild](https://esbuild.github.io/)와 [tsup](https://github.com/egoist/tsup)으로 빌드한 뒤, [clasp](https://github.com/google/CLASP) CLI로 Apps Script에 배포됩니다.
 
 ## ⚙️ 설정 관리
 
 프로젝트 설정은 속성 서비스 ([Properties Service](https://developers.google.com/apps-script/guides/properties))를 이용합니다. 내부용 / 개인용 스크립트 프로젝트에서 쉽고 빠르게 사용할 수 있어 좋은 선택입니다.![속성 서비스 설정](./assets/properties-service.png)
 
-하지만 매번 스크립트 설정에 가서 설정을 바꾸는 것은 귀찮기에 애드온으로 관리하기로 했습니다. 설정을 저장하기 전에 검증할 수도 있고, 작업 수동 실행 등 여러 편의 기능을 구현해서 쓸 수 있습니다. 다만 개인용 / 내부용 프로젝트가 아닌 대중에 공개될 프로젝트라면 스크립트 속성(`ScriptProperties`)을 불특정 다수에게 노출하고 수정 가능하게 하는 건 부적합합니다. `UserProperties`를 사용하세요.
+하지만 매번 스크립트 설정에 가서 설정을 바꾸는 것은 귀찮기에, 애드온으로 관리하기로 했습니다. 설정을 저장하기 전에 검증할 수도 있고, 작업 수동 실행 등 여러 편의 기능을 구현해서 쓸 수 있습니다.
+
+다만 개인용 / 내부용 프로젝트가 아닌 대중에 공개될 프로젝트라면 스크립트 속성(`ScriptProperties`)을 불특정 다수에게 노출하고 수정 가능하게 하는 건 부적합합니다. 이 경우에는 `UserProperties`가 권장됩니다.
 
 ![애드온 UI](./assets/addon-ui.png)
 
@@ -290,7 +296,9 @@ jobs:
 
 ## 🪝 배포 후 초기화 자동 실행하기
 
-`clasp run-function` 도구를 이용하여 배포 후 초기화(주로 트리거)를 자동 실행하고자 했으나 새 스크립트 프로젝트는 기본적으로 `scripts.run` API를 사용할 수 없다는 문제가 있었습니다. `scripts.run` API를 사용하고자 할 경우 사용자는 본인의 Google Cloud 프로젝트를 연결하고 여러 설정을 끝마쳐야 합니다.
+`clasp run-function` 도구를 이용하여 배포 후 초기화(주로 트리거)를 자동 실행하고자 했으나, 새 스크립트 프로젝트는 기본적으로 `scripts.run` API를 사용할 수 없다는 문제가 있었습니다.
+
+`scripts.run` API를 사용하고자 할 경우, 사용자는 본인의 Google Cloud 프로젝트를 연결하고 여러 설정을 끝마쳐야 합니다.
 
 1.  Google Cloud 프로젝트를 만들고 Apps Script API를 사용 설정합니다.
 
@@ -359,7 +367,7 @@ jobs:
 
     ![권한 요청](./assets/authorize.png)
 
-    다른 애드온이 필요한 모든 권한을 요청할 수도 있겠지만 각 스크립트 프로젝트가 독립된 경계를 유지하도록 남겨두면 언젠가 필요할 때 쉽게 프로젝트를 분리할 수도 있고, 디버깅도 용이할 것이라 생각되어 지금 구현을 유지하기로 했습니다.
+    다른 애드온이 필요한 모든 권한을 미리 요청할 수도 있겠지만, 각 스크립트 프로젝트가 독립된 경계를 유지하도록 남겨두면 언젠가 필요할 때 쉽게 프로젝트를 분리할 수도 있습니다. 디버깅 또한 용이할 것이라 생각되어 지금의 구현을 유지하기로 했습니다.
 
 ## 🖼️ 만들어 본 것들
 

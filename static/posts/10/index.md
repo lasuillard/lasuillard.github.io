@@ -9,7 +9,9 @@ tags:
   - Certification
 ---
 
-최근 클라우드 엔지니어링 직무 전환을 준비하고 있습니다. AWS에 대해 배울 겸 이직에 활용하기 위해 AWS 자격증을 준비하기로 결정했습니다. 시험 접수부터 합격 후 자격증 수령까지 2개월의 짧은 기록과 경험, 그리고 자잘한 팁에 대해 공유합니다.
+최근 클라우드 엔지니어링 직무 전환을 준비하고 있습니다. AWS에 대해 배울 겸, 이직에 활용하기 위해 AWS 자격증을 준비하기로 결정했습니다.
+
+시험 접수부터 합격 후 자격증 수령까지 2개월의 짧은 기록과 경험, 그리고 자잘한 팁에 대해 공유합니다.
 
 ## 🎓 AWS 자격증이란?
 
@@ -19,7 +21,7 @@ AWS 환경에서 시스템을 설계, 구현 및 관리하는 기술과 능력�
 
 ![시험 환경](./assets/exam-logo.png)
 
-저는 Associate 자격 없이 바로 Professional 시험에 응시했습니다. 이전 직장에서 1년 반 동안 AWS 인프라 운영을 제가 도맡다시피 했어서 괜찮지 않을까? 싶었는데 생각보다 훨씬 어려웠습니다.
+저는 Associate 자격 없이 바로 Professional 시험에 응시했습니다. 이전 직장에서 1년 반 동안 AWS 인프라 운영을 제가 도맡다시피 했어서 '괜찮지 않을까?' 싶었는데, 생각보다 훨씬 어려웠습니다.
 
 ## 📋 시험 접수하기
 
@@ -47,7 +49,9 @@ AWS는 시험 관리를 [Pearson](https://www.pearsonvue.com/us/en/test-takers.h
 
 저는 시험을 위해 Udemy에서 [Stephane Maarek의 강의](https://www.udemy.com/course/aws-solutions-architect-professional/) 1개와 실전 모의고사 2개([Stephane Maarek](https://www.udemy.com/course/practice-exam-aws-certified-solutions-architect-professional/), [Jon Bonso](https://www.udemy.com/course/aws-solutions-architect-professional-practice-exams-sap-c02/) 각 1개)를 구매했습니다. 기간은 2개월, 하루 2\~3시간 정도 강의를 듣다가 마지막 2\~3주에 모의고사와 오답 풀이를 중점으로 진행했습니다.
 
-모의고사는 실제 시험보다 어려운 편입니다. 일단 Stephane Maarek의 모의고사는 정말 어렵습니다. [AWS 공식 샘플 시험 문항](https://d1.awsstatic.com/ko_KR/training-and-certification/docs-sa-pro/AWS-Certified-Solutions-Architect-Professional_Sample-Questions.pdf)과 비교했을 때 지문이 장황한데다 선택지가 요구하는 지식이 굉장히 지엽적입니다. 구체적인 수치를 토대로 정답을 고르도록 하는 문제가 많습니다. Jon Bonso의 모의고사도 실제 시험보다 지문이 장황한 편입니다. 제 개인적인 체감으로는 공식 샘플 문제와 실제 시험의 분위기가 꽤 비슷했습니다.
+모의고사는 실제 시험보다 어려운 편입니다. 일단 Stephane Maarek의 모의고사는 정말 어렵습니다. [AWS 공식 샘플 시험 문항](https://d1.awsstatic.com/ko_KR/training-and-certification/docs-sa-pro/AWS-Certified-Solutions-Architect-Professional_Sample-Questions.pdf)과 비교했을 때 지문이 장황한 데다, 선택지가 요구하는 지식이 굉장히 지엽적입니다.
+
+구체적인 수치를 토대로 정답을 고르도록 하는 문제가 많습니다. Jon Bonso의 모의고사도 실제 시험보다 지문이 장황한 편입니다. 제 개인적인 체감으로는 공식 샘플 문제와 실제 시험의 분위기가 꽤 비슷했습니다.
 
 모의고사 결과는,
 
@@ -77,7 +81,9 @@ AWS Skill Builder에서도 시험을 준비할 수 있습니다. 구독 배지�
 
 2.  신분증 제시 (2개 이상)
 
-    시험 감독관님이 신분증을 2개 요구하셨고, 저는 여권과 운전면허증(국문)을 제시했습니다. 어떤 분은 깜빡하여 하나만 가져오신 듯 했고, 감독관님의 안내에 따라 신용/체크카드로 두 번째 신분증을 대신 제출하셨습니다.
+    시험 감독관님이 신분증을 2개 요구하셨고, 저는 여권과 운전면허증(국문)을 제시했습니다.
+
+    어떤 분은 깜빡하여 하나만 가져오신 듯했는데, 감독관님의 안내에 따라 신용/체크카드로 두 번째 신분증을 대신 제출하셨습니다.
 
     준비 전 찾아본 글에 따르면 하나만 가져가도 허용하는 경우가 있다고 했던 것 같은데, 감독관마다 다른 듯 하니 주의하시길 바랍니다.
 
