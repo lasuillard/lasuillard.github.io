@@ -27,11 +27,6 @@
 			return;
 		}
 
-		import('mermaid').then(({ default: mermaid }) => {
-			console.debug('Mermaid loaded. Running...');
-			mermaid.run();
-		});
-
 		// Monkey-patching footnote label (add emoji and translate)
 		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
 		if (footnoteLabel) {
