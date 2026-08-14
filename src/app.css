@@ -36,6 +36,30 @@
 		font-size: 0.85em;
 		display: inline-block;
 	}
+	/* Center figure caption */
+	.prose figure figcaption {
+		@apply text-center;
+	}
+	/* Center image and add shadow for visual recognition */
+	.prose img {
+		@apply mx-auto shadow-md;
+	}
+	/* Visual spacing above headings when scrolling */
+	.prose :where(h1, h2, h3, h4, h5, h6) {
+		@apply scroll-mt-16 md:scroll-mt-24 lg:scroll-mt-32;
+	}
+	/* Show '#' on the left of heading links when hover */
+	.prose :where(h1, h2, h3, h4, h5, h6) > a:hover {
+		@apply before:text-secondary before:absolute before:-ml-6 before:underline before:underline-offset-4 before:content-['#'];
+	}
+	/* Pre formatting */
+	.prose pre {
+		@apply m-2 p-0 text-wrap;
+	}
+	/* Center Mermaid diagram horizontally */
+	.prose pre.mermaid svg {
+		@apply mx-auto p-2;
+	}
 	/* Customize scrollbar */
 	::-webkit-scrollbar {
 		@apply h-2 w-2;

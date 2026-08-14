@@ -105,34 +105,3 @@
 		</div>
 	</div>
 </div>
-
-<style lang="postcss">
-	@reference "../../../app.css";
-
-	article {
-		& :global(figure figcaption) {
-			@apply text-center;
-		}
-
-		/* Center image and add some shadow for visual recognition */
-		& :global(img) {
-			@apply mx-auto shadow-md;
-		}
-		/* When scroll, ensure some visual spacing above headings */
-		& :global(:where(h1, h2, h3, h4, h5, h6)) {
-			@apply scroll-mt-16 md:scroll-mt-24 lg:scroll-mt-32;
-		}
-		/* Show '#' on the left of heading links when hover */
-		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
-			@apply before:text-secondary before:absolute before:-ml-6 before:underline before:underline-offset-4 before:content-['#'];
-		}
-		/* Add some shadow for visual recognition */
-		& :global(pre) {
-			@apply m-2 p-0 text-wrap;
-		}
-		/* Center Mermaid diagram horizontally */
-		& :global(pre.mermaid svg) {
-			@apply mx-auto p-2;
-		}
-	}
-</style>
