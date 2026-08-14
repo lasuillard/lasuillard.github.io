@@ -27,14 +27,14 @@
 	}
 	/* No underline for heading links (like autolinked headings) */
 	.prose :where(h1, h2, h3, h4, h5, h6) a {
-    @apply !no-underline;
+		@apply no-underline!;
 	}
 	/* Link icon for post content links */
 	article.prose :where(a[href^='http']):not(:where(h1, h2, h3, h4, h5, h6) > a)::before {
 		content: '🔗';
 		margin-right: 0.15em;
 		font-size: 0.85em;
-    display: inline-block;
+		display: inline-block;
 	}
 	/* Customize scrollbar */
 	::-webkit-scrollbar {
