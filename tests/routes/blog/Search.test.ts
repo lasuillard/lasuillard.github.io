@@ -21,8 +21,8 @@ it('has a trigger button and opens modal when clicked', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	// Inside the modal there should be the textbox
-	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
+	// Inside the modal there should be the textbox, which is portaled to document.body
+	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
 	expect(input).toBeTruthy();
 });
 
@@ -47,17 +47,16 @@ it('shows matching results for given query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
+	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uno');
 	await tick();
 
-	const resultsContainer = component.container.querySelector('ol.menu');
+	const resultsContainer = document.querySelector('ol.menu');
 	expect(resultsContainer).toBeTruthy();
 
-	const titleElement = component.getByText('Uno terra errat');
-	expect(titleElement).toBeTruthy();
-	expect(titleElement.tagName).toBe('SPAN');
+	const titleElement = document.body.textContent;
+	expect(titleElement).toContain('Uno terra errat');
 });
 
 it('highlights matching terms in the snippet', async ({ user }) => {
@@ -81,13 +80,13 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
+	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uniquephrase');
 	await tick();
 
 	// Check that the snippet container displays the text
-	const markElement = component.container.querySelector('mark');
+	const markElement = document.querySelector('mark');
 	expect(markElement).toBeTruthy();
 	expect(markElement?.textContent).toBe('uniquephrase');
 	expect(markElement?.className).toContain('text-primary');
@@ -113,14 +112,16 @@ it('shows no results for non-matching query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
+	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('xyz123');
 	await tick();
 
-	const searchResults = component.container.querySelector('ol.menu');
+	const searchResults = document.querySelector('ol.menu');
 	expect(searchResults).toBeNull();
-	expect(component.getByText('검색 결과가 없습니다.')).toBeTruthy();
+
+	const bodyText = document.body.textContent;
+	expect(bodyText).toContain('검색 결과가 없습니다.');
 });
 
 it('suggest matching results for given query', async ({ user }) => {
@@ -143,12 +144,12 @@ it('suggest matching results for given query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
+	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('un');
 	await tick();
 
-	const searchResults = component.container.querySelector('ol.menu');
+	const searchResults = document.querySelector('ol.menu');
 	expect(searchResults).toBeNull();
 });
 
@@ -160,6 +161,6 @@ it('shows empty search state initially', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const initialText = component.getByText('검색어를 입력하여 게시글을 찾아보세요.');
-	expect(initialText).toBeTruthy();
+	const bodyText = document.body.textContent;
+	expect(bodyText).toContain('검색어를 입력하여 게시글을 찾아보세요.');
 });

@@ -159,6 +159,18 @@
 		}
 	}
 
+	// Svelte action to teleport the modal elements to document.body
+	function portal(node: HTMLElement) {
+		document.body.appendChild(node);
+		return {
+			destroy() {
+				if (node.parentNode) {
+					node.parentNode.removeChild(node);
+				}
+			}
+		};
+	}
+
 	// Auto-focus input when modal opens
 	$effect(() => {
 		if (isModalOpen && modalInput) {
@@ -209,7 +221,7 @@
 					`No search result, making suggestion: ${quoteJoin(
 						suggestions.map((value) => value.suggestion)
 					)}`
-				);
+					);
 			}
 		});
 	});
@@ -220,7 +232,7 @@
 <div data-testid="search" class="mb-2 w-full">
 	<button
 		onclick={openModal}
-		class="input input-bordered text-base-content/40 flex h-10 w-full items-center gap-2 text-left font-light"
+		class="input input-bordered flex h-10 w-full items-center gap-2 text-left text-base-content/40 font-light"
 		aria-label="검색"
 	>
 		<SearchIcon class="h-4 w-4 stroke-gray-400" />
@@ -230,7 +242,8 @@
 
 	{#if isModalOpen}
 		<div
-			class="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-[10vh] backdrop-blur-xs"
+			use:portal
+			class="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-xs flex justify-center items-start pt-[15vh] p-4"
 			onclick={(e) => {
 				if (e.target === e.currentTarget) {
 					closeModal();
@@ -247,18 +260,18 @@
 			data-testid="search-modal"
 		>
 			<div
-				class="bg-base-200 border-base-300 flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border shadow-2xl"
+				class="bg-base-200 w-full max-w-2xl rounded-lg shadow-2xl flex flex-col overflow-hidden border border-base-300"
 			>
 				<!-- Search bar -->
-				<div class="border-base-300 flex items-center gap-3 border-b p-4">
-					<SearchIcon class="h-5 w-5 flex-shrink-0 stroke-gray-400" />
+				<div class="p-4 border-b border-base-300 flex items-center gap-3">
+					<SearchIcon class="h-5 w-5 stroke-gray-400 flex-shrink-0" />
 					<input
 						bind:this={modalInput}
 						type="text"
 						placeholder="검색어를 입력하세요..."
 						bind:value={query}
 						onkeydown={handleKeydown}
-						class="text-base-content grow bg-transparent text-base outline-none placeholder:font-light"
+						class="grow bg-transparent outline-none text-base text-base-content placeholder:font-light"
 					/>
 					<kbd class="kbd kbd-xs">ESC</kbd>
 					<button
@@ -275,27 +288,27 @@
 				<div class="max-h-[60vh] overflow-y-auto p-2" role="searchbox">
 					{#if query}
 						{#if processedResults.length > 0}
-							<ol class="menu w-full gap-1 p-0">
+							<ol class="menu w-full p-0 gap-1">
 								{#each processedResults as result, i (result.id)}
-									<li class="{i === activeIndex ? 'bg-base-300' : ''} overflow-hidden rounded-md">
+									<li
+										class="{i === activeIndex ? 'bg-base-300' : ''} rounded-md overflow-hidden"
+									>
 										<a
 											href="/blog/{result.id}-{result.slug}"
 											onclick={closeModal}
 											class="flex flex-col items-start gap-1 p-3 font-normal"
 										>
-											<span
-												class="text-base-content block w-full truncate text-left text-sm font-bold"
-											>
+											<span class="text-sm font-bold text-base-content block w-full text-left truncate">
 												{result.title}
 											</span>
 											{#if result.snippetFragments && result.snippetFragments.length > 0}
 												<p
-													class="text-base-content/70 line-clamp-2 w-full text-left text-xs leading-relaxed font-normal"
+													class="text-xs text-base-content/70 line-clamp-2 text-left w-full leading-relaxed font-normal"
 												>
 													{#each result.snippetFragments as fragment, idx (idx)}
 														{#if fragment.isMatch}
 															<mark
-																class="bg-primary/20 text-primary dark:text-primary-content rounded-xs px-0.5 font-semibold"
+																class="bg-primary/20 text-primary dark:text-primary-content font-semibold rounded-xs px-0.5"
 																>{fragment.text}</mark
 															>
 														{:else}
@@ -309,12 +322,12 @@
 								{/each}
 							</ol>
 						{:else}
-							<div class="flex flex-col items-center justify-center px-4 py-10 text-center">
-								<h2 class="text-base-content/70 text-lg font-semibold">검색 결과가 없습니다.</h2>
-								<p class="text-base-content/50 mt-1 text-sm">추천 검색어:</p>
+							<div class="flex flex-col items-center justify-center py-10 px-4 text-center">
+								<h2 class="text-lg font-semibold text-base-content/70">검색 결과가 없습니다.</h2>
+								<p class="text-sm text-base-content/50 mt-1">추천 검색어:</p>
 								{#if suggestions.length > 0}
 									<button
-										class="btn btn-ghost btn-sm text-primary mt-2 font-normal"
+										class="btn btn-ghost btn-sm mt-2 text-primary font-normal"
 										onclick={() => {
 											query = suggestions[0].suggestion;
 										}}
@@ -322,13 +335,13 @@
 										{suggestions[0].suggestion}
 									</button>
 								{:else}
-									<p class="text-base-content/40 mt-1 text-sm">...</p>
+									<p class="text-sm text-base-content/40 mt-1">...</p>
 								{/if}
 							</div>
 						{/if}
 					{:else}
-						<div class="text-base-content/40 flex flex-col items-center justify-center py-12">
-							<SearchIcon class="stroke-base-content/30 mb-2 h-10 w-10" />
+						<div class="flex flex-col items-center justify-center py-12 text-base-content/40">
+							<SearchIcon class="h-10 w-10 stroke-base-content/30 mb-2" />
 							<p class="text-sm font-light">검색어를 입력하여 게시글을 찾아보세요.</p>
 						</div>
 					{/if}
