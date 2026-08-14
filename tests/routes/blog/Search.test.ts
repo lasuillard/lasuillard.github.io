@@ -22,7 +22,9 @@ it('has a trigger button and opens modal when clicked', async ({ user }) => {
 	await tick();
 
 	// Inside the modal there should be the textbox, which is portaled to document.body
-	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
+	const input = document.querySelector(
+		'input[placeholder="검색어를 입력하세요..."]'
+	) as HTMLInputElement;
 	expect(input).toBeTruthy();
 });
 
@@ -47,7 +49,9 @@ it('shows matching results for given query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
+	const input = document.querySelector(
+		'input[placeholder="검색어를 입력하세요..."]'
+	) as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uno');
 	await tick();
@@ -80,7 +84,9 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
+	const input = document.querySelector(
+		'input[placeholder="검색어를 입력하세요..."]'
+	) as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uniquephrase');
 	await tick();
@@ -112,7 +118,9 @@ it('shows no results for non-matching query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
+	const input = document.querySelector(
+		'input[placeholder="검색어를 입력하세요..."]'
+	) as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('xyz123');
 	await tick();
@@ -144,7 +152,9 @@ it('suggest matching results for given query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector('input[placeholder="검색어를 입력하세요..."]') as HTMLInputElement;
+	const input = document.querySelector(
+		'input[placeholder="검색어를 입력하세요..."]'
+	) as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('un');
 	await tick();
