@@ -1,9 +1,14 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import MarkdownSnippet from '$components/content/MarkdownSnippet.svelte';
 	import SearchIcon from '$components/icon/Search.svelte';
 	import XMarkIcon from '$components/icon/XMark.svelte';
-	import { getEngine } from '$lib/search';
+	import {
+		countTermOccurrences,
+		getEngine,
+		getExcerpt,
+		getSuggestions,
+		performSearch
+	} from '$lib/search';
 	import { route } from '$lib/urls';
 	import { quoteJoin } from '$lib/utils';
 	import type { SearchResult, Suggestion } from 'minisearch';
@@ -168,17 +173,7 @@
 			return;
 		}
 
-		const results = searchEngine.search(value, {
-			fuzzy: 0.2,
-			combineWith: 'AND'
-		});
-		results.sort(
-			(a: any, b: any) =>
-				b['metadata.publicationDate'] - a['metadata.publicationDate'] ||
-				b.score - a.score ||
-				a['metadata.title'].localeCompare(b['metadata.title'])
-		);
-		const slicedResults = results.slice(0, 5);
+		const slicedResults = performSearch(value, searchEngine);
 
 		untrack(() => {
 			searchResults = slicedResults;
@@ -189,28 +184,7 @@
 			);
 
 			if (!slicedResults.length) {
-				let rawSuggestions = searchEngine.autoSuggest(value, { fuzzy: 0.2 });
-				rawSuggestions.sort((a, b) => b.score - a.score);
-
-				const finalSuggestions: typeof rawSuggestions = [];
-				for (const s of rawSuggestions) {
-					// Single words only
-					if (s.suggestion.trim().includes(' ')) continue;
-
-					// Prefix-based deduplication to avoid particle spam (e.g. github, github는, github에)
-					const isDuplicate = finalSuggestions.some(
-						(existing) =>
-							s.suggestion.startsWith(existing.suggestion) ||
-							existing.suggestion.startsWith(s.suggestion)
-					);
-
-					if (!isDuplicate) {
-						finalSuggestions.push(s);
-					}
-					if (finalSuggestions.length >= 5) break;
-				}
-
-				suggestions = finalSuggestions;
+				suggestions = getSuggestions(value, searchEngine);
 				console.debug(
 					`No search result, making suggestion: ${quoteJoin(
 						suggestions.map((value) => value.suggestion)
@@ -266,7 +240,8 @@
 						onkeydown={handleKeydown}
 						class="text-base-content grow bg-transparent text-base outline-none placeholder:font-light"
 					/>
-					<kbd class="kbd kbd-xs">ESC</kbd>
+					<kbd class="kbd kbd-xs shrink-0">Tab</kbd>
+					<kbd class="kbd kbd-xs shrink-0">ESC</kbd>
 					<button
 						type="button"
 						aria-label="Close"
@@ -282,8 +257,12 @@
 				<div class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-[65vh]" role="searchbox">
 					{#if query}
 						{#if processedResults.length > 0}
-							<ul bind:this={resultsList} class="flex w-full flex-col gap-1 p-0">
+							<ul bind:this={resultsList} class="flex w-full flex-col p-0">
 								{#each processedResults as result, i (result.id)}
+									{@const searchTerms = Array.from(
+										new Set([...result.terms, ...query.split(/\s+/), query.trim()])
+									)}
+									{@const matchCount = countTermOccurrences(result.rawContent, searchTerms)}
 									<li
 										class="{i === activeIndex
 											? 'bg-base-300'
@@ -315,18 +294,25 @@
 											}}
 											class="flex w-full cursor-pointer flex-col items-start gap-1 p-3 text-left font-normal"
 										>
-											<span class="text-base-content block w-full text-left text-sm font-bold">
-												{result.title}
-											</span>
+											<div class="flex w-full items-center justify-between gap-2">
+												<span
+													class="text-base-content block grow text-left text-base font-bold tracking-tight"
+												>
+													{result.title}
+												</span>
+												{#if matchCount > 0}
+													<span class="badge badge-ghost badge-xs shrink-0 font-normal">
+														{matchCount}개 일치
+													</span>
+												{/if}
+											</div>
 											{#if result.rawContent}
-												<div class="pointer-events-none w-full">
-													<MarkdownSnippet
-														rawMarkdown={result.rawContent}
-														terms={Array.from(
-															new Set([...result.terms, ...query.split(/\s+/), query.trim()])
-														)}
-													/>
-												</div>
+												<p
+													class="text-base-content/70 mt-1 line-clamp-3 w-full text-left text-xs leading-relaxed"
+												>
+													<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+													{@html getExcerpt(result.rawContent, searchTerms)}
+												</p>
 											{/if}
 										</div>
 									</li>

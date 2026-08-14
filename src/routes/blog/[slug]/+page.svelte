@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Comment from './Comment.svelte';
+	import Markdown from '$components/content/Markdown.svelte';
 	import TagBadge from '$components/content/TagBadge.svelte';
 	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
-	import Markdown from '$components/content/Markdown.svelte';
-	import Toc from './Toc.svelte';
-	import SeriesWidget from './SeriesWidget.svelte';
 	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
+	import Comment from './Comment.svelte';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
+	import SeriesWidget from './SeriesWidget.svelte';
+	import Toc from './Toc.svelte';
 
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
@@ -56,13 +56,13 @@
 
 <div>
 	<div class="flex">
-		<div class="mx-auto max-w-none lg:max-w-[50rem]">
+		<div class="mx-auto max-w-none lg:max-w-200">
 			<div class="mt-6 flex flex-col items-center gap-4 sm:gap-6">
 				{#if metadata.preview}
 					<img
 						src={metadata.preview}
 						alt="Preview"
-						class="h-auto w-full flex-shrink-0 rounded-lg object-contain sm:h-48 sm:w-48"
+						class="h-auto w-full shrink-0 rounded-lg object-contain sm:h-48 sm:w-48"
 					/>
 				{/if}
 				<div class="flex w-full flex-1 flex-col items-center">
@@ -94,7 +94,7 @@
 				<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
 			{/if}
 			<div bind:this={contentWrapper}>
-				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
+				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none wrap-break-word">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
