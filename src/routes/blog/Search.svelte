@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { untrack } from 'svelte';
 	import SearchIcon from '$components/icon/Search.svelte';
 	import XMarkIcon from '$components/icon/XMark.svelte';
 	import { getEngine } from '$lib/search';
@@ -6,17 +7,15 @@
 	import { route } from '$lib/urls';
 	import { goto } from '$app/navigation';
 	import type { SearchResult, Suggestion } from 'minisearch';
-	import { writable } from 'svelte/store';
 
 	const searchEngine = getEngine();
 
-	let searchInput: HTMLInputElement;
-	let searchText = writable('');
+	let isModalOpen = $state(false);
+	let query = $state('');
 	let searchResults: SearchResult[] = $state([]);
 	let suggestions: Suggestion[] = $state([]);
-
-	let isFocused = $state(false);
 	let activeIndex = $state(-1);
+	let modalInput: HTMLInputElement | undefined = $state();
 
 	function getSnippetFragments(
 		content: string,
@@ -106,33 +105,42 @@
 		})
 	);
 
-	function clearSearch() {
-		$searchText = '';
-		if (searchInput) {
-			searchInput.focus();
-		}
-	}
-
-	// Reset active index when results change
-	$effect(() => {
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		searchResults; // track
+	function openModal() {
+		isModalOpen = true;
 		activeIndex = -1;
-	});
-
-	function handleFocusIn() {
-		isFocused = true;
 	}
 
-	function handleFocusOut(e: FocusEvent) {
-		const container = e.currentTarget as HTMLElement;
-		if (!container.contains(e.relatedTarget as Node)) {
-			isFocused = false;
+	function closeModal() {
+		isModalOpen = false;
+		query = '';
+		activeIndex = -1;
+	}
+
+	function handleGlobalKeydown(e: KeyboardEvent) {
+		const isTyping = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName);
+		if (isTyping) {
+			if (e.key === 'Escape' && isModalOpen) {
+				closeModal();
+				e.preventDefault();
+			}
+			return;
+		}
+
+		if ((e.key === 'k' && (e.ctrlKey || e.metaKey)) || e.key === '/') {
+			e.preventDefault();
+			openModal();
 		}
 	}
 
 	function handleKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape') {
+			closeModal();
+			e.preventDefault();
+			return;
+		}
+
 		if (!searchResults.length) return;
+
 		if (e.key === 'ArrowDown') {
 			e.preventDefault();
 			activeIndex = Math.min(activeIndex + 1, searchResults.length - 1);
@@ -142,15 +150,32 @@
 		} else if (e.key === 'Enter' && activeIndex >= 0) {
 			e.preventDefault();
 			const result = searchResults[activeIndex];
-			goto(route('/blog/[slug]', { params: { slug: `${result.id}-${result['metadata.slug']}` } }));
-		} else if (e.key === 'Escape') {
-			isFocused = false;
+			closeModal();
+			goto(
+				route('/blog/[slug]', {
+					params: { slug: `${result.id}-${result.slug || result['metadata.slug']}` }
+				})
+			);
 		}
 	}
 
-	searchText.subscribe((value) => {
+	// Auto-focus input when modal opens
+	$effect(() => {
+		if (isModalOpen && modalInput) {
+			untrack(() => {
+				modalInput?.focus();
+			});
+		}
+	});
+
+	// Reactive search engine query handler
+	$effect(() => {
+		const value = query;
 		if (!value) {
-			searchResults = [];
+			untrack(() => {
+				searchResults = [];
+				activeIndex = -1;
+			});
 			return;
 		}
 
@@ -168,110 +193,147 @@
 				b['metadata.publicationDate'] - a['metadata.publicationDate'] ||
 				a['metadata.title'].localeCompare(b['metadata.title'])
 		);
-		searchResults = results.slice(0, 5);
+		const slicedResults = results.slice(0, 5);
 
-		console.debug(
-			`Searching for "${value}": ${quoteJoin(searchResults.map((result) => result.id))}`
-		);
+		untrack(() => {
+			searchResults = slicedResults;
+			activeIndex = -1;
 
-		if (!searchResults.length) {
-			suggestions = searchEngine.autoSuggest(value, { fuzzy: 0.25 });
 			console.debug(
-				`No search result, making suggestion: ${quoteJoin(
-					suggestions.map((value) => value.suggestion)
-				)}`
+				`Searching for "${value}": ${quoteJoin(slicedResults.map((result) => result.id))}`
 			);
-		}
+
+			if (!slicedResults.length) {
+				suggestions = searchEngine.autoSuggest(value, { fuzzy: 0.25 });
+				console.debug(
+					`No search result, making suggestion: ${quoteJoin(
+						suggestions.map((value) => value.suggestion)
+					)}`
+				);
+			}
+		});
 	});
 </script>
 
-<div data-testid="search" class="mb-2 w-64">
-	<div
-		class="group relative flex items-center space-x-2"
-		onfocusin={handleFocusIn}
-		onfocusout={handleFocusOut}
+<svelte:window onkeydown={handleGlobalKeydown} />
+
+<div data-testid="search" class="mb-2 w-full">
+	<button
+		onclick={openModal}
+		class="input input-bordered text-base-content/40 flex h-10 w-full items-center gap-2 text-left font-light"
+		aria-label="검색"
 	>
-		<div class="w-full" role="search">
-			<!-- TODO: Auto-fill suggestion (tab key?) -->
-			<label class="input input-bordered flex h-10 items-center gap-2">
-				<SearchIcon class="h-4 w-4 stroke-gray-400" />
-				<input
-					bind:this={searchInput}
-					type="text"
-					placeholder="..."
-					bind:value={$searchText}
-					onkeydown={handleKeydown}
-					class="grow placeholder:font-light"
-				/>
-				<button
-					type="button"
-					aria-label="Clear search"
-					class="btn btn-ghost btn-circle btn-xs"
-					onclick={clearSearch}
-				>
-					<XMarkIcon class="h-4 w-4" />
-				</button>
-			</label>
+		<SearchIcon class="h-4 w-4 stroke-gray-400" />
+		<span>검색...</span>
+		<kbd class="kbd kbd-xs ml-auto">Ctrl + K</kbd>
+	</button>
+
+	{#if isModalOpen}
+		<div
+			class="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-4 pt-[10vh] backdrop-blur-xs"
+			onclick={(e) => {
+				if (e.target === e.currentTarget) {
+					closeModal();
+				}
+			}}
+			onkeydown={(e) => {
+				if (e.key === 'Escape') {
+					closeModal();
+				}
+			}}
+			tabindex="-1"
+			role="dialog"
+			aria-modal="true"
+			data-testid="search-modal"
+		>
 			<div
-				class="dropdown absolute top-[135%] right-0 z-1 w-[20rem] max-w-[90vw] sm:w-[26rem] md:w-[32rem] {$searchText.length >
-					0 && isFocused
-					? 'dropdown-open'
-					: ''}"
+				class="bg-base-200 border-base-300 flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border shadow-2xl"
 			>
-				{#if $searchText}
-					<div role="searchbox">
-						<ol
-							class="menu dropdown-content bg-base-200 w-full space-y-2 rounded-xs shadow-xl hover:visible!"
-						>
-							{#each processedResults as result, i (result.id)}
-								<li class={i === activeIndex ? 'bg-base-300' : ''}>
-									<a
-										href="/blog/{result.id}-{result.slug}"
-										class="flex flex-col items-start gap-1 p-3 font-normal"
-									>
-										<span
-											class="text-base-content block w-full truncate text-left text-sm font-bold"
-										>
-											{result.title}
-										</span>
-										{#if result.snippetFragments && result.snippetFragments.length > 0}
-											<p
-												class="text-base-content/70 line-clamp-2 w-full text-left text-xs leading-relaxed font-normal"
-											>
-												{#each result.snippetFragments as fragment, idx (idx)}
-													{#if fragment.isMatch}
-														<mark
-															class="bg-primary/20 text-primary dark:text-primary-content rounded-xs px-0.5 font-semibold"
-															>{fragment.text}</mark
-														>
-													{:else}
-														{fragment.text}
-													{/if}
-												{/each}
-											</p>
-										{/if}
-									</a>
-								</li>
-							{/each}
-						</ol>
-					</div>
-				{:else}
-					<div
-						class="card dropdown-content compact bg-base-200 z-1 w-full rounded-xs shadow-xl"
-						role="searchbox"
+				<!-- Search bar -->
+				<div class="border-base-300 flex items-center gap-3 border-b p-4">
+					<SearchIcon class="h-5 w-5 flex-shrink-0 stroke-gray-400" />
+					<input
+						bind:this={modalInput}
+						type="text"
+						placeholder="검색어를 입력하세요..."
+						bind:value={query}
+						onkeydown={handleKeydown}
+						class="text-base-content grow bg-transparent text-base outline-none placeholder:font-light"
+					/>
+					<kbd class="kbd kbd-xs">ESC</kbd>
+					<button
+						type="button"
+						aria-label="Close"
+						class="btn btn-ghost btn-circle btn-xs"
+						onclick={closeModal}
 					>
-						<div class="card-body items-center">
-							<h2 class="card-title">No results found</h2>
-							<p>Suggestions:</p>
-							{#if suggestions.length}
-								<p>{suggestions[0].suggestion || ''}</p>
-							{:else}
-								<p>...</p>
-							{/if}
+						<XMarkIcon class="h-5 w-5" />
+					</button>
+				</div>
+
+				<!-- Results/Suggestions -->
+				<div class="max-h-[60vh] overflow-y-auto p-2" role="searchbox">
+					{#if query}
+						{#if processedResults.length > 0}
+							<ol class="menu w-full gap-1 p-0">
+								{#each processedResults as result, i (result.id)}
+									<li class="{i === activeIndex ? 'bg-base-300' : ''} overflow-hidden rounded-md">
+										<a
+											href="/blog/{result.id}-{result.slug}"
+											onclick={closeModal}
+											class="flex flex-col items-start gap-1 p-3 font-normal"
+										>
+											<span
+												class="text-base-content block w-full truncate text-left text-sm font-bold"
+											>
+												{result.title}
+											</span>
+											{#if result.snippetFragments && result.snippetFragments.length > 0}
+												<p
+													class="text-base-content/70 line-clamp-2 w-full text-left text-xs leading-relaxed font-normal"
+												>
+													{#each result.snippetFragments as fragment, idx (idx)}
+														{#if fragment.isMatch}
+															<mark
+																class="bg-primary/20 text-primary dark:text-primary-content rounded-xs px-0.5 font-semibold"
+																>{fragment.text}</mark
+															>
+														{:else}
+															{fragment.text}
+														{/if}
+													{/each}
+												</p>
+											{/if}
+										</a>
+									</li>
+								{/each}
+							</ol>
+						{:else}
+							<div class="flex flex-col items-center justify-center px-4 py-10 text-center">
+								<h2 class="text-base-content/70 text-lg font-semibold">검색 결과가 없습니다.</h2>
+								<p class="text-base-content/50 mt-1 text-sm">추천 검색어:</p>
+								{#if suggestions.length > 0}
+									<button
+										class="btn btn-ghost btn-sm text-primary mt-2 font-normal"
+										onclick={() => {
+											query = suggestions[0].suggestion;
+										}}
+									>
+										{suggestions[0].suggestion}
+									</button>
+								{:else}
+									<p class="text-base-content/40 mt-1 text-sm">...</p>
+								{/if}
+							</div>
+						{/if}
+					{:else}
+						<div class="text-base-content/40 flex flex-col items-center justify-center py-12">
+							<SearchIcon class="stroke-base-content/30 mb-2 h-10 w-10" />
+							<p class="text-sm font-light">검색어를 입력하여 게시글을 찾아보세요.</p>
 						</div>
-					</div>
-				{/if}
+					{/if}
+				</div>
 			</div>
 		</div>
-	</div>
+	{/if}
 </div>

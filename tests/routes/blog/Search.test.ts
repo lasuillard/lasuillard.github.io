@@ -12,9 +12,18 @@ it('has a valid locator', () => {
 	expect(getByTestId('search')).toBeTruthy();
 });
 
-it('has a text input with placeholder', () => {
+it('has a trigger button and opens modal when clicked', async ({ user }) => {
 	const component = render(Search);
-	expect((component.getByRole('textbox') as HTMLInputElement).placeholder).toBe('...');
+	const button = component.getByRole('button', { name: '검색' });
+	expect(button).toBeTruthy();
+	expect(button.textContent).toContain('검색...');
+
+	await user.click(button);
+	await tick();
+
+	// Inside the modal there should be the textbox
+	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
+	expect(input).toBeTruthy();
 });
 
 it('shows matching results for given query', async ({ user }) => {
@@ -34,7 +43,11 @@ it('shows matching results for given query', async ({ user }) => {
 	await initEngine([testPost]);
 	const component = render(Search);
 
-	const input = component.getByRole('textbox') as HTMLInputElement;
+	const button = component.getByRole('button', { name: '검색' });
+	await user.click(button);
+	await tick();
+
+	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uno');
 	await tick();
@@ -64,7 +77,11 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 	await initEngine([testPost]);
 	const component = render(Search);
 
-	const input = component.getByRole('textbox') as HTMLInputElement;
+	const button = component.getByRole('button', { name: '검색' });
+	await user.click(button);
+	await tick();
+
+	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('uniquephrase');
 	await tick();
@@ -92,14 +109,18 @@ it('shows no results for non-matching query', async ({ user }) => {
 	await initEngine([testPost]);
 	const component = render(Search);
 
-	const input = component.getByRole('textbox') as HTMLInputElement;
+	const button = component.getByRole('button', { name: '검색' });
+	await user.click(button);
+	await tick();
+
+	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('xyz123');
 	await tick();
 
 	const searchResults = component.container.querySelector('ol.menu');
-	expect(searchResults).toBeTruthy();
-	expect(searchResults?.children.length).toBe(0);
+	expect(searchResults).toBeNull();
+	expect(component.getByText('검색 결과가 없습니다.')).toBeTruthy();
 });
 
 it('suggest matching results for given query', async ({ user }) => {
@@ -118,28 +139,27 @@ it('suggest matching results for given query', async ({ user }) => {
 	await initEngine([testPost]);
 	const component = render(Search);
 
-	const input = component.getByRole('textbox') as HTMLInputElement;
+	const button = component.getByRole('button', { name: '검색' });
+	await user.click(button);
+	await tick();
+
+	const input = component.getByPlaceholderText('검색어를 입력하세요...') as HTMLInputElement;
 	await user.click(input);
 	await user.keyboard('un');
 	await tick();
 
 	const searchResults = component.container.querySelector('ol.menu');
-	expect(searchResults).toBeTruthy();
-	expect(searchResults?.children.length).toBe(0);
+	expect(searchResults).toBeNull();
 });
 
-it('shows no results message when search is empty', async ({ user }) => {
+it('shows empty search state initially', async ({ user }) => {
 	await initEngine([]);
 	const component = render(Search);
 
-	const input = component.getByRole('textbox') as HTMLInputElement;
-	await user.click(input);
-	await user.keyboard('test');
-	await user.clear(input);
+	const button = component.getByRole('button', { name: '검색' });
+	await user.click(button);
 	await tick();
 
-	const noResultsText = component.getByText('No results found');
-	const suggestionsText = component.getByText('Suggestions:');
-	expect(noResultsText).toBeTruthy();
-	expect(suggestionsText).toBeTruthy();
+	const initialText = component.getByText('검색어를 입력하여 게시글을 찾아보세요.');
+	expect(initialText).toBeTruthy();
 });
