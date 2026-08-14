@@ -1,8 +1,8 @@
 // @vitest-environment happy-dom
 import { Post } from '$lib/post';
 import { initEngine } from '$lib/search';
-import Search from '$routes/blog/Search.svelte';
-import { render } from '@testing-library/svelte';
+import Search from '$components/layout/Search.svelte';
+import { render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
 import { expect } from 'vitest';
 import { it } from '../../_helpers/vitest';
@@ -16,7 +16,6 @@ it('has a trigger button and opens modal when clicked', async ({ user }) => {
 	const component = render(Search);
 	const button = component.getByRole('button', { name: '검색' });
 	expect(button).toBeTruthy();
-	expect(button.textContent).toContain('검색...');
 
 	await user.click(button);
 	await tick();
@@ -56,7 +55,7 @@ it('shows matching results for given query', async ({ user }) => {
 	await user.keyboard('uno');
 	await tick();
 
-	const resultsContainer = document.querySelector('ol.menu');
+	const resultsContainer = document.querySelector('ul.flex.w-full.flex-col');
 	expect(resultsContainer).toBeTruthy();
 
 	const titleElement = document.body.textContent;
@@ -92,10 +91,15 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 	await tick();
 
 	// Check that the snippet container displays the text
-	const markElement = document.querySelector('mark');
-	expect(markElement).toBeTruthy();
-	expect(markElement?.textContent).toBe('uniquephrase');
-	expect(markElement?.className).toContain('text-primary');
+	await waitFor(
+		() => {
+			const markElement = document.querySelector('mark');
+			expect(markElement).toBeTruthy();
+			expect(markElement?.textContent).toBe('uniquephrase');
+			expect(markElement?.className).toContain('text-warning-content');
+		},
+		{ timeout: 5000 }
+	);
 });
 
 it('shows no results for non-matching query', async ({ user }) => {
@@ -125,11 +129,11 @@ it('shows no results for non-matching query', async ({ user }) => {
 	await user.keyboard('xyz123');
 	await tick();
 
-	const searchResults = document.querySelector('ol.menu');
+	const searchResults = document.querySelector('ul.flex.w-full.flex-col');
 	expect(searchResults).toBeNull();
 
 	const bodyText = document.body.textContent;
-	expect(bodyText).toContain('검색 결과가 없습니다.');
+	expect(bodyText).toContain('Did you mean...');
 });
 
 it('suggest matching results for given query', async ({ user }) => {
@@ -159,7 +163,7 @@ it('suggest matching results for given query', async ({ user }) => {
 	await user.keyboard('un');
 	await tick();
 
-	const searchResults = document.querySelector('ol.menu');
+	const searchResults = document.querySelector('ul.flex.w-full.flex-col');
 	expect(searchResults).toBeNull();
 });
 

@@ -1,4 +1,3 @@
-import { cleanMarkdown } from '$lib/search';
 import { postRepository } from '$lib/server/post';
 import { json } from '@sveltejs/kit';
 import MiniSearch from 'minisearch';
@@ -16,7 +15,7 @@ export const GET = async () => {
 			'metadata.slug',
 			'metadata.publicationDate',
 			'metadata.tags',
-			'content'
+			'rawContent'
 		],
 		extractField: (document: any, fieldName: string) => {
 			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
@@ -29,7 +28,7 @@ export const GET = async () => {
 			...post.metadata,
 			publicationDate: new Date(post.metadata.publicationDate).getTime()
 		},
-		content: cleanMarkdown(post.content || '')
+		rawContent: post.content
 	}));
 
 	miniSearch.addAll(documents);

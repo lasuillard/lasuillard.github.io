@@ -5,6 +5,7 @@
 	import QRCodeIcon from '$components/icon/QRCode.svelte';
 	import QRCode from '$components/layout/QRCode.svelte';
 	import ThemeSelect from './ThemeSelect.svelte';
+	import Search from './Search.svelte';
 
 	const links = [
 		{ name: 'About Me', href: '/' },
@@ -70,7 +71,8 @@
 				</div>
 
 				<!-- Utility buttons -->
-				<div class="navbar-end flex-1 gap-2">
+				<div class="navbar-end flex-1 items-center gap-2">
+					<Search />
 					<details
 						bind:this={qrDropdownDetails}
 						class="dropdown dropdown-end hidden md:inline-block"
