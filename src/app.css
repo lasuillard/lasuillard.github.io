@@ -34,6 +34,7 @@
 		content: '🔗';
 		margin-right: 0.15em;
 		font-size: 0.85em;
+    display: inline-block;
 	}
 	/* Customize scrollbar */
 	::-webkit-scrollbar {
