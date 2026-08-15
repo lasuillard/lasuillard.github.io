@@ -70,4 +70,8 @@
 	::-webkit-scrollbar-thumb {
 		@apply bg-secondary hover:bg-[color-mix(in_oklab,oklch(var(--s)),black_7%)];
 	}
+	/* Highlight styling for search results */
+	.search-highlight {
+		@apply bg-warning text-warning-content rounded-xs px-1 font-bold;
+	}
 }

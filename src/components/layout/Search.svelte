@@ -22,10 +22,13 @@
 	let suggestions: Suggestion[] = $state([]);
 	let activeIndex = $state(-1);
 	let lastInteraction: 'mouse' | 'keyboard' = $state('keyboard');
+	let dialogRef: HTMLDialogElement | undefined = $state();
 	let modalInput: HTMLInputElement | undefined = $state();
 	let resultsList: HTMLUListElement | undefined = $state();
-	let modalContainer: HTMLDivElement | undefined = $state();
 
+	/**
+	 * Transform MiniSearch raw results into structured search objects for UI rendering.
+	 */
 	let processedResults = $derived(
 		searchResults.map((result) => {
 			const terms = result.terms || [];
@@ -34,36 +37,66 @@
 				id: res.id,
 				slug: res['metadata.slug'],
 				title: res['metadata.title'],
-				rawContent: res.rawContent || res.content || '',
+				content: res.content || res.rawContent || '',
 				terms
 			};
 		})
 	);
 
+	/**
+	 * Open search modal dialog and reset active item selection.
+	 */
 	function openModal() {
 		isModalOpen = true;
 		activeIndex = -1;
+		dialogRef?.showModal();
 	}
 
+	/**
+	 * Close search modal dialog and clear query state.
+	 */
 	function closeModal() {
 		isModalOpen = false;
 		query = '';
 		activeIndex = -1;
+		if (dialogRef?.open) {
+			dialogRef.close();
+		}
 	}
 
-	function handleModalKeydown(e: KeyboardEvent) {
-		if (e.key === 'Escape') {
-			closeModal();
-			e.preventDefault();
+	/**
+	 * Handle global window keydown events for search shortcuts (Ctrl+K / Cmd+K).
+	 */
+	function handleGlobalKeydown(e: KeyboardEvent) {
+		const isTyping = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName);
+		if (isTyping) {
+			if (e.key === 'Escape' && isModalOpen) {
+				closeModal();
+				e.preventDefault();
+			}
 			return;
 		}
 
-		if (e.key === 'Tab' && modalContainer) {
-			const focusableElements = modalContainer.querySelectorAll(
-				'button:not([disabled]):not([tabindex="-1"]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-			) as NodeListOf<HTMLElement>;
+		if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+			e.preventDefault();
+			openModal();
+			return;
+		}
+	}
 
-			if (!focusableElements || focusableElements.length === 0) return;
+	/**
+	 * Handle Tab focus trap inside search modal.
+	 * Traps focus so cycling with Tab/Shift+Tab rotates within modal elements.
+	 */
+	function handleDialogKeydown(e: KeyboardEvent) {
+		if (e.key === 'Tab' && dialogRef) {
+			const focusableElements = Array.from(
+				dialogRef.querySelectorAll<HTMLElement>(
+					'button:not([disabled]):not([tabindex="-1"]), [href], input:not([disabled]):not([tabindex="-1"]), [tabindex]:not([tabindex="-1"])'
+				)
+			);
+
+			if (focusableElements.length === 0) return;
 
 			const firstElement = focusableElements[0];
 			const lastElement = focusableElements[focusableElements.length - 1];
@@ -82,22 +115,10 @@
 		}
 	}
 
-	function handleGlobalKeydown(e: KeyboardEvent) {
-		const isTyping = ['INPUT', 'TEXTAREA'].includes((e.target as HTMLElement).tagName);
-		if (isTyping) {
-			if (e.key === 'Escape' && isModalOpen) {
-				closeModal();
-				e.preventDefault();
-			}
-			return;
-		}
-
-		if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
-			e.preventDefault();
-			openModal();
-		}
-	}
-
+	/**
+	 * Handle keyboard navigation inside search input.
+	 * Supports ArrowUp/Down for item selection, Enter to navigate, and Escape to close.
+	 */
 	function handleKeydown(e: KeyboardEvent) {
 		lastInteraction = 'keyboard';
 		if (e.key === 'Escape') {
@@ -126,18 +147,6 @@
 		}
 	}
 
-	// Svelte action to teleport the modal elements to document.body
-	function portal(node: HTMLElement) {
-		document.body.appendChild(node);
-		return {
-			destroy() {
-				if (node.parentNode) {
-					node.parentNode.removeChild(node);
-				}
-			}
-		};
-	}
-
 	// Auto-focus input when modal opens
 	$effect(() => {
 		if (isModalOpen && modalInput) {
@@ -147,7 +156,7 @@
 		}
 	});
 
-	// Scroll active item into view
+	// Scroll active item into view when navigating with keyboard
 	$effect(() => {
 		if (lastInteraction === 'keyboard' && activeIndex >= 0 && resultsList) {
 			const activeEl = resultsList.children[activeIndex] as HTMLElement;
@@ -210,147 +219,144 @@
 		</span>
 	</button>
 
-	{#if isModalOpen}
+	<dialog
+		bind:this={dialogRef}
+		oncancel={closeModal}
+		onkeydown={handleDialogKeydown}
+		class="modal bg-black/50 backdrop-blur-xs"
+		data-testid="search-modal"
+	>
 		<div
-			use:portal
-			bind:this={modalContainer}
-			class="fixed inset-0 z-9999 flex items-start justify-center bg-black/50 p-4 pt-[15vh] backdrop-blur-xs"
-			onclick={(e) => {
-				if (e.target === e.currentTarget) {
-					closeModal();
-				}
-			}}
-			onkeydown={handleModalKeydown}
-			tabindex="-1"
-			role="dialog"
-			aria-modal="true"
-			data-testid="search-modal"
+			class="modal-box border-base-300 flex max-h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg border p-0 shadow-2xl lg:w-[65vw]"
 		>
-			<div
-				class="bg-base-200 border-base-300 flex w-full max-w-2xl flex-col overflow-hidden rounded-lg border shadow-2xl lg:w-[65vw] lg:max-w-[65vw]"
-			>
-				<!-- Search bar -->
-				<div class="border-base-300 flex items-center gap-3 border-b p-4">
-					<SearchIcon class="h-5 w-5 shrink-0 stroke-gray-400" />
-					<input
-						bind:this={modalInput}
-						type="text"
-						placeholder="검색어를 입력하세요..."
-						bind:value={query}
-						onkeydown={handleKeydown}
-						class="text-base-content grow bg-transparent text-base outline-none placeholder:font-light"
-					/>
-					<kbd class="kbd kbd-xs shrink-0">Tab</kbd>
-					<kbd class="kbd kbd-xs shrink-0">ESC</kbd>
-					<button
-						type="button"
-						aria-label="Close"
-						tabindex="-1"
-						class="btn btn-ghost btn-circle btn-xs"
-						onclick={closeModal}
-					>
-						<XMarkIcon class="h-5 w-5" />
-					</button>
-				</div>
+			<!-- Search bar -->
+			<div class="border-base-300 flex items-center gap-3 border-b p-4">
+				<SearchIcon class="h-5 w-5 shrink-0 stroke-gray-400" />
+				<input
+					bind:this={modalInput}
+					type="text"
+					placeholder="검색어를 입력하세요..."
+					bind:value={query}
+					onkeydown={handleKeydown}
+					data-testid="search-input"
+					class="text-base-content grow bg-transparent text-base outline-none placeholder:font-light"
+				/>
+				<kbd class="kbd kbd-xs shrink-0">Tab</kbd>
+				<kbd class="kbd kbd-xs shrink-0">ESC</kbd>
+				<button
+					type="button"
+					aria-label="Close"
+					class="btn btn-ghost btn-circle btn-xs"
+					onclick={closeModal}
+				>
+					<XMarkIcon class="h-5 w-5" />
+				</button>
+			</div>
 
-				<!-- Results/Suggestions -->
-				<div class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-[65vh]" role="searchbox">
-					{#if query}
-						{#if processedResults.length > 0}
-							<ul bind:this={resultsList} class="flex w-full flex-col p-0">
-								{#each processedResults as result, i (result.id)}
-									{@const searchTerms = Array.from(
-										new Set([...result.terms, ...query.split(/\s+/), query.trim()])
-									)}
-									{@const matchCount = countTermOccurrences(result.rawContent, searchTerms)}
-									<li
-										class="{i === activeIndex
-											? 'bg-base-300'
-											: 'hover:bg-base-300'} overflow-hidden rounded-md"
-										onmouseenter={() => {
-											lastInteraction = 'mouse';
-											activeIndex = i;
+			<!-- Results/Suggestions -->
+			<div class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-[65vh]" role="searchbox">
+				{#if query}
+					{#if processedResults.length > 0}
+						<ul
+							bind:this={resultsList}
+							data-testid="search-results"
+							class="flex w-full flex-col p-0"
+						>
+							{#each processedResults as result, i (result.id)}
+								{@const searchTerms = Array.from(
+									new Set([...result.terms, ...query.split(/\s+/), query.trim()])
+								)}
+								{@const matchCount = countTermOccurrences(result.content, searchTerms)}
+								<li
+									class="{i === activeIndex
+										? 'bg-base-300'
+										: 'hover:bg-base-300'} overflow-hidden rounded-md"
+									onmouseenter={() => {
+										lastInteraction = 'mouse';
+										activeIndex = i;
+									}}
+								>
+									<div
+										role="button"
+										tabindex="0"
+										onclick={() => {
+											closeModal();
+											goto(
+												route('/blog/[slug]', { params: { slug: `${result.id}-${result.slug}` } })
+											);
 										}}
-									>
-										<div
-											role="button"
-											tabindex="0"
-											onclick={() => {
+										onkeydown={(e) => {
+											if (e.key === 'Enter' || e.key === ' ') {
+												e.preventDefault();
 												closeModal();
 												goto(
-													route('/blog/[slug]', { params: { slug: `${result.id}-${result.slug}` } })
+													route('/blog/[slug]', {
+														params: { slug: `${result.id}-${result.slug}` }
+													})
 												);
-											}}
-											onkeydown={(e) => {
-												if (e.key === 'Enter' || e.key === ' ') {
-													e.preventDefault();
-													closeModal();
-													goto(
-														route('/blog/[slug]', {
-															params: { slug: `${result.id}-${result.slug}` }
-														})
-													);
-												}
-											}}
-											class="flex w-full cursor-pointer flex-col items-start gap-1 p-3 text-left font-normal"
-										>
-											<div class="flex w-full items-center justify-between gap-2">
-												<span
-													class="text-base-content block grow text-left text-base font-bold tracking-tight"
-												>
-													{result.title}
+											}
+										}}
+										class="flex w-full cursor-pointer flex-col items-start gap-1 p-3 text-left font-normal"
+									>
+										<div class="flex w-full items-center justify-between gap-2">
+											<span
+												class="text-base-content block grow text-left text-base font-bold tracking-tight"
+											>
+												{result.title}
+											</span>
+											{#if matchCount > 0}
+												<span class="badge badge-ghost badge-xs shrink-0 font-normal">
+													{matchCount}개 일치
 												</span>
-												{#if matchCount > 0}
-													<span class="badge badge-ghost badge-xs shrink-0 font-normal">
-														{matchCount}개 일치
-													</span>
-												{/if}
-											</div>
-											{#if result.rawContent}
-												<p
-													class="text-base-content/70 mt-1 line-clamp-3 w-full text-left text-xs leading-relaxed"
-												>
-													<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-													{@html getExcerpt(result.rawContent, searchTerms)}
-												</p>
 											{/if}
 										</div>
-									</li>
-								{/each}
-							</ul>
-						{:else}
-							<div class="flex flex-col items-center justify-center px-4 py-10 text-center">
-								<!-- TODO: Translate 'Did you mean...' in the future -->
-								<p class="text-base-content/50 mb-4 text-sm">Did you mean...</p>
-								{#if suggestions.length > 0}
-									<div class="flex flex-wrap items-center justify-center gap-2">
-										{#each suggestions as suggestion, i (suggestion.suggestion)}
-											<button
-												class="link link-primary link-hover text-base font-normal"
-												onclick={() => {
-													query = suggestion.suggestion;
-												}}
+										{#if result.content}
+											<p
+												class="text-base-content/70 mt-1 line-clamp-3 w-full text-left text-xs leading-relaxed"
 											>
-												{suggestion.suggestion}
-											</button>
-											{#if i < suggestions.length - 1}
-												<span class="text-base-content/30 text-sm">,</span>
-											{/if}
-										{/each}
+												<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+												{@html getExcerpt(result.content, searchTerms)}
+											</p>
+										{/if}
 									</div>
-								{:else}
-									<p class="text-base-content/40 mt-1 text-sm">...</p>
-								{/if}
-							</div>
-						{/if}
+								</li>
+							{/each}
+						</ul>
 					{:else}
-						<div class="text-base-content/40 flex flex-col items-center justify-center py-12">
-							<SearchIcon class="stroke-base-content/30 mb-2 h-10 w-10" />
-							<p class="text-sm font-light">검색어를 입력하여 게시글을 찾아보세요.</p>
+						<div class="flex flex-col items-center justify-center px-4 py-10 text-center">
+							<!-- TODO: Translate 'Did you mean...' in the future -->
+							<p class="text-base-content/50 mb-4 text-sm">Did you mean...</p>
+							{#if suggestions.length > 0}
+								<div class="flex flex-wrap items-center justify-center gap-2">
+									{#each suggestions as suggestion, i (suggestion.suggestion)}
+										<button
+											class="link link-primary link-hover text-base font-normal"
+											onclick={() => {
+												query = suggestion.suggestion;
+											}}
+										>
+											{suggestion.suggestion}
+										</button>
+										{#if i < suggestions.length - 1}
+											<span class="text-base-content/30 text-sm">,</span>
+										{/if}
+									{/each}
+								</div>
+							{:else}
+								<p class="text-base-content/40 mt-1 text-sm">...</p>
+							{/if}
 						</div>
 					{/if}
-				</div>
+				{:else}
+					<div class="text-base-content/40 flex flex-col items-center justify-center py-12">
+						<SearchIcon class="stroke-base-content/30 mb-2 h-10 w-10" />
+						<p class="text-sm font-light">검색어를 입력하여 게시글을 찾아보세요.</p>
+					</div>
+				{/if}
 			</div>
 		</div>
-	{/if}
+		<form method="dialog" class="modal-backdrop">
+			<button tabindex="-1" onclick={closeModal}>close</button>
+		</form>
+	</dialog>
 </div>

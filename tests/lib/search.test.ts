@@ -39,9 +39,7 @@ describe('getExcerpt', () => {
 	it('extracts excerpt and highlights matched terms with mark tags', () => {
 		const raw = '### Title\nThis is a sample markdown post containing special term inside content.';
 		const excerpt = getExcerpt(raw, ['special']);
-		expect(excerpt).toContain(
-			'<mark class="bg-warning text-warning-content rounded-xs px-1 font-bold">special</mark>'
-		);
+		expect(excerpt).toContain('<mark class="search-highlight">special</mark>');
 		expect(excerpt).not.toContain('###');
 	});
 
@@ -49,9 +47,7 @@ describe('getExcerpt', () => {
 		const raw = 'Text with & < > and target term.';
 		const excerpt = getExcerpt(raw, ['target']);
 		expect(excerpt).toContain('&amp; &lt; &gt;');
-		expect(excerpt).toContain(
-			'<mark class="bg-warning text-warning-content rounded-xs px-1 font-bold">target</mark>'
-		);
+		expect(excerpt).toContain('<mark class="search-highlight">target</mark>');
 	});
 });
 
@@ -124,7 +120,7 @@ describe('getEngine', () => {
 	});
 });
 
-describe('performSearch and getSuggestions', () => {
+describe('performSearch', () => {
 	it('performs search and respects limit', async () => {
 		const posts = [
 			Post.parse({
@@ -159,7 +155,9 @@ describe('performSearch and getSuggestions', () => {
 		// Should sort by publicationDate desc
 		expect(results[0].id).toBe('2');
 	});
+});
 
+describe('getSuggestions', () => {
 	it('returns suggestions for misspelled query', async () => {
 		const posts = [
 			Post.parse({

@@ -15,7 +15,7 @@ export const GET = async () => {
 			'metadata.slug',
 			'metadata.publicationDate',
 			'metadata.tags',
-			'rawContent'
+			'content'
 		],
 		extractField: (document: any, fieldName: string) => {
 			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
@@ -28,7 +28,7 @@ export const GET = async () => {
 			...post.metadata,
 			publicationDate: new Date(post.metadata.publicationDate).getTime()
 		},
-		rawContent: post.content
+		content: post.content
 	}));
 
 	miniSearch.addAll(documents);

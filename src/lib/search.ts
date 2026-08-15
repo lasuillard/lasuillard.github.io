@@ -1,7 +1,7 @@
 import MiniSearch from 'minisearch';
-import { unified } from 'unified';
-import remarkParse from 'remark-parse';
 import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import { unified } from 'unified';
 
 let miniSearch: MiniSearch | undefined = undefined;
 
@@ -183,10 +183,14 @@ export function countTermOccurrences(markdown: string, terms: string[]): number 
  * @param maxLength Maximum character length of excerpt.
  * @returns HTML string with highlighted matching terms.
  */
-export function getExcerpt(markdown: string, terms: string[], maxLength = 200): string {
+export function getExcerpt(markdown: string, terms: string[], maxLength = 400): string {
 	if (!markdown) return '';
 
+	// Clean markdown formatting to get plain text
 	const text = cleanMarkdown(markdown);
+
+	// Filter out empty terms and sort terms by length descending
+	// to match longest terms first
 	const validTerms = terms
 		.map((t) => t.trim())
 		.filter((t) => t.length > 0)
@@ -196,10 +200,10 @@ export function getExcerpt(markdown: string, terms: string[], maxLength = 200): 
 		const snippet = text.slice(0, maxLength);
 		return escapeHtml(snippet) + (text.length > maxLength ? '...' : '');
 	}
-
 	const lowerText = text.toLowerCase();
 	let bestIndex = -1;
 
+	// Find the earliest occurrence index of any search term in the document text
 	for (const term of validTerms) {
 		const idx = lowerText.indexOf(term.toLowerCase());
 		if (idx !== -1 && (bestIndex === -1 || idx < bestIndex)) {
@@ -207,6 +211,7 @@ export function getExcerpt(markdown: string, terms: string[], maxLength = 200): 
 		}
 	}
 
+	// Extract a snippet window centered around the first matching term
 	let snippet: string;
 	if (bestIndex === -1) {
 		snippet = text.slice(0, maxLength) + (text.length > maxLength ? '...' : '');
@@ -218,16 +223,17 @@ export function getExcerpt(markdown: string, terms: string[], maxLength = 200): 
 		snippet = leadingEllipsis + text.slice(start, end) + trailingEllipsis;
 	}
 
+	// Escape HTML special characters before injecting highlight mark tags to
+	// prevent XSS
 	const escapedSnippet = escapeHtml(snippet);
 
+	// Build a regular expression to match all search terms globally
+	// and case-insensitively
 	const escapedTerms = validTerms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
 	const regex = new RegExp(escapedTerms.join('|'), 'gi');
 
-	return escapedSnippet.replace(
-		regex,
-		(match) =>
-			`<mark class="bg-warning text-warning-content rounded-xs px-1 font-bold">${match}</mark>`
-	);
+	// Wrap matching terms in <mark> tags using the stylesheet class
+	return escapedSnippet.replace(regex, (match) => `<mark class="search-highlight">${match}</mark>`);
 }
 
 /**

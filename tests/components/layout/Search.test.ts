@@ -20,10 +20,7 @@ it('has a trigger button and opens modal when clicked', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	// Inside the modal there should be the textbox, which is portaled to document.body
-	const input = document.querySelector(
-		'input[placeholder="검색어를 입력하세요..."]'
-	) as HTMLInputElement;
+	const input = component.getByTestId('search-input');
 	expect(input).toBeTruthy();
 });
 
@@ -48,14 +45,12 @@ it('shows matching results for given query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector(
-		'input[placeholder="검색어를 입력하세요..."]'
-	) as HTMLInputElement;
+	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('uno');
 	await tick();
 
-	const resultsContainer = document.querySelector('ul.flex.w-full.flex-col');
+	const resultsContainer = component.getByTestId('search-results');
 	expect(resultsContainer).toBeTruthy();
 
 	const titleElement = document.body.textContent;
@@ -83,9 +78,7 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector(
-		'input[placeholder="검색어를 입력하세요..."]'
-	) as HTMLInputElement;
+	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('uniquephrase');
 	await tick();
@@ -96,7 +89,7 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 			const markElement = document.querySelector('mark');
 			expect(markElement).toBeTruthy();
 			expect(markElement?.textContent).toBe('uniquephrase');
-			expect(markElement?.className).toContain('text-warning-content');
+			expect(markElement?.className).toContain('search-highlight');
 		},
 		{ timeout: 5000 }
 	);
@@ -122,14 +115,12 @@ it('shows no results for non-matching query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector(
-		'input[placeholder="검색어를 입력하세요..."]'
-	) as HTMLInputElement;
+	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('xyz123');
 	await tick();
 
-	const searchResults = document.querySelector('ul.flex.w-full.flex-col');
+	const searchResults = component.queryByTestId('search-results');
 	expect(searchResults).toBeNull();
 
 	const bodyText = document.body.textContent;
@@ -156,14 +147,12 @@ it('suggest matching results for given query', async ({ user }) => {
 	await user.click(button);
 	await tick();
 
-	const input = document.querySelector(
-		'input[placeholder="검색어를 입력하세요..."]'
-	) as HTMLInputElement;
+	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('un');
 	await tick();
 
-	const searchResults = document.querySelector('ul.flex.w-full.flex-col');
+	const searchResults = component.queryByTestId('search-results');
 	expect(searchResults).toBeNull();
 });
 
