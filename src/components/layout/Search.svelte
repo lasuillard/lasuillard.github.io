@@ -4,7 +4,7 @@
 	import XMarkIcon from '$components/icon/XMark.svelte';
 	import {
 		countTermOccurrences,
-		getEngine,
+		getEnginePromise,
 		getExcerpt,
 		getSuggestions,
 		performSearch
@@ -12,9 +12,10 @@
 	import { route } from '$lib/urls';
 	import { quoteJoin } from '$lib/utils';
 	import type { SearchResult, Suggestion } from 'minisearch';
+	import type MiniSearch from 'minisearch';
 	import { untrack } from 'svelte';
 
-	const searchEngine = getEngine();
+	let searchEngine: MiniSearch | undefined = $state();
 
 	let isModalOpen = $state(false);
 	let query = $state('');
@@ -149,6 +150,13 @@
 
 	// Auto-focus input when modal opens
 	$effect(() => {
+		getEnginePromise()?.then((engine) => {
+			searchEngine = engine;
+		});
+	});
+
+	// Auto-focus input when modal opens
+	$effect(() => {
 		if (isModalOpen && modalInput) {
 			untrack(() => {
 				modalInput?.focus();
@@ -169,20 +177,18 @@
 	// Reactive search engine query handler
 	$effect(() => {
 		const value = query;
-		if (!value) {
+		const currentEngine = searchEngine;
+
+		if (!value || !currentEngine) {
 			untrack(() => {
 				searchResults = [];
+				suggestions = [];
 				activeIndex = -1;
 			});
 			return;
 		}
 
-		if (!searchEngine) {
-			console.debug('Trying to use search engine not initalized');
-			return;
-		}
-
-		const slicedResults = performSearch(value, searchEngine);
+		const slicedResults = performSearch(value, currentEngine);
 
 		untrack(() => {
 			searchResults = slicedResults;
@@ -193,7 +199,7 @@
 			);
 
 			if (!slicedResults.length) {
-				suggestions = getSuggestions(value, searchEngine);
+				suggestions = getSuggestions(value, currentEngine);
 				console.debug(
 					`No search result, making suggestion: ${quoteJoin(
 						suggestions.map((value) => value.suggestion)
@@ -225,6 +231,7 @@
 		onkeydown={handleDialogKeydown}
 		class="modal bg-black/50 backdrop-blur-xs"
 		data-testid="search-modal"
+		aria-label="블로그 검색"
 	>
 		<div
 			class="modal-box border-base-300 flex max-h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-lg border p-0 shadow-2xl lg:w-[65vw]"
@@ -236,6 +243,7 @@
 					bind:this={modalInput}
 					type="text"
 					placeholder="검색어를 입력하세요..."
+					aria-label="검색어를 입력하세요..."
 					bind:value={query}
 					onkeydown={handleKeydown}
 					data-testid="search-input"
@@ -254,7 +262,7 @@
 			</div>
 
 			<!-- Results/Suggestions -->
-			<div class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-[65vh]" role="searchbox">
+			<div class="max-h-[60vh] overflow-y-auto p-2 lg:max-h-[65vh]">
 				{#if query}
 					{#if processedResults.length > 0}
 						<ul
@@ -324,8 +332,7 @@
 						</ul>
 					{:else}
 						<div class="flex flex-col items-center justify-center px-4 py-10 text-center">
-							<!-- TODO: Translate 'Did you mean...' in the future -->
-							<p class="text-base-content/50 mb-4 text-sm">Did you mean...</p>
+							<p class="text-base-content/50 mb-4 text-sm">아니면...</p>
 							{#if suggestions.length > 0}
 								<div class="flex flex-wrap items-center justify-center gap-2">
 									{#each suggestions as suggestion, i (suggestion.suggestion)}

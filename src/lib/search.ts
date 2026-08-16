@@ -4,6 +4,7 @@ import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 
 let miniSearch: MiniSearch | undefined = undefined;
+let enginePromise: Promise<MiniSearch> | undefined = undefined;
 
 const processor = unified().use(remarkParse).use(remarkGfm);
 
@@ -45,7 +46,7 @@ export function cleanMarkdown(markdown: string): string {
  * @param posts Posts to index.
  * @returns Initialized search engine.
  */
-export async function initEngine(posts?: any[]): Promise<MiniSearch> {
+export async function _initEngine(posts?: any[]): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 
 	const options = {
@@ -56,7 +57,7 @@ export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 			'metadata.slug',
 			'metadata.publicationDate',
 			'metadata.tags',
-			'content'
+			'rawContent'
 		],
 		extractField: (document: any, fieldName: string) => {
 			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
@@ -85,7 +86,8 @@ export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 				...post.metadata,
 				publicationDate: new Date(post.metadata.publicationDate).getTime()
 			},
-			content: cleanMarkdown(post.content || '')
+			content: cleanMarkdown(post.content || ''),
+			rawContent: post.content
 		}));
 		await miniSearch.addAllAsync(cleanedPosts);
 	}
@@ -94,11 +96,32 @@ export async function initEngine(posts?: any[]): Promise<MiniSearch> {
 }
 
 /**
- * Returns search engine.
- * @returns Search engine instance. If not initialized returns `undefined`.
+ * Initializes the search engine (cached).
+ * @param posts Posts to index.
+ * @returns Promise resolving to search engine instance.
  */
-export function getEngine(): MiniSearch | undefined {
-	return miniSearch;
+export function initEngine(posts?: any[]): Promise<MiniSearch> {
+	if (!enginePromise) {
+		enginePromise = _initEngine(posts);
+	}
+	return enginePromise;
+}
+
+/**
+ * Returns search engine initialization promise.
+ * @returns Search engine promise. If not initialized returns `undefined`.
+ */
+export function getEnginePromise(): Promise<MiniSearch> | undefined {
+	return enginePromise;
+}
+
+/**
+ * Clear the initialized search engine and promise.
+ * Used primarily for testing purposes to reset the global state.
+ */
+export function clearEngine() {
+	miniSearch = undefined;
+	enginePromise = undefined;
 }
 
 /**
@@ -110,14 +133,14 @@ export function getEngine(): MiniSearch | undefined {
  */
 export function performSearch(query: string, searchEngine: MiniSearch, limit = 5) {
 	const results = searchEngine.search(query, {
-		fuzzy: 0.2,
+		fuzzy: (term) => (term.length > 3 ? 0.2 : false),
 		combineWith: 'AND'
 	});
 
 	results.sort(
 		(a: any, b: any) =>
-			b['metadata.publicationDate'] - a['metadata.publicationDate'] ||
 			b.score - a.score ||
+			b['metadata.publicationDate'] - a['metadata.publicationDate'] ||
 			a['metadata.title'].localeCompare(b['metadata.title'])
 	);
 
@@ -132,7 +155,9 @@ export function performSearch(query: string, searchEngine: MiniSearch, limit = 5
  * @returns Array of suggestions.
  */
 export function getSuggestions(query: string, searchEngine: MiniSearch, limit = 5) {
-	const rawSuggestions = searchEngine.autoSuggest(query, { fuzzy: 0.2 });
+	const rawSuggestions = searchEngine.autoSuggest(query, {
+		fuzzy: 0.2
+	});
 	rawSuggestions.sort((a, b) => b.score - a.score);
 
 	const finalSuggestions: typeof rawSuggestions = [];

@@ -1,11 +1,15 @@
 // @vitest-environment happy-dom
-import { Post } from '$lib/post';
-import { initEngine } from '$lib/search';
 import Search from '$components/layout/Search.svelte';
+import { Post } from '$lib/post';
+import { initEngine, clearEngine } from '$lib/search';
 import { render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
-import { expect } from 'vitest';
+import { expect, afterEach } from 'vitest';
 import { it } from '../../_helpers/vitest';
+
+afterEach(() => {
+	clearEngine();
+});
 
 it('has a valid locator', () => {
 	const { getByTestId } = render(Search);
@@ -124,7 +128,7 @@ it('shows no results for non-matching query', async ({ user }) => {
 	expect(searchResults).toBeNull();
 
 	const bodyText = document.body.textContent;
-	expect(bodyText).toContain('Did you mean...');
+	expect(bodyText).toContain('아니면...');
 });
 
 it('suggest matching results for given query', async ({ user }) => {

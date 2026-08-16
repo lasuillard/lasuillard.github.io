@@ -2,8 +2,10 @@
 import { describe, expect, it, vi, afterEach } from 'vitest';
 import {
 	countTermOccurrences,
-	getEngine,
+	getEnginePromise,
 	initEngine,
+	clearEngine,
+	_initEngine,
 	cleanMarkdown,
 	performSearch,
 	getSuggestions,
@@ -12,6 +14,10 @@ import {
 import { Post } from '~/lib/post';
 
 describe('countTermOccurrences', () => {
+	afterEach(() => {
+		clearEngine();
+	});
+
 	it('returns 0 for empty content or empty terms', () => {
 		expect(countTermOccurrences('', ['test'])).toBe(0);
 		expect(countTermOccurrences('sample text', [])).toBe(0);
@@ -51,9 +57,9 @@ describe('getExcerpt', () => {
 	});
 });
 
-describe('getEngine', () => {
+describe('getEnginePromise', () => {
 	it('returns undefined when not initialized', () => {
-		expect(getEngine()).toBeUndefined();
+		expect(getEnginePromise()).toBeUndefined();
 	});
 
 	it('returns engine instance after initialization', async () => {
@@ -71,7 +77,7 @@ describe('getEngine', () => {
 		});
 
 		const engine = await initEngine([testPost]);
-		expect(getEngine()).toBe(engine);
+		expect(await getEnginePromise()).toBe(engine);
 
 		const results = engine.search('unique-search-word');
 		expect(results.length).toBe(1);
@@ -99,7 +105,7 @@ describe('getEngine', () => {
 			});
 			vi.stubGlobal('fetch', mockFetch);
 
-			const engine = await initEngine();
+			const engine = await _initEngine();
 			expect(engine).toBeDefined();
 			expect(mockFetch).toHaveBeenCalledWith('/api/search-index');
 		});
@@ -112,7 +118,7 @@ describe('getEngine', () => {
 			});
 			vi.stubGlobal('fetch', mockFetch);
 
-			const engine = await initEngine();
+			const engine = await _initEngine();
 			expect(engine).toBeDefined();
 			expect(mockFetch).toHaveBeenCalledWith('/api/search-index');
 			expect(engine.documentCount).toBe(0);
@@ -148,7 +154,7 @@ describe('performSearch', () => {
 				content: 'Svelte framework guide'
 			})
 		];
-		const engine = await initEngine(posts);
+		const engine = await _initEngine(posts);
 
 		const results = performSearch('Svelte', engine, 1);
 		expect(results.length).toBe(1);
@@ -173,7 +179,7 @@ describe('getSuggestions', () => {
 				content: 'JavaScript programming language'
 			})
 		];
-		const engine = await initEngine(posts);
+		const engine = await _initEngine(posts);
 
 		const suggestions = getSuggestions('javascrip', engine);
 		expect(suggestions.length).toBeGreaterThan(0);
