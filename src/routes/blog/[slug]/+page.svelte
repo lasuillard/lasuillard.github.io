@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Comment from './Comment.svelte';
+	import Markdown from '$components/content/Markdown.svelte';
 	import TagBadge from '$components/content/TagBadge.svelte';
 	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
-	import Markdown from '$components/content/Markdown.svelte';
-	import Toc from './Toc.svelte';
-	import SeriesWidget from './SeriesWidget.svelte';
 	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
+	import Comment from './Comment.svelte';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
+	import SeriesWidget from './SeriesWidget.svelte';
+	import Toc from './Toc.svelte';
 
 	let { data } = $props();
 	const { metadata, content, seriesPosts } = $derived.by(() => {
@@ -26,11 +26,6 @@
 			console.debug('Content is not ready yet. Skipping patching.');
 			return;
 		}
-
-		import('mermaid').then(({ default: mermaid }) => {
-			console.debug('Mermaid loaded. Running...');
-			mermaid.run();
-		});
 
 		// Monkey-patching footnote label (add emoji and translate)
 		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
@@ -61,13 +56,13 @@
 
 <div>
 	<div class="flex">
-		<div class="mx-auto max-w-none lg:max-w-[50rem]">
+		<div class="mx-auto max-w-none lg:max-w-200">
 			<div class="mt-6 flex flex-col items-center gap-4 sm:gap-6">
 				{#if metadata.preview}
 					<img
 						src={metadata.preview}
 						alt="Preview"
-						class="h-auto w-full flex-shrink-0 rounded-lg object-contain sm:h-48 sm:w-48"
+						class="h-auto w-full shrink-0 rounded-lg object-contain sm:h-48 sm:w-48"
 					/>
 				{/if}
 				<div class="flex w-full flex-1 flex-col items-center">
@@ -99,7 +94,7 @@
 				<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
 			{/if}
 			<div bind:this={contentWrapper}>
-				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none break-words">
+				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none wrap-break-word">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
@@ -110,38 +105,3 @@
 		</div>
 	</div>
 </div>
-
-<style lang="postcss">
-	@reference "../../../app.css";
-
-	article {
-		& :global(figure figcaption) {
-			@apply text-center;
-		}
-
-		/* Center image and add some shadow for visual recognition */
-		& :global(img) {
-			@apply mx-auto shadow-md;
-		}
-		/* When scroll, ensure some visual spacing above headings */
-		& :global(:where(h1, h2, h3, h4, h5, h6)) {
-			@apply scroll-mt-16 md:scroll-mt-24 lg:scroll-mt-32;
-		}
-		/* No underline for heading links */
-		& :global(:where(h1, h2, h3, h4, h5, h6) > a) {
-			@apply no-underline;
-		}
-		/* Show '#' on the left of heading links when hover */
-		& :global(:where(h1, h2, h3, h4, h5, h6) > a:hover) {
-			@apply before:text-secondary before:absolute before:-ml-6 before:underline before:underline-offset-4 before:content-['#'];
-		}
-		/* Add some shadow for visual recognition */
-		& :global(pre) {
-			@apply m-2 p-0 text-wrap;
-		}
-		/* Center Mermaid diagram horizontally */
-		& :global(pre.mermaid svg) {
-			@apply mx-auto p-2;
-		}
-	}
-</style>

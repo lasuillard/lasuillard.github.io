@@ -137,6 +137,20 @@
 				container.appendChild(copyBtn);
 				codeBlockWrapper.appendChild(container);
 			});
+
+			// Initialize mermaid diagrams
+			const mermaids = document.querySelectorAll('.mermaid');
+			if (mermaids.length > 0) {
+				import('mermaid').then(({ default: mermaid }) => {
+					console.debug('Mermaid loaded. Running...');
+					mermaid
+						.run({
+							nodes: Array.from(mermaids) as HTMLElement[],
+							suppressErrors: true
+						})
+						.catch((e) => console.debug('Mermaid failed to run', e));
+				});
+			}
 		});
 	});
 </script>

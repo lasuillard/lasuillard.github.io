@@ -4,7 +4,7 @@
 	import PostCard from '$components/content/PostCard.svelte';
 	import TagBadge from '$components/content/TagBadge.svelte';
 	import Pagination from './Pagination.svelte';
-	import Search from './Search.svelte';
+
 	import { PAGE_SIZE } from '$lib/constants';
 	import { route } from '$lib/urls';
 	import { fade } from 'svelte/transition';
@@ -70,8 +70,6 @@
 <div>
 	<div class="grid grid-cols-1 items-start gap-8 lg:gap-12 xl:grid-cols-4 xl:gap-16">
 		<aside class="order-1 mb-8 w-full xl:sticky xl:top-24 xl:order-1 xl:col-span-1 xl:mb-0">
-			<Search />
-
 			<!-- All tags -->
 			<div data-testid="tags">
 				<h2 class="mt-10 mb-2 text-2xl uppercase">Tags</h2>
