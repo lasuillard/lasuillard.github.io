@@ -26,7 +26,7 @@
 			checked={$currentTheme === Theme.Dark}
 			onclick={toggleTheme}
 		/>
-		<MoonIcon class="swap-on h-7 w-7" />
-		<SunIcon class="swap-off h-7 w-7" />
+		<MoonIcon class="swap-on h-6 w-6" />
+		<SunIcon class="swap-off h-6 w-6" />
 	</label>
 </div>
