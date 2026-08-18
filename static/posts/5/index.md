@@ -1,5 +1,6 @@
 ---
 title: 마음대로 쓰고 버리는 개발 컨테이너
+series: 개발 컨테이너 활용하기
 publicationDate: 2025-07-28
 preview: ./preview.png
 summary: >
