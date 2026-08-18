@@ -1,7 +1,7 @@
 ---
 title: 개발 컨테이너 구성 검증 중앙화 및 자동화하기
 series: 개발 컨테이너 활용하기
-publicationDate: 2026-08-12
+publicationDate: 2026-08-18
 preview: ./preview.png
 summary: >
   Probot으로 Dev Container 구성 검증을 중앙화하고 자동화하는 GitHub App 개발하기
