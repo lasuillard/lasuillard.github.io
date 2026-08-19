@@ -264,9 +264,9 @@ check "app_listen_to_required_events" {
 }
 ```
 
-![Terraform Cloud](./assets/terraform-cloud.png)
-
 저장소 커밋 시 배포를 자동 실행하는 Terraform Cloud의 VCS Driven Workflow를 활용하여 인프라 변경 사항을 투명하게 추적하고 자동 배포할 수 있도록 했습니다.
+
+![Terraform Cloud](./assets/terraform-cloud.png)
 
 ## ✅ Devcontainer Check
 
