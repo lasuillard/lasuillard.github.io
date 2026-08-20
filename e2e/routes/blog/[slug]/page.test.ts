@@ -126,7 +126,6 @@ test.describe('Section tracking and auto-scroll', () => {
 		await expect(page).toHaveURL(new RegExp('.*#' + encodedId));
 
 		// The matching link in ToC should be highlighted (bold/underline)
-		await expect(headingLink).toHaveClass(/font-bold/);
 		await expect(headingLink).toHaveClass(/underline/);
 	});
 
@@ -160,7 +159,6 @@ test.describe('Section tracking and auto-scroll', () => {
 			.locator(`a[href="${targetHash}"]`)
 			.first();
 		await expect(activeHeadingLink).toBeVisible();
-		await expect(activeHeadingLink).toHaveClass(/font-bold/);
 		await expect(activeHeadingLink).toHaveClass(/underline/);
 
 		// Assert we scrolled past the top (window.scrollY > 0)

@@ -37,7 +37,9 @@ Windows는 개발자 친화적인 OS는 아닙니다. Windows에 특화된 생�
 
 ## 🛡️ 보안 프로그램을 우회할 수는 없을까?
 
-Selenium 및 PyAutoGUI로 실험해보았을 때 키 입력이 무시되었습니다. 보안 프로그램의 설계 및 동작 방식에 의한 것이라고 예상되었고, 국내외 보안 프로그램의 동작을 이해하기 위한 충분한 자료를 찾을 수는 없었지만 일반적인 동작을 추측하는데 도움이 될 만한 [블로그 글](https://skensita.tistory.com/entry/%ED%82%A4%EB%B3%B4%EB%93%9C-%EB%B3%B4%EC%95%88)을 하나 찾을 수 있었습니다.
+Selenium 및 PyAutoGUI 등 다양한 소프트웨어 레벨 자동화 도구로 키 입력을 시도하고 네트워크 패킷을 모니터링해보았습니다. 그 결과 입력값이 완전히 무시되거나 의미 없는 더미 값(예: `aaaaa1` 등)으로 변조되어 전송되는 현상을 확인했습니다.
+
+국내외 보안 프로그램의 동작을 이해하기 위한 충분한 자료를 찾을 수는 없었지만, 일반적인 동작을 추측하는 데 도움이 될 만한 [블로그 글](https://skensita.tistory.com/entry/%ED%82%A4%EB%B3%B4%EB%93%9C-%EB%B3%B4%EC%95%88)을 하나 찾을 수 있었습니다.
 
 <figure class="image">
   <img src="./assets/keyboard-security.png" alt="키보드 보안 동작 다이어그램" />
@@ -70,15 +72,15 @@ Selenium 및 PyAutoGUI로 실험해보았을 때 키 입력이 무시되었습�
 
 ![키보드 상태 다이어그램](./assets/keyboard-state-diagram.png)
 
-구현 중 가장 신경을 쓴 부분은 한/영/숫자 등 키 배열 전환에 대한 상태 전이에 대한 추상화였습니다. 추후 다른 웹 사이트에서도 활용할 수 있기를 원했기 때문입니다. 이를 위해 [python-statemachine](https://python-statemachine.readthedocs.io/en/latest/)을 활용했습니다.
+구현 중 가장 신경을 쓴 부분은 한/영/숫자 등 키 배열 전환에 대한 상태 전이에 대한 추상화였습니다. 추후 다른 웹 사이트에서도 활용할 수 있기를 원했기 때문입니다. 이를 위해 [python-statemachine](https://python-statemachine.readthedocs.io/en/latest/)을 활용했습니다. 템플릿 매칭 실패나 예기치 않은 오류로 로그인이 실패할 경우를 대비해 당시 브라우저 스크린샷을 저장하여 추후 디버깅할 수 있도록 구성했습니다.
 
 로컬 환경에서 개발하는 중에는 Vagrant를 이용해 Windows Server VM을 구성하여 이용했습니다. Selenium Node를 배포하고, VM 외부의 Selenium Hub에 등록하여 이용했습니다.
 
 모든 구현 과정에서 가장 귀찮았던 건 키 배열을 하나하나 뜯어내는 노가다 과정이었습니다. 이 작업을 위해 처음으로 Figma를 활용했습니다.
 
-## 🔧 인프라 구축하기
+### 🔧 인프라 구축하기
 
-기능을 로컬에서 구현한 뒤 동작을 검증했고 AWS 인프라에 배포할 필요가 있었습니다. 빠른 구현 및 검토를 위해 단일 EC2 인스턴스를 퍼블릭 서브넷에 배포하고 EIP를 할당해주었습니다. EC2 User Data를 이용해서 사이트 보안 프로그램과 Selenium Server, [NSSM (Non-Sucking Service Manager)](https://nssm.cc/)을 설치했습니다. NSSM을 이용해서 Selenium Server를 서비스로 등록하여 실행했습니다.
+기능을 로컬에서 구현한 뒤 동작을 검증했고 AWS 인프라에 배포할 필요가 있었습니다. 빠른 구현 및 검토를 위해 단일 EC2 인스턴스를 퍼블릭 서브넷에 배포하고 EIP를 할당해주었습니다. EC2 User Data를 이용해서 사이트 보안 프로그램과 Selenium Server, 그리고 임의의 실행 파일이나 스크립트를 백그라운드 Windows 서비스로 등록해 관리해주는 [NSSM (Non-Sucking Service Manager)](https://nssm.cc/)을 설치했습니다. NSSM을 이용해서 Selenium Server를 서비스로 등록하여 실행했습니다.
 
 ![애플리케이션 구조도](./assets/application-diagram.png)
 
@@ -86,15 +88,15 @@ ECS에 배포된 스크래핑 애플리케이션은 인스턴스의 EIP를 통�
 
 이 과정에서 생소한 Windows Server와 씨름해야 했고, 여러 문제와 맞닥뜨렸습니다.
 
-### 🖥️ Windows 생태계의 난관
+#### 🖥️ Windows 생태계의 난관
 
-Windows Server를 구성하는 과정에서 많은 시행착오가 있었습니다. Windows Server는 Linux와 달리 패키지 관리자가 없고, 설치 및 구성 과정이 GUI 중심으로 되어 있어 자동화가 어려웠습니다. PowerShell 경험이 전무한 것도 한몫 했습니다. 또한 보안 정책과 권한 관리가 복잡하여 예상치 못한 문제들이 발생했습니다.
+Windows Server를 구성하는 과정에서 많은 시행착오가 있었습니다. Windows Server는 Linux와 달리 패키지 관리자가 없고, 설치 및 구성 과정이 GUI 중심으로 되어 있어 자동화가 어려웠습니다. PowerShell 경험이 전무한 것도 한몫했습니다. 또한 보안 정책과 권한 관리가 복잡하여 예상치 못한 문제들이 발생했습니다.
 
-### 🔒 보안 프로그램 및 콘솔 세션 유지
+#### 🔒 보안 프로그램 및 콘솔 세션 유지
 
 연결된 RDP 세션이 없으면 보안 프로그램이 자꾸 꺼지는 문제가 있었습니다. 초기에는 RDP 세션을 유지하는 Linux EC2 인스턴스를 추가 배포했지만, 문제가 끊이지 않았고 한동안 마땅한 해결책을 찾지 못했습니다.
 
-매번 문제가 발생하면 직접 서버에 접속하여 해결하는 과정을 반복하다가, 결국 시간을 내어 추가 조사에 나섰습니다. 그 결과 보안 프로그램이 정상 동작하려면 활성화된 콘솔 세션이 필요하다는 것을 알게 되었습니다.
+매번 문제가 발생하면 직접 서버에 접속하여 해결하는 과정을 반복하다가, 결국 시간을 내어 추가 조사에 나섰습니다. 그 결과 보안 프로그램이 정상 동작하려면 활성화된 콘솔 세션이 필요하다는 것을 알게 되었습니다. RDP 세션이 끊어지면 윈도우는 화면 렌더링과 입력 후킹을 비활성화하는데, 활성화된 콘솔 세션으로 전환하면 원격 접속이 종료되어도 GUI 및 보안 모듈이 정상 동작할 수 있습니다.
 
 RDP 세션을 연결한 뒤 다음 명령어로 현재 세션을 콘솔 세션으로 전환할 수 있습니다.
 
@@ -105,9 +107,7 @@ tscon %SESSIONNAME% /dest:console
 
 이후 RDP 연결이 끊기게 되지만 콘솔 세션은 유지되어 보안 프로그램이 상시 실행될 수 있게 합니다. 하지만 간혹 관리 및 디버깅을 위해 서버에 접속하거나 서버를 재시작해야 하는 경우가 있습니다. 이 경우 콘솔 세션을 수동으로 시작해주어야 하는데, 매번 이 과정을 수동으로 하다 보면 실수가 발생할 수도 있어 자동화하고자 했습니다.
 
-그래서 찾은 방법은 [AutoLogon 기능을 활용](https://learn.microsoft.com/ko-kr/troubleshoot/windows-server/user-profiles-and-logon/turn-on-automatic-logon)하는 것이었습니다.
-
-사용된 User Data의 일부입니다.
+그래서 찾은 방법은 [AutoLogon 기능을 활용](https://learn.microsoft.com/ko-kr/troubleshoot/windows-server/user-profiles-and-logon/turn-on-automatic-logon)하는 것이었습니다. 다음은 사용된 User Data의 일부입니다.
 
 ```powershell
 # WARNING: Autologon user credentials stored to registry as plain text, without any encryption
@@ -128,7 +128,7 @@ exit 3010
 
 `ForceAutoLogon` 설정을 통해 유지보수 작업이 끝난 후 콘솔 세션이 자동으로 시작되도록 할 수 있습니다. 단, **자동 로그온은 보안상 위험할 수 있으므로 주의가 필요**합니다. EC2 User Data 및 서버 내 레지스트리에 관리자 계정 정보가 평문으로 저장되기 때문입니다.
 
-### ⚙️ Selenium 서버 서비스 등록
+#### ⚙️ Selenium 서버 서비스 등록
 
 보통 Selenium 서버는 `.jar` 파일로 제공되며 실행하기 위해 `java`가 필요합니다. Windows 서버는 바로 이용할 수 있는 패키지 관리 도구가 없습니다. 또한 장애가 발생했을 때 서버가 재시작되게끔 서비스로 등록하여야 합니다.
 
@@ -166,17 +166,17 @@ New-NetFirewallRule `
 
 하지만 개인적으로 이 구성을 더 발전시키고 싶어졌습니다.
 
-- 유연한 확장
+- **유연한 확장**
 
   단일 온디맨드 인스턴스 구성은 수동 관리는 편하지만, 필요에 따른 자동 확장 및 축소에는 제약이 있습니다. 보안 프로그램을 이용하는 여러 사이트가 비슷한 요건을 공유할 것이니, 확장 가능하다면 여러 기능을 부담 없이 추가할 수 있습니다.
 
-- 비용 절약
+- **비용 절약**
 
   스팟 인스턴스를 활용한다면 비용을 약 60~70% 절감할 수 있습니다. 하지만 스팟 요청을 직접 관리하는 대신 ASG (Auto Scaling Group)를 이용하고, ALB (Application Load Balancer) Target Group을 이용하여 트래픽을 분산하면 인스턴스 그룹 관리가 편해집니다.
 
-- 애플리케이션 직접 배포
+- **애플리케이션 직접 배포**
 
-  단일 Selenium 서버를 올리고 관리하는 건 어렵지 않지만 확장성을 고려해야 한다면 Windows Server 기반 확장 가능한 Selenium Grid 구성이 필요합니다. 허브 노드 그룹과 브라우저 노드 그룹을 관리해야 하며, 전체적인 복잡도를 크게 끌어올릴 것입니다. 또한 분리된 구성에서는 브라우저의 모든 기능을 활용하기 어렵습니다.
+  단일 Selenium 서버를 올리고 관리하는 건 어렵지 않지만 확장성을 고려해야 한다면 Windows Server 기반 확장 가능한 Selenium Grid 구성이 필요합니다. 허브 노드 그룹과 브라우저 노드 그룹을 관리해야 하며, 전체적인 복잡도를 크게 끌어올릴 것으로 판단했습니다. 또한 분리된 구성에서는 브라우저의 모든 기능을 활용하기 어렵습니다.
 
   시스템 리소스에 대한 접근 수준(화면, 키보드 / 마우스, 봇 감지 우회 등)을 높이고자 한다면 애플리케이션을 서버에 직접 배포하고 웹 드라이버를 각 서버에 설치하여 이용하는 편이 좋을 것입니다. 따라서 Selenium Server는 제외하기로 했습니다.
 
@@ -184,25 +184,23 @@ New-NetFirewallRule `
 
 ![새 구성 설계도](./assets/new-design-diagram.png)
 
-- EC2
+- **EC2**
 
   유연한 배포 환경을 위해 ASG (Auto Scaling Group) 및 ALB (Application Load Balancer)를 활용합니다.
 
   ASG는 Launch Template과 ABS (Attribute-based Instance Type Selection)을 활용하여 요구 사항(vCPU / RAM 등)에 따라 비용 효율적인 인스턴스를 알아서 선택하게 합니다.
 
-- EC2 Image Builder
+- **EC2 Image Builder**
 
-  User Data는 사용하기 편하지만 설치가 오래 걸리는 의존성을 매번 설치하면, 인스턴스가 시작하고 실제로 애플리케이션 배포가 가능해지기까지 오랜 시간이 걸립니다.
-  - 필요한 도구 / 패키지 등 설치 (Chocolatey, NSSM, 보안 프로그램 등)
-  - AutoLogon 설정 후 인스턴스 재부팅
+  User Data는 구성하기 편하지만 인스턴스가 기동될 때마다 의존 패키지 설치, AutoLogon 설정 및 재부팅을 반복해야 하므로, 실제로 애플리케이션이 준비되기까지 오랜 시간이 걸립니다.
 
-    인스턴스 시작 속도를 높이고자 기반 AMI를 만들어 활용하기로 했습니다. Packer를 활용할 수도 있지만 개발 환경과 CI/CD를 가능한 단순화하고자 했습니다. 또한 AWS에서 제공하는 미리 정의된 컴포넌트(Chocolatey, Python 설치 등)를 활용할 수 있습니다.
+  인스턴스 시작 속도를 높이고자 기반 AMI를 만들어 활용하기로 했습니다. Packer를 활용할 수도 있지만 개발 환경과 CI/CD를 가능한 단순화하고자 했습니다. 또한 AWS에서 제공하는 미리 정의된 컴포넌트(Chocolatey, Python 설치 등)를 활용할 수 있습니다.
 
-    Image Builder를 통해 자동 로그온 설정을 하고자 했지만 Sysprep에 의해 관련 레지스트리 설정이 날아가는 문제가 있었습니다. 당장은 필요 이상으로 복잡해지기 때문에 추후 개선의 여지를 모색하도록 하고, 당장은 User Data를 활용하기로 했습니다.
+  Image Builder를 통해 자동 로그온 설정을 하고자 했지만, Windows 이미지를 템플릿화하고 일반화(Generalize)하는 Sysprep 과정에서 관련 레지스트리 설정이 초기화되는 문제가 있었습니다. 당장은 필요 이상으로 복잡해지기 때문에 추후 개선의 여지를 모색하도록 하고, 당장은 User Data를 활용하기로 했습니다.
 
-    SSM Association 또한 시도해봤지만 스케일 아웃 후 인스턴스가 준비되기까지 오랜 시간이 걸리고, 재부팅을 요하는 복잡한 초기화를 구성하기가 어려웠습니다.
+  SSM Association 또한 시도해봤지만 스케일 아웃 후 인스턴스가 준비되기까지 오랜 시간이 걸리고, 재부팅을 요하는 복잡한 초기화를 구성하기가 어려웠습니다.
 
-- CodeDeploy
+- **CodeDeploy**
 
   애플리케이션 배포를 위해 이용합니다. ASG 스케일 아웃 또한 처리할 수 있으며, ALB와의 연계도 좋습니다. GitHub을 이용하고 있으니 배포는 GitHub Actions를 통해 자동화합니다.
 
@@ -216,27 +214,76 @@ New-NetFirewallRule `
 
 ## 🧗 난관
 
-Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거나 직접 구현해야 했습니다.
+기반 네트워크나 IAM, 오토 스케일링 그룹 등을 구성하는 데 애를 먹지는 않았지만, Image Builder와 CodeDeploy를 구성하는 데는 많은 시행착오가 있었습니다. Pulumi AWS Provider의 기능 한계로 일부 기능은 다른 방법을 찾거나 직접 구현해야 했습니다.
 
 ### ⚡ 이미지 빌드 자동 시작하기
 
 최초 구성 시 이미지 빌드 파이프라인이 자동으로 시작되게끔 자동화하고 싶었습니다. 이를 지원하는 연관 설정이나 리소스가 없었기에 Pulumi의 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/) 기능을 이용해 사용자 정의 리소스를 구현하여 자동화했습니다.
 
+```python
+from typing import Any
+
+import boto3
+from pulumi import Input, ResourceOptions
+from pulumi.dynamic import CreateResult, Resource, ResourceProvider
+
+
+class _Provider(ResourceProvider):
+    def create(self, props: Any) -> CreateResult:
+        client_token = props["client_token"]
+
+        session = boto3.Session(region_name=props.get("region", None))
+        imagebuilder = session.client("imagebuilder")
+        response = imagebuilder.start_image_pipeline_execution(
+            imagePipelineArn=props["image_pipeline_arn"],
+            clientToken=client_token,
+        )
+
+        return CreateResult(
+            id_=client_token,
+            outs={"image_build_version_arn": response["imageBuildVersionArn"], **props},
+        )
+
+
+class TriggerImagePipeline(Resource):
+    """Trigger an AWS Image Builder pipeline to build an image."""
+
+    def __init__(  # noqa: D107
+        self,
+        resource_name: str,
+        opts: ResourceOptions | None = None,
+        *,
+        image_pipeline_arn: Input[str],
+        client_token: Input[str] | None = None,
+        region: Input[str] | None = None,
+    ) -> None:
+        super().__init__(
+            _Provider(),
+            resource_name,
+            {
+                "image_pipeline_arn": image_pipeline_arn,
+                "client_token": client_token or resource_name,
+                "region": region,
+            },
+            opts,
+        )
+```
+
+이 사용자 정의 리소스를 이용하면 Image Builder 파이프라인을 Pulumi로 구성한 뒤, 해당 리소스를 생성하는 것으로 이미지 빌드가 자동으로 시작됩니다.
+
 ![EC2 Image Builder](./assets/ec2-image-builder.png)
 
 ### 👣 관리되지 않는 리소스 추적하기
 
-Image Builder는 이미지 빌드 시 CloudWatch 로그 그룹으로 빌드 로그를 전달합니다. 다만 현재 연관된 리소스 중 그 어디에서도 사용자가 로그 그룹을 지정할 수 있는 선택지가 없다는 문제가 있었습니다.
-
-IaC를 다루다 보면, 이처럼 인기가 없는 제품은 문서나 설정이 많이 부족한 경우를 쉽게 찾아볼 수 있습니다.
+Image Builder는 이미지 빌드 시 CloudWatch 로그 그룹으로 빌드 로그를 전달합니다. 다만 현재 연관된 리소스 중 그 어디에서도 사용자가 로그 그룹을 지정할 수 있는 선택지가 없다는 문제가 있었습니다. IaC를 다루다 보면, 비교적 인기가 없는 제품은 문서나 설정이 많이 부족한 경우를 쉽게 찾아볼 수 있습니다.
 
 명명 규칙(`/aws/imagebuilder/<이미지 이름>`)을 따라 미리 로그 그룹을 생성해두면 이 리소스를 직접 관리할 수 있습니다. Image Builder는 이미 존재한다면 그 로그 그룹을 사용합니다.
 
 ### 🧹 깨끗하게 뒤처리하기
 
-실험이 끝난 뒤 리소스를 삭제하여도 Image Builder에 의해 생성된 일부 리소스(Image Builder Images, EC2 AMI, EC2 EBS Snapshot)는 알아서 삭제되지 않기에 추가 비용이 청구되지 않도록 직접 처리해주어야 합니다.
+실험이 끝난 뒤 리소스를 삭제하여도 Image Builder에 의해 생성된 일부 리소스(Image Builder Images, EC2 AMI, EC2 EBS Snapshot)는 자동으로 삭제되지 않기에 추가 비용이 청구되지 않도록 직접 처리해주어야 합니다.
 
-가능한 반복적인 작업을 자동화하고 싶었기에 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/)를 활용하여 해결했습니다. 반복적인 작업은 실수할 여지가 많기 때문에 가능하면 자동화하는 것이 좋다고 생각합니다.
+가능한 반복적인 작업을 자동화하고 싶었기에 이 또한 [Dynamic Provider](https://www.pulumi.com/docs/iac/concepts/resources/dynamic-providers/)를 활용하여 해결했습니다. 반복적인 작업은 실수할 여지가 많기 때문에 가능하면 자동화하는 것이 좋다고 생각합니다.
 
 ## ✅ 결과 및 검토
 
@@ -280,7 +327,9 @@ AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본
 
 ![curl으로 애플리케이션 동작 확인](./assets/curl-application-check.png)
 
-배포된 FastAPI 애플리케이션의 OpenAPI 문서도 확인해봅니다.![FastAPI OpenAPI 문서 확인](./assets/fastapi-openapi-docs.png)
+배포된 FastAPI 애플리케이션의 OpenAPI 문서도 확인해봅니다.
+
+![FastAPI OpenAPI 문서 확인](./assets/fastapi-openapi-docs.png)
 
 ### ⌛ 시나리오에 따른 배포 소요 시간
 
@@ -288,11 +337,11 @@ AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본
 
 | 시나리오                             | AMI 빌드 (Image Builder) | EC2 인스턴스 초기화 (User Data) | 애플리케이션 배포 (CodeDeploy) | 총 소요 시간 |
 | ------------------------------------ | ------------------------ | ------------------------------- | ------------------------------ | ------------ |
-| 최초 구성 및 배포 / 기반 이미지 변경 | 20 ~ 30분                | 5 ~ 10분                        | 5 ~ 10분                       | 30 ~ 50분    |
-| 스케일 아웃 (ASG)                    | X                        | 5 ~ 10분                        | 5 ~ 10분                       | 10 ~ 20분    |
+| 최초 구성 및 배포 / 기반 이미지 변경 | 20\~30분                 | 5\~10분                         | 5\~10분                        | 30\~50분     |
+| 스케일 아웃 (ASG)                    | X                        | 5\~10분                         | 5\~10분                        | 10\~20분     |
 | 애플리케이션 업데이트                | X                        | X                               | 약 3분                         | 약 3분       |
 
-애플리케이션 배포 시간은 구성에 크게 의존합니다. 무거운 의존성이 많을 수록 당연히 오래 걸리게 됩니다. 실험을 위해 사용한 애플리케이션은 튜토리얼 수준의 굉장히 단순한 FastAPI 애플리케이션으로, 1분도 채 걸리지 않을 정도였습니다.
+애플리케이션 배포 시간은 구성에 크게 의존합니다. 무거운 의존성이 많을수록 오래 걸리게 됩니다. 실험을 위해 사용한 애플리케이션은 튜토리얼 수준의 굉장히 단순한 FastAPI 애플리케이션으로, 1분도 채 걸리지 않을 정도였습니다.
 
 일반적인 수준의 크롤러 애플리케이션이라면 다양한 라이브러리, Selenium 웹 드라이버 등 많은 의존성을 가지므로 최초 배포 시 적어도 5분은 걸릴 것이라고 예상하고 있습니다. 필요하다면 이러한 내부 의존성 설치 속도를 올리기 위한 내부 미러링(pip / Selenium 웹 드라이버 등) 또한 고려할 수 있을 것입니다. 또한 적절한 EC2 인스턴스 유형을 선택하면 초기화 및 의존성 설치 속도를 개선하여 배포 속도를 더 올릴 수 있을 것입니다.
 
@@ -300,54 +349,46 @@ AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본
 
 ![실험 비용](./assets/cost-and-usage.png)
 
-하루 약 3 \~ 6시간의 작업에 대해 청구된 비용은 보통 $0.5 \~ $1.5 수준(프리티어 혜택 포함)입니다. 생각보다 거의 안 나와서 놀랐습니다. IaC 도구 활용의 이점 중 하나는 이런 실험 인프라를 필요할 때 쉽게 만들고 삭제할 수 있다는 것입니다.
+하루 약 3\~6시간의 작업에 대해 청구된 비용은 보통 $0.5\~$1.5 수준(프리티어 혜택 포함)입니다. 생각보다 거의 안 나와서 놀랐습니다. IaC 도구 활용의 이점 중 하나는 이런 실험 인프라를 필요할 때 쉽게 만들고 삭제할 수 있다는 것입니다.
 
 ## 🤔 개선할 점
 
 이 실험에 예상보다 훨씬 많은 시간을 투자해야 했기에 한 번 일단락을 짓기로 했습니다. 추후 개선 사항과 함께 글을 보완하고자 합니다.
 
-- PowerShell 스크립트 개선
+- **PowerShell 스크립트 개선**
 
   `python -m pipx run uv run ...`과 같이 장황한 PowerShell 스크립트를 작성하게 되었습니다. 도구를 설치한 후에도 세션이 제대로 명령어를 찾지 못했고 Scoop, pipx 등 여러 도구를 활용해봤지만 잘 되지 않았습니다. Chocolatey의 `Update-SessionEnvironment` 또한 활용해봤지만 해결할 수 없었습니다.
 
-- AMI 빌드 개선
+- **AMI 빌드 개선**
 
-  AMI 빌드 후 Launch Template이 변경된 뒤 자동으로 Instance Refresh가 수행되지 않는 문제가 있습니다. EventBridge 및 Lambda를 이용하여 이를 자동화할 예정입니다.
+  AMI 빌드 후 Launch Template이 변경된 뒤 자동으로 Instance Refresh가 수행되지 않는 문제가 있습니다. EventBridge 및 Lambda를 이용하여 이를 자동화할 예정입니다. 또한 느린 인스턴스 스케일 아웃 속도를 개선하려고 합니다. [EC2 Fast Launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/win-ami-config-fast-launch.html)와 같은 기능을 활용할 수 있는지 검토해 볼 생각입니다.
 
-  또한 느린 인스턴스 스케일 아웃 속도를 개선하려고 합니다.
+- **AutoLogon 설정 개선 또는 대안 모색**
 
-  - AutoLogon 설정 개선 또는 대안 모색
+  Sysprep 과정에서 자동 로그온을 설정할 수 있다면 인스턴스가 자동 로그온 설정 후 재부팅할 필요가 없으며, 준비까지 필요한 시간을 유의미하게 단축할 수 있으리라 생각합니다. 가능하다면 AutoLogon을 사용하지 않고도 콘솔 세션을 유지할 수 있는 대안을 찾으면 좋겠습니다.
 
-    Sysprep 과정에서 자동 로그온을 설정할 수 있다면 인스턴스가 자동 로그온 설정 후 재부팅할 필요가 없으며, 준비까지 필요한 시간을 유의미하게 단축할 수 있으리라 생각합니다. 가능하다면 AutoLogon을 사용하지 않고도 콘솔 세션을 유지할 수 있는 대안을 찾으면 좋겠습니다.
-
-  - [EC2 Fast Launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/win-ami-config-fast-launch.html) 기능 실험
-
-    AWS에서 제공하는 EC2 Fast Launch를 이용하면 Windows 인스턴스의 스케일 아웃 속도를 크게 개선할 수 있을 것 같습니다.
-
-- 로컬 VM 개발 환경 구성
+- **로컬 VM 개발 환경 구성**
 
   IaC를 통해 대부분의 작업을 자동화할 수 있었지만, 애플리케이션을 개발하고 Windows Server 내에서 실험하는 데에 모든 AWS 인프라 자원이 필요하지는 않으며, 여전히 상당한 초기 설정 시간이 필요합니다.
 
   실제 애플리케이션 개발 과정에서는 로컬 환경에서 Windows Server에 대한 배포 및 애플리케이션 구성을 실험할 수 있으면 큰 도움이 될 것이며, Vagrant를 활용하려고 합니다.
 
-- 실제 동작하는 스크래핑 애플리케이션 예제 추가
+- **실제 동작하는 스크래핑 애플리케이션 구현**
 
   인프라 구성에 집중하기 위해 이번에는 애플리케이션을 굉장히 단순하게 구성했습니다. OpenCV를 활용하여 보안 키보드와 상호작용하는 실제 동작하는 예제를 추가할 생각입니다.
 
-- HTTPS 구성
+- **완전한 구성으로 발전시키기**
 
-  Route 53 도메인 및 ACM 구성과 관련된 내용은 이번에 다루지 않았습니다. 추후 HTTPS 구성을 추가하려고 합니다.
+  Route 53 도메인 및 ACM 구성과 관련된 내용은 이번에 다루지 않았지만, 추후 HTTPS 구성을 추가하려고 합니다. 단순히 실험을 위한 구성에서 끝나지 않고, 실제 운영 환경이라고 생각하고 안정적으로 동작하는 시스템으로 발전시키고자 합니다.
 
-- IaC 개선
-  - 인프라 리소스 삭제(`pulumi destroy`) 중 일부 리소스 삭제 중 오류가 발생하여 수동 개입을 필요로 하고 있습니다.
-  - EC2 Image Builder로 인한 외부 변경 사항(Launch Template)으로 인해 IaC 상태와 실제 상태 사이에 불일치가 발생합니다.
+- **IaC 개선**
+
+  인프라 리소스 삭제(`pulumi destroy`) 과정에서 일부 리소스 삭제 시 오류가 발생하여 수동 개입을 필요로 하고 있으며, EC2 Image Builder로 인한 외부 변경 사항(Launch Template)으로 인해 IaC 상태와 실제 상태 사이에 불일치가 발생합니다.
 
 ## 💭 마치며
 
 Elastic Beanstalk와 Lambda, ECS를 이용해 애플리케이션을 배포한 적이 있었지만 EC2 + CodeDeploy 조합은 처음이었습니다. 단일 EC2 인스턴스에 SSH(Session Manager 경유)를 이용해 배포한 적이 있으니 EC2 배포 경험이 없는 건 아니지만 이번 경우는 Windows Server였다는 점에서 더욱 특별합니다.
 
-Windows 환경이 가지는 특성과 고유한 문제들이 있어서 쉽지 않았지만 신선한 경험이었고, PowerShell은 생각보다 좋은 스크립트 도구라는 것도 알게 되었습니다.
-
-하지만 꼭 필요한 경우가 아니라면 Windows Server를 이용하는 것은 피하고 싶습니다. Linux 서버 대비 알아야 할 것도 많고, 필요한 리소스도 상당합니다. Windows의 복잡한 생태계, 특히 콘솔 세션은 스크래핑 기능 구현 후에도 한동안 저를 괴롭혔던 주범이었습니다.
+Windows 환경이 가지는 특성과 고유한 문제들이 있어서 쉽지 않았지만 신선한 경험이었고, PowerShell은 생각보다 좋은 스크립트 도구라는 것도 알게 되었습니다. 하지만 꼭 필요한 경우가 아니라면 Windows Server를 이용하는 것은 피하고 싶습니다. Linux 서버 대비 알아야 할 것도 많고, 필요한 리소스도 상당합니다. Windows의 복잡한 생태계, 특히 콘솔 세션은 스크래핑 기능 구현 후에도 한동안 저를 괴롭혔던 주범이었습니다.
 
 이 실험을 위해 사용된 소스 코드는 [lasuillard/aws-codedeploy-windows](https://github.com/lasuillard/aws-codedeploy-windows)에서 확인하실 수 있습니다.

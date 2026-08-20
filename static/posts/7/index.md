@@ -12,13 +12,11 @@ tags:
   - Pulumi
 ---
 
-여러 작은 사이드 프로젝트를 하다 보면 테스트 환경 구성에 많은 시간을 투자하곤 합니다. Test-first TDD를 엄격히 따르는 편은 아닙니다. 하지만 산만한 저는 자잘한 프로젝트를 많이 해보는 편이라, 언제 손을 놓아도 언제든 다시 작업할 수 있는 개발 환경을 갖추는 것이 특히 중요합니다.
+여러 작은 사이드 프로젝트를 하다 보면 테스트 환경 구성에 많은 시간을 투자하곤 합니다. TDD(테스트 주도 개발)를 엄격히 따르는 편은 아니지만, 여러 프로젝트를 병렬로 다루다 보니 언제든 다시 작업을 이어갈 수 있는 개발 환경을 갖추는 것이 특히 중요합니다.
 
-기능에 UI가 포함되는 경우에는 종단 간 테스트를 위해 Playwright를 이용하고 있습니다. 하지만 매번 GitHub에서 테스트 결과를 직접 확인하는 것은 꽤 불편하게 느껴졌습니다.
+프로젝트에 기능에 UI가 포함되는 경우에는 종단 간 테스트를 위해 Playwright를 이용하고 있습니다. 하지만 매번 GitHub에서 테스트 결과를 직접 확인하는 것은 꽤 불편하게 느껴졌습니다. 워크플로 아티팩트를 다운로드하는 대신, PR에서 링크를 열고 바로 HTML 테스트 보고서를 확인할 수 있으면 좋겠다고 생각했습니다.
 
-워크플로 아티팩트를 다운로드하는 대신, PR에서 링크를 열고 바로 HTML 테스트 보고서를 확인할 수 있으면 좋겠다고 생각했습니다.
-
-이번에는 AWS S3와 CloudFront를 활용하여 Playwright 테스트 리포트를 브라우저에서 쉽고 빠르게 확인하는 간단한 워크플로에 대해 이야기하려고 합니다.
+이번에는 AWS S3와 CloudFront를 활용하여 Playwright 테스트 리포트를 브라우저에서 한 번의 클릭으로 즉시 확인하는 간단한 워크플로를 소개합니다.
 
 ## 🎭 Playwright
 
@@ -28,29 +26,28 @@ tags:
 
 Playwright를 선택하게 된 데에는 다음과 같은 이유가 있습니다:
 
-- Cypress나 Puppeteer, Selenium과 비교했을 때 가장 구성 및 실행이 편리했습니다. 브라우저 및 시스템 의존성 설치를 알아서 합니다.
-
-- 브라우저 UI 및 다양한 확장(VS Code Extension, MCP)을 지원하며 좋은 사용 경험을 제공합니다.
-
-- 공식 문서가 잘 관리되어 있으며 생태계가 활발합니다. 참고할 수 있는 글과 문서가 굉장히 풍부하며 Microsoft에서 관리하므로 짧은 시일 내에 문제가 발생할 가능성이 적습니다.
+- 브라우저 및 시스템 의존성 설치를 자동으로 처리해 줍니다. 설치 및 실행이 간단하며, 공식 Docker 이미지도 제공되어 CI 환경에서 쉽게 활용할 수 있습니다.
+- 브라우저 UI 및 다양한 확장(VS Code Extension, MCP, CLI)을 지원하며 좋은 사용 경험을 제공합니다.
+- 공식 문서가 잘 관리되어 있으며 생태계가 활발합니다. 참고할 수 있는 글과 문서가 굉장히 풍부하며 Microsoft에서 관리하므로 안정적으로 유지보수됩니다.
 
 ## 🪣 임시 웹 호스팅
 
-Playwright HTML 보고서를 브라우저에서 다운로드 과정 없이 쉽고 빠르게 확인하려면 간단한 정적 호스팅이 필요합니다. 임시 웹 페이지 호스팅이 간단해야 하고, 여러 PR에서 생성된 보고서를 쉽게 확인할 수 있어야 합니다.
-
-또한 오래된 웹 페이지를 자동 만료시킬 수 있다면 더욱 편리하겠죠. 
+Playwright HTML 보고서를 번거로운 다운로드 과정 없이 브라우저에서 바로 열람하려면 간단한 정적 웹 호스팅 환경이 필요합니다. 임시 호스팅 구성이 단순해야 하고, 여러 PR에서 생성된 보고서를 독립적으로 확인할 수 있어야 합니다. 또한 오래된 리포트를 자동으로 만료시킬 수 있다면 관리 및 비용 부담을 크게 줄일 수 있습니다.
 
 이 모두를 만족하는 가장 가성비 좋은 솔루션은 AWS S3와 CloudFront입니다.
 
 - S3 라이프사이클 규칙을 통해 오래된 보고서는 자동으로 삭제할 수 있어 비용 발생을 최소화할 수 있습니다.
+- S3 버킷을 외부에 직접 공개하지 않고 CloudFront와 OAC(Origin Access Control)를 통해 접근하도록 구성하여 S3를 향한 비인가 접근이나 직접 공격을 사전에 효과적으로 차단할 수 있습니다.
+- CloudFront 정액 요금제(Flat Rate Pricing, [2025년 11월에 출시](https://aws.amazon.com/ko/blogs/korea/introducing-flat-rate-pricing-plans-with-no-overages/))를 이용하면 과도한 요금 발생을 막을 수 있습니다. 주의해야 할 점은, 정액 요금제로 전환한 CloudFront 인스턴스는 기존 종량 요금제로 전환해야 삭제할 수 있습니다.
 
-- S3를 외부에 노출하지 않고 CloudFront를 통해 접근하기 때문에 S3에 대한 공격을 대거 미연에 방지할 수 있습니다.
-
-- CloudFront 정액 요금제(Flat Rate Pricing, [2025년 11월에 출시](https://aws.amazon.com/ko/blogs/korea/introducing-flat-rate-pricing-plans-with-no-overages/))를 이용하면 과도한 요금 발생을 막을 수 있습니다. 주의해야 할 점은, 정액 요금제로 전환한 CloudFront 인스턴스는 기존 종량 요금제로 전환해야 삭제할 수 있다는 점입니다.
+> 🤔 **다른 정적 호스팅 서비스(GitHub Pages, Cloudflare Pages)와의 비교**
+>
+> - **GitHub Pages:** 배포 브랜치에 매번 테스트 리포트 빌드 결과물을 커밋해야 하므로, 수많은 PR과 커밋으로 인해 Git 히스토리가 난잡해지고 저장소 용량이 급격히 비대해집니다.
+> - **Cloudflare Pages:** PR별 Preview 배포를 지원하지만, S3 수명 주기 규칙(Lifecycle)과 비슷한 기능을 지원하지 않습니다. 또한 별도의 배포 CLI(Wrangler)나 계정 관리 없이, `aws s3 cp` 한 줄로 디렉토리 구조(`playwright-report-${{ github.run_id }}`)를 직접 제어하고 기존 AWS/Pulumi 단일 스택에서 인프라를 통합 관리하는 것이 훨씬 직관적이고 여러 프로젝트에 재사용하기 수월했습니다.
 
 ### 📜 Pulumi 인프라 정의
 
-다른 프로젝트에서도 Playwright를 사용하고 있거나 앞으로도 사용할 계획이 있기 때문에 Pulumi로 그 구성을 정의해두고 다른 프로젝트에서도 재사용하기로 했습니다.
+앞으로 여러 프로젝트에서 동일한 구성을 재사용할 수 있도록 Pulumi를 사용해 인프라를 코드(IaC)로 정의했습니다.
 
 ```python
 import pulumi_aws as aws
@@ -176,7 +173,7 @@ aws.s3.BucketCorsConfiguration(
 
 이 외에도 GitHub Actions 변수 자원을 관리하는 코드가 있어 GitHub Actions 환경으로 변수 및 비밀값 삽입 또한 Pulumi에서 처리하고 있습니다. AWS 인프라에 인증하기 위한 OIDC 구성 등도 Pulumi에서 관리하고 있습니다.
 
-## ⚙️ Playwright HTML 리포트 생성하기
+### ⚙️ Playwright HTML 리포트 생성하기
 
 테스트 후 HTML 리포트를 생성하도록 Playwright 설정을 갱신해야 할 필요가 있습니다. `$.reporter` 설정을 변경하여 HTML 리포트를 생성하도록 해줍니다.
 
@@ -198,11 +195,11 @@ aws.s3.BucketCorsConfiguration(
 }
 ```
 
-생성된 리포트는 `playwright-report/` 디렉토리에 저장됩니다. 남은 것은 이 파일을 S3에 업로드하는 것 뿐입니다.
+생성된 리포트는 `playwright-report/` 디렉토리에 저장됩니다. 남은 것은 이 디렉토리를 S3에 업로드하는 것뿐입니다.
 
-## 📰 테스트 리포트 업로드하기
+### 📰 테스트 리포트 업로드하기
 
-이제 CI 워크플로 내용을 갱신하여 HTML 리포트를 S3에 업로드하고 [thollander/actions-comment-pull-request](https://github.com/thollander/actions-comment-pull-request)를 이용하여 PR에 댓글을 남깁니다. [AWS OIDC](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws)를 이용하여 임시 인증 정보를 발급받은 뒤 S3에 업로드하며, 업로드를 위한 IAM 정책은 연관된 IAM 역할에 극히 제한적으로 부여되어 있습니다.
+이제 CI 워크플로를 작성하여 HTML 리포트를 S3에 업로드하고, [thollander/actions-comment-pull-request](https://github.com/thollander/actions-comment-pull-request) 액션을 이용해 PR에 접근 링크가 담긴 댓글을 남깁니다. 장기 AWS 자격 증명(Access Key)을 시크릿에 저장하지 않고 [AWS OIDC](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws)를 통해 안전하게 임시 인증 정보를 발급받아 업로드하며, 업로드 권한 역시 최소 권한 원칙에 따라 필요한 S3 경로에만 제한적으로 부여했습니다.
 
 ```yaml
 steps:
@@ -250,7 +247,7 @@ steps:
       file-path: ./playwright-report.md
 ```
 
-테스트가 완료되면 PR에 댓글이 달립니다.
+테스트가 완료되면 PR에 댓글이 달립니다. `comment-tag: playwright-report` 옵션 덕분에 새로운 커밋이 푸시될 때마다 기존 댓글이 최신 링크로 깔끔하게 갱신되어 PR이 댓글로 도배되지 않습니다. 이로 인해 이전 커밋의 리포트 링크를 PR 댓글에서 바로 누를 수는 없다는 단점은 있지만, 워크플로에서 `$GITHUB_STEP_SUMMARY`에도 함께 출력해 두었으므로 특정 워크플로의 GitHub Actions Job Summary 탭으로 이동하면 해당 커밋 시점의 리포트를 언제든지 확인할 수 있습니다.
 
 ![PR 테스트 결과 댓글](./assets/pr-comment.png)
 
@@ -258,23 +255,29 @@ steps:
 
 ![테스트 케이스 상세 결과](./assets/test-case-detail.png)
 
-실패한 테스트 케이스의 경우 Playwright 설정에 따라 트레이스, 스크린샷 스냅샷의 변경 상세 등이 테스트 결과 상세에 포함되어 자세한 내용을 확인할 수 있습니다.
+실패한 테스트 케이스의 트레이스(Trace) zip 파일을 로컬로 다운로드받아 [Playwright Trace Viewer](https://trace.playwright.dev/)에 다시 수동 업로드할 필요 없이, 브라우저에서 버튼 클릭 한 번으로 액션 타임라인, 네트워크 로그, DOM 스냅샷을 즉시 브라우저에서 확인할 수 있습니다.
 
 ![Playwright 트레이스](./assets/playwright-trace.png)
 
 ## 🤔 아쉬운 점
 
-- Playwright를 필요로 하는 프로젝트마다 워크플로를 각자 구성해야 하고, 워크플로에 AWS 접근 권한을 부여해야 하며, 프로젝트별로 인프라 리소스를 각각 관리해야 합니다.
+- **접근 제어 및 보안 (오픈소스 vs 프라이빗)**
 
-  그래서 GitHub App이나 커스텀 GitHub Action을 만들어서 여러 프로젝트에서 재사용하는 방식을 고려하고 있습니다.
+  현재 구성은 누구나 접근 가능한 공개(Public) 리포지토리를 전제로 하고 있습니다. 만약 내부 API 엔드포인트나 민감한 에러 스택이 포함될 수 있는 비공개(Private) 프로젝트라면 CloudFront Signed Cookies 등을 도입해 인가된 사용자만 리포트를 열람할 수 있도록 개선해야 합니다. 현재 이 보안 문제를 해결하기 위한 후속 인프라 설계를 사이드 프로젝트로 진행 중입니다.
 
-- PR에서 스냅샷을 업데이트할 수 있다면 좀 더 편리할 것 같습니다. 이번에는 다루지 않았지만 앞으로 필요해질 것 같습니다.
+- **프로젝트별 워크플로 및 권한 관리**
 
-- 개발 환경과 CI 환경 사이의 불일치를 해소해야 합니다. 저는 Docker를 이용해 Playwright 테스트를 실행하고 있지만, 이 방법은 Docker 빌드로 인해 테스트 실행 시간이 길어지는 단점이 있습니다.
+  Playwright를 필요로 하는 프로젝트마다 워크플로를 각자 구성해야 하고, 워크플로에 AWS 접근 권한을 부여해야 하며, 프로젝트별로 인프라 리소스를 각각 관리해야 합니다. 그래서 GitHub App이나 커스텀 GitHub Action을 만들어서 여러 프로젝트에서 재사용하는 방식을 고려하고 있습니다.
+
+- **스냅샷 갱신 및 환경 일치**
+
+  PR에서 스냅샷을 손쉽게 업데이트할 수 있는 워크플로가 추가되면 더 편리할 것 같습니다. 또한 로컬(Docker)과 CI 환경 사이의 실행 속도 및 환경 불일치 해소도 남아있는 과제입니다.
 
 ## 💭 마치며
 
-간단한 자동화지만 Playwright 테스트 리포트를 브라우저에서 쉽고 빠르게 확인할 수 있어 편리해졌습니다. 또한 오래된 보고서는 자동으로 삭제되므로 비용 발생을 최소화할 수 있습니다. 하지만 제한된 확장성은 여전히 발목을 잡고 있습니다. 다음에는 여러 프로젝트에 쉽게 재사용할 수 있는 GitHub App이나 커스텀 GitHub Action을 만들어 글로 정리해보려고 합니다.
+간단한 파이프라인 구성만으로도 Playwright 테스트 결과와 트레이스를 브라우저에서 즉시 확인할 수 있게 되어 작업 편의성이 크게 향상되었습니다. 또한 S3 라이프사이클을 통해 오래된 보고서가 자동으로 정리되므로 불필요한 스토리지 비용 발생도 사전에 방지할 수 있습니다.
+
+다만 프로젝트별 개별 구성에 따른 재사용성 한계와 비공개 프로젝트를 위한 접근 제어는 여전히 발전시킬 여지가 남아있습니다. 다음에는 여러 프로젝트에 손쉽게 붙여 쓸 수 있는 재사용 가능한 커스텀 GitHub Action과 CloudFront Signed Cookies를 활용한 보안 호스팅을 구축하여 글로 정리해보려 합니다.
 
 ## 🔗 참고한 글
 

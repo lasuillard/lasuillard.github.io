@@ -1,20 +1,22 @@
+import { definer as terraform } from '@taga3s/highlightjs-terraform';
 import type { Element, Root } from 'hast';
+import powershell from 'highlight.js/lib/languages/powershell';
+import { common } from 'lowlight';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeHighlight from 'rehype-highlight';
 import rehypeHighlightCodeLines from 'rehype-highlight-code-lines';
 import rehypeMermaid from 'rehype-mermaid';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
-import { common } from 'lowlight';
-// @ts-expect-error - highlightjs-svelte has no types
-import hljsSvelte from 'highlightjs-svelte/dist/index.mjs';
-import powershell from 'highlight.js/lib/languages/powershell';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import remarkStringify from 'remark-stringify';
 import { unified } from 'unified';
 import { SKIP, visit } from 'unist-util-visit';
+
+// @ts-expect-error - highlightjs-svelte has no types
+import hljsSvelte from 'highlightjs-svelte/dist/index.mjs';
 
 let svelteLanguage: any;
 try {
@@ -77,7 +79,8 @@ const processor = unified()
 		languages: {
 			...common,
 			powershell,
-			svelte: svelteLanguage
+			svelte: svelteLanguage,
+			tf: terraform
 		}
 	})
 	.use(rehypeHighlightCodeLines, {

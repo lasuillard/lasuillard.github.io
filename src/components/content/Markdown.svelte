@@ -221,7 +221,7 @@
 		position: absolute;
 		right: 0.75rem;
 		top: 0.75rem;
-		z-index: 20;
+		z-index: 5;
 		display: flex;
 		align-items: center;
 		gap: 0.5rem;

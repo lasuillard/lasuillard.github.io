@@ -4,7 +4,7 @@ series: 개발 컨테이너 활용하기
 publicationDate: 2025-07-28
 preview: ./preview.png
 summary: >
-  Dev Container를 활용하여 언제든지 쉽게 재현 가능하고 격리된, 나만의 개발 환경 만들기
+  Dev Container를 이용하여 언제든지 쉽게 재현 가능하고 격리된, 나만의 개발 환경 만들기
 tags:
   - Dev Container
   - Docker
@@ -13,71 +13,61 @@ tags:
   - VS Code
 ---
 
-다들 개발 환경은 어떻게 구성하고 관리하고 계신가요? 아마도 Python 가상 환경(venv), pyenv, nodenv, Poetry, uv, pipenv 등 여러 패키지 매니저나 환경 관리 도구를 활용하고 계실 것 같습니다. 저 역시 다양한 도구를 사용해봤지만, 최근에는 새 프로젝트를 시작할 때 개발 컨테이너 구성을 가장 우선시하고 있습니다.
+다들 개발 환경은 어떻게 구성하고 관리하고 계신가요? 아마도 Python 가상 환경(venv), pyenv, nodenv, Poetry, uv, pipenv 등 여러 패키지 매니저나 환경 관리 도구를 사용하고 계실 것 같습니다. 저 역시 다양한 도구를 사용해봤지만, 최근에는 새 프로젝트를 시작할 때 개발 컨테이너 구성을 가장 우선시하고 있습니다.
 
-저는 간단한 사이드 프로젝트를 시작할 때마다 개발 환경 구성에 많은 시간을 쏟곤 합니다. 하지만 개발 환경 구성에 너무 집중한 나머지, 정작 프로젝트 자체의 개발은 소홀해지는 경향이 있었습니다.
+저는 간단한 사이드 프로젝트를 시작할 때마다 개발 환경 구성에 많은 시간을 쏟곤 합니다. 그러다 보니 개발 환경 구성에 너무 집중한 나머지, 정작 프로젝트 자체의 개발은 소홀해지는 경향이 있었습니다. 그리고 오래된 프로젝트를 다시 찾았을 때는 언어나 라이브러리 버전이 노후화되어 개발 환경을 통째로 갱신해야 했습니다. 그 와중에 개발 컨테이너는 여러 프로젝트를 오가며 다시 적응하는 시간을 크게 줄여줬습니다.
 
-그리고 오래된 프로젝트를 다시 찾았을 때는 언어나 라이브러리 버전이 노후화되어 개발 환경을 통째로 갱신해야 했습니다. 하지만 개발 컨테이너는 여러 프로젝트를 오가며 다시 적응하는 시간을 크게 줄여줬습니다.
-
-이 글에서는 많은 시행착오를 통해 습득한 개발 컨테이너 활용 방법과 경험을 공유하고자 합니다.
+이 글에서는 많은 시행착오를 통해 습득한 개발 컨테이너 사용법과 경험을 공유하고자 합니다.
 
 ## 🐳 Dev Container(개발 컨테이너)란 무엇인가?
 
-Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기술을 활용하여 개발 환경을 구성 및 관리하는 기술입니다. 컨테이너는 애플리케이션과 그 의존성을 격리된 환경에 패키징하는 기술로, 개발 컨테이너는 이를 개발 환경에 적용한 것입니다. 개발 컨테이너는 애플리케이션 실행, 개발에 필요한 도구 및 라이브러리, 런타임 관리, CI 등 다양한 목적으로 이용할 수 있습니다.
+Dev Container(이하 개발 컨테이너)는 Docker 등의 컨테이너 기술을 개발 환경 격리 및 관리에 적용한 개방형 표준 사양입니다. 애플리케이션 런타임뿐만 아니라 개발에 필요한 도구, 확장 프로그램, CI 환경까지 일관되게 패키징하여 관리할 수 있습니다.
 
 ![개발 컨테이너 구조 예시](./assets/dev-container-structure.png)
 
 개발 컨테이너는 로컬, 원격 및 클라우드 환경에서 다양한 도구를 통해 실행될 수 있습니다. 잘 알려진 도구로는 Visual Studio Code, GitHub Codespaces, GitPod, JetBrains IDE 등이 있습니다.
 
-또한 개발 컨테이너는 Docker 외에도 다양한 호환 도구(OrbStack, Podman 등)를 지원합니다. 다양한 템플릿([Dev Container Templates](https://containers.dev/templates))을 이용하거나 직접 설정 파일(`devcontainer.json`)을 추가하여 컨테이너화된 개발 환경을 시작할 수 있습니다. 또한 [Dev Container Features](https://containers.dev/features)를 활용하여 특정 도구의 설치 및 설정을 재사용할 수도 있습니다.
+또한 개발 컨테이너는 Docker 외에도 다양한 호환 도구(OrbStack, Podman 등)를 지원합니다. 잠시 macOS에서 OrbStack과 함께 사용했을 때에는 큰 문제 없이 쾌적하게 동작했습니다(다만 복잡한 구성에서는 100% 호환되지 않을 수 있다는 점은 염두에 두어야 합니다). 이에 더해 다양한 템플릿([Dev Container Templates](https://containers.dev/templates))을 이용하거나 직접 설정 파일(`devcontainer.json`)을 추가하여 컨테이너화된 개발 환경을 시작할 수 있습니다. [Dev Container Features](https://containers.dev/features)를 이용하여 특정 도구의 설치 및 설정을 재사용할 수도 있습니다.
 
 ## 🎣 언제 활용하면 좋을까?
 
-개발 컨테이너가 언뜻 보기에는 만능처럼 보이지만, 여느 기술이 그렇듯 모든 것에 활용할 수 있는 만능 도구는 아닙니다. 제가 생각하는 사용 사례는 다음과 같습니다.
+개발 컨테이너가 언뜻 보기에는 만능처럼 보이지만, 여느 기술이 그렇듯 모든 것에 적용할 수 있는 은탄환은 아닙니다. 제가 생각하는 사용 사례는 다음과 같습니다.
 
 ### 👍 권장 사용 사례
 
-- 팀 개발 환경 통일
+- **팀 개발 환경 통일**
 
   공동 작업자(동료)와 공통 개발 환경을 공유하고 관리할 수 있으며 **"Works on my machine"** 문제에 대한 해결책이 될 수 있습니다.
 
-- 복잡한 환경 구성 자동화
+- **복잡한 환경 구성 자동화**
 
-  Lifecycle Scripts 및 Docker Compose를 활용하여 여러 의존 서비스(데이터베이스, 캐시 등)를 가진 복잡한 환경 구성을 보다 효과적으로 관리할 수 있습니다.
+  Lifecycle Scripts(`postCreateCommand` 등) 및 Docker Compose를 이용하여 여러 의존 서비스(데이터베이스, 캐시 등)를 가진 복잡한 환경 구성을 보다 효과적으로 관리할 수 있습니다.
 
-- 일회용(Disposable) 개발 환경
+- **일회용(Disposable) 개발 환경**
 
   쉽게 쓰고 버릴 수 있는 개발 환경을 구축하여 필요에 따라 쉽게 재구성할 수 있습니다. 개발 환경에 문제가 생기면 다시 만들면 됩니다. 또한 개발 환경을 반복적으로 재구성하면서 개발 환경 개선의 기회를 모색할 수 있습니다.
 
-- 환경 격리
+- **환경 격리**
 
   호스트 환경으로부터의 격리 이점(도구 및 설정, 네트워크 충돌 방지 등)을 누릴 수 있습니다.
 
 ### 👎 권장하지 않는 사용 사례
 
-- 컨테이너 기술에 익숙하지 않은 경우
+- **컨테이너 기술에 익숙하지 않은 경우**
 
-  컨테이너 기술이 굉장히 보편화되었지만, 구성 및 디버깅에 대한 러닝 커브가 분명히 존재합니다. 익숙하지 않다면 구성 및 관리에 많은 노력을 필요로 합니다.
+  컨테이너 기술이 굉장히 보편화되었지만, 구성 및 디버깅에 대한 러닝 커브가 분명히 존재합니다. 익숙하지 않다면 구성 및 관리에 많은 노력을 필요로 합니다. 또한 컨테이너는 어떤 환경에서든 잘 동작할 것처럼 보이지만, 실제로는 OS/CPU 아키텍처 등 하드웨어에 대한 고려가 필요합니다. 필수 패키지 설치가 실패하거나 정상적으로 동작하지 않는 문제가 발생할 수 있습니다.
 
-  컨테이너는 어떤 환경에서든 잘 동작할 것처럼 보이지만, 실제로는 OS/CPU 아키텍처 등 하드웨어에 대한 고려가 필요합니다. 필수 패키지 설치가 실패하거나 정상적으로 동작하지 않는 문제가 발생할 수 있습니다.
-
-- 도구 호환성 문제
+- **도구 호환성 문제**
 
   [개발 컨테이너 표준](https://containers.dev/)이 존재하지만, 이에 대한 IDE/코드 편집기 등 도구의 수용 수준은 차이가 있습니다. 모든 IDE/코드 편집기가 개발 컨테이너를 지원하는 것은 아니며, 지원하더라도 표준을 100% 지원하지 않을 수 있으므로 개발 환경 구성에 따른 동작 차이가 있을 수 있습니다.
 
-- 호스트 의존성이 높은 경우
+- **호스트 의존성이 높은 경우**
 
-  호스트로부터 파일 시스템, 네트워크 등 많은 부분이 분리되므로 호스트의 자원(각종 파일, 소켓 등)을 적극적으로 활용해야 하는 경우 볼륨 설정 등을 통해 다시 명시적으로 연결해야 할 필요가 있습니다.
+  호스트로부터 파일 시스템, 네트워크 등 많은 부분이 분리되므로 호스트의 자원(각종 파일, 소켓 등)을 적극적으로 사용해야 하는 경우 볼륨 설정 등을 통해 다시 명시적으로 연결해야 할 필요가 있습니다. 디스플레이 및 상호작용이 중요한 GUI/모바일 애플리케이션 개발을 위한 환경을 구성하고자 하는 경우, 높은 호스트 자원 요구 사항으로 인해 성능 저하나 복잡성, 호환성 문제가 발생할 수 있습니다. 이 경우 VM과 원격 SSH 연결([VS Code: Remote - SSH](https://code.visualstudio.com/docs/remote/ssh))을 이용하는 대안을 검토해보시기 바랍니다.
 
-- 하드웨어 요구 사항
+- **보안 우려**
 
-  디스플레이 및 상호작용이 중요한 GUI/모바일 애플리케이션 개발을 위한 환경을 구성하고자 하는 경우, 높은 자원 요구 사항으로 인해 성능 저하, 필요 이상으로 복잡한 환경 구성, 그리고 호환성 문제 등이 발생할 수 있습니다.
-
-  이 경우 VM과 원격 SSH 연결([VS Code: Remote - SSH](https://code.visualstudio.com/docs/remote/ssh))을 활용하는 대안을 검토해보시기 바랍니다.
-
-- 보안 우려
-
-  컨테이너 탈옥에 대한 가능성은 언제든지 열려 있습니다. Docker의 경우 [Rootless mode](https://docs.docker.com/engine/security/rootless/)를 활용할 수는 있지만 VM만큼 안전하지는 않습니다.
+  컨테이너 탈옥(Breakout)에 대한 가능성은 언제든지 열려 있습니다. Docker의 경우 데몬을 일반 사용자 권한으로 실행하는 [Rootless mode](https://docs.docker.com/engine/security/rootless/)를 적용해 호스트 루트 권한 탈취를 방어할 수는 있지만, 여전히 VM만큼 완전한 격리를 보장하지는 못합니다.
 
 ## 🚀 예제와 함께 시작하기
 
@@ -86,11 +76,72 @@ Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기�
 로컬 환경에서 시작하고 싶다면 [VS Code 개발 컨테이너 공식 문서](https://code.visualstudio.com/docs/devcontainers/containers)를 참고하시기 바랍니다.
 
 1. 예제 코드 저장소([lasuillard/my-project-template](https://github.com/lasuillard/my-project-template/tree/df1e88dd0c57b6684cd0f12d4ae0e089d8388d02))를 엽니다. 이 저장소는 개발 컨테이너가 미리 구성된 개인 프로젝트 템플릿입니다. 공식 Dev Container Template 기능과는 상관없습니다.
+
+   `devcontainer.json` 파일은 다음과 같은 내용을 담고 있습니다.
+
+   ```jsonc
+   // https://containers.dev/implementors/json_reference
+   {
+   	"name": "lasuillard/my-project-template",
+   	// I recommend to use VS Code's default automatic port forwarding instead
+   	// "forwardPorts": [],
+   	"dockerComposeFile": ["../docker-compose.yaml", "./docker-compose.devcontainer.yaml"],
+   	"service": "workspace",
+   	"mounts": [
+   		"source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,consistency=cached"
+   	],
+   	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+   	"shutdownAction": "stopCompose",
+   	"features": {
+   		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+   			"moby": false
+   		} // Isolated Docker environment from the host machine
+   		// TODO(update-this): Add features as you need (see https://containers.dev/features for available features)
+   	},
+   	// This make the workspace container to run indefinitely, otherwise, based on the image you use,
+   	// the container could stop after the command is executed, that must not be a typical behavior
+   	// for a development container.
+   	"overrideCommand": true,
+   	// Below are dev container lifecycle commands, listed in the order they are executed.
+   	// * Be sure to check the executable permissions of the scripts you use.
+   	// ! `initializeCommand` runs on the **host machine** during initialization.
+   	// ! If you are using various OS including Windows, you should be aware of the this configuration's behavior.
+   	// "initializeCommand": "...",
+   	// These commands run in the container, not on the host machine.
+   	"onCreateCommand": "./.devcontainer/onCreateCommand.sh",
+   	"updateContentCommand": "./.devcontainer/updateContentCommand.sh",
+   	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
+   	"postStartCommand": "./.devcontainer/postStartCommand.sh",
+   	"postAttachCommand": "./.devcontainer/postAttachCommand.sh",
+   	"customizations": {
+   		"vscode": {
+   			// List of VS Code extensions to install in the container
+   			// I recommend you to sync this file with your `.vscode/extensions.json`
+   			// ! Extensions listed here WILL BE INSTALLED, unlike `.vscode/extensions.json` only provides recommendations.
+   			// ! So be sure to list only the extensions all the contributors SHOULD use.
+   			// * If you have personal extensions that you want install for all dev containers,
+   			// * edit `dev.containers.defaultExtensions` in your user settings instead.
+   			"extensions": [
+   				"EditorConfig.EditorConfig",
+   				"streetsidesoftware.code-spell-checker",
+   				// TODO(update-this): Below is just an example configuration. Update it as needed.
+   				"astral-sh.ty",
+   				"charliermarsh.ruff",
+   				"ms-python.debugpy",
+   				"ms-python.python",
+   				"ms-python.vscode-pylance",
+   				"ms-toolsai.jupyter"
+   			]
+   		}
+   	}
+   }
+   ```
+
 2. Code - Codespaces - Create codespace on main을 눌러 새 Codespaces를 시작합니다.
 
    ![Create Codespaces](./assets/create-codespaces.png)
 
-3. 개발 컨테이너 빌드가 시작됩니다. 대략 5~10분 정도 소요되며, 이 시간은 구성에 따라 차이가 있습니다. 빌드 후에는 Codespaces를 삭제하지 않는 한 기존 작업 환경을 재사용하게 됩니다.
+3. 개발 컨테이너 빌드가 시작됩니다. 대략 5\~10분 정도 소요되며, 이 시간은 구성에 따라 차이가 있습니다. 빌드 후에는 Codespaces를 삭제하지 않는 한 기존 작업 환경을 재사용하게 됩니다.
 
    ![Waiting for building Codespaces](./assets/waiting-for-building-codespaces.png)
 
@@ -114,9 +165,9 @@ Dev Container(이하 개발 컨테이너)는 Docker와 같은 컨테이너 기�
 
 ### 🔑 Git Credentials
 
-Git 서명 기능을 이용한다면 GPG 또는 SSH를 활용하게 됩니다. 저는 개인적인 선호에 의해 SSH를 활용하고 있습니다. VS Code의 개발 컨테이너는 [Git 설정, SSH 및 GPG 공유 기능](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials)을 지원하므로 별도 설정 없이 이러한 설정을 개발 컨테이너에도 사용할 수 있습니다.
+Git 서명 기능을 이용한다면 GPG 또는 SSH를 사용하게 됩니다. 저는 개인적인 선호에 의해 SSH를 사용하고 있습니다. VS Code의 개발 컨테이너는 [Git 설정, SSH 및 GPG 공유 기능](https://code.visualstudio.com/remote/advancedcontainers/sharing-git-credentials)을 지원하므로 별도 설정 없이 이러한 설정을 개발 컨테이너에도 사용할 수 있습니다.
 
-하지만 저는 VS Code의 동기화 기능을 대신 Git 설정은 후술한 Dotfiles를 통해 관리하고, SSH는 1Password SSH 에이전트 기능을 활용하고 있습니다. 개발용 Linux 서버를 통해 개발 컨테이너를 시작하거나 개발 컨테이너 내에서 SSH를 이용해야 할 경우 다음과 같은 GUI를 통해 인증 후 SSH 키를 이용할 수 있게 됩니다.
+하지만 저는 VS Code의 기본 자격 증명 동기화 기능 대신 Git 설정은 후술할 Dotfiles를 통해 관리하고, SSH는 1Password SSH 에이전트 기능을 이용하고 있습니다. 호스트의 SSH 에이전트 소켓이 컨테이너 내부로 안전하게 전달되므로 컨테이너 안에 개인키를 복사하지 않고도 원격 서버나 컨테이너 내에서 안전하게 인증할 수 있습니다. 개발용 Linux 서버를 통해 개발 컨테이너를 시작하거나 개발 컨테이너 내에서 SSH를 이용해야 할 경우 다음과 같은 GUI를 통해 인증 후 SSH 키를 이용하게 됩니다.
 
 ![1Password SSH Agent](./assets/1password-ssh-agent.png)
 
@@ -126,7 +177,7 @@ Git 서명 기능을 이용한다면 GPG 또는 SSH를 활용하게 됩니다. �
 
 Dotfiles는 보통 사용자 홈(`$HOME`) 디렉터리에 저장되는 사용자 설정 파일(`.bashrc`, `.zshrc`, &hellip;)을 통칭하는 용어입니다. 그리고 이런 Dotfiles를 관리하기 위해 특별한 코드 저장소를 구축하여 관리하는 패턴이 널리 사용되고 있습니다.
 
-VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러한 Dotfiles 저장소를 명시하고 설치 스크립트를 활용할 수 있도록 지원합니다.
+VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러한 Dotfiles 저장소를 명시하고 설치 스크립트를 이용할 수 있도록 지원합니다.
 
 - VS Code는 `dotfiles.*` 설정을 이용하며, 이 설정은 [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) 확장 프로그램에서 지원합니다.
 
@@ -138,21 +189,21 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
   }
   ```
 
-- GitHub Codespaces의 경우, GitHub 개인 설정의 **Codespaces - Dotfiles** 설정을 이용해야 합니다. Codespaces를 활용하는 경우, GPG 키 주입이 GitHub에 의해 자동으로 이루어지므로 SSH보다 관리하기 편합니다. SSH 키는 직접 주입과 관리를 고려해야 하기 때문에 번거롭습니다.
+- GitHub Codespaces의 경우, GitHub 개인 설정의 **Codespaces - Dotfiles** 설정을 이용해야 합니다. Codespaces를 사용하는 경우, GPG 키 주입이 GitHub에 의해 자동으로 이루어지므로 SSH보다 관리하기 편합니다. SSH 키는 직접 주입과 관리를 고려해야 하기 때문에 번거롭습니다.
 
 ![GitHub settings for Codespace - Dotfiles](./assets/github-codespaces-dotfiles.png)
 
 ## 💡 팁
 
-다음은 개발 컨테이너 및 원격 개발 환경에서 활용할 수 있는 팁 및 기능에 대한 설명입니다.
+다음은 개발 컨테이너 및 원격 개발 환경에서 참고할 수 있는 팁 및 기능에 대한 설명입니다.
 
 ### ⚙️ 설정 관리
 
-프로젝트 개발 컨테이너 설정을 가능한 한 최소로, 가볍게 유지합니다. 꼭 필요한(MUST) 설정만 유지하고, 그 외의 개인적인 설정은 다른 설정 주입 방법을 활용합니다.
+프로젝트 개발 컨테이너 설정을 가능한 한 최소로, 가볍게 유지합니다. 꼭 필요한(**MUST**) 설정만 유지하고, 그 외의 개인적인 설정은 다른 설정 주입 방법을 사용합니다.
 
-- 개인 에디터 설정은 User Settings를 활용합니다.
+- 개인 에디터 설정은 User Settings를 이용합니다.
 
-  `dev.containers.*`, `remote.*` 설정을 활용합니다. 생각보다 유용한 설정이 많습니다. 개인화된 설정을 위해 활용하기 좋은 설정은 다음과 같은 것들이 있습니다.
+  `dev.containers.*`, `remote.*` 설정을 이용합니다. 생각보다 유용한 설정이 많습니다. 개인화된 설정을 위해 적용하기 좋은 설정은 다음과 같은 것들이 있습니다.
 
   - `dev.containers.copyGitConfig`
 
@@ -166,29 +217,26 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 
     모든 개발 컨테이너에 공통적으로 설치할 Dev Container Feature 목록입니다.
 
-- 개인 쉘 스크립트, 바이너리 도구 및 설정 파일(`.gitconfig`, `.vimrc` 등)은 Dotfiles를 활용할 수 있습니다.
+- 개인 쉘 스크립트, 바이너리 도구 및 설정 파일(`.gitconfig`, `.vimrc` 등)은 Dotfiles를 이용할 수 있습니다.
 
-- 작업 공간에서 **강제되어야** 하는 설정은 VS Code 워크스페이스 설정(`.vscode/settings.json`)을 활용할 수 있지만, 꼭 필요한 최소한의 설정만을 공유합니다. 이는 프로젝트 정책에 기반해야 합니다.
+- 작업 공간에서 **강제되어야** 하는 설정은 VS Code 워크스페이스 설정(`.vscode/settings.json`)을 이용할 수 있지만, 꼭 필요한 최소한의 설정만을 공유합니다. 이는 프로젝트 정책에 기반해야 합니다.
 
-- 필요하다면 [Multi-root Workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces) 기능을 활용하여 워크스페이스 설정 또한 오버라이드할 수 있습니다.
+- 필요하다면 [Multi-root Workspaces](https://code.visualstudio.com/docs/editing/workspaces/multi-root-workspaces) 기능을 이용하여 워크스페이스 설정 또한 오버라이드할 수 있습니다.
 
-- `*.example` 파일을 활용합니다.
+- `*.example` 파일을 사용합니다.
 
-  `.env.example`, `.vscode.example` 등 비침습적이고 공유할 수 있는 예시를 제공하는 좋은 방법입니다. 최대한의 유연성을 제공하고 싶다면 `.devcontainer` 디렉터리 또한 `.devcontainer.example`로 바꾸어 개발자가 직접 설정할 수 있도록 하는 것도 좋은 방법입니다. 프로젝트 설정을 따라가고 싶다면, 단순히 심볼릭 링크를 생성하면 됩니다.
+  `.env.example`, `.vscode.example` 등 비침습적이고 공유할 수 있는 예시를 제공하는 좋은 방법입니다. 최대한의 유연성을 제공하고 싶다면 `.devcontainer` 디렉터리 또한 `.devcontainer.example`로 바꾸어 개발자가 직접 설정할 수 있도록 하는 것도 유용합니다. 프로젝트 기본 설정을 그대로 따르고 싶다면 `ln -s .devcontainer.example .devcontainer`와 같이 심볼릭 링크를 생성하면 됩니다.
 
-- [direnv](https://direnv.net/)는 워크스페이스를 사용자화하는 또 다른 유용한 도구입니다.
+### 📁 direnv
 
-  - `.envrc` 파일을 작성하여 이용하며 계층화된 접근을 지원합니다. 현재 작업 경로에 `.envrc` 파일이 없다면 상위 경로에서 찾습니다.
+[direnv](https://direnv.net/)는 디렉터리별로 환경 변수를 자동 로드/언로드해 주는 셸 확장 도구로, 워크스페이스를 사용자화하는 또 다른 유용한 도구입니다. 개발 컨테이너 내부 셸이나 호스트 워크스페이스 모두에서 디렉터리별 환경 변수와 훅을 주입할 때 유용하게 쓰입니다.
 
-  - `.env` 파일을 지원합니다.
-
-  - 다양한 기능을 제공합니다. 표준 라이브러리([direnv-stdlib](https://direnv.net/man/direnv-stdlib.1.html))를 지원하며, 스크립트를 작성하고 실행하기 때문에 `.env` 파일보다 더 많은 걸 할 수 있습니다(`.bashrc` 파일을 생각하세요).
-
-  - Bash 외에도 여러 쉘을 지원합니다.
-
-  - 전역 훅 스크립트를 지원합니다. 훅 스크립트를 통해 여러 프로젝트에 공통적으로 적용해야 할 동작을 주입할 수 있습니다.
-
-  - 안전합니다. `direnv allow`를 통해 명시적으로 허가해야만 `.envrc` 파일이 실행되며, `.envrc` 파일에 변경 사항이 발생하면 사용 중단되어 다시 명시적으로 허가해야 합니다.
+- `.envrc` 파일을 작성하여 이용하며 계층화된 접근을 지원합니다. 현재 작업 경로에 `.envrc` 파일이 없다면 상위 경로에서 찾습니다.
+- `.env` 파일을 지원합니다.
+- 다양한 기능을 제공합니다. 표준 라이브러리([direnv-stdlib](https://direnv.net/man/direnv-stdlib.1.html))를 지원하며, 스크립트를 작성하고 실행하기 때문에 `.env` 파일보다 더 많은 걸 할 수 있습니다(`.bashrc` 파일을 생각하세요).
+- Bash 외에도 여러 쉘을 지원합니다.
+- 전역 훅 스크립트를 지원합니다. 훅 스크립트를 통해 여러 프로젝트에 공통적으로 적용해야 할 동작을 주입할 수 있습니다.
+- 안전합니다. `direnv allow`를 통해 명시적으로 허가해야만 `.envrc` 파일이 실행되며, `.envrc` 파일에 변경 사항이 발생하면 사용 중단되어 다시 명시적으로 허가해야 합니다.
 
 ### 🔄 Settings Sync
 
@@ -198,11 +246,11 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 
 동기화는 GitHub 계정 또는 Microsoft 계정을 통해 이루어집니다. 그러므로 여러 기기에서 연관 계정에 로그인하여 쉽게 VS Code 설정을 동기화할 수 있습니다.
 
-이 기능은 개발 컨테이너 전용 기능은 아닙니다. 개발 컨테이너가 다른 기기에서 동작하더라도 에디터는 보통 사용자의 기기에서 동작하므로 사용자 설정은 개발 컨테이너에서도 유효합니다. 최근 AI 프롬프트나 MCP 서버 설정 등도 동기화할 수 있게 되었으니 여러 기기를 활용한다면 꼭 활용해보시기 바랍니다.
+이 기능은 개발 컨테이너 전용 기능은 아니지만, 로컬 머신과 원격/컨테이너 환경을 오갈 때 일관된 에디터 사용자 경험을 유지하는 데 큰 도움이 됩니다. 개발 컨테이너가 다른 기기나 클라우드에서 동작하더라도 에디터 클라이언트는 로컬 기기의 설정을 그대로 따르기 때문입니다. 최근에는 AI 프롬프트나 MCP 서버 설정 등도 동기화할 수 있게 되었으니 여러 기기에서 작업한다면 꼭 사용해보시기 바랍니다.
 
 ### ☁️ Cloud Changes
 
-Cloud Changes 또한 GitHub 또는 Microsoft 계정을 활용하여 현재 작업 공간의 변경 사항을 저장하고 여러 기기에서 불러와 작업을 재개할 수 있도록 도와주는 도구입니다. 큰 작업 내용을 잠시 저장하기 위해 `chore: temporary work save`과 같은 커밋을 만들어본 경험이 있으시다면, 이 기능이 유용할 것입니다.
+Cloud Changes 또한 GitHub 또는 Microsoft 계정을 이용하여 현재 작업 공간의 커밋되지 않은 변경 사항을 클라우드에 임시 저장하고, 다른 기기나 컨테이너에서 불러와 작업을 재개할 수 있도록 도와주는 도구입니다. 데스크톱과 노트북, 또는 Codespaces를 오갈 때 변경 사항을 옮기기 위해 불필요하게 `chore: temporary work save` 같은 임시 커밋을 남겨본 경험이 있다면 특히 유용합니다.
 
 ![Turning on Cloud Changes](./assets/turning-on-cloud-changes.png)
 
@@ -218,14 +266,20 @@ Settings Sync와는 다르게 작업 상황은 자동 저장되지 않으므로 
 
 ![Show Cloud Changes](./assets/show-cloud-changes.png)
 
-저는 Git Stash 대신 또는 로컬 작업 사항을 백업하기 위해 사용하고 있습니다. 이 기능은 개발 컨테이너에 국한되지 않고, 로컬 개발 환경에서도 유용하게 활용할 수 있습니다. 또한 GitHub Codespaces와 같은 클라우드 개발 환경에서도 동일하게 사용할 수 있습니다.
+저는 Git Stash 대신 또는 로컬 작업 사항을 백업하기 위해 사용하고 있습니다. 이 기능은 개발 컨테이너에 국한되지 않고, 로컬 개발 환경에서도 유용하게 사용할 수 있습니다. 또한 GitHub Codespaces와 같은 클라우드 개발 환경에서도 동일하게 사용할 수 있습니다.
 
 하지만 Cloud Changes는 크고 많은 작업 사항을 저장하려 시도할 경우, API 제한에 걸려 저장이 실패할 수 있습니다. 따라서 작은 작업 단위로 저장하는 것을 권장합니다.
 
 ## 💭 마치며
 
-제 주 코드 편집기는 VS Code이어서 VS Code를 중점적으로 설명했습니다. 하지만 개발 컨테이너는 VS Code에 국한되지 않고, JetBrains IDE, GitPod 등 개발 컨테이너를 지원하는 다양한 도구에서 활용할 수 있습니다 (다소 기능의 차이는 있겠지만). 이 글에서 설명한 내용은 다른 도구에서도 유사하게 적용될 수 있습니다.
+제 주 코드 편집기가 VS Code이다 보니 VS Code를 중점적으로 다루었습니다. 하지만 개발 컨테이너는 특정 에디터에 국한되지 않고, JetBrains IDE, GitPod 등 개발 컨테이너 표준을 지원하는 다양한 도구에서 폭넓게 사용할 수 있습니다.
 
-저는 [Vagrant](https://developer.hashicorp.com/vagrant)와 [Ansible](https://github.com/ansible/ansible)을 활용하여 VM을 프로비저닝하여 개발 환경 전용 VM을 구축하고 그 안에서 개발 컨테이너를 구동합니다. [Tailscale](https://tailscale.com/)으로 복잡한 네트워킹을 단순화하고 SSH 에이전트 포워딩으로 SSH 키 관리를 일원화하며 Dotfiles 저장소로 개인화 설정을 쉽게 주입하고 관리합니다. 글은 VS Code를 중심으로 하지만, 제 개발 환경을 구성하는 기술은 특정 IDE에 종속되지 않는 것들입니다.
+참고로 저의 경우 호스트 환경의 오염을 원천 방지하기 위해 [Vagrant](https://developer.hashicorp.com/vagrant)[^1]와 [Ansible](https://github.com/ansible/ansible)[^2]로 전용 개발 VM을 프로비저닝하고, 그 안에서 개발 컨테이너를 구동하는 구조를 사용하고 있습니다. 여기에 [Tailscale](https://tailscale.com/)[^3]로 복잡한 네트워킹을 단순화하고, SSH 에이전트 포워딩으로 키 관리를 일원화하며, Dotfiles로 개인 설정을 주입합니다. 이처럼 개발 컨테이너를 중심에 두되 특정 IDE에 종속되지 않는 견고한 환경을 만들 수 있습니다.
 
-개발 컨테이너는 편리한 기술이고, 활용 여지는 무궁무진합니다. 하지만 여느 도구나 그렇듯 모든 곳에 활용할 수 있는 만능 도구는 아닙니다. 프로젝트 성격과 요구 사항에 맞추어 적절히 조정한다면 편리함과 보안, 두마리 토끼를 모두 잡을 수 있는 강력한 도구가 될 수 있습니다.
+[^1]: Vagrant는 HashiCorp에서 개발한 가상 머신 프로비저닝 도구로, 설정 파일(`Vagrantfile`) 하나로 VM 생성부터 환경 구성까지 자동화할 수 있습니다.
+
+[^2]: Ansible은 Red Hat에서 관리하는 IT 자동화 도구로, YAML 기반 플레이북을 통해 서버 설정, 소프트웨어 배포 등의 작업을 에이전트 없이 SSH만으로 수행할 수 있습니다.
+
+[^3]: Tailscale은 WireGuard 기반의 메시 VPN 서비스로, 복잡한 네트워크 설정 없이 여러 기기를 하나의 사설 네트워크로 연결할 수 있습니다.
+
+개발 컨테이너는 매우 편리한 기술이고 응용 가능성도 무궁무진합니다. 물론 모든 문제를 해결해 주는 만능 해결책은 아니지만, 프로젝트의 성격과 팀의 요구사항에 맞추어 적절히 구성한다면 편리함과 격리, 두 마리 토끼를 모두 잡을 수 있는 강력한 도구가 될 것입니다.

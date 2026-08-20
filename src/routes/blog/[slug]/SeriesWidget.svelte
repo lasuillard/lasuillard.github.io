@@ -34,7 +34,7 @@
 					{:else}
 						<a
 							href="/blog/{post.metadata.id}-{post.metadata.slug}"
-							class="link link-hover text-base-content hover:text-secondary transition-colors"
+							class="link link-hover text-base-content transition-colors"
 						>
 							{post.metadata.title}
 						</a>

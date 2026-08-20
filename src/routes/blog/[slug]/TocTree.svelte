@@ -52,9 +52,7 @@
 {:else}
 	<div data-testid="toc-tree" class="mb-2 text-left" {...rest}>
 		<p class="mb-2 text-sm font-light text-gray-500">
-			<a
-				class={isActive ? 'link-hover link text-secondary font-bold underline' : 'link-hover link'}
-				href={link}>{heading}</a
+			<a class={isActive ? 'link-hover link underline' : 'link-hover link'} href={link}>{heading}</a
 			>
 		</p>
 		<ul class="ml-4">
