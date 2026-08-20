@@ -142,6 +142,7 @@ Grafana에서 시각화된 결과를 확인합니다.
 또 이러한 사용 방식은 해석의 여지는 있으나 CI/CD 목적 외의 일반 컴퓨팅 작업을 제한하는 [GitHub 약관](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features)에 위배될 가능성도 있습니다.
 
 > ... Additionally, regardless of whether an Action is using self-hosted runners, Actions should not be used for:
+>
 > - ...
 > - If using GitHub-hosted runners, any other activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
 

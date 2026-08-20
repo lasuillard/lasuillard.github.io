@@ -20,13 +20,16 @@ tags:
 [Google Apps Script](https://developers.google.com/apps-script)(이하 GAS)는 Google Drive에 의해 제공되는 클라우드 기반 자바스크립트 플랫폼입니다. Gmail, Google Calendar, Google Sheets 등 Google Workspace 제품군 전반에 걸쳐 손쉽게 연동되고 다양한 자동화 작업을 수행할 수 있습니다.
 
 ### 👍 장점
-  - 개인 용도로 차고 넘치는 [무료 할당량](https://developers.google.com/apps-script/guides/services/quotas?hl=ko)
-  - [V8 런타임](https://v8.dev/) 지원을 통한 최신 JavaScript(ES6+) 개발 환경
-  - [clasp](https://github.com/google/clasp) CLI를 통한 개발 및 배포 자동화
+
+- 개인 용도로 차고 넘치는 [무료 할당량](https://developers.google.com/apps-script/guides/services/quotas?hl=ko)
+- [V8 런타임](https://v8.dev/) 지원을 통한 최신 JavaScript(ES6+) 개발 환경
+- [clasp](https://github.com/google/clasp) CLI를 통한 개발 및 배포 자동화
+
 ### 👎 단점
-  - JavaScript 외 다른 언어를 직접 지원하지 않음
-  - 일부 제품(Google Photos, Keep 등)은 비공식 서드파티 라이브러리([GPhotoApp](https://github.com/tanaikech/GPhotoApp) 등)를 써야 함
-  - 스크립트 외부 호출 등 일부 고급 기능을 사용하려면 사용자의 Google Cloud 프로젝트를 직접 연결해야 함
+
+- JavaScript 외 다른 언어를 직접 지원하지 않음
+- 일부 제품(Google Photos, Keep 등)은 비공식 서드파티 라이브러리([GPhotoApp](https://github.com/tanaikech/GPhotoApp) 등)를 써야 함
+- 스크립트 외부 호출 등 일부 고급 기능을 사용하려면 사용자의 Google Cloud 프로젝트를 직접 연결해야 함
 
 저는 이메일(Gmail)부터 일정 관리(Google Calendar / Tasks), 문서 작업(Google Sheets / Docs), 파일 관리(Google Drive) 등 다양한 Google Workspace 제품을 이용하고 있으며, 대부분의 반복 작업도 이 환경 위에서 이루어지기 때문에 작업 자동화에는 Google Apps Script 만한 게 없었습니다.
 
