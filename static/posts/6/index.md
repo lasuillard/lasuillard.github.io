@@ -150,15 +150,15 @@ Django SSR만을 이용하여 웹 프로젝트를 진행한 것은 처음이었�
 
 Railway의 사소한(?) 단점들은 다음과 같습니다.
 
-- 공식 IaC Provider 부재
+- **공식 IaC Provider 부재**
 
   공식 Terraform 및 Pulumi Provider가 없기에 커뮤니티에서 제공하는 [railway-community-provider](https://registry.terraform.io/providers/terraform-community-providers/railway/latest/docs/resources/service)를 이용해야 합니다. 특히 Pulumi의 경우 공식 및 커뮤니티 프로바이더 구현이 없어 [Terraform Providers](https://www.pulumi.com/docs/iac/get-started/terraform/terraform-providers/) 브릿지를 거쳐 연동해야 합니다.
 
-- 무료 사용자 플랜이 없음
+- **무료 사용자 플랜이 없음**
 
   30일의 체험 기간 동안 $5의 크레딧을 제공하며 이는 테스트에 충분한 양이지만 이후에는 최소 $5/월(Hobby Plan) 비용을 지불해야 합니다. 굉장히 작은 프로젝트를 무료로 배포하고자 한다면 다른 호스팅 서비스를 고려하는 편이 좋습니다.
 
-- 빌드 및 배포 전/후 제한적 커스텀
+- **빌드 및 배포 전/후 제한적 커스텀**
 
   제 간단한 블로그 서비스를 배포하는 데에는 큰 문제는 없었지만, 복잡한 배포 라이프사이클을 요구하는 경우 설정에 좀 더 공을 들이거나 빌드 및 배포를 직접 구현해야 할 수도 있습니다.
 
