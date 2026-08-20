@@ -141,7 +141,9 @@ Grafana에서 시각화된 결과를 확인합니다.
 
 또 이러한 사용 방식은 해석의 여지는 있으나 CI/CD 목적 외의 일반 컴퓨팅 작업을 제한하는 [GitHub 약관](https://docs.github.com/en/site-policy/github-terms/github-terms-for-additional-products-and-features)에 위배될 가능성도 있습니다.
 
-> If using GitHub-hosted runners, any other activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
+> ... Additionally, regardless of whether an Action is using self-hosted runners, Actions should not be used for:
+> - ...
+> - If using GitHub-hosted runners, any other activity unrelated to the production, testing, deployment, or publication of the software project associated with the repository where GitHub Actions are used.
 
 지금은 Google Cloud Platform의 무료 e2-micro 인스턴스를 이용해서 메트릭을 수집하고 있습니다. 대부분의 Exporter와 Alloy 에이전트는 리소스 사용량이 크지 않기 때문에 아직까지 인스턴스 크기로 문제가 된 적은 없습니다.
 
