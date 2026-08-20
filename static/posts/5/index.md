@@ -141,7 +141,7 @@ Dev Container(이하 개발 컨테이너)는 Docker 등의 컨테이너 기술�
 
    ![Create Codespaces](./assets/create-codespaces.png)
 
-3. 개발 컨테이너 빌드가 시작됩니다. 대략 5 \~ 10분 정도 소요되며, 이 시간은 구성에 따라 차이가 있습니다. 빌드 후에는 Codespaces를 삭제하지 않는 한 기존 작업 환경을 재사용하게 됩니다.
+3. 개발 컨테이너 빌드가 시작됩니다. 대략 5\~10분 정도 소요되며, 이 시간은 구성에 따라 차이가 있습니다. 빌드 후에는 Codespaces를 삭제하지 않는 한 기존 작업 환경을 재사용하게 됩니다.
 
    ![Waiting for building Codespaces](./assets/waiting-for-building-codespaces.png)
 

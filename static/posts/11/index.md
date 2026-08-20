@@ -44,7 +44,7 @@ tags:
 
 ![Railway 결제 내역](./assets/railway-billing-history.png)
 
-여전히 Railway의 비용 정책은 매력적입니다. Railway Hobby 플랜은 월 $5에 불과한 데다 실제 CPU 및 메모리 사용량에 기반하는 과금 정책, 그리고 서버리스 기능을 활용한 개발 환경 비용 절감 덕분에 월 $5 ~ $6 정도로 Django와 Postgres, Redis, 그리고 Celery로 구성된 제 블로그를 개발과 운영 두 환경에서 큰 문제 없이 운영할 수 있었습니다.
+여전히 Railway의 비용 정책은 매력적입니다. Railway Hobby 플랜은 월 $5에 불과한 데다 실제 CPU 및 메모리 사용량에 기반하는 과금 정책, 그리고 서버리스 기능을 활용한 개발 환경 비용 절감 덕분에 월 $5\~$6 정도로 Django와 Postgres, Redis, 그리고 Celery로 구성된 제 블로그를 개발과 운영 두 환경에서 큰 문제 없이 운영할 수 있었습니다.
 
 결국 블로그를 Django로 전환한 것이 제 기술적 허영심과 과욕, 섣부른 판단이 부른 실수였음을 받아들여야 했습니다. 그리고 다시 GitHub Pages로 돌아가기로 했습니다.
 

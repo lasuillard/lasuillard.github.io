@@ -146,7 +146,7 @@ flowchart TD
   reuse & cache-write --> complete[Workflow complete]
 ```
 
-검증 속도 최적화를 위해 해시 기반 캐싱을 도입했습니다. 단순 설정 파일 비교 대신 `devcontainer read-configuration --include-features-configuration --include-merged-configuration` 명령을 사용하여 Features와 상속 설정이 완전히 병합된 최종 형상의 해시를 계산합니다. GitHub Actions 캐시(`actions/cache`)에 저장된 이전 검증 결과와 해시를 비교하여, 동일한 해시 값을 가지는 설정에 대해서는 빌드를 생략하고 캐시된 성공 결과를 재사용함으로써 통상 2 ~ 3분 이상 소요되던 검증 시간을 약 20초 내외로 단축했습니다.
+검증 속도 최적화를 위해 해시 기반 캐싱을 도입했습니다. 단순 설정 파일 비교 대신 `devcontainer read-configuration --include-features-configuration --include-merged-configuration` 명령을 사용하여 Features와 상속 설정이 완전히 병합된 최종 형상의 해시를 계산합니다. GitHub Actions 캐시(`actions/cache`)에 저장된 이전 검증 결과와 해시를 비교하여, 동일한 해시 값을 가지는 설정에 대해서는 빌드를 생략하고 캐시된 성공 결과를 재사용함으로써 통상 2\~3분 이상 소요되던 검증 시간을 약 20초 내외로 단축했습니다.
 
 다만 이 방식은 설정 파일에 직접 명시되지 않은 외부 `Dockerfile`이나 의존 파일의 단독 변경까지 완벽히 감지하지 못할 수 있다는 한계가 있어, 향후 의존 파일 전체를 해시 계산에 포함하도록 보완할 계획입니다.
 

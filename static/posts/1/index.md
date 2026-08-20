@@ -231,7 +231,7 @@ GET HTTP 메소드를 이용하므로 쉽고 단순하며 공개된 정보에 �
 
 헤딩 태그에 따라 들여쓰기 크기가 정해진 것이 아니라 중첩된 목록처럼 스타일이 적용됩니다. 태그마다 절댓값을 주면 구현이 쉽고 편하겠지만 범용성을 위해 조금 더 시간을 할애하기로 했습니다.
 
-이를 위해 헤딩 태그 이름(`h1` ~ `h6`)의 숫자 크기를 비교 키로 사용하여, 선형으로 추출된 헤딩 목록을 재귀적으로 부모-자식 트리 구조로 변환하는 알고리즘과 컴포넌트를 구현([/src/lib/toc.ts](https://github.com/lasuillard/lasuillard.github.io/blob/9ec91330ebae92e8fd4632a36d971870dddb4c2d/src/lib/toc.ts), [/src/components/content/Toc.svelte](https://github.com/lasuillard/lasuillard.github.io/blob/9ec91330ebae92e8fd4632a36d971870dddb4c2d/src/components/content/Toc.svelte))했습니다.
+이를 위해 헤딩 태그 이름(`h1`\~`h6`)의 숫자 크기를 비교 키로 사용하여, 선형으로 추출된 헤딩 목록을 재귀적으로 부모-자식 트리 구조로 변환하는 알고리즘과 컴포넌트를 구현([/src/lib/toc.ts](https://github.com/lasuillard/lasuillard.github.io/blob/9ec91330ebae92e8fd4632a36d971870dddb4c2d/src/lib/toc.ts), [/src/components/content/Toc.svelte](https://github.com/lasuillard/lasuillard.github.io/blob/9ec91330ebae92e8fd4632a36d971870dddb4c2d/src/components/content/Toc.svelte))했습니다.
 
 알고리즘에 대한 공부가 게을렀던 탓인지 결코 어려운 문제가 아님에도 불구하고, 구현을 위해 생각보다 오랜 시간 머리를 싸매야 했습니다.
 

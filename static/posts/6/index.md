@@ -87,7 +87,7 @@ tags:
 
   ![커맨드 기능](./assets/command-feature.png)
 
-이 외에도 `ImageField` 미리보기, 탭, 색상 선택 및 WYSIWYG 위젯 등, 기능이 너무도 많아 모두 열거할 수는 없지만 작은 Django 어드민 라이브러리 10 ~ 20개 분량의 기능은 포함하고 있습니다. 또한 유명한 여러 라이브러리([django-import-export](https://github.com/django-import-export/django-import-export), [django-constance](https://github.com/jazzband/django-constance), [django-celery-beat](https://github.com/celery/django-celery-beat) 등)에 대한 지원도 포함합니다.
+이 외에도 `ImageField` 미리보기, 탭, 색상 선택 및 WYSIWYG 위젯 등, 기능이 너무도 많아 모두 열거할 수는 없지만 작은 Django 어드민 라이브러리 10\~20개 분량의 기능은 포함하고 있습니다. 또한 유명한 여러 라이브러리([django-import-export](https://github.com/django-import-export/django-import-export), [django-constance](https://github.com/jazzband/django-constance), [django-celery-beat](https://github.com/celery/django-celery-beat) 등)에 대한 지원도 포함합니다.
 
 ### ✏️ 블로그 글 작성 및 관리
 
@@ -140,9 +140,9 @@ Django SSR만을 이용하여 웹 프로젝트를 진행한 것은 처음이었�
 
 ![서버리스 활성화 설정](./assets/railway-enable-serverless.png)
 
-서버리스 모드는 요청이 없을 때 컨테이너를 유휴 상태로 만들어 비용을 절약하는 데 도움을 줍니다. 다만 웹 서버와 데이터베이스가 모두 잠든 상태에서 첫 요청이 들어오면 깨어나는 데(Cold Start) 약 5 \~ 10초 정도의 딜레이가 발생했습니다. 개발이나 테스트 환경에서는 매우 유용하지만, 블로그 방문자에게는 꽤 답답한 지연일 수 있어 실제 프로덕션 환경에서는 서버리스 모드를 비활성화해 두었습니다.
+서버리스 모드는 요청이 없을 때 컨테이너를 유휴 상태로 만들어 비용을 절약하는 데 도움을 줍니다. 다만 웹 서버와 데이터베이스가 모두 잠든 상태에서 첫 요청이 들어오면 깨어나는 데(Cold Start) 약 5\~10초 정도의 딜레이가 발생했습니다. 개발이나 테스트 환경에서는 매우 유용하지만, 블로그 방문자에게는 꽤 답답한 지연일 수 있어 실제 프로덕션 환경에서는 서버리스 모드를 비활성화해 두었습니다.
 
-실제 서비스 재작성 중 발생한 비용은 0.5 USD에 불과했고, Celery를 추가로 구성한 지금은 월 4 \~ 5 USD정도 크레딧(Hobby 플랜에는 매달 $5의 크레딧 포함)을 사용하고 있습니다. 이에 더해 사용량 한도(Hard Limit)를 설정할 수도 있어서 과도한 비용 발생을 막을 수 있습니다.
+실제 서비스 재작성 중 발생한 비용은 0.5 USD에 불과했고, Celery를 추가로 구성한 지금은 월 4\~5 USD정도 크레딧(Hobby 플랜에는 매달 $5의 크레딧 포함)을 사용하고 있습니다. 이에 더해 사용량 한도(Hard Limit)를 설정할 수도 있어서 과도한 비용 발생을 막을 수 있습니다.
 
 ![Railway 사용 비용](./assets/railway-cost.png)
 
