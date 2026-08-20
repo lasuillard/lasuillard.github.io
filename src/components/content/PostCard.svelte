@@ -39,7 +39,7 @@
 			: 'items-start text-left md:p-6 lg:p-8'}"
 	>
 		<h2 class="card-title {variant === 'vertical' ? 'justify-center text-base' : 'text-2xl'}">
-			<a href={postUrl} class="link hover:text-secondary">{metadata.title}</a>
+			<a href={postUrl} class="link">{metadata.title}</a>
 		</h2>
 		<p class="text-gray-500 {variant === 'vertical' ? 'mb-1' : 'mt-1'}">
 			<CalendarDaysIcon class="mb-1 inline-block h-4 w-4" />
