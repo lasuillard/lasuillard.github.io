@@ -76,7 +76,7 @@ Selenium 및 PyAutoGUI 등 다양한 소프트웨어 레벨 자동화 도구로 
 
 아래 동영상은 로컬 환경에서 구현한 로그인 자동화 과정입니다. 계정 정보는 더미 값(예: `username`/`pa$$w0rd`)으로 대체했습니다.
 
-<video controls src="./assets/login-automation.mp4" title="AWS Codedeploy Windows 로그인 자동화 데모"></video>
+<video controls src="./assets/login-automation.mp4" title="로그인 자동화 시연"></video>
 
 로컬 환경에서 개발하는 중에는 Vagrant를 이용해 Windows Server VM을 구성하여 이용했습니다. Selenium Node를 배포하고, VM 외부의 Selenium Hub에 등록하여 이용했습니다.
 
