@@ -74,6 +74,10 @@ Selenium 및 PyAutoGUI 등 다양한 소프트웨어 레벨 자동화 도구로 
 
 구현 중 가장 신경을 쓴 부분은 한/영/숫자 등 키 배열 전환에 대한 상태 전이에 대한 추상화였습니다. 추후 다른 웹 사이트에서도 활용할 수 있기를 원했기 때문입니다. 이를 위해 [python-statemachine](https://python-statemachine.readthedocs.io/en/latest/)을 활용했습니다. 템플릿 매칭 실패나 예기치 않은 오류로 로그인이 실패할 경우를 대비해 당시 브라우저 스크린샷을 저장하여 추후 디버깅할 수 있도록 구성했습니다.
 
+아래 동영상은 로컬 환경에서 구현한 로그인 자동화 과정입니다. 계정 정보는 더미 값(예: `username`/`pa$$w0rd`)으로 대체했습니다.
+
+<video controls src="./assets/login-automation.mp4" title="AWS Codedeploy Windows 로그인 자동화 데모"></video>
+
 로컬 환경에서 개발하는 중에는 Vagrant를 이용해 Windows Server VM을 구성하여 이용했습니다. Selenium Node를 배포하고, VM 외부의 Selenium Hub에 등록하여 이용했습니다.
 
 모든 구현 과정에서 가장 귀찮았던 건 키 배열을 하나하나 뜯어내는 노가다 과정이었습니다. 이 작업을 위해 처음으로 Figma를 활용했습니다.
