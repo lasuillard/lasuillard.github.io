@@ -10,7 +10,6 @@ export const GET: RequestHandler = async () => {
 
 	const allPosts = await postRepository.getAllPosts();
 
-	// TODO: Generate RSS XML document from list of posts; https://www.w3schools.com/xml/xml_rss.asp
 	const body = `<?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>

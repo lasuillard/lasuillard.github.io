@@ -24,5 +24,3 @@ it('uses default width when not provided', () => {
 	const canvas = getByTestId('qrcode') as HTMLCanvasElement;
 	expect(canvas.width).toBe(213);
 });
-
-// FIXME: Canvas raising errors

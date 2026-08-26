@@ -2,7 +2,6 @@
 	import { page } from '$app/stores';
 
 	interface Props {
-		// FIXME: Accepting parameters for testing because mocking store isn't easy
 		status?: any;
 		/* c8 ignore next */
 		message?: any;
