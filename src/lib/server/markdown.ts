@@ -65,7 +65,6 @@ function rewriteStaticUrls(options: { rewriteUrl: (url: string) => string }) {
 				node.url = newUrl;
 			} else if (node.type === 'html') {
 				// e.g. "<img src="/static/posts/개발을-위한-데이터베이스/preview.png" alt="Preview" width="50%" />"
-				// TODO: Consider using DOM or XML parser to handle HTML nodes more safely (also update RSS code altogether)
 				const match = node.value.match(/src="(?<src>[^"]*)"/);
 				if (!match) {
 					return;
