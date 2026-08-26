@@ -30,7 +30,7 @@
 		// Monkey-patching footnote label (add emoji and translate)
 		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
 		if (footnoteLabel) {
-			footnoteLabel.innerHTML = '각주'; // TODO: I18n
+			footnoteLabel.innerHTML = '각주';
 			footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
 		} else {
 			console.debug('Footnote label not found. Skipping patching.');
