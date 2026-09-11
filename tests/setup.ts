@@ -9,7 +9,6 @@ beforeEach(() => {
 			return { matches: query === '(prefers-color-scheme: dark)' };
 		})
 	);
-	vi.mock('$app/environment', () => ({ browser: true }));
 });
 
 afterEach(() => {
