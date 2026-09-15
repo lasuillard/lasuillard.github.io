@@ -3,6 +3,8 @@ import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 import { svelteTesting } from '@testing-library/svelte/vite';
+import fs from 'fs';
+import path from 'path';
 import type { PluginOption } from 'vite';
 import { defineConfig } from 'vitest/config';
 
@@ -17,6 +19,21 @@ export default defineConfig({
 		}),
 		tailwindcss(),
 		sveltekit(),
+		{
+			name: 'exclude-static-files',
+			closeBundle() {
+				const outputDir = '.svelte-kit/output/client';
+				const filePatternsToExclude = [`posts/**/*.drawio`];
+				filePatternsToExclude.forEach((pattern) => {
+					const matchedFiles = fs.globSync(pattern, { cwd: outputDir });
+					matchedFiles.forEach((relPath) => {
+						const absPath = path.join(outputDir, relPath);
+						if (!fs.existsSync(absPath)) return;
+						fs.unlinkSync(absPath);
+					});
+				});
+			}
+		},
 		svelteTesting() as PluginOption,
 		codecovSvelteKitPlugin({
 			enableBundleAnalysis: true,
