@@ -1,0 +1,22 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36" version="27.1.6">
+  <diagram name="Page-1" id="WPl9QyYcOy-EeKgDGWwU">
+    <mxGraphModel grid="1" page="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="14Ah4vpqRLY2FKAkAl4p-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=light-dark(#FFFFFF,#FFFFFF);" vertex="1" parent="1">
+          <mxGeometry x="390" y="300" width="660" height="660" as="geometry" />
+        </mxCell>
+        <mxCell id="-YgeK1kFc9pVsygyPkG9-3" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/2048px-Visual_Studio_Code_1.35_icon.svg.png;" vertex="1" parent="1">
+          <mxGeometry x="445" y="675" width="200" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="-YgeK1kFc9pVsygyPkG9-4" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://cdn4.iconfinder.com/data/icons/logos-and-brands/512/97_Docker_logo_logos-512.png;" vertex="1" parent="1">
+          <mxGeometry x="765" y="660" width="230" height="230" as="geometry" />
+        </mxCell>
+        <mxCell id="-YgeK1kFc9pVsygyPkG9-5" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=none;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://plugins.jetbrains.com/files/21962/777845/icon/default.png;fontColor=none;fontSize=15;align=center;noLabel=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="400" width="200" height="200" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
