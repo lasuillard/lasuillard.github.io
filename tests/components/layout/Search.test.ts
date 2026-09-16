@@ -52,10 +52,11 @@ it('shows matching results for given query', async ({ user }) => {
 	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('uno');
-	await tick();
 
-	const resultsContainer = component.getByTestId('search-results');
-	expect(resultsContainer).toBeTruthy();
+	await waitFor(() => {
+		const resultsContainer = component.getByTestId('search-results');
+		expect(resultsContainer).toBeTruthy();
+	});
 
 	const titleElement = document.body.textContent;
 	expect(titleElement).toContain('Uno terra errat');
@@ -122,13 +123,14 @@ it('shows no results for non-matching query', async ({ user }) => {
 	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('xyz123');
-	await tick();
+
+	await waitFor(() => {
+		const bodyText = document.body.textContent;
+		expect(bodyText).toContain('아니면...');
+	});
 
 	const searchResults = component.queryByTestId('search-results');
 	expect(searchResults).toBeNull();
-
-	const bodyText = document.body.textContent;
-	expect(bodyText).toContain('아니면...');
 });
 
 it('suggest matching results for given query', async ({ user }) => {

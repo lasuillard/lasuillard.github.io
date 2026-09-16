@@ -42,11 +42,11 @@ export function cleanMarkdown(markdown: string): string {
 }
 
 /**
- * Initialize search engine.
+ * Create a new search engine instance.
  * @param posts Posts to index.
  * @returns Initialized search engine.
  */
-export async function _initEngine(posts?: any[]): Promise<MiniSearch> {
+async function createEngine(posts?: any[]): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 
 	const options = {
@@ -96,13 +96,19 @@ export async function _initEngine(posts?: any[]): Promise<MiniSearch> {
 }
 
 /**
- * Initializes the search engine (cached).
+ * Initializes the search engine (cached by default).
  * @param posts Posts to index.
+ * @param options Initialization options.
+ * @param options.useCache Whether to cache and reuse the engine promise. Defaults to `true`.
  * @returns Promise resolving to search engine instance.
  */
-export function initEngine(posts?: any[]): Promise<MiniSearch> {
+export function initEngine(posts?: any[], options?: { useCache?: boolean }): Promise<MiniSearch> {
+	const useCache = options?.useCache ?? true;
+	if (!useCache) {
+		return createEngine(posts);
+	}
 	if (!enginePromise) {
-		enginePromise = _initEngine(posts);
+		enginePromise = createEngine(posts);
 	}
 	return enginePromise;
 }

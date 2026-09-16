@@ -5,7 +5,6 @@ import {
 	getEnginePromise,
 	initEngine,
 	clearEngine,
-	_initEngine,
 	cleanMarkdown,
 	performSearch,
 	getSuggestions,
@@ -105,7 +104,7 @@ describe('getEnginePromise', () => {
 			});
 			vi.stubGlobal('fetch', mockFetch);
 
-			const engine = await _initEngine();
+			const engine = await initEngine(undefined, { useCache: false });
 			expect(engine).toBeDefined();
 			expect(mockFetch).toHaveBeenCalledWith('/api/search-index');
 		});
@@ -118,7 +117,7 @@ describe('getEnginePromise', () => {
 			});
 			vi.stubGlobal('fetch', mockFetch);
 
-			const engine = await _initEngine();
+			const engine = await initEngine(undefined, { useCache: false });
 			expect(engine).toBeDefined();
 			expect(mockFetch).toHaveBeenCalledWith('/api/search-index');
 			expect(engine.documentCount).toBe(0);
@@ -154,7 +153,7 @@ describe('performSearch', () => {
 				content: 'Svelte framework guide'
 			})
 		];
-		const engine = await _initEngine(posts);
+		const engine = await initEngine(posts, { useCache: false });
 
 		const results = performSearch('Svelte', engine, 1);
 		expect(results.length).toBe(1);
@@ -179,7 +178,7 @@ describe('getSuggestions', () => {
 				content: 'JavaScript programming language'
 			})
 		];
-		const engine = await _initEngine(posts);
+		const engine = await initEngine(posts, { useCache: false });
 
 		const suggestions = getSuggestions('javascrip', engine);
 		expect(suggestions.length).toBeGreaterThan(0);
