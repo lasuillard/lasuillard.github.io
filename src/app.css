@@ -4,7 +4,7 @@
 
 @plugin 'daisyui' {
 	themes:
-		retro --default,
+		corporate --default,
 		black --prefersdark;
 }
 
