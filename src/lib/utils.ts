@@ -51,3 +51,28 @@ export function formatRelativeDate(date: Date, baseDate: Date = new Date()): str
 		locale: ko
 	});
 }
+
+/**
+ * Converts a string to kebab-case.
+ * Splits on whitespace, punctuation, and camelCase boundaries.
+ * Preserves Unicode characters (e.g., Korean).
+ * @param str Input string.
+ * @returns kebab-case string.
+ */
+export function kebabCase(str: string): string {
+	return (
+		str
+			// Insert separator before uppercase letters in camelCase
+			.replace(/([a-z\d])([A-Z])/g, '$1 $2')
+			// Insert separator between letters and digits
+			.replace(/([a-zA-Z])(\d)/g, '$1 $2')
+			.replace(/(\d)([a-zA-Z])/g, '$1 $2')
+			// Replace non-alphanumeric, non-Unicode-letter characters with spaces
+			.replace(/[^a-zA-Z0-9\u00C0-\u024F\u0400-\u04FF\u3000-\u9FFF\uAC00-\uD7AF]+/g, ' ')
+			.trim()
+			.toLowerCase()
+			.split(/\s+/)
+			.filter(Boolean)
+			.join('-')
+	);
+}
