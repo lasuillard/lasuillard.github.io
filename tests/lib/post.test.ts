@@ -59,4 +59,44 @@ describe('`Post` schema', () => {
 			content: 'Yummy'
 		});
 	});
+
+	it('parses post metadata including optional changelog field', () => {
+		expect(
+			Post.parse({
+				metadata: {
+					id: 3,
+					title: 'Dr Pepper',
+					slug: 'dr-pepper',
+					publicationDate: '2022-06-15',
+					preview: '/dr-pepper.png',
+					summary: 'Spicy soda review.',
+					tags: ['beverage'],
+					changelog: [
+						{
+							date: '2023-01-01',
+							message: 'Updated flavor notes.'
+						}
+					]
+				},
+				content: 'Tastes unique'
+			})
+		).toEqual({
+			metadata: {
+				id: '3',
+				title: 'Dr Pepper',
+				slug: 'dr-pepper',
+				publicationDate: new Date('2022-06-15'),
+				preview: '/dr-pepper.png',
+				summary: 'Spicy soda review.',
+				tags: ['beverage'],
+				changelog: [
+					{
+						date: new Date('2023-01-01'),
+						message: 'Updated flavor notes.'
+					}
+				]
+			},
+			content: 'Tastes unique'
+		});
+	});
 });

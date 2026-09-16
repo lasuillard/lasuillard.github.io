@@ -13,7 +13,15 @@ export const Metadata = z
 		preview: z.string().optional().default('/no-image.svg'),
 		summary: z.string(),
 		tags: z.array(z.string()),
-		series: z.string().optional()
+		series: z.string().optional(),
+		changelog: z
+			.array(
+				z.object({
+					date: z.coerce.date(),
+					message: z.string()
+				})
+			)
+			.optional()
 	})
 	.strict();
 

@@ -5,6 +5,7 @@
 	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
 	import Comment from './Comment.svelte';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
+	import ChangelogWidget from './ChangelogWidget.svelte';
 	import SeriesWidget from './SeriesWidget.svelte';
 	import Toc from './Toc.svelte';
 
@@ -92,6 +93,9 @@
 			<!-- Floating/Hoverable TOC -->
 			{#if contentIsReady}
 				<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
+			{/if}
+			{#if metadata.changelog && metadata.changelog.length > 0}
+				<ChangelogWidget changelogs={metadata.changelog} />
 			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none wrap-break-word">
