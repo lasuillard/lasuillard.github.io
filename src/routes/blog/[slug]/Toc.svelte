@@ -45,9 +45,11 @@
 	});
 </script>
 
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
+	role="button"
+	tabindex="0"
+	aria-label="목차"
+	aria-expanded={isHovered}
 	data-testid="toc"
 	class={'fixed top-1/3 right-4 z-50 cursor-pointer transition-all duration-300 select-none ' +
 		(isHovered
@@ -63,6 +65,14 @@
 		const target = e.target as HTMLElement;
 		if (target.closest('a')) return;
 		isHovered = !isHovered;
+	}}
+	onkeydown={(e) => {
+		if (e.key === 'Enter' || e.key === ' ') {
+			const target = e.target as HTMLElement;
+			if (target.closest('a')) return;
+			e.preventDefault();
+			isHovered = !isHovered;
+		}
 	}}
 >
 	<div>

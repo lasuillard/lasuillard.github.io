@@ -43,16 +43,15 @@
 			<header class="navbar z-10 w-full px-12 py-3" data-testid="header">
 				<!-- Drawer button -->
 				<div class="flex-none md:hidden">
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<label
-						tabindex="0"
-						for="header-drawer"
+					<button
+						type="button"
 						class="btn btn-square btn-ghost"
 						data-testid="drawer-toggle"
-						aria-label="Menu"
+						aria-label="메뉴"
+						onclick={() => (drawerOpen = !drawerOpen)}
 					>
 						<MenuIcon class="h-7 w-7" />
-					</label>
+					</button>
 				</div>
 
 				<!-- Navigation links -->
@@ -103,15 +102,9 @@
 
 		<!-- Drawer content -->
 		<div class="drawer-side z-10 lg:hidden">
-			<label for="header-drawer" class="drawer-overlay"></label>
-
-			<!-- svelte-ignore a11y_no_static_element_interactions -->
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<div
-				class="flex min-h-screen w-full"
-				onclick={(/* Force close drawer when click wrapper */) => (drawerOpen = false)}
-			>
-				<div class="m-auto flex flex-col items-center gap-8">
+			<label for="header-drawer" class="drawer-overlay" aria-label="메뉴 닫기"></label>
+			<div class="pointer-events-none flex min-h-screen w-full">
+				<div class="pointer-events-auto m-auto flex flex-col items-center gap-8">
 					<ul class="menu flex flex-col items-center gap-6 text-2xl text-white">
 						{#each links as link (link.name)}
 							<li>
