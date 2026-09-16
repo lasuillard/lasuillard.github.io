@@ -6,10 +6,9 @@
 	interface Props {
 		content: HTMLElement | undefined;
 		activeId?: string;
-		[key: string]: any;
 	}
 
-	let { content = $bindable(), activeId = '', ...rest }: Props = $props();
+	let { content = $bindable(), activeId = '' }: Props = $props();
 	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
 	let isHovered = $state(false);
 
@@ -63,7 +62,6 @@
 		if (target.closest('a')) return;
 		isHovered = !isHovered;
 	}}
-	{...rest}
 >
 	<div>
 		{#each rootHeadings as root (root.data.textContent)}
