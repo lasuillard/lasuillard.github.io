@@ -7,7 +7,7 @@ import { get, type Writable } from 'svelte/store';
  * Available themes for current website. Don't forget to update app.css file as well
  */
 export enum Theme {
-	Light = 'retro',
+	Light = 'corporate',
 	Dark = 'black'
 }
 
