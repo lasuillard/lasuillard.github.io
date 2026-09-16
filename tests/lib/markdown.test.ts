@@ -12,4 +12,12 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"
 		`);
 	});
+
+	it('renders footnotes with configured footnoteLabel', async () => {
+		const result = await parse(`Hello world[^1]
+
+[^1]: Footnote content`);
+		expect(result.content).toContain('id="footnote-label"');
+		expect(result.content).toContain('🔗 각주');
+	});
 });

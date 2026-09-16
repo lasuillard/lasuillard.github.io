@@ -1,22 +1,18 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
-let page: Page;
-
-test.beforeAll('go to blog index page', async ({ browser }) => {
-	page = await browser.newPage();
+test('visit page', async ({ page }) => {
 	await page.goto('/');
-});
-
-test('visit page', async () => {
 	await expect(page).toHaveScreenshot({ fullPage: true });
 });
 
-test('has a title and meta tags for SEO', async () => {
-	expect(await page.title()).toMatch(/.+ • lasuillard's Blog/);
+test('has a title and meta tags for SEO', async ({ page }) => {
+	await page.goto('/');
+	await expect(page).toHaveTitle(/.+ • lasuillard's Blog/);
 	expect(await page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
 });
 
-test('renders recent posts section with 3 posts', async () => {
+test('renders recent posts section with 3 posts', async ({ page }) => {
+	await page.goto('/');
 	const recentPostsSection = page.getByTestId('recent-posts');
 	await expect(recentPostsSection).toBeVisible();
 
@@ -27,31 +23,49 @@ test('renders recent posts section with 3 posts', async () => {
 	expect(postCount).toBe(3);
 });
 
-test('header has QR code dropdown on desktop', async ({ page: _page }, testInfo) => {
-	await _page.goto('/');
-	const qrDropdown = _page.getByLabel('QR Code');
+test('header has QR code dropdown on desktop', async ({ page }, testInfo) => {
+	await page.goto('/');
+	const qrDropdown = page.getByLabel('QR Code');
 
 	if (testInfo.project.name !== 'Mobile L') {
 		await expect(qrDropdown).toBeVisible();
 
 		await qrDropdown.click();
-		await expect(_page.getByTestId('qrcode')).toBeVisible();
+		await expect(page.getByTestId('qrcode')).toBeVisible();
 	} else {
 		await expect(qrDropdown).not.toBeVisible();
 	}
 });
 
-test('header has QR code inside drawer on mobile', async ({ page: _page }, testInfo) => {
-	await _page.goto('/');
+test('header has QR code inside drawer on mobile', async ({ page }, testInfo) => {
+	await page.goto('/');
 	if (testInfo.project.name === 'Mobile L') {
-		const drawerToggle = _page.getByTestId('drawer-toggle');
+		const drawerToggle = page.getByTestId('drawer-toggle');
 		await expect(drawerToggle).toBeVisible();
 
 		await drawerToggle.click();
 
-		const qrCodeInDrawer = _page.locator('.drawer-side').getByTestId('qrcode');
+		const qrCodeInDrawer = page.locator('.drawer-side').getByTestId('qrcode');
 		await expect(qrCodeInDrawer).toBeVisible();
 	}
+});
+
+test('persists theme selection across reloads', async ({ page }) => {
+	await page.goto('/');
+	const initialTheme = await page.locator('html').getAttribute('data-theme');
+	const themeToggle = page.getByLabel('Theme Selection');
+	await expect(themeToggle).toBeVisible();
+
+	await themeToggle.click();
+	const newTheme = await page.locator('html').getAttribute('data-theme');
+	expect(newTheme).not.toBe(initialTheme);
+
+	const storedTheme = await page.evaluate(() => localStorage.getItem('theme'));
+	expect(storedTheme).toBe(JSON.stringify(newTheme));
+
+	await page.reload();
+	const reloadedTheme = await page.locator('html').getAttribute('data-theme');
+	expect(reloadedTheme).toBe(newTheme);
 });
 
 test.describe('Visual regression', () => {

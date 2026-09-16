@@ -8,7 +8,7 @@
 		activeId?: string;
 	}
 
-	let { content = $bindable(), activeId = '' }: Props = $props();
+	let { content, activeId = '' }: Props = $props();
 	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
 	let isHovered = $state(false);
 

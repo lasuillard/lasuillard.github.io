@@ -22,28 +22,11 @@
 
 	const scrollTracker = new ScrollTracker();
 
-	// Take action when the content is ready
-	$effect(() => {
-		if (!contentIsReady) {
-			console.debug('Content is not ready yet. Skipping patching.');
-			return;
-		}
-
-		// Monkey-patching footnote label (add emoji and translate)
-		const footnoteLabel = contentWrapper?.querySelector('#footnote-label > a');
-		if (footnoteLabel) {
-			footnoteLabel.innerHTML = '각주';
-			footnoteLabel.innerHTML = '🔗 ' + footnoteLabel.innerHTML;
-		} else {
-			console.debug('Footnote label not found. Skipping patching.');
-		}
-	});
-
 	$effect(() => {
 		if (!contentWrapper || !contentIsReady) {
 			return;
 		}
-		scrollTracker.doInit(contentWrapper);
+		scrollTracker.init(contentWrapper);
 
 		return () => scrollTracker.destroy();
 	});

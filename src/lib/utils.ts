@@ -64,3 +64,17 @@ export function kebabCase(str: string): string {
 			.join('-')
 	);
 }
+
+/**
+ * Escape special characters in a string for safe inclusion in XML.
+ * @param str Raw string to escape.
+ * @returns Escaped XML string.
+ */
+export function escapeXml(str: string): string {
+	return str
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;');
+}

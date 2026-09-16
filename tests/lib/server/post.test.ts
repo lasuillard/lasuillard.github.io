@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
+import { PostSchema } from '~/lib/post';
 import { PostRepository } from '~/lib/server/post';
 
 describe('PostRepository.getAllPosts', () => {
@@ -11,10 +12,12 @@ describe('PostRepository.getAllPosts', () => {
 });
 
 describe('PostRepository.findPostById', () => {
-	it('returns post', async () => {
+	it('returns post matching PostSchema', async () => {
 		const postRepository = new PostRepository();
 		const post = await postRepository.findPostById('1');
-		expect(post).toBeTruthy();
+		expect(post).not.toBeNull();
+		const result = PostSchema.safeParse(post);
+		expect(result.success).toBe(true);
 	});
 
 	it('should return null if not exists', async () => {

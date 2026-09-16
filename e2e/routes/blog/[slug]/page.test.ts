@@ -3,8 +3,9 @@ import { expectScreenshotWithPadding } from '../../../helpers';
 
 let page: Page;
 
-test.beforeAll('go to post page', async ({ browser }) => {
-	page = await browser.newPage();
+test.beforeAll('go to post page', async ({ browser }, testInfo) => {
+	const context = await browser.newContext(testInfo.project.use);
+	page = await context.newPage();
 
 	// Fix clock time to prevent relative date shifts over time
 	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));

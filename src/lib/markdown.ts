@@ -64,7 +64,8 @@ const processor = unified()
 	.use(remarkStringify)
 	.use(remarkRehype, {
 		// Currently there is no user uploaded documents might harmful
-		allowDangerousHtml: true
+		allowDangerousHtml: true,
+		footnoteLabel: '🔗 각주'
 	})
 	.use(rehypeMermaid, { strategy: 'pre-mermaid' }) // Let client render it
 	.use(rehypeTableScroll)
