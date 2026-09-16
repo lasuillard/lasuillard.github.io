@@ -2,18 +2,6 @@ import { formatDistanceStrict, isSameDay } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 /**
- * Returns variable name.
- * @example
- * const myVar = "123"
- * getVarName({ myVar }) // Returns "myVar"
- * @param obj Wrapping object for variable.
- * @returns Name of variable.
- */
-export function getVarName(obj: { [_: string]: unknown }): string {
-	return Object.keys(obj)[0];
-}
-
-/**
  * Returns clone of given object with properties in keys omitted.
  * @example
  * omitKeys({a: 1, b: 3, c: 2}, ["b"]) // Returns { a: 1, c: 2 }

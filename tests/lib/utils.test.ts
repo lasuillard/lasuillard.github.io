@@ -1,12 +1,5 @@
-import { formatRelativeDate, getVarName, kebabCase, omitKeys, quoteJoin } from '$lib/utils';
+import { formatRelativeDate, kebabCase, omitKeys, quoteJoin } from '$lib/utils';
 import { describe, expect, it } from 'vitest';
-
-describe('getVarName', () => {
-	it('returns variable name', () => {
-		const myVar = '123';
-		expect(getVarName({ myVar })).toEqual('myVar');
-	});
-});
 
 describe('omitKeys', () => {
 	it('omits some properties', () => {
