@@ -1,9 +1,13 @@
 import { expect, test, type Page } from '@playwright/test';
+import { expectScreenshotWithPadding } from '../../../helpers';
 
 let page: Page;
 
 test.beforeAll('go to post page', async ({ browser }) => {
 	page = await browser.newPage();
+
+	// Fix clock time to prevent relative date shifts over time
+	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
 
 	// Block utterances widget from loading to prevent flakiness
 	await page.route('**/utteranc.es/**', (route) => route.abort());
@@ -11,10 +15,97 @@ test.beforeAll('go to post page', async ({ browser }) => {
 	await page.goto('/blog/1-기술-블로그-시작하기');
 });
 
-test('visit page', async () => {
-	await expect(page).toHaveScreenshot({
-		fullPage: true,
-		mask: [page.locator("img[src$='.gif']")]
+test.describe('Visual regression', () => {
+	// Captures the top hero region of a post with an associated series banner.
+	// We inject padding into the hero container and temporarily hide the sticky navbar
+	// so the hero container has clean surrounding whitespace without header overlap.
+	test('article hero with series banner', async () => {
+		await page.goto('/blog/1-기술-블로그-시작하기');
+		const hero = page.getByTestId('article-hero');
+		await expect(hero).toBeVisible();
+		await page.getByTestId('header-wrapper').evaluate((el) => {
+			el.style.visibility = 'hidden';
+		});
+		await hero.evaluate((el) => {
+			el.style.padding = '24px';
+		});
+		try {
+			await expect(hero).toHaveScreenshot('article-hero-series.png');
+		} finally {
+			await page.getByTestId('header-wrapper').evaluate((el) => {
+				el.style.visibility = '';
+			});
+		}
+	});
+
+	// Captures the hero region of a post featuring a changelog banner.
+	// The changelog widget is expanded prior to snapshotting to visually verify its open state.
+	test('article hero with changelog banner', async () => {
+		await page.goto('/blog/3-남이-만든-open-api-스키마-테스트하기');
+		const hero = page.getByTestId('article-hero');
+		await expect(hero).toBeVisible();
+
+		// Expand the changelog widget so its full list is captured
+		const changelog = page.getByTestId('changelog-widget');
+		await expect(changelog).toBeVisible();
+		await page.getByTestId('changelog-header').click();
+		await expect(page.getByTestId('changelog-list')).toBeVisible();
+
+		await page.getByTestId('header-wrapper').evaluate((el) => {
+			el.style.visibility = 'hidden';
+		});
+		await hero.evaluate((el) => {
+			el.style.padding = '24px';
+		});
+		try {
+			await expect(hero).toHaveScreenshot('article-hero-changelog.png');
+		} finally {
+			await page.getByTestId('header-wrapper').evaluate((el) => {
+				el.style.visibility = '';
+			});
+		}
+	});
+
+	// Captures an in-depth article section combining images, bulleted lists, subheadings,
+	// and syntax-highlighted code blocks. Viewport height is temporarily scaled up by 20%
+	// to capture all these elements together within a single cohesive viewport glance.
+	test('article content and typography', async () => {
+		await page.goto('/blog/3-남이-만든-open-api-스키마-테스트하기');
+		const origViewport = page.viewportSize();
+		if (origViewport) {
+			await page.setViewportSize({
+				width: origViewport.width,
+				height: Math.round(origViewport.height * 1.2)
+			});
+		}
+		try {
+			await page.getByRole('heading', { name: /OpenAPI Generator/ }).evaluate((el) => {
+				el.scrollIntoView({ block: 'center' });
+			});
+			await expect(page).toHaveScreenshot('article-prose-viewport.png');
+		} finally {
+			if (origViewport) {
+				await page.setViewportSize(origViewport);
+			}
+		}
+	});
+
+	// Captures the hover state of the floating Table of Contents.
+	// Uses padding clipping to ensure its drop shadow and rounded corners are not clipped.
+	test('floating table of contents', async () => {
+		await page.goto('/blog/1-기술-블로그-시작하기');
+		const series = page.getByTestId('series-widget');
+		await expect(series).toBeVisible();
+		await series.evaluate((el) => {
+			el.style.visibility = 'hidden';
+		});
+		const toc = page.getByTestId('toc');
+		await expect(toc).toBeVisible();
+		await toc.hover();
+
+		// Wait for hover expansion transition (duration-300) to complete
+		await page.waitForTimeout(350);
+		await expectScreenshotWithPadding(page, toc, 'toc-hover.png');
 	});
 });
 
@@ -96,7 +187,7 @@ test.describe('Series widget', () => {
 
 test.describe('Changelog widget', () => {
 	test('does not render changelog widget for post without changelog', async () => {
-		await page.goto('/blog/2-개발을-위한-데이터베이스');
+		await page.goto('/blog/1-기술-블로그-시작하기');
 		const widget = page.getByTestId('changelog-widget');
 		await expect(widget).not.toBeVisible();
 	});

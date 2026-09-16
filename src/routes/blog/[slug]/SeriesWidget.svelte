@@ -26,7 +26,7 @@
 	data-testid="series-widget"
 >
 	<summary class="collapse-title cursor-pointer px-5 py-3.5" data-testid="series-header">
-		<div class="flex items-center justify-between pr-6">
+		<div class="flex flex-col gap-2 pr-6 sm:flex-row sm:items-center sm:justify-between">
 			<div class="flex items-center gap-2.5">
 				<div
 					class="bg-primary/10 text-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-md"
@@ -38,7 +38,7 @@
 				</h3>
 			</div>
 			<span
-				class="badge badge-neutral badge-sm font-mono font-medium whitespace-nowrap"
+				class="badge badge-neutral badge-sm self-start font-mono font-medium whitespace-nowrap sm:self-auto"
 				data-testid="series-count"
 			>
 				{sortedPosts.length}개의 글

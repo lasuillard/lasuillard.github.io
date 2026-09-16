@@ -55,3 +55,51 @@ test('header has QR code inside drawer on mobile', async ({ page: _page }, testI
 });
 
 test('list all tags with ref counts', () => test.fixme());
+
+test.describe('Visual regression', () => {
+	test('search modal with query results', async ({ page }) => {
+		await page.goto('/');
+		await page.getByRole('button', { name: '검색' }).click();
+		const modal = page.getByTestId('search-modal');
+		await expect(modal).toBeVisible();
+
+		const input = page.getByTestId('search-input');
+		await input.fill('Playwright');
+		await expect(page.getByTestId('search-results')).toBeVisible();
+
+		await expect(modal).toHaveScreenshot('search-modal-results.png');
+	});
+
+	test('QR code feature', async ({ page }, testInfo) => {
+		await page.goto('/');
+		if (testInfo.project.name !== 'Mobile L') {
+			const qrDropdown = page.getByTestId('qr-dropdown');
+			await page.getByLabel('QR Code').click();
+			await expect(page.getByTestId('qrcode')).toBeVisible();
+
+			// Wait for opening transition to complete
+			await page.waitForTimeout(350);
+
+			const content = qrDropdown.locator('.dropdown-content');
+			await expect(content).toHaveScreenshot('qrcode-dropdown.png', {
+				// Mask dynamic canvas and URL to avoid diffs from ephemeral test server ports
+				mask: [content.getByTestId('qrcode'), content.locator('span.select-all')]
+			});
+		} else {
+			const drawerToggle = page.getByTestId('drawer-toggle');
+			await drawerToggle.click();
+
+			const qrCodeInDrawer = page.locator('.drawer-side').getByTestId('qrcode');
+			await expect(qrCodeInDrawer).toBeVisible();
+
+			// Wait for drawer slide-in transition to complete
+			await page.waitForTimeout(350);
+
+			const drawerContent = page.locator('.drawer-side .m-auto');
+			await expect(drawerContent).toHaveScreenshot('qrcode-drawer.png', {
+				// Mask dynamic canvas and URL to avoid diffs from ephemeral test server ports
+				mask: [qrCodeInDrawer, page.locator('.drawer-side').locator('span.select-all')]
+			});
+		}
+	});
+});
