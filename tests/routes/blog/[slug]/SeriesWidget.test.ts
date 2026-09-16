@@ -11,7 +11,7 @@ describe('SeriesWidget', () => {
 				id: '1',
 				slug: 'first-post',
 				title: '첫 번째 글',
-				publicationDate: new Date('2024-01-01'),
+				publicationDate: new Date('2024-01-01T12:00:00+09:00'),
 				preview: '/no-image.svg',
 				summary: '첫 번째 글 요약',
 				tags: []
@@ -23,7 +23,7 @@ describe('SeriesWidget', () => {
 				id: '2',
 				slug: 'second-post',
 				title: '두 번째 글',
-				publicationDate: new Date('2024-06-01'),
+				publicationDate: new Date('2024-06-01T12:00:00+09:00'),
 				preview: '/no-image.svg',
 				summary: '두 번째 글 요약',
 				tags: []
@@ -35,7 +35,7 @@ describe('SeriesWidget', () => {
 				id: '3',
 				slug: 'third-post',
 				title: '세 번째 글',
-				publicationDate: new Date('2024-03-01'),
+				publicationDate: new Date('2024-03-01T12:00:00+09:00'),
 				preview: '/no-image.svg',
 				summary: '세 번째 글 요약',
 				tags: []

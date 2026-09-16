@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 describe('ChangelogWidget', () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
-		vi.setSystemTime(new Date('2026-03-20'));
+		vi.setSystemTime(new Date('2026-03-20T12:00:00+09:00'));
 	});
 
 	afterEach(() => {
@@ -15,9 +15,9 @@ describe('ChangelogWidget', () => {
 
 	it('renders changelog entries in descending chronological order using testids', () => {
 		const changelogs = [
-			{ date: new Date('2025-01-10'), message: '첫 번째 변경' },
-			{ date: new Date('2026-03-15'), message: '세 번째 변경' },
-			{ date: new Date('2025-06-20'), message: '두 번째 변경' }
+			{ date: new Date('2025-01-10T12:00:00+09:00'), message: '첫 번째 변경' },
+			{ date: new Date('2026-03-15T12:00:00+09:00'), message: '세 번째 변경' },
+			{ date: new Date('2025-06-20T12:00:00+09:00'), message: '두 번째 변경' }
 		];
 
 		const { getByTestId, getAllByTestId } = render(ChangelogWidget, { changelogs });
@@ -59,7 +59,7 @@ describe('ChangelogWidget', () => {
 	});
 
 	it('renders a single changelog item correctly', () => {
-		const changelogs = [{ date: new Date('2026-03-18'), message: '단일 업데이트' }];
+		const changelogs = [{ date: new Date('2026-03-18T12:00:00+09:00'), message: '단일 업데이트' }];
 
 		const { getByTestId, getAllByTestId } = render(ChangelogWidget, { changelogs });
 
@@ -75,7 +75,7 @@ describe('ChangelogWidget', () => {
 	});
 
 	it('displays "오늘" when the latest changelog was posted today', () => {
-		const changelogs = [{ date: new Date('2026-03-20'), message: '오늘 업데이트' }];
+		const changelogs = [{ date: new Date('2026-03-20T12:00:00+09:00'), message: '오늘 업데이트' }];
 
 		const { getByTestId } = render(ChangelogWidget, { changelogs });
 		expect(getByTestId('changelog-latest-date').textContent?.trim()).toBe('오늘');
