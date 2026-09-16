@@ -1,9 +1,18 @@
 // @vitest-environment happy-dom
 import ChangelogWidget from '$routes/blog/[slug]/ChangelogWidget.svelte';
 import { render } from '@testing-library/svelte';
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 describe('ChangelogWidget', () => {
+	beforeEach(() => {
+		vi.useFakeTimers();
+		vi.setSystemTime(new Date('2026-03-20T12:00:00Z'));
+	});
+
+	afterEach(() => {
+		vi.useRealTimers();
+	});
+
 	it('renders changelog entries in descending chronological order using testids', () => {
 		const changelogs = [
 			{ date: new Date('2025-01-10'), message: '첫 번째 변경' },
@@ -18,9 +27,9 @@ describe('ChangelogWidget', () => {
 		// Starts closed by default
 		expect(widget.hasAttribute('open')).toBe(false);
 
-		// Header assertions
+		// Header assertions: anchored date is 2026-03-20, latest changelog is 2026-03-15 (5일 전)
 		expect(getByTestId('changelog-title').textContent?.trim()).toBe('변경 이력');
-		expect(getByTestId('changelog-latest-date').textContent?.trim()).toBe('2026-03-15');
+		expect(getByTestId('changelog-latest-date').textContent?.trim()).toBe('5일 전');
 		expect(getByTestId('heroicons/clock')).toBeTruthy();
 
 		// Item assertions
@@ -50,17 +59,25 @@ describe('ChangelogWidget', () => {
 	});
 
 	it('renders a single changelog item correctly', () => {
-		const changelogs = [{ date: new Date('2026-08-20'), message: '단일 업데이트' }];
+		const changelogs = [{ date: new Date('2026-03-18'), message: '단일 업데이트' }];
 
 		const { getByTestId, getAllByTestId } = render(ChangelogWidget, { changelogs });
 
+		// 2026-03-20 vs 2026-03-18 -> 2일 전
 		expect(getByTestId('changelog-title').textContent?.trim()).toBe('변경 이력');
-		expect(getByTestId('changelog-latest-date').textContent?.trim()).toBe('2026-08-20');
+		expect(getByTestId('changelog-latest-date').textContent?.trim()).toBe('2일 전');
 
 		const items = getAllByTestId('changelog-item');
 		expect(items).toHaveLength(1);
-		expect(getByTestId('changelog-item-date').textContent?.trim()).toBe('2026-08-20');
+		expect(getByTestId('changelog-item-date').textContent?.trim()).toBe('2026-03-18');
 		expect(getByTestId('changelog-message').textContent?.trim()).toBe('단일 업데이트');
 		expect(getByTestId('changelog-latest-badge')).toBeTruthy();
+	});
+
+	it('displays "오늘" when the latest changelog was posted today', () => {
+		const changelogs = [{ date: new Date('2026-03-20'), message: '오늘 업데이트' }];
+
+		const { getByTestId } = render(ChangelogWidget, { changelogs });
+		expect(getByTestId('changelog-latest-date').textContent?.trim()).toBe('오늘');
 	});
 });

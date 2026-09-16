@@ -1,11 +1,14 @@
 <script lang="ts">
 	import ClockIcon from '$components/icon/Clock.svelte';
 	import type { Metadata } from '$lib/post';
-	import { format } from 'date-fns';
+	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
+	import { ko } from 'date-fns/locale';
 
 	let { changelogs } = $props<{
 		changelogs: NonNullable<Metadata['changelog']>;
 	}>();
+
+	const today = new Date();
 
 	const sortedChangelogs = $derived(
 		[...changelogs].sort((a, b) => {
@@ -36,10 +39,15 @@
 			{#if sortedChangelogs.length > 0}
 				<time
 					datetime={new Date(sortedChangelogs[0].date).toISOString()}
-					class="badge badge-neutral badge-sm font-mono font-medium whitespace-nowrap"
+					class="badge badge-neutral badge-sm font-medium whitespace-nowrap"
 					data-testid="changelog-latest-date"
 				>
-					{format(sortedChangelogs[0].date, 'yyyy-MM-dd')}
+					{isSameDay(new Date(sortedChangelogs[0].date), today)
+						? '오늘'
+						: formatDistanceStrict(new Date(sortedChangelogs[0].date), today, {
+								addSuffix: true,
+								locale: ko
+							})}
 				</time>
 			{/if}
 		</div>
