@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
 import Search from '$components/layout/Search.svelte';
-import { Post } from '$lib/post';
+import { PostSchema } from '$lib/post';
 import { initEngine, clearEngine } from '$lib/search';
 import { render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
@@ -29,7 +29,7 @@ it('has a trigger button and opens modal when clicked', async ({ user }) => {
 });
 
 it('shows matching results for given query', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -62,7 +62,7 @@ it('shows matching results for given query', async ({ user }) => {
 });
 
 it('highlights matching terms in the snippet', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -100,7 +100,7 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 });
 
 it('shows no results for non-matching query', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -132,7 +132,7 @@ it('shows no results for non-matching query', async ({ user }) => {
 });
 
 it('suggest matching results for given query', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',

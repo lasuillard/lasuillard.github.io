@@ -9,7 +9,7 @@ const coerceTimezoneDate = z.preprocess((val) => {
 }, z.coerce.date());
 
 /** Expected and required metadata for posts. */
-export const Metadata = z
+export const MetadataSchema = z
 	.object({
 		id: z.coerce.string().regex(
 			// Only alphanumeric characters are allowed for the ID to prevent conflicts with slug in the URL.
@@ -33,13 +33,13 @@ export const Metadata = z
 	})
 	.strict();
 
-export type Metadata = z.infer<typeof Metadata>;
+export type Metadata = z.infer<typeof MetadataSchema>;
 
-export const Post = z
+export const PostSchema = z
 	.object({
-		metadata: Metadata,
+		metadata: MetadataSchema,
 		content: z.string()
 	})
 	.strict();
 
-export type Post = z.infer<typeof Post>;
+export type Post = z.infer<typeof PostSchema>;

@@ -11,7 +11,7 @@ import {
 	getSuggestions,
 	getExcerpt
 } from '~/lib/search';
-import { Post } from '~/lib/post';
+import { PostSchema } from '~/lib/post';
 
 describe('countTermOccurrences', () => {
 	afterEach(() => {
@@ -63,7 +63,7 @@ describe('getEnginePromise', () => {
 	});
 
 	it('returns engine instance after initialization', async () => {
-		const testPost = Post.parse({
+		const testPost = PostSchema.parse({
 			metadata: {
 				id: '1',
 				slug: 'test-post',
@@ -129,7 +129,7 @@ describe('getEnginePromise', () => {
 describe('performSearch', () => {
 	it('performs search and respects limit', async () => {
 		const posts = [
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: '1',
 					slug: 'post-1',
@@ -141,7 +141,7 @@ describe('performSearch', () => {
 				},
 				content: 'Svelte kit web application'
 			}),
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: '2',
 					slug: 'post-2',
@@ -166,7 +166,7 @@ describe('performSearch', () => {
 describe('getSuggestions', () => {
 	it('returns suggestions for misspelled query', async () => {
 		const posts = [
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: '1',
 					slug: 'post-1',
