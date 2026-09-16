@@ -9,6 +9,9 @@ tags:
   - OpenAPI Generator
   - TypeScript
   - Vitest
+changelog:
+  - date: 2026-08-20
+    message: 2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용 추가
 ---
 
 평소 북마크와 웹 페이지 하이라이트를 [Raindrop](https://raindrop.io/)에서 관리하고 있습니다. 특정 기기나 브라우저에 종속되지 않고 태그를 비롯한 편리한 기능을 이용할 수 있으며, 북마크를 공유하거나 공개할 수도 있습니다.
@@ -435,7 +438,3 @@ jobs:
 ## 💭 마치며
 
 raindrop-client는 [Raindrop Sync for Chrome](https://github.com/lasuillard-s/raindrop-sync-chrome) 프로젝트를 위해 만들어졌습니다. OpenAPI 스키마의 관리 주체가 서비스 제공자가 아닌 제3자인 이번 경우에는 고려해야 할 사항이 많았습니다. 단순히 스키마를 한 번 작성하고 끝내는 것이 아니라, VCR(Polly.js)을 통한 테스트, Snapshot Serializer를 활용한 동적 타입 검증, 그리고 API Drift Detection 자동화까지 유기적으로 연결해야 비로소 안심하고 쓸 수 있는 라이브러리가 완성될 수 있었습니다.
-
-## 📜 변경 이력
-
-- **2026-08-20** \- 2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용이 추가되었습니다.

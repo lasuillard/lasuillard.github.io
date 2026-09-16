@@ -2,9 +2,11 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import TagBadge from '$components/content/TagBadge.svelte';
 	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
-	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
+	import { formatRelativeDate } from '$lib/utils';
+	import { format } from 'date-fns';
 	import Comment from './Comment.svelte';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
+	import ChangelogWidget from './ChangelogWidget.svelte';
 	import SeriesWidget from './SeriesWidget.svelte';
 	import Toc from './Toc.svelte';
 
@@ -70,9 +72,7 @@
 					<p class="mt-4 text-center font-light md:text-base">
 						<CalendarDaysIcon class="mr-1 inline-block h-5 w-5 align-text-bottom text-gray-500" />
 						<time datetime={metadata.publicationDate.toISOString()} role="time">
-							{isSameDay(metadata.publicationDate, today)
-								? '오늘'
-								: formatDistanceStrict(metadata.publicationDate, today, { addSuffix: true })}
+							{formatRelativeDate(metadata.publicationDate, today)}
 							({format(metadata.publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
@@ -93,14 +93,17 @@
 			{#if contentIsReady}
 				<Toc content={contentWrapper} activeId={scrollTracker.activeId} />
 			{/if}
+			{#if metadata.changelog && metadata.changelog.length > 0}
+				<ChangelogWidget changelogs={metadata.changelog} />
+			{/if}
+			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
+				<SeriesWidget seriesName={metadata.series} {seriesPosts} currentPostId={metadata.id} />
+			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none wrap-break-word">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
-			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
-				<SeriesWidget seriesName={metadata.series} {seriesPosts} currentPostId={metadata.id} />
-			{/if}
 			<Comment />
 		</div>
 	</div>

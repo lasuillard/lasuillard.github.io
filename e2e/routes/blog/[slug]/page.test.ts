@@ -45,7 +45,7 @@ test.describe('Series widget', () => {
 		// First item should be Post 11 (more recent, 2026-07-28)
 		const firstItem = listItems.nth(0);
 		await expect(firstItem).toContainText('다시 GitHub Pages로 블로그 배포하기');
-		await expect(firstItem).toContainText('Current');
+		await expect(firstItem).toContainText('현재');
 
 		// Second item should be Post 6 (2025-10-10)
 		const secondItem = listItems.nth(1);
@@ -85,12 +85,39 @@ test.describe('Series widget', () => {
 		// Post 6 (second item) should be Current
 		const secondItem = listItems.nth(1);
 		await expect(secondItem).toContainText('Django로 블로그 다시 만들기');
-		await expect(secondItem).toContainText('Current');
+		await expect(secondItem).toContainText('현재');
 
 		// Post 1 (third item) should have an active link
 		const thirdItem = listItems.nth(2);
 		await expect(thirdItem).toContainText('기술 블로그 시작하기');
 		await expect(thirdItem.locator('a')).toBeVisible();
+	});
+});
+
+test.describe('Changelog widget', () => {
+	test('does not render changelog widget for post without changelog', async () => {
+		await page.goto('/blog/2-개발을-위한-데이터베이스');
+		const widget = page.getByTestId('changelog-widget');
+		await expect(widget).not.toBeVisible();
+	});
+
+	test('renders changelog widget with correct details on post 3', async () => {
+		await page.goto('/blog/3-남이-만든-open-api-스키마-테스트하기');
+		const widget = page.getByTestId('changelog-widget');
+		await expect(widget).toBeVisible();
+
+		// Check title
+		await expect(widget.locator('h3')).toContainText('변경 이력');
+
+		// Check changelog items
+		const listItems = widget.locator('ul > li');
+		await expect(listItems).toHaveCount(1);
+
+		const item = listItems.nth(0);
+		await expect(item).toContainText('2026-08-20');
+		await expect(item).toContainText(
+			'2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용 추가'
+		);
 	});
 });
 
