@@ -97,14 +97,14 @@
 			{#if metadata.changelog && metadata.changelog.length > 0}
 				<ChangelogWidget changelogs={metadata.changelog} />
 			{/if}
+			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
+				<SeriesWidget seriesName={metadata.series} {seriesPosts} currentPostId={metadata.id} />
+			{/if}
 			<div bind:this={contentWrapper}>
 				<article class="prose prose-sm lg:prose-base mx-auto mt-12 max-w-none wrap-break-word">
 					<Markdown bind:ready={contentIsReady}>{content}</Markdown>
 				</article>
 			</div>
-			{#if metadata.series && seriesPosts && seriesPosts.length > 0}
-				<SeriesWidget seriesName={metadata.series} {seriesPosts} currentPostId={metadata.id} />
-			{/if}
 			<Comment />
 		</div>
 	</div>

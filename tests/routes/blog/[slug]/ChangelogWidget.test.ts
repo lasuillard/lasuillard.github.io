@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 describe('ChangelogWidget', () => {
 	beforeEach(() => {
 		vi.useFakeTimers();
-		vi.setSystemTime(new Date('2026-03-20T12:00:00Z'));
+		vi.setSystemTime(new Date('2026-03-20'));
 	});
 
 	afterEach(() => {

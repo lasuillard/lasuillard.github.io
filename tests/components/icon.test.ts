@@ -1,5 +1,6 @@
 // @vitest-environment happy-dom
 import Clock from '$components/icon/Clock.svelte';
+import Folder from '$components/icon/Folder.svelte';
 import GitHub from '$components/icon/GitHub.svelte';
 import Gmail from '$components/icon/Gmail.svelte';
 import LinkedIn from '$components/icon/LinkedIn.svelte';
@@ -14,6 +15,7 @@ import { expect, it } from 'vitest';
 
 it.each([
 	{ Component: Clock },
+	{ Component: Folder },
 	{ Component: GitHub },
 	{ Component: Gmail },
 	{ Component: LinkedIn },

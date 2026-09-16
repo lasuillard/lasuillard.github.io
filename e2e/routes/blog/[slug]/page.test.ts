@@ -45,7 +45,7 @@ test.describe('Series widget', () => {
 		// First item should be Post 11 (more recent, 2026-07-28)
 		const firstItem = listItems.nth(0);
 		await expect(firstItem).toContainText('다시 GitHub Pages로 블로그 배포하기');
-		await expect(firstItem).toContainText('Current');
+		await expect(firstItem).toContainText('현재');
 
 		// Second item should be Post 6 (2025-10-10)
 		const secondItem = listItems.nth(1);
@@ -85,7 +85,7 @@ test.describe('Series widget', () => {
 		// Post 6 (second item) should be Current
 		const secondItem = listItems.nth(1);
 		await expect(secondItem).toContainText('Django로 블로그 다시 만들기');
-		await expect(secondItem).toContainText('Current');
+		await expect(secondItem).toContainText('현재');
 
 		// Post 1 (third item) should have an active link
 		const thirdItem = listItems.nth(2);
