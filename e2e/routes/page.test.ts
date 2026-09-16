@@ -54,8 +54,6 @@ test('header has QR code inside drawer on mobile', async ({ page: _page }, testI
 	}
 });
 
-test('list all tags with ref counts', () => test.fixme());
-
 test.describe('Visual regression', () => {
 	test('search modal with query results', async ({ page }) => {
 		await page.goto('/');
