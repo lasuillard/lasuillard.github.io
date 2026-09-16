@@ -1,6 +1,7 @@
 <script lang="ts">
 	import FolderIcon from '$components/icon/Folder.svelte';
 	import type { Post } from '$lib/post';
+	import { route } from '$lib/urls';
 	import { format } from 'date-fns';
 
 	let { seriesName, seriesPosts, currentPostId } = $props<{
@@ -79,7 +80,9 @@
 								</span>
 							{:else}
 								<a
-									href="/blog/{post.metadata.id}-{post.metadata.slug}"
+									href={route('/blog/[slug]', {
+										params: { slug: `${post.metadata.id}-${post.metadata.slug}` }
+									})}
 									class="link link-hover text-base-content font-light transition-colors"
 								>
 									{post.metadata.title}

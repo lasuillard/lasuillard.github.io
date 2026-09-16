@@ -139,4 +139,33 @@ describe('`Post` schema', () => {
 			content: 'Refreshing'
 		});
 	});
+
+	it('preserves explicit Date instances without modifying their timestamps', () => {
+		const utcMidnight = new Date('2023-08-01T00:00:00.000Z');
+		expect(
+			Post.parse({
+				metadata: {
+					id: 5,
+					title: 'Sprite Zero',
+					slug: 'sprite-zero',
+					publicationDate: utcMidnight,
+					preview: '/sprite-zero.png',
+					summary: 'Zero sugar soda.',
+					tags: ['beverage']
+				},
+				content: 'Crisp'
+			})
+		).toEqual({
+			metadata: {
+				id: '5',
+				title: 'Sprite Zero',
+				slug: 'sprite-zero',
+				publicationDate: utcMidnight,
+				preview: '/sprite-zero.png',
+				summary: 'Zero sugar soda.',
+				tags: ['beverage']
+			},
+			content: 'Crisp'
+		});
+	});
 });

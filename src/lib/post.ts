@@ -1,20 +1,9 @@
 import { z } from 'zod';
 
-/** Coerce date string or Date to timezone-aware Date, defaulting date-only input to noon Asia/Seoul (12:00:00+09:00). */
+/** Coerce date string or Date to timezone-aware Date, defaulting date-only string input to noon Asia/Seoul (12:00:00+09:00). */
 const coerceTimezoneDate = z.preprocess((val) => {
 	if (typeof val === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(val.trim())) {
 		return `${val.trim()}T12:00:00+09:00`;
-	}
-	if (val instanceof Date) {
-		if (
-			val.getUTCHours() === 0 &&
-			val.getUTCMinutes() === 0 &&
-			val.getUTCSeconds() === 0 &&
-			val.getUTCMilliseconds() === 0
-		) {
-			const dateStr = val.toISOString().slice(0, 10);
-			return `${dateStr}T12:00:00+09:00`;
-		}
 	}
 	return val;
 }, z.coerce.date());

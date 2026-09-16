@@ -1,9 +1,10 @@
 <script lang="ts">
 	import TagBadge from './TagBadge.svelte';
 	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
-	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
 	import type { Metadata } from '$lib/post';
 	import { route } from '$lib/urls';
+	import { formatRelativeDate } from '$lib/utils';
+	import { format } from 'date-fns';
 
 	interface Props {
 		metadata: Metadata;
@@ -44,9 +45,7 @@
 		<p class="text-gray-500 {variant === 'vertical' ? 'mb-1' : 'mt-1'}">
 			<CalendarDaysIcon class="mb-1 inline-block h-4 w-4" />
 			<time datetime={metadata.publicationDate.toISOString()} role="time">
-				{isSameDay(metadata.publicationDate, today)
-					? '오늘'
-					: formatDistanceStrict(metadata.publicationDate, today, { addSuffix: true })}
+				{formatRelativeDate(metadata.publicationDate, today)}
 				({format(metadata.publicationDate, 'yyyy년 M월 d일')})
 			</time>
 		</p>

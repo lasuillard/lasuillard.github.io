@@ -1,3 +1,6 @@
+import { formatDistanceStrict, isSameDay } from 'date-fns';
+import { ko } from 'date-fns/locale';
+
 /**
  * Returns variable name.
  * @example
@@ -31,4 +34,20 @@ export function omitKeys(obj: any, keys: string[]): any {
  */
 export function quoteJoin(values: unknown[]): string {
 	return values.map((value) => `"${value}"`).join(', ');
+}
+
+/**
+ * Returns a human-friendly relative date string in Korean (e.g., '오늘', '3일 전', '2개월 전').
+ * @param date The target date to compare.
+ * @param baseDate The base date to compare against (defaults to current time).
+ * @returns Relative date string in Korean.
+ */
+export function formatRelativeDate(date: Date, baseDate: Date = new Date()): string {
+	if (isSameDay(date, baseDate)) {
+		return '오늘';
+	}
+	return formatDistanceStrict(date, baseDate, {
+		addSuffix: true,
+		locale: ko
+	});
 }

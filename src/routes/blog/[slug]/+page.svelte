@@ -2,7 +2,8 @@
 	import Markdown from '$components/content/Markdown.svelte';
 	import TagBadge from '$components/content/TagBadge.svelte';
 	import CalendarDaysIcon from '$components/icon/CalendarDays.svelte';
-	import { format, formatDistanceStrict, isSameDay } from 'date-fns';
+	import { formatRelativeDate } from '$lib/utils';
+	import { format } from 'date-fns';
 	import Comment from './Comment.svelte';
 	import { ScrollTracker } from './scroll-tracking.svelte.js';
 	import ChangelogWidget from './ChangelogWidget.svelte';
@@ -71,9 +72,7 @@
 					<p class="mt-4 text-center font-light md:text-base">
 						<CalendarDaysIcon class="mr-1 inline-block h-5 w-5 align-text-bottom text-gray-500" />
 						<time datetime={metadata.publicationDate.toISOString()} role="time">
-							{isSameDay(metadata.publicationDate, today)
-								? '오늘'
-								: formatDistanceStrict(metadata.publicationDate, today, { addSuffix: true })}
+							{formatRelativeDate(metadata.publicationDate, today)}
 							({format(metadata.publicationDate, 'yyyy년 M월 d일')})
 						</time>
 					</p>
