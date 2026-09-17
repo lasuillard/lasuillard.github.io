@@ -1,6 +1,6 @@
-import { Metadata, Post } from '$lib/post';
+import { MetadataSchema, PostSchema, type Post } from '$lib/post';
 import { parse } from '$lib/server/markdown';
-import _ from 'lodash';
+import { kebabCase } from '$lib/utils';
 import path from 'node:path';
 import { z } from 'zod';
 
@@ -42,15 +42,15 @@ export class PostRepository {
 				const [, id] = filepath.match(/\/static\/posts\/([^/]+)\/index\.md$/) || [];
 
 				// Parse metadata
-				const metadata = Metadata.parse({
+				const metadata = MetadataSchema.parse({
 					...frontMatter,
 					id
 				});
 
 				// ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.
-				const slug = _.kebabCase(metadata.title);
+				const slug = kebabCase(metadata.title);
 
-				return Post.parse({
+				return PostSchema.parse({
 					metadata: {
 						...metadata,
 						slug: metadata.slug || slug

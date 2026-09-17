@@ -113,3 +113,23 @@ test.describe('Blog Tag Filtering', () => {
 		expect(href).toMatch(/tag=SvelteKit/);
 	});
 });
+
+test.describe('Visual regression', () => {
+	// Captures the full blog index page.
+	// Uses a fixed clock time to prevent test flakiness from relative publication dates changing over time.
+	test('full blog index page', async ({ page }) => {
+		await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
+		await page.goto('/blog');
+
+		const postsSection = page.getByTestId('posts');
+		await expect(postsSection).toBeVisible();
+
+		// Ensure the post cards have rendered with images
+		await expect(postsSection.locator('img').first()).toBeVisible();
+
+		// Wait for Svelte fade/flip transitions to settle
+		await page.waitForTimeout(350);
+
+		await expect(page).toHaveScreenshot('blog-index-full.png', { fullPage: true });
+	});
+});

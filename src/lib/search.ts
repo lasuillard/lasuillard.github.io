@@ -6,12 +6,13 @@ import { unified } from 'unified';
 let miniSearch: MiniSearch | undefined = undefined;
 let enginePromise: Promise<MiniSearch> | undefined = undefined;
 
+// Markdown parser used to build ASTs for extracting plain text for search indexing.
 const processor = unified().use(remarkParse).use(remarkGfm);
 
 /**
- * Clean up markdown tags, HTML elements, and formatting for better indexing.
+ * Strips markdown formatting and HTML tags to extract plain text for search indexing.
  * @param markdown Raw markdown content.
- * @returns Cleaned text content.
+ * @returns Plain text suitable for indexing.
  */
 export function cleanMarkdown(markdown: string): string {
 	const tree = processor.parse(markdown);
@@ -42,11 +43,11 @@ export function cleanMarkdown(markdown: string): string {
 }
 
 /**
- * Initialize search engine.
+ * Create a new search engine instance.
  * @param posts Posts to index.
  * @returns Initialized search engine.
  */
-export async function _initEngine(posts?: any[]): Promise<MiniSearch> {
+async function createEngine(posts?: any[]): Promise<MiniSearch> {
 	console.debug('Initializing search engine');
 
 	const options = {
@@ -96,13 +97,19 @@ export async function _initEngine(posts?: any[]): Promise<MiniSearch> {
 }
 
 /**
- * Initializes the search engine (cached).
+ * Initializes the search engine (cached by default).
  * @param posts Posts to index.
+ * @param options Initialization options.
+ * @param options.useCache Whether to cache and reuse the engine promise. Defaults to `true`.
  * @returns Promise resolving to search engine instance.
  */
-export function initEngine(posts?: any[]): Promise<MiniSearch> {
+export function initEngine(posts?: any[], options?: { useCache?: boolean }): Promise<MiniSearch> {
+	const useCache = options?.useCache ?? true;
+	if (!useCache) {
+		return createEngine(posts);
+	}
 	if (!enginePromise) {
-		enginePromise = _initEngine(posts);
+		enginePromise = createEngine(posts);
 	}
 	return enginePromise;
 }

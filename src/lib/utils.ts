@@ -2,18 +2,6 @@ import { formatDistanceStrict, isSameDay } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 /**
- * Returns variable name.
- * @example
- * const myVar = "123"
- * getVarName({ myVar }) // Returns "myVar"
- * @param obj Wrapping object for variable.
- * @returns Name of variable.
- */
-export function getVarName(obj: { [_: string]: unknown }): string {
-	return Object.keys(obj)[0];
-}
-
-/**
  * Returns clone of given object with properties in keys omitted.
  * @example
  * omitKeys({a: 1, b: 3, c: 2}, ["b"]) // Returns { a: 1, c: 2 }
@@ -50,4 +38,29 @@ export function formatRelativeDate(date: Date, baseDate: Date = new Date()): str
 		addSuffix: true,
 		locale: ko
 	});
+}
+
+/**
+ * Converts a string to kebab-case.
+ * Splits on whitespace, punctuation, and camelCase boundaries.
+ * Preserves Unicode characters (e.g., Korean).
+ * @param str Input string.
+ * @returns kebab-case string.
+ */
+export function kebabCase(str: string): string {
+	return (
+		str
+			// Insert separator before uppercase letters in camelCase
+			.replace(/([a-z\d])([A-Z])/g, '$1 $2')
+			// Insert separator between letters and digits
+			.replace(/([a-zA-Z])(\d)/g, '$1 $2')
+			.replace(/(\d)([a-zA-Z])/g, '$1 $2')
+			// Replace non-alphanumeric, non-Unicode-letter characters with spaces
+			.replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
+			.trim()
+			.toLowerCase()
+			.split(/\s+/)
+			.filter(Boolean)
+			.join('-')
+	);
 }

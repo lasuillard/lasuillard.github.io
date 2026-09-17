@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { Post } from '~/lib/post';
+import { PostSchema } from '~/lib/post';
 
-describe('`Post` schema', () => {
+describe('PostSchema', () => {
 	it('parses given JSON object class', () => {
 		expect(
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: 1,
 					title: 'Coke and Cider',
@@ -32,7 +32,7 @@ describe('`Post` schema', () => {
 
 	it('parses post metadata including optional series field', () => {
 		expect(
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: 2,
 					title: 'Fanta and Sprite',
@@ -62,7 +62,7 @@ describe('`Post` schema', () => {
 
 	it('parses post metadata including optional changelog field', () => {
 		expect(
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: 3,
 					title: 'Dr Pepper',
@@ -102,7 +102,7 @@ describe('`Post` schema', () => {
 
 	it('preserves explicit timezone-aware timestamps in publicationDate and changelog', () => {
 		expect(
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: 4,
 					title: 'Mountain Dew',
@@ -143,7 +143,7 @@ describe('`Post` schema', () => {
 	it('preserves explicit Date instances without modifying their timestamps', () => {
 		const utcMidnight = new Date('2023-08-01T00:00:00.000Z');
 		expect(
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: 5,
 					title: 'Sprite Zero',

@@ -1,5 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { postRepository } from '$lib/server/post';
+import { Feed } from 'rivu';
 
 export const prerender = true;
 
@@ -10,27 +11,22 @@ export const GET: RequestHandler = async () => {
 
 	const allPosts = await postRepository.getAllPosts();
 
-	const body = `<?xml version="1.0" encoding="UTF-8" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>${siteTitle}</title>
-    <description>${siteDescription}</description>
-    <link>${siteUrl}</link>
-    <atom:link href="${siteUrl}/rss.xml" rel="self" type="application/rss+xml" />
-    ${allPosts
-			.map((post) => {
-				const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
-				return `<item>
-            <guid isPermaLink="true">${postLink}</guid>
-            <title>${post.metadata.title}</title>
-            <link>${postLink}</link>
-            <description>${post.metadata.summary}</description>
-            <pubDate>${post.metadata.publicationDate.toUTCString()}</pubDate>
-          </item>`;
-			})
-			.join('')}
-  </channel>
-</rss>`;
+	const feed = new Feed({
+		title: siteTitle,
+		link: siteUrl,
+		description: siteDescription,
+		language: 'ko-KR',
+		items: allPosts.map((post) => {
+			const postLink = encodeURI(`${siteUrl}/blog/${post.metadata.id}-${post.metadata.slug}`);
+			return {
+				title: post.metadata.title,
+				link: postLink,
+				description: post.metadata.summary,
+				guid: postLink,
+				pubDate: post.metadata.publicationDate
+			};
+		})
+	});
 	const options = {
 		headers: {
 			// https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control
@@ -39,5 +35,5 @@ export const GET: RequestHandler = async () => {
 		}
 	};
 
-	return new Response(body, options);
+	return new Response(feed.generate(), options);
 };

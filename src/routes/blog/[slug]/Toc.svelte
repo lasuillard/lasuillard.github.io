@@ -6,10 +6,9 @@
 	interface Props {
 		content: HTMLElement | undefined;
 		activeId?: string;
-		[key: string]: any;
 	}
 
-	let { content = $bindable(), activeId = '', ...rest }: Props = $props();
+	let { content, activeId = '' }: Props = $props();
 	let rootHeadings: TreeNode<HTMLElement>[] = $state([]);
 	let isHovered = $state(false);
 
@@ -44,11 +43,20 @@
 		makeToc(root, items);
 		rootHeadings = root.children;
 	});
+
+	function handleWindowKeydown(e: KeyboardEvent) {
+		if (e.key === 'Escape' && isHovered) {
+			isHovered = false;
+		}
+	}
 </script>
 
-<div
+<svelte:window onkeydown={handleWindowKeydown} />
+
+<aside
 	data-testid="toc"
-	class={'fixed top-1/3 right-4 z-50 cursor-pointer transition-all duration-300 select-none ' +
+	aria-label="목차"
+	class={'fixed top-1/3 right-4 z-50 transition-all duration-300 select-none ' +
 		(isHovered
 			? 'rounded-box border-base-content/10 bg-base-100/95 max-h-[60vh] max-w-[80vw] overflow-y-auto border p-4 shadow-xl backdrop-blur-xs'
 			: 'border-transparent bg-transparent p-2 shadow-none')}
@@ -58,16 +66,26 @@
 	onmouseleave={() => {
 		isHovered = false;
 	}}
-	onclick={(e) => {
-		const target = e.target as HTMLElement;
-		if (target.closest('a')) return;
-		isHovered = !isHovered;
-	}}
-	{...rest}
 >
-	<div>
-		{#each rootHeadings as root (root.data.textContent)}
-			<TocTree tree={root} {activeId} {isHovered} />
-		{/each}
-	</div>
-</div>
+	{#if !isHovered}
+		<button
+			type="button"
+			class="cursor-pointer border-none bg-transparent p-0 text-left outline-none"
+			aria-label="목차 열기"
+			aria-expanded="false"
+			onclick={() => {
+				isHovered = true;
+			}}
+		>
+			{#each rootHeadings as root (root.data.textContent)}
+				<TocTree tree={root} {activeId} {isHovered} />
+			{/each}
+		</button>
+	{:else}
+		<nav aria-label="목차 링크">
+			{#each rootHeadings as root (root.data.textContent)}
+				<TocTree tree={root} {activeId} {isHovered} />
+			{/each}
+		</nav>
+	{/if}
+</aside>

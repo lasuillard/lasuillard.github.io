@@ -34,9 +34,7 @@
 	}
 </script>
 
-<!-- svelte-ignore a11y_no_static_element_interactions -->
-<!-- svelte-ignore a11y_click_events_have_key_events -->
-<div class="flex flex-col items-center gap-2" onclick={(e) => e.stopPropagation()}>
+<div class="flex flex-col items-center gap-2">
 	<div class="rounded-xl bg-white p-2 shadow-lg">
 		{#if url}
 			<canvas

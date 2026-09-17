@@ -26,6 +26,7 @@
 	let dialogRef: HTMLDialogElement | undefined = $state();
 	let modalInput: HTMLInputElement | undefined = $state();
 	let resultsList: HTMLUListElement | undefined = $state();
+	let searchDebounceTimer: ReturnType<typeof setTimeout> | undefined;
 
 	/**
 	 * Transform MiniSearch raw results into structured search objects for UI rendering.
@@ -60,6 +61,7 @@
 		isModalOpen = false;
 		query = '';
 		activeIndex = -1;
+		clearTimeout(searchDebounceTimer);
 		if (dialogRef?.open) {
 			dialogRef.close();
 		}
@@ -180,6 +182,7 @@
 		const currentEngine = searchEngine;
 
 		if (!value || !currentEngine) {
+			clearTimeout(searchDebounceTimer);
 			untrack(() => {
 				searchResults = [];
 				suggestions = [];
@@ -188,25 +191,32 @@
 			return;
 		}
 
-		const slicedResults = performSearch(value, currentEngine);
+		clearTimeout(searchDebounceTimer);
+		searchDebounceTimer = setTimeout(() => {
+			const slicedResults = performSearch(value, currentEngine);
 
-		untrack(() => {
-			searchResults = slicedResults;
-			activeIndex = -1;
+			untrack(() => {
+				searchResults = slicedResults;
+				activeIndex = -1;
 
-			console.debug(
-				`Searching for "${value}": ${quoteJoin(slicedResults.map((result) => result.id))}`
-			);
-
-			if (!slicedResults.length) {
-				suggestions = getSuggestions(value, currentEngine);
 				console.debug(
-					`No search result, making suggestion: ${quoteJoin(
-						suggestions.map((value) => value.suggestion)
-					)}`
+					`Searching for "${value}": ${quoteJoin(slicedResults.map((result) => result.id))}`
 				);
-			}
-		});
+
+				if (!slicedResults.length) {
+					suggestions = getSuggestions(value, currentEngine);
+					console.debug(
+						`No search result, making suggestion: ${quoteJoin(
+							suggestions.map((value) => value.suggestion)
+						)}`
+					);
+				}
+			});
+		}, 150);
+
+		return () => {
+			clearTimeout(searchDebounceTimer);
+		};
 	});
 </script>
 
@@ -350,7 +360,9 @@
 									{/each}
 								</div>
 							{:else}
-								<p class="text-base-content/40 mt-1 text-sm">...</p>
+								<p data-testid="search-no-suggestions" class="text-base-content/40 mt-1 text-sm">
+									...
+								</p>
 							{/if}
 						</div>
 					{/if}

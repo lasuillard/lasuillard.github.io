@@ -2,7 +2,6 @@
 	import { currentTheme, Theme } from '$lib/theme';
 
 	let theme = $derived($currentTheme == Theme.Light ? 'github-light' : 'github-dark');
-	let container: HTMLDivElement | undefined = $state();
 
 	function loadUtterances(node: HTMLDivElement) {
 		const script = document.createElement('script');
@@ -24,14 +23,15 @@
 </script>
 
 {#key theme}
-	<div data-testid="utterances" bind:this={container} use:loadUtterances></div>
+	<div data-testid="utterances" use:loadUtterances></div>
 {/key}
 
 <style lang="postcss">
 	@reference "../../../app.css";
 
 	/* Fix widget width going beyond the container */
-	:global(*) {
+	:global(.utterances),
+	:global(.utterances-frame) {
 		max-width: 100%;
 	}
 
