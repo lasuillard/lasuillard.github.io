@@ -48,6 +48,7 @@
 						class="btn btn-square btn-ghost"
 						data-testid="drawer-toggle"
 						aria-label="메뉴"
+						aria-expanded={drawerOpen}
 						onclick={() => (drawerOpen = !drawerOpen)}
 					>
 						<MenuIcon class="h-7 w-7" />

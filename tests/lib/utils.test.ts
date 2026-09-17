@@ -28,27 +28,14 @@ describe('formatRelativeDate', () => {
 });
 
 describe('kebabCase', () => {
-	it('converts space-separated words', () => {
+	it('converts strings to kebab-case', () => {
 		expect(kebabCase('Hello World')).toBe('hello-world');
-	});
-
-	it('converts camelCase', () => {
 		expect(kebabCase('camelCaseString')).toBe('camel-case-string');
-	});
-
-	it('handles Korean text', () => {
 		expect(kebabCase('기술 블로그 시작하기')).toBe('기술-블로그-시작하기');
-	});
-
-	it('handles mixed Korean and ASCII', () => {
 		expect(kebabCase('SvelteKit으로 블로그 만들기')).toBe('svelte-kit으로-블로그-만들기');
-	});
-
-	it('handles punctuation', () => {
 		expect(kebabCase('foo--bar__baz')).toBe('foo-bar-baz');
-	});
-
-	it('handles empty string', () => {
+		expect(kebabCase('ブログ')).toBe('ブログ');
+		expect(kebabCase('Ελληνικά 문자열')).toBe('ελληνικά-문자열');
 		expect(kebabCase('')).toBe('');
 	});
 });

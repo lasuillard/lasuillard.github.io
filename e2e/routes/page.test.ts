@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 test('visit page', async ({ page }) => {
+	// Fix clock time to prevent relative date shifts over time
+	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
 	await page.goto('/');
 	await expect(page).toHaveScreenshot({ fullPage: true });
 });

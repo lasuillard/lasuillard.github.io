@@ -56,25 +56,11 @@ export function kebabCase(str: string): string {
 			.replace(/([a-zA-Z])(\d)/g, '$1 $2')
 			.replace(/(\d)([a-zA-Z])/g, '$1 $2')
 			// Replace non-alphanumeric, non-Unicode-letter characters with spaces
-			.replace(/[^a-zA-Z0-9\u00C0-\u024F\u0400-\u04FF\u3000-\u9FFF\uAC00-\uD7AF]+/g, ' ')
+			.replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
 			.trim()
 			.toLowerCase()
 			.split(/\s+/)
 			.filter(Boolean)
 			.join('-')
 	);
-}
-
-/**
- * Escape special characters in a string for safe inclusion in XML.
- * @param str Raw string to escape.
- * @returns Escaped XML string.
- */
-export function escapeXml(str: string): string {
-	return str
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;');
 }

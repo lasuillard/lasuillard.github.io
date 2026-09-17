@@ -360,7 +360,9 @@
 									{/each}
 								</div>
 							{:else}
-								<p class="text-base-content/40 mt-1 text-sm">...</p>
+								<p data-testid="search-no-suggestions" class="text-base-content/40 mt-1 text-sm">
+									...
+								</p>
 							{/if}
 						</div>
 					{/if}
