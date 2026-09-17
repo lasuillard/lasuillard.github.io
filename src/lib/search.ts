@@ -6,12 +6,13 @@ import { unified } from 'unified';
 let miniSearch: MiniSearch | undefined = undefined;
 let enginePromise: Promise<MiniSearch> | undefined = undefined;
 
+// Markdown parser used to build ASTs for extracting plain text for search indexing.
 const processor = unified().use(remarkParse).use(remarkGfm);
 
 /**
- * Clean up markdown tags, HTML elements, and formatting for better indexing.
+ * Strips markdown formatting and HTML tags to extract plain text for search indexing.
  * @param markdown Raw markdown content.
- * @returns Cleaned text content.
+ * @returns Plain text suitable for indexing.
  */
 export function cleanMarkdown(markdown: string): string {
 	const tree = processor.parse(markdown);

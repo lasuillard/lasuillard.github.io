@@ -37,8 +37,8 @@
 			ready = true;
 			return;
 		}
-		({ content } = await import('$lib/markdown').then(({ parse }) =>
-			parse(wrapper?.textContent || '')
+		({ content } = await import('$lib/markdown').then(({ render }) =>
+			render(wrapper?.textContent || '')
 		));
 
 		console.debug('Content is ready to be displayed.');

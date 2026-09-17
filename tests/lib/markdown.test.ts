@@ -1,10 +1,10 @@
 // @vitest-environment happy-dom
 import { describe, expect, it } from 'vitest';
-import { parse } from '~/lib/markdown';
+import { render } from '~/lib/markdown';
 
-describe(parse, () => {
-	it('parses markdown into HTML', async () => {
-		const result = await parse(`# Lorem Ipsum
+describe(render, () => {
+	it('renders markdown into HTML', async () => {
+		const result = await render(`# Lorem Ipsum
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 		expect(result.content).toMatchInlineSnapshot(`
@@ -14,7 +14,7 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
 	});
 
 	it('renders footnotes with configured footnoteLabel', async () => {
-		const result = await parse(`Hello world[^1]
+		const result = await render(`Hello world[^1]
 
 [^1]: Footnote content`);
 		expect(result.content).toContain('id="footnote-label"');
