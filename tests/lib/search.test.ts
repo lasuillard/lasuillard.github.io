@@ -5,13 +5,12 @@ import {
 	getEnginePromise,
 	initEngine,
 	clearEngine,
-	_initEngine,
 	cleanMarkdown,
 	performSearch,
 	getSuggestions,
 	getExcerpt
 } from '~/lib/search';
-import { Post } from '~/lib/post';
+import { PostSchema } from '~/lib/post';
 
 describe('countTermOccurrences', () => {
 	afterEach(() => {
@@ -63,7 +62,7 @@ describe('getEnginePromise', () => {
 	});
 
 	it('returns engine instance after initialization', async () => {
-		const testPost = Post.parse({
+		const testPost = PostSchema.parse({
 			metadata: {
 				id: '1',
 				slug: 'test-post',
@@ -105,7 +104,7 @@ describe('getEnginePromise', () => {
 			});
 			vi.stubGlobal('fetch', mockFetch);
 
-			const engine = await _initEngine();
+			const engine = await initEngine(undefined, { useCache: false });
 			expect(engine).toBeDefined();
 			expect(mockFetch).toHaveBeenCalledWith('/api/search-index');
 		});
@@ -118,7 +117,7 @@ describe('getEnginePromise', () => {
 			});
 			vi.stubGlobal('fetch', mockFetch);
 
-			const engine = await _initEngine();
+			const engine = await initEngine(undefined, { useCache: false });
 			expect(engine).toBeDefined();
 			expect(mockFetch).toHaveBeenCalledWith('/api/search-index');
 			expect(engine.documentCount).toBe(0);
@@ -129,7 +128,7 @@ describe('getEnginePromise', () => {
 describe('performSearch', () => {
 	it('performs search and respects limit', async () => {
 		const posts = [
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: '1',
 					slug: 'post-1',
@@ -141,7 +140,7 @@ describe('performSearch', () => {
 				},
 				content: 'Svelte kit web application'
 			}),
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: '2',
 					slug: 'post-2',
@@ -154,7 +153,7 @@ describe('performSearch', () => {
 				content: 'Svelte framework guide'
 			})
 		];
-		const engine = await _initEngine(posts);
+		const engine = await initEngine(posts, { useCache: false });
 
 		const results = performSearch('Svelte', engine, 1);
 		expect(results.length).toBe(1);
@@ -166,7 +165,7 @@ describe('performSearch', () => {
 describe('getSuggestions', () => {
 	it('returns suggestions for misspelled query', async () => {
 		const posts = [
-			Post.parse({
+			PostSchema.parse({
 				metadata: {
 					id: '1',
 					slug: 'post-1',
@@ -179,7 +178,7 @@ describe('getSuggestions', () => {
 				content: 'JavaScript programming language'
 			})
 		];
-		const engine = await _initEngine(posts);
+		const engine = await initEngine(posts, { useCache: false });
 
 		const suggestions = getSuggestions('javascrip', engine);
 		expect(suggestions.length).toBeGreaterThan(0);

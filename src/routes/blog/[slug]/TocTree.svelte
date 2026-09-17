@@ -6,10 +6,9 @@
 		tree: TreeNode<HTMLElement>;
 		activeId?: string;
 		isHovered?: boolean;
-		[key: string]: any;
 	}
 
-	let { tree, activeId = '', isHovered = false, ...rest }: Props = $props();
+	let { tree, activeId = '', isHovered = false }: Props = $props();
 
 	const heading = $derived(tree.data.textContent);
 
@@ -39,7 +38,7 @@
 </script>
 
 {#if !isHovered}
-	<div data-testid="toc-tree" class="flex flex-col items-start {lineIndentClass} my-1" {...rest}>
+	<div data-testid="toc-tree" class="flex flex-col items-start {lineIndentClass} my-1">
 		<div
 			class="h-1 {lineWidthClass} rounded-full transition-all duration-200 {isActive
 				? 'bg-secondary h-1.5 shadow-xs'
@@ -50,7 +49,7 @@
 		<TocTree tree={child} {activeId} {isHovered} />
 	{/each}
 {:else}
-	<div data-testid="toc-tree" class="mb-2 text-left" {...rest}>
+	<div data-testid="toc-tree" class="mb-2 text-left">
 		<p class="mb-2 text-sm font-light text-gray-500">
 			<a class={isActive ? 'link-hover link underline' : 'link-hover link'} href={link}>{heading}</a
 			>

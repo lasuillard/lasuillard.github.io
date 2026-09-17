@@ -3,6 +3,21 @@
 	import CopyIcon from '$components/icon/Copy.svelte';
 	import CheckIcon from '$components/icon/Check.svelte';
 
+	const LANG_MAP: Record<string, string> = {
+		javascript: 'JS',
+		typescript: 'TS',
+		powershell: 'PowerShell',
+		svelte: 'Svelte',
+		html: 'HTML',
+		css: 'CSS',
+		json: 'JSON',
+		bash: 'Bash',
+		shell: 'Shell',
+		markdown: 'Markdown',
+		python: 'Python',
+		yaml: 'YAML'
+	};
+
 	let {
 		// Parsed front matter and content
 		// eslint-disable-next-line no-useless-assignment
@@ -22,8 +37,8 @@
 			ready = true;
 			return;
 		}
-		({ content } = await import('$lib/markdown').then(({ parse }) =>
-			parse(wrapper?.textContent || '')
+		({ content } = await import('$lib/markdown').then(({ render }) =>
+			render(wrapper?.textContent || '')
 		));
 
 		console.debug('Content is ready to be displayed.');
@@ -72,21 +87,7 @@
 				if (lang) {
 					const badge = document.createElement('span');
 					badge.className = 'code-badge';
-					const langMap: Record<string, string> = {
-						javascript: 'JS',
-						typescript: 'TS',
-						powershell: 'PowerShell',
-						svelte: 'Svelte',
-						html: 'HTML',
-						css: 'CSS',
-						json: 'JSON',
-						bash: 'Bash',
-						shell: 'Shell',
-						markdown: 'Markdown',
-						python: 'Python',
-						yaml: 'YAML'
-					};
-					badge.innerText = langMap[lang.toLowerCase()] || lang;
+					badge.innerText = LANG_MAP[lang.toLowerCase()] || lang;
 					container.appendChild(badge);
 				}
 

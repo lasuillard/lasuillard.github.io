@@ -8,7 +8,7 @@
 	import { fade } from 'svelte/transition';
 	import '~/app.css';
 
-	let { data = $bindable(), children } = $props();
+	let { data, children } = $props();
 
 	let title = $derived(titleWithSuffix($page.data?.meta?.title));
 </script>

@@ -1,10 +1,10 @@
 // @vitest-environment happy-dom
 import Search from '$components/layout/Search.svelte';
-import { Post } from '$lib/post';
-import { initEngine, clearEngine } from '$lib/search';
+import { PostSchema } from '$lib/post';
+import { clearEngine, initEngine } from '$lib/search';
 import { render, waitFor } from '@testing-library/svelte';
 import { tick } from 'svelte';
-import { expect, afterEach } from 'vitest';
+import { afterEach, expect } from 'vitest';
 import { it } from '../../_helpers/vitest';
 
 afterEach(() => {
@@ -29,7 +29,7 @@ it('has a trigger button and opens modal when clicked', async ({ user }) => {
 });
 
 it('shows matching results for given query', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -52,17 +52,18 @@ it('shows matching results for given query', async ({ user }) => {
 	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('uno');
-	await tick();
 
-	const resultsContainer = component.getByTestId('search-results');
-	expect(resultsContainer).toBeTruthy();
+	await waitFor(() => {
+		const resultsContainer = component.getByTestId('search-results');
+		expect(resultsContainer).toBeTruthy();
+	});
 
 	const titleElement = document.body.textContent;
 	expect(titleElement).toContain('Uno terra errat');
 });
 
 it('highlights matching terms in the snippet', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -95,12 +96,66 @@ it('highlights matching terms in the snippet', async ({ user }) => {
 			expect(markElement?.textContent).toBe('uniquephrase');
 			expect(markElement?.className).toContain('search-highlight');
 		},
-		{ timeout: 5000 }
+		{ timeout: 5_000 }
 	);
 });
 
+it('cancels previous debounce timer on rapid input and renders only latest query results', async ({
+	user
+}) => {
+	const post1 = PostSchema.parse({
+		metadata: {
+			id: '1',
+			slug: 'apple-post',
+			title: 'Apple Orchard',
+			publicationDate: new Date(),
+			preview: '/posts/preview.png',
+			summary: 'A test summary',
+			tags: ['apple']
+		},
+		content: 'Content containing apple fruit'
+	});
+	const post2 = PostSchema.parse({
+		metadata: {
+			id: '2',
+			slug: 'banana-post',
+			title: 'Banana Plantation',
+			publicationDate: new Date(),
+			preview: '/posts/preview.png',
+			summary: 'A test summary',
+			tags: ['banana']
+		},
+		content: 'Content containing banana fruit'
+	});
+	await initEngine([post1, post2]);
+	const component = render(Search);
+
+	const button = component.getByRole('button', { name: '검색' });
+	await user.click(button);
+	await tick();
+
+	const input = component.getByTestId('search-input');
+	await user.click(input);
+
+	// Rapid typing: input apple then immediately replace with banana before 150ms debounce fires
+	await user.keyboard('apple');
+	await user.clear(input);
+	await user.keyboard('banana');
+
+	await waitFor(
+		() => {
+			const resultsContainer = component.getByTestId('search-results');
+			expect(resultsContainer).toBeTruthy();
+			expect(document.body.textContent).toContain('Banana Plantation');
+		},
+		{ timeout: 1_000 }
+	);
+
+	expect(document.body.textContent).not.toContain('Apple Orchard');
+});
+
 it('shows no results for non-matching query', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -122,17 +177,22 @@ it('shows no results for non-matching query', async ({ user }) => {
 	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('xyz123');
-	await tick();
+
+	await waitFor(
+		() => {
+			const bodyText = document.body.textContent;
+			expect(bodyText).toContain('아니면...');
+			expect(component.getByTestId('search-no-suggestions')).toBeTruthy();
+		},
+		{ timeout: 1_000 }
+	);
 
 	const searchResults = component.queryByTestId('search-results');
 	expect(searchResults).toBeNull();
-
-	const bodyText = document.body.textContent;
-	expect(bodyText).toContain('아니면...');
 });
 
 it('suggest matching results for given query', async ({ user }) => {
-	const testPost = Post.parse({
+	const testPost = PostSchema.parse({
 		metadata: {
 			id: '1',
 			slug: 'uno-terra-errat',
@@ -154,7 +214,14 @@ it('suggest matching results for given query', async ({ user }) => {
 	const input = component.getByTestId('search-input');
 	await user.click(input);
 	await user.keyboard('un');
-	await tick();
+
+	await waitFor(
+		() => {
+			const suggestionButton = component.getByRole('button', { name: 'uno' });
+			expect(suggestionButton).toBeTruthy();
+		},
+		{ timeout: 1_000 }
+	);
 
 	const searchResults = component.queryByTestId('search-results');
 	expect(searchResults).toBeNull();

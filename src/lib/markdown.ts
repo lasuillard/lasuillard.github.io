@@ -64,7 +64,8 @@ const processor = unified()
 	.use(remarkStringify)
 	.use(remarkRehype, {
 		// Currently there is no user uploaded documents might harmful
-		allowDangerousHtml: true
+		allowDangerousHtml: true,
+		footnoteLabel: '🔗 각주'
 	})
 	.use(rehypeMermaid, { strategy: 'pre-mermaid' }) // Let client render it
 	.use(rehypeTableScroll)
@@ -88,11 +89,11 @@ const processor = unified()
 	});
 
 /**
- * Parses given markdown string.
+ * Renders a markdown string into HTML with syntax highlighting, mermaid diagrams, and heading anchors.
  * @param markdown Raw markdown string.
- * @returns Front matter and content converted into HTML.
+ * @returns Content converted into HTML.
  */
-export async function parse(markdown: string): Promise<{ content: string }> {
+export async function render(markdown: string): Promise<{ content: string }> {
 	const result = await processor.process(markdown);
 	return {
 		content: result.toString()

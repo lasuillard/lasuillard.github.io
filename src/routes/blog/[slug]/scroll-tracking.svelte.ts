@@ -9,7 +9,7 @@ export class ScrollTracker {
 	private clickScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 	private observer: IntersectionObserver | null = null;
 
-	doInit(container: HTMLElement) {
+	init(container: HTMLElement) {
 		if (this.initialScrollDone) return; // Ensure it runs only once per visit
 		this.initObserver(container);
 

@@ -86,12 +86,13 @@ const baseProcessor = unified()
 	.use(remarkStringify);
 
 /**
- * Parses given markdown string.
+ * Preprocesses a markdown string by extracting frontmatter and rewriting relative asset URLs.
+ * The output content remains as markdown (not HTML); use `$lib/markdown.render` for HTML rendering.
  * @param markdown Raw markdown string.
  * @param options Options for parsing.
  * @param options.filepath File path of the markdown file being parsed, used to resolve relative URLs.
  *  It should be an absolute path from repository root, e.g. `/posts/1/index.md`.
- * @returns Front matter and content converted into HTML.
+ * @returns Extracted front matter and preprocessed markdown content.
  */
 export async function parse(
 	markdown: string,

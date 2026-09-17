@@ -11,9 +11,7 @@
 		<!-- Profile image -->
 		<div class="avatar col-span-1 flex justify-center">
 			<div class="h-fit w-36 rounded-lg bg-sky-900 p-0.5 sm:w-48">
-				<!-- svelte-ignore a11y_img_redundant_alt -->
-				<!-- BUG: https://github.com -->
-				<img class="mask rounded-md" src={profileImage} alt="Profile image" />
+				<img class="mask rounded-md" src={profileImage} alt="이유찬 프로필" />
 			</div>
 		</div>
 
