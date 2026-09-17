@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import { expectScreenshotWithPadding } from '../../../helpers';
+import { expectToHaveScreenshot } from '../../../helpers';
 
 let page: Page;
 
@@ -9,40 +9,29 @@ test.beforeAll('go to post page', async ({ browser }, testInfo) => {
 
 	// Fix clock time to prevent relative date shifts over time
 	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
-
-	// Block utterances widget from loading to prevent flakiness
-	await page.route('**/utteranc.es/**', (route) => route.abort());
-
-	await page.goto('/blog/1-기술-블로그-시작하기');
 });
 
 test.describe('Visual regression', () => {
 	// Captures the top hero region of a post with an associated series banner.
-	// We inject padding into the hero container and temporarily hide the sticky navbar
-	// so the hero container has clean surrounding whitespace without header overlap.
 	test('article hero with series banner', async () => {
 		await page.goto('/blog/1-기술-블로그-시작하기');
+
 		const hero = page.getByTestId('article-hero');
+		const series = page.getByTestId('series-widget');
 		await expect(hero).toBeVisible();
-		await page.getByTestId('header-wrapper').evaluate((el) => {
-			el.style.visibility = 'hidden';
+		await expect(series).toBeVisible();
+
+		await expectToHaveScreenshot(page, [hero, series], 'article-hero-series.png', {
+			padding: 24,
+			hide: [page.getByTestId('header-wrapper')]
 		});
-		await hero.evaluate((el) => {
-			el.style.padding = '24px';
-		});
-		try {
-			await expect(hero).toHaveScreenshot('article-hero-series.png');
-		} finally {
-			await page.getByTestId('header-wrapper').evaluate((el) => {
-				el.style.visibility = '';
-			});
-		}
 	});
 
 	// Captures the hero region of a post featuring a changelog banner.
 	// The changelog widget is expanded prior to snapshotting to visually verify its open state.
 	test('article hero with changelog banner', async () => {
 		await page.goto('/blog/3-남이-만든-open-api-스키마-테스트하기');
+
 		const hero = page.getByTestId('article-hero');
 		await expect(hero).toBeVisible();
 
@@ -50,63 +39,106 @@ test.describe('Visual regression', () => {
 		const changelog = page.getByTestId('changelog-widget');
 		await expect(changelog).toBeVisible();
 		await page.getByTestId('changelog-header').click();
-		await expect(page.getByTestId('changelog-list')).toBeVisible();
+		const changelogList = page.getByTestId('changelog-list');
+		await expect(changelogList).toBeVisible();
 
-		await page.getByTestId('header-wrapper').evaluate((el) => {
-			el.style.visibility = 'hidden';
+		await expectToHaveScreenshot(page, [hero, changelogList], 'article-hero-changelog.png', {
+			padding: 24,
+			hide: [page.getByTestId('header-wrapper')]
 		});
-		await hero.evaluate((el) => {
-			el.style.padding = '24px';
-		});
-		try {
-			await expect(hero).toHaveScreenshot('article-hero-changelog.png');
-		} finally {
-			await page.getByTestId('header-wrapper').evaluate((el) => {
-				el.style.visibility = '';
-			});
-		}
 	});
 
 	// Captures an in-depth article section combining images, bulleted lists, subheadings,
-	// and syntax-highlighted code blocks. Viewport height is temporarily scaled up by 20%
-	// to capture all these elements together within a single cohesive viewport glance.
+	// and syntax-highlighted code blocks.
 	test('article content and typography', async () => {
 		await page.goto('/blog/3-남이-만든-open-api-스키마-테스트하기');
-		const origViewport = page.viewportSize();
-		if (origViewport) {
-			await page.setViewportSize({
-				width: origViewport.width,
-				height: Math.round(origViewport.height * 1.2)
-			});
-		}
-		try {
-			await page.getByRole('heading', { name: /OpenAPI Generator/ }).evaluate((el) => {
-				el.scrollIntoView({ block: 'center' });
-			});
-			await expect(page).toHaveScreenshot('article-prose-viewport.png');
-		} finally {
-			if (origViewport) {
-				await page.setViewportSize(origViewport);
+
+		const heading = page.getByRole('heading', { name: /OpenAPI란\?/ });
+		const image = page.locator('article img[alt="Swagger"]');
+		const subheading = page.getByRole('heading', { name: /OpenAPI Generator/ });
+		const codeBlock = page.locator('pre').filter({ hasText: 'AuthenticationApi' }).first();
+
+		await expect(heading).toBeVisible();
+		await expect(image).toBeVisible();
+		await expect(subheading).toBeVisible();
+		await expect(codeBlock).toBeVisible();
+
+		await expectToHaveScreenshot(
+			page,
+			[heading, image, subheading, codeBlock],
+			'article-prose-viewport.png',
+			{
+				padding: 24,
+				hide: [page.getByTestId('header-wrapper')]
 			}
-		}
+		);
 	});
 
 	// Captures the hover state of the floating Table of Contents.
 	// Uses padding clipping to ensure its drop shadow and rounded corners are not clipped.
 	test('floating table of contents', async () => {
 		await page.goto('/blog/1-기술-블로그-시작하기');
+
 		const series = page.getByTestId('series-widget');
 		await expect(series).toBeVisible();
-		await series.evaluate((el) => {
-			el.style.visibility = 'hidden';
-		});
 		const toc = page.getByTestId('toc');
 		await expect(toc).toBeVisible();
 		await toc.hover();
 
 		// Wait for hover expansion transition (duration-300) to complete
 		await page.waitForTimeout(350);
-		await expectScreenshotWithPadding(page, toc, 'toc-hover.png');
+		await expectToHaveScreenshot(page, toc, 'toc-hover.png', {
+			padding: 24,
+			hide: [series]
+		});
+	});
+
+	// Captures the post footer section containing the footnotes and the comments widget.
+	test('post footer with footnotes and comment', async () => {
+		await page.goto('/blog/1-기술-블로그-시작하기');
+
+		const footnotes = page.locator('section.footnotes');
+		// Disable smooth scroll to ensure instant navigation
+		await page.evaluate(() => {
+			document.documentElement.style.scrollBehavior = 'auto';
+		});
+
+		// Scroll footnotes into view first so lazy-loaded utterances iframe triggers loading
+		await footnotes.evaluate((el) => {
+			el.scrollIntoView({ block: 'start', behavior: 'instant' });
+		});
+
+		// Wait for actual utterances widget iframe to load and render
+		const utterancesFrame = page.frameLocator('iframe.utterances-frame');
+		await expect(utterancesFrame.locator('main.timeline')).toBeVisible();
+
+		const comment = page.getByTestId('utterances');
+		await expect(comment).toBeVisible();
+
+		// Wait for all images to finish loading to avoid layout shifts
+		await page.evaluate(async () => {
+			const images = Array.from(document.querySelectorAll('img'));
+			await Promise.all(
+				images.map((img) => {
+					if (img.complete) return Promise.resolve();
+					return new Promise((resolve) => {
+						img.addEventListener('load', resolve);
+						img.addEventListener('error', resolve);
+					});
+				})
+			);
+		});
+
+		try {
+			await expectToHaveScreenshot(page, [footnotes, comment], 'article-footer-viewport.png', {
+				padding: 24,
+				hide: [page.getByTestId('header-wrapper'), page.getByTestId('toc')]
+			});
+		} finally {
+			await page.evaluate(() => {
+				document.documentElement.style.scrollBehavior = '';
+			});
+		}
 	});
 });
 
