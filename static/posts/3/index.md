@@ -3,7 +3,7 @@ title: 남이 만든 OpenAPI 스키마 테스트하기
 publicationDate: 2024-07-09
 preview: ./preview.png
 summary: >
-  API 클라이언트 코드 자동 생성을 위해 남이 만든 API 서버에 OpenAPI 스키마 붙여보기
+  남이 만든 API 서버를 위해 OpenAPI 스키마 작성하고 테스트하기
 tags:
   - OpenAPI
   - OpenAPI Generator
@@ -11,7 +11,7 @@ tags:
   - Vitest
 changelog:
   - date: 2026-08-20
-    message: 2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용 추가
+    message: 2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용을 추가했습니다.
 ---
 
 평소 북마크와 웹 페이지 하이라이트를 [Raindrop](https://raindrop.io/)에서 관리하고 있습니다. 특정 기기나 브라우저에 종속되지 않고 태그를 비롯한 편리한 기능을 이용할 수 있으며, 북마크를 공유하거나 공개할 수도 있습니다.
