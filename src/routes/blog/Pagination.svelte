@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { route } from '$lib/urls';
+	import ChevronLeftIcon from '$components/icon/ChevronLeft.svelte';
+	import ChevronRightIcon from '$components/icon/ChevronRight.svelte';
 
 	interface Props {
 		currentPage: number;
@@ -59,70 +60,68 @@
 		}
 		return pages;
 	});
-
-	/** Prompt user to go to a specific page number. */
-	function handleGoToPage() {
-		const input = prompt(`Go to page (1-${totalPages}):`);
-		if (input === null) return;
-		const pageNum = parseInt(input, 10);
-		if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
-			goto(getPageUrl(pageNum));
-		} else {
-			alert(`Please enter a valid page number between 1 and ${totalPages}`);
-		}
-	}
 </script>
 
-<div class="join" data-testid="pagination">
-	<!-- First page & Previous page -->
+<div class="flex items-center justify-center gap-2 sm:gap-4" data-testid="pagination">
+	<!-- Previous page -->
 	{#if currentPage === 1}
-		<span class="join-item btn btn-sm btn-disabled" aria-label="First page">&lt;&lt;</span>
-		<span class="join-item btn btn-sm btn-disabled" aria-label="Previous page">&lt;</span>
-	{:else}
-		<a class="join-item btn btn-sm" href={getPageUrl(1)} aria-label="First page">&lt;&lt;</a>
-		<a class="join-item btn btn-sm" href={getPageUrl(currentPage - 1)} aria-label="Previous page"
-			>&lt;</a
+		<button
+			class="btn btn-ghost btn-sm sm:btn-md btn-circle cursor-not-allowed opacity-50"
+			aria-label="이전 페이지"
+			disabled
 		>
+			<ChevronLeftIcon class="h-5 w-5" />
+		</button>
+	{:else}
+		<a
+			class="btn btn-ghost btn-sm sm:btn-md btn-circle text-base-content/70 hover:text-base-content hover:bg-base-200"
+			href={getPageUrl(currentPage - 1)}
+			aria-label="이전 페이지"
+		>
+			<ChevronLeftIcon class="h-5 w-5" />
+		</a>
 	{/if}
 
 	<!-- Page numbers and Ellipsis -->
-	{#each visiblePages as item, i (item + '-' + i)}
-		{#if item === '...'}
-			<button
-				type="button"
-				class="join-item btn btn-sm"
-				onclick={handleGoToPage}
-				aria-label="Go to page"
-			>
-				...
-			</button>
-		{:else}
-			<a
-				class="join-item btn btn-sm {currentPage === item ? 'btn-active' : ''}"
-				href={getPageUrl(item)}
-				data-sveltekit-noscroll
-			>
-				{item}
-			</a>
-		{/if}
-	{/each}
+	<div class="flex items-center gap-1">
+		{#each visiblePages as item, i (item + '-' + i)}
+			{#if item === '...'}
+				<span
+					class="text-base-content/50 px-2 font-bold tracking-widest select-none"
+					aria-label="생략"
+				>
+					...
+				</span>
+			{:else}
+				<a
+					class="btn btn-sm sm:btn-md w-9 rounded-xl text-sm font-semibold transition-all sm:w-11 sm:text-base
+						{currentPage === item
+						? 'btn-primary text-primary-content scale-105 shadow-md'
+						: 'btn-ghost text-base-content/70 hover:bg-base-200 hover:text-base-content'}"
+					href={getPageUrl(item)}
+				>
+					{item}
+				</a>
+			{/if}
+		{/each}
+	</div>
 
-	<!-- Next page & Last page -->
+	<!-- Next page -->
 	{#if currentPage === totalPages}
-		<span class="join-item btn btn-sm btn-disabled" aria-label="Next page">&gt;</span>
-		<span class="join-item btn btn-sm btn-disabled" aria-label="Last page">&gt;&gt;</span>
+		<button
+			class="btn btn-ghost btn-sm sm:btn-md btn-circle cursor-not-allowed opacity-50"
+			aria-label="다음 페이지"
+			disabled
+		>
+			<ChevronRightIcon class="h-5 w-5" />
+		</button>
 	{:else}
 		<a
-			class="join-item btn btn-sm"
+			class="btn btn-ghost btn-sm sm:btn-md btn-circle text-base-content/70 hover:text-base-content hover:bg-base-200"
 			href={getPageUrl(currentPage + 1)}
-			aria-label="Next page"
-			data-sveltekit-noscroll>&gt;</a
+			aria-label="다음 페이지"
 		>
-		<a
-			class="join-item btn btn-sm"
-			href={getPageUrl(totalPages)}
-			aria-label="Last page"
-			data-sveltekit-noscroll>&gt;&gt;</a
-		>
+			<ChevronRightIcon class="h-5 w-5" />
+		</a>
 	{/if}
 </div>

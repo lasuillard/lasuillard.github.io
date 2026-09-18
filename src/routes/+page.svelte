@@ -47,12 +47,21 @@
 	</div>
 
 	<!-- Recent Posts Section -->
-	<div class="border-base-content/10 mt-20 border-t pt-10" data-testid="recent-posts">
-		<h3 class="mb-8 text-center text-2xl font-bold">최근 쓴 글</h3>
-		<div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+	<div class="border-base-200 mt-24 border-t pt-16" data-testid="recent-posts">
+		<div class="relative mb-10 flex items-center justify-center">
+			<h2 class="text-3xl font-extrabold tracking-tight">최근 쓴 글</h2>
+			<a
+				href="/blog"
+				class="btn btn-ghost btn-sm text-base-content/70 hover:text-base-content absolute right-0"
+			>
+				전체보기 →
+			</a>
+		</div>
+
+		<div class="grid grid-cols-1 items-start gap-x-4 gap-y-8 md:grid-cols-3 lg:gap-x-6 lg:gap-y-10">
 			{#if data.recentPosts && data.recentPosts.length}
 				{#each data.recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags, preview } } (id)}
-					<div class="break-inside-avoid">
+					<div class="w-full">
 						<PostCard
 							metadata={{ id, slug, title, publicationDate, summary, tags, preview }}
 							variant="vertical"
@@ -60,7 +69,7 @@
 					</div>
 				{/each}
 			{:else}
-				<p class="text-center text-sm">아직 글을 쓰지 않았습니다.</p>
+				<div class="text-base-content/70 py-12 text-center text-lg">아직 글을 쓰지 않았습니다.</div>
 			{/if}
 		</div>
 	</div>
