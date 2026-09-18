@@ -18,7 +18,7 @@ repos:
       - id: prettier
         name: prettier
         language: system
-        types_or: [javascript, ts, svelte, json, yaml]
+        types_or: [javascript, ts, svelte, json, yaml, markdown]
         entry: npm exec -- prettier
         args: [--write]
 
