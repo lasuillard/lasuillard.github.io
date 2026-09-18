@@ -56,14 +56,14 @@ sequenceDiagram
 
 ### 🧰 테크 스택
 
-| 항목 | 설명 |
-|--- | --- |
-| 프론트엔드 | [Svelte](https://svelte.dev/) + TypeScript |
-| UI | [Flowbite Svelte](https://flowbite-svelte.com/) |
-| 빌드 및 패키징 | Vite + [CRXJS](https://crxjs.dev/) |
-| 상태 관리 | Chrome Storage API (`storage.sync`) |
-| 배포 | GitHub Actions |
-| 호스팅 | Chrome Web Store |
+| 항목           | 설명                                            |
+| -------------- | ----------------------------------------------- |
+| 프론트엔드     | [Svelte](https://svelte.dev/) + TypeScript      |
+| UI             | [Flowbite Svelte](https://flowbite-svelte.com/) |
+| 빌드 및 패키징 | Vite + [CRXJS](https://crxjs.dev/)              |
+| 상태 관리      | Chrome Storage API (`storage.sync`)             |
+| 배포           | GitHub Actions                                  |
+| 호스팅         | Chrome Web Store                                |
 
 ### 🔄 동기화 전략
 
