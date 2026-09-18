@@ -119,7 +119,9 @@ test.describe('Visual regression', () => {
 	// Uses a fixed clock time to prevent test flakiness from relative publication dates changing over time.
 	test('full blog index page', async ({ page }) => {
 		await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
-		await page.goto('/blog');
+
+		// Use tag-filtered view to list only posts with the Pulumi tag, which does not change often
+		await page.goto('/blog?tag=Pulumi');
 
 		const postsSection = page.getByTestId('posts');
 		await expect(postsSection).toBeVisible();
