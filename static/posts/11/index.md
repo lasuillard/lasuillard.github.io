@@ -1,6 +1,5 @@
 ---
 title: 다시 GitHub Pages로 블로그 배포하기
-series: 기술 블로그 운영하기
 publicationDate: 2026-07-28
 preview: ./preview.png
 summary: >
@@ -10,6 +9,7 @@ tags:
   - GitHub Pages
   - Railway
   - SvelteKit
+series: 기술 블로그 운영하기
 ---
 
 기술 블로그를 작년 말에 Railway로 옮겼습니다. 블로그를 Django로 완전히 재작성하고 필요한 동적 기능들을 붙이기 위해서였습니다. 하지만 최근 다시 GitHub Pages로 블로그를 옮기게 되었습니다.

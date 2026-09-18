@@ -1,10 +1,9 @@
 ---
 title: 기술 블로그 시작하기
-series: 기술 블로그 운영하기
 publicationDate: 2023-11-03
 preview: ./preview.png
 summary: >
-  SvelteKit으로 마크다운 기반 정적 웹 블로그 만들기
+  마크다운(Markdown) 기반 정적 웹 블로그 만들기
 tags:
   - GitHub Actions
   - GitHub Pages
@@ -12,6 +11,7 @@ tags:
   - SvelteKit
   - Tailwind CSS
   - TypeScript
+series: 기술 블로그 운영하기
 ---
 
 지금껏 개인 블로그를 운영한 적이 없었습니다. 경력을 시작한 지 얼마 되지도 않았고, 남과 나눌 수 있는 정도의 지식이나 경험을 가지고 있지 않았으며 무엇보다 필요성을 느끼지 못했기 때문이었습니다.

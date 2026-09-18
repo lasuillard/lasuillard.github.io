@@ -1,5 +1,5 @@
 ---
-title: Google Apps Script로 작업 자동화하기
+title: 자동화를 위한 Google Apps Script
 publicationDate: 2026-05-18
 preview: ./preview.png
 summary: >
@@ -8,6 +8,7 @@ tags:
   - GitHub Actions
   - Google Apps Script
   - Google Cloud
+  - PNPM
   - TypeScript
 ---
 
