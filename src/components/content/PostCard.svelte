@@ -9,7 +9,7 @@
 	interface Props {
 		metadata: Metadata;
 		selectedTag?: string | null;
-		variant?: 'horizontal' | 'vertical';
+		variant?: 'horizontal' | 'vertical'; // we might not need variant anymore if we only use vertical, but let's keep it just in case
 	}
 
 	let { metadata, selectedTag = null, variant = 'horizontal' }: Props = $props();
@@ -19,49 +19,76 @@
 	);
 </script>
 
-<div
-	class="card bg-base-100 border-base-200 border shadow-xl transition-transform duration-200 hover:scale-[1.02]
-    {variant === 'horizontal' ? 'md:card-side md:h-80 lg:h-96' : ''}"
->
-	<figure
-		class="{variant === 'horizontal' ? 'md:w-2/5 md:flex-shrink-0 lg:w-[28.8rem]' : ''} bg-white"
+{#if variant === 'horizontal'}
+	<!-- Horizontal Variant -->
+	<article
+		class="group bg-base-100 border-base-200 flex flex-col overflow-hidden rounded-3xl border transition-all duration-300 hover:shadow-xl md:flex-row"
 	>
-		<a href={postUrl} class="flex h-full w-full items-center justify-center">
+		<a href={postUrl} class="bg-base-200 block shrink-0 overflow-hidden md:w-2/5">
 			<img
 				src={metadata.preview}
 				alt={metadata.title}
-				class="h-full w-full object-contain {variant === 'horizontal' ? 'md:h-80 lg:h-96' : ''}"
+				class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
 			/>
 		</a>
-	</figure>
-	<div
-		class="card-body justify-center {variant === 'vertical'
-			? 'items-center p-4 text-center text-xs'
-			: 'items-start text-left md:p-6 lg:p-8'}"
-	>
-		<h2 class="card-title {variant === 'vertical' ? 'justify-center text-base' : 'text-2xl'}">
-			<a href={postUrl} class="link">{metadata.title}</a>
-		</h2>
-		<p class="text-gray-500 {variant === 'vertical' ? 'mb-1' : 'mt-1'}">
-			<CalendarDaysIcon class="mb-1 inline-block h-4 w-4" />
-			<time datetime={metadata.publicationDate.toISOString()} role="time">
-				{formatRelativeDate(metadata.publicationDate, today)}
-				({format(metadata.publicationDate, 'yyyy년 M월 d일')})
-			</time>
-		</p>
-		<p class="line-clamp-3 {variant === 'vertical' ? 'leading-snug' : 'md:text-lg'} [&_p]:mt-0">
-			{metadata.summary}
-		</p>
-		<div
-			class="mt-4 leading-loose md:line-clamp-2 {variant === 'vertical'
-				? 'text-center'
-				: 'text-left'}"
-		>
-			{#each metadata.tags as tag (tag)}
-				<span class="mr-1 mb-1 inline-block align-middle">
+		<div class="flex flex-1 flex-col justify-center p-6 lg:p-8">
+			<div class="text-base-content/60 mb-3 flex items-center gap-1.5 text-sm">
+				<CalendarDaysIcon class="h-4 w-4" />
+				<time datetime={metadata.publicationDate.toISOString()}>
+					{formatRelativeDate(metadata.publicationDate, today)} ({format(
+						metadata.publicationDate,
+						'yyyy년 M월 d일'
+					)})
+				</time>
+			</div>
+			<h2 class="group-hover:text-primary mb-3 text-2xl leading-tight font-bold transition-colors">
+				<a href={postUrl}>{metadata.title}</a>
+			</h2>
+			<p class="text-base-content/70 mb-4 line-clamp-3 leading-relaxed">
+				{metadata.summary}
+			</p>
+			<div class="mt-auto flex flex-wrap gap-2">
+				{#each metadata.tags as tag (tag)}
 					<TagBadge {tag} selected={selectedTag?.toLowerCase() === tag.toLowerCase()} />
-				</span>
-			{/each}
+				{/each}
+			</div>
 		</div>
-	</div>
-</div>
+	</article>
+{:else}
+	<!-- Vertical Masonry Variant -->
+	<article
+		class="group bg-base-100 border-base-200 flex flex-col overflow-hidden rounded-3xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+	>
+		<a href={postUrl} class="bg-base-200 border-base-200/50 block w-full overflow-hidden border-b">
+			<img
+				src={metadata.preview}
+				alt={metadata.title}
+				class="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-105"
+			/>
+		</a>
+		<div class="flex flex-col p-5 sm:p-6">
+			<div class="text-base-content/60 mb-2.5 flex items-center gap-1.5 text-xs sm:text-sm">
+				<CalendarDaysIcon class="h-4 w-4" />
+				<time datetime={metadata.publicationDate.toISOString()}>
+					{formatRelativeDate(metadata.publicationDate, today)} ({format(
+						metadata.publicationDate,
+						'yyyy년 M월 d일'
+					)})
+				</time>
+			</div>
+			<h2
+				class="group-hover:text-primary mb-2.5 text-lg leading-tight font-bold transition-colors sm:text-xl"
+			>
+				<a href={postUrl}>{metadata.title}</a>
+			</h2>
+			<p class="text-base-content/70 mb-4 line-clamp-4 text-sm leading-relaxed sm:text-base">
+				{metadata.summary}
+			</p>
+			<div class="flex flex-wrap gap-1.5">
+				{#each metadata.tags as tag (tag)}
+					<TagBadge {tag} selected={selectedTag?.toLowerCase() === tag.toLowerCase()} />
+				{/each}
+			</div>
+		</div>
+	</article>
+{/if}

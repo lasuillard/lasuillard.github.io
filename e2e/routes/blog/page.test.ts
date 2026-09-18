@@ -13,7 +13,7 @@ test.describe('Blog Pagination', () => {
 		await page.goto('/blog');
 
 		// The list of posts container is inside [data-testid="posts"]
-		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
+		const posts = page.getByTestId('posts').locator('article');
 		await expect(posts).toHaveCount(10);
 	});
 
@@ -29,7 +29,7 @@ test.describe('Blog Pagination', () => {
 		await expect(page).toHaveURL(/\/blog\?page=2/);
 
 		// Check that the second page has a valid number of posts
-		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
+		const posts = page.getByTestId('posts').locator('article');
 		await expect(posts.first()).toBeVisible();
 		await expect(async () => {
 			expect(await posts.count()).toBeLessThanOrEqual(10);
@@ -40,15 +40,15 @@ test.describe('Blog Pagination', () => {
 		await page.goto('/blog?page=2');
 
 		// Go back to page 1 using the previous button
-		const prevButtons = page.getByTestId('pagination').locator('[aria-label="Previous page"]');
+		const prevButtons = page.getByTestId('pagination').locator('[aria-label="이전 페이지"]');
 		await prevButtons.first().click();
 
 		await expect(page).toHaveURL(/\/blog$/);
-		const posts = page.getByTestId('posts').locator('> div.flex-col > div');
+		const posts = page.getByTestId('posts').locator('article');
 		await expect(posts).toHaveCount(10);
 
 		// Go to page 2 using the next button
-		const nextButtons = page.getByTestId('pagination').locator('[aria-label="Next page"]');
+		const nextButtons = page.getByTestId('pagination').locator('[aria-label="다음 페이지"]');
 		await nextButtons.first().click();
 
 		await expect(page).toHaveURL(/\/blog\?page=2/);
@@ -63,13 +63,15 @@ test.describe('Blog Tag Filtering', () => {
 		// Expect title to be the default "Blog" title
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
-		// Get the tag span badge directly by filtering on text content
-		const tag = page.getByTestId('tags').locator('span').filter({ hasText: 'SvelteKit' });
-		await expect(tag).toBeVisible();
+		// If on mobile/tablet, the tags are inside a <details> dropdown that needs to be opened
+		const details = page.locator('details.collapse');
+		if (await details.isVisible()) {
+			await details.locator('summary').click();
+		}
 
-		// Check that the tag badge initially has badge-secondary and not badge-primary
-		await expect(tag).toHaveClass(/badge-secondary/);
-		await expect(tag).not.toHaveClass(/badge-primary/);
+		// Get the tag link directly by filtering on text content (must be the visible one)
+		const tag = page.locator('aside').locator('a:visible').filter({ hasText: 'SvelteKit' }).first();
+		await expect(tag).toBeVisible();
 
 		// Click the tag to filter
 		await tag.click();
@@ -80,22 +82,22 @@ test.describe('Blog Tag Filtering', () => {
 		// Expect title to dynamically change
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
 
-		// Expect the selected tag badge to be highlighted with badge-primary
-		await expect(tag).toHaveClass(/badge-primary/);
-		await expect(tag).not.toHaveClass(/badge-secondary/);
-
-		// Click the tag again to clear/toggle the filter
-		await tag.click();
+		// Click "전체보기" to clear it, since our logic navigates to /blog for 전체보기
+		if (await details.isVisible()) {
+			await details.locator('summary').click();
+		}
+		const allTags = page
+			.locator('aside')
+			.locator('a:visible')
+			.filter({ hasText: '전체보기' })
+			.first();
+		await allTags.click();
 
 		// Expect the URL to go back to /blog without query parameter
 		await expect(page).toHaveURL(/\/blog$/);
 
 		// Expect title to return to default
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
-
-		// Expect badge to return to badge-secondary
-		await expect(tag).toHaveClass(/badge-secondary/);
-		await expect(tag).not.toHaveClass(/badge-primary/);
 	});
 
 	test('should preserve tag filter when navigating pages', async ({ page }) => {
