@@ -4,7 +4,7 @@ series: 개발 데이터베이스 구축 자동화
 publicationDate: 2024-06-14
 preview: ./preview.png
 summary: >
-  빠르고 쾌적한 개발을 위해 데이터를 안전하게 추출하기
+  빠르고 안전한 개발을 위한 데이터베이스 구축 자동화하기
 tags:
   - AWS RDS
   - AWS Route 53

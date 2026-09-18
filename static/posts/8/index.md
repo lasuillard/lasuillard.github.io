@@ -1,10 +1,11 @@
 ---
-title: GitHub Actions를 활용하여 메트릭 수집하기
+title: GitHub Actions로 메트릭 수집하기
 publicationDate: 2025-10-10
 preview: ./preview.png
 summary: >
-  GitHub Actions를 활용해서 소규모 메트릭 데이터를 Push 방식으로 수집해보기
+  GitHub Actions 환경에서 Prometheus 메트릭 온디맨드 방식으로 수집하기
 tags:
+  - Docker
   - GitHub Actions
   - Grafana
   - Grafana Alloy

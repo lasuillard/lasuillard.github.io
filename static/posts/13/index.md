@@ -1,6 +1,5 @@
 ---
 title: 데이터베이스 로테이션 고도화하기
-series: 개발 데이터베이스 구축 자동화
 publicationDate: 2026-09-17
 preview: ./preview.png
 summary: >
@@ -11,6 +10,7 @@ tags:
   - AWS RDS
   - AWS Lambda
   - Terraform
+series: 개발 데이터베이스 구축 자동화
 ---
 
 이전 글에서 개발 환경에서 운영 환경의 데이터를 안전하게 추출하고 활용하기 위한 다양한 방법을 검토했습니다. 그 중 데이터베이스 로테이션 방식이 가장 유용했고, 이를 개인적으로 재현하고 고도화해보고 싶었습니다.

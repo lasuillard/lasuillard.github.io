@@ -1,10 +1,9 @@
 ---
 title: Django로 블로그 다시 만들기
-series: 기술 블로그 운영하기
 publicationDate: 2025-10-10
 preview: ./preview.png
 summary: >
-  SvelteKit으로 만들었던 정적 웹 블로그를 Django로 완전히 다시 만든 이유
+  SvelteKit으로 만든 블로그를 Django로 다시 만들기
 tags:
   - AWS CloudFront
   - AWS S3
@@ -12,6 +11,7 @@ tags:
   - Pulumi
   - Python
   - Railway
+series: 기술 블로그 운영하기
 ---
 
 이전에 블로그를 만든 적이 있습니다. SvelteKit으로 작성한 마크다운 기반 블로그로, 처음에는 GitHub Pages에 배포하여 운영했었죠. 나중에는 Cloudflare Workers로 옮겨가며 이런저런 실험도 하고 추가 기능도 구현해 나갔었지만, 점차 정적 웹 페이지의 한계 및 불편함으로 전환을 계속 고려하고 있었습니다.
@@ -61,7 +61,7 @@ tags:
 
 - **SQLite 대신 PostgreSQL**: 작은 블로그인 만큼, Railway 볼륨에 SQLite를 얹는 것으로 충분했을 수도 있습니다. 하지만 개인 프로젝트에서도 실무 수준의 프로덕션 기술 스택을 직접 구축하고 다루며 Postgres에 익숙해지고 싶어 선택했습니다.
 
-- **S3 + CloudFront**: Railway의 과금 모델이 실제 사용량/트래픽 기반인 만큼, 서버의 불필요한 네트워크 부하와 전송 비용을 줄이기 위해 정적/미디어 리소스는 저렴한 AWS S3 + CloudFront로 제공했습니다. 아울러 최근 이슈가 되는 DoW(Denial of Wallet)[^1] 공격에 대한 최소한의 보호 계층 역할도 겸합니다.
+- **S3 + CloudFront**: Railway의 과금 모델이 실제 사용량/트래픽 기반인 만큼, 서버의 불필요한 네트워크 부하와 전송 비용을 줄이기 위해 정적/미디어 리소스는 저렴한 AWS S3 + CloudFront로 제공했습니다. 아울러 최근 이슈가 되는 DoW (Denial of Wallet)[^1] 공격에 대한 최소한의 보호 계층 역할도 겸합니다.
 
 - **Pulumi 기반 인프라 관리**: 별도의 IaC 코드 저장소에서 개인 프로젝트 전반의 인프라를 Pulumi로 통합 관리하고 있었기에, 블로그에 필요한 리소스도 가장 빠르고 일관되게 프로비저닝할 수 있었습니다.
 
