@@ -152,7 +152,7 @@ test('has a title and meta tags for SEO', async () => {
 
 test.describe('Series widget', () => {
 	test('does not render series widget for post without a series', async () => {
-		await page.goto('/blog/2-개발을-위한-데이터베이스');
+		await page.goto('/blog/8-git-hub-actions로-메트릭-수집하기');
 		const widget = page.getByTestId('series-widget');
 		await expect(widget).not.toBeVisible();
 	});
