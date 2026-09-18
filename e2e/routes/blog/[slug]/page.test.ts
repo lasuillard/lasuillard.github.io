@@ -239,7 +239,7 @@ test.describe('Changelog widget', () => {
 		const item = listItems.nth(0);
 		await expect(item).toContainText('2026-08-20');
 		await expect(item).toContainText(
-			'2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용 추가'
+			'2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용을 추가했습니다.'
 		);
 	});
 });
