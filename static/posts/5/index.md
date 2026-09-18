@@ -1,16 +1,16 @@
 ---
 title: 마음대로 쓰고 버리는 개발 컨테이너
-series: 개발 컨테이너 활용하기
 publicationDate: 2025-07-28
 preview: ./preview.png
 summary: >
-  Dev Container를 이용하여 언제든지 쉽게 재현 가능하고 격리된, 나만의 개발 환경 만들기
+  언제든지 쉽게 쓰고 버릴 수 있는 개발 환경 구축하기
 tags:
   - Dev Container
   - Docker
   - Dotfiles
   - GitHub Codespaces
   - VS Code
+series: 개발 컨테이너 활용하기
 ---
 
 다들 개발 환경은 어떻게 구성하고 관리하고 계신가요? 아마도 Python 가상 환경(venv), pyenv, nodenv, Poetry, uv, pipenv 등 여러 패키지 매니저나 환경 관리 도구를 사용하고 계실 것 같습니다. 저 역시 다양한 도구를 사용해봤지만, 최근에는 새 프로젝트를 시작할 때 개발 컨테이너 구성을 가장 우선시하고 있습니다.
