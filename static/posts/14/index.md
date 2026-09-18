@@ -12,7 +12,11 @@ tags:
 series: Raindrop Sync for Chrome
 ---
 
-이전 글에서는 Raindrop Sync for Chrome (RSFC) 브라우저 확장 프로그램을 위한 raindrop-client 라이브러리 개발 및 테스트에 대해 다루었습니다. 이번 글에서는 실제로 Chrome 확장 프로그램을 개발하고 배포한 과정에 대해 이야기하고자 합니다.
+이전 글에서는 Raindrop Sync for Chrome (RSFC) 브라우저 확장 프로그램을 위한 [raindrop-client](https://www.npmjs.com/package/@lasuillard/raindrop-client) 라이브러리 개발 및 테스트에 대해 다루었습니다. 개발을 위한 준비의 준비가 완료되었으니, 이제 실제 Chrome 확장 프로그램 개발에 착수할 수 있게 되었습니다.
+
+RSFC를 개발하게 된 배경에 대해서는 이전에도 다루었지만, Raindrop 북마크를 브라우저에 동기화하여 브라우저나 Raycast와 같은 퀵 런처 프로그램에서 쉽고 빠르게 접근하기 위함이었습니다. 퀵 런처의 Raindrop 플러그인이나 확장 프로그램을 사용할 수도 있겠지만, 브라우저 북마크는 많은 퀵 런처에서 자체 또는 플러그인/확장 프로그램을 통해 지원되는 공통적인 기능이기 때문에 북마크를 브라우저에 동기화하는 것이 더 범용적이고 효율적입니다.
+
+이번 글에서는 실제로 Chrome 확장 프로그램을 개발하고 배포한 과정에 대해 이야기하고자 합니다.
 
 ## ✨ RSFC 미리보기
 
@@ -36,7 +40,7 @@ series: Raindrop Sync for Chrome
 
 ## 🏗️ 애플리케이션 설계
 
-동기화 과정은 사용자 브라우저(Chrome), Raindrop 서버 간에 이루어지는 비교적 단순한 과정입니다.
+동기화 과정은 Chrome, Raindrop 서버 간에 이루어지는 비교적 단순한 과정입니다.
 
 ```mermaid
 sequenceDiagram
@@ -60,10 +64,12 @@ sequenceDiagram
 | -------------- | ----------------------------------------------- |
 | 프론트엔드     | [Svelte](https://svelte.dev/) + TypeScript      |
 | UI             | [Flowbite Svelte](https://flowbite-svelte.com/) |
-| 빌드 및 패키징 | Vite + [CRXJS](https://crxjs.dev/)              |
+| 빌드 및 패키징 | Vite + CRXJS[^1]              |
 | 상태 관리      | Chrome Storage API (`storage.sync`)             |
 | 배포           | GitHub Actions                                  |
 | 호스팅         | Chrome Web Store                                |
+
+[^1]: [CRXJS](https://crxjs.dev/)는 Vite 기반 Chrome 확장 프로그램 개발 도구입니다.
 
 ### 🔄 동기화 전략
 
@@ -87,25 +93,25 @@ Chrome 북마크와 Raindrop 북마크 데이터의 차이로 인해 동기화 �
 
 ### ⚡ 점진적 동기화: Desired State Model
 
-점진적 동기화는 전체 동기화를 수행하는 대신, 변경 사항만을 반영하여 효율적으로 동기화를 수행하는 방식입니다. 이를 위해 IaC(Infrastructure as Code)에서 영감을 받아 Desired State Model을 도입하여, 현재 상태(Current State)와 목표 상태(Desired State)를 비교하고 필요한 변경만 적용하도록 구현했습니다.
+점진적 동기화는 전체 동기화를 수행하는 대신, 변경 사항만을 반영하는 방식입니다. Terraform이나 Kubernetes와 같은 IaC, Infrastructure as Code 도구들에서 영감을 받아 Desired State Model을 도입해 현재 상태(Current State)와 목표 상태(Desired State)를 비교하고 필요한 변경만 적용하도록 구현했습니다.
 
-요구 상태 모델을 도입함으로써 다음과 같은 이점을 얻을 수 있었습니다.
+Desired State Model의 도입을 통해, 다음과 같은 이점을 누릴 수 있었습니다.
 
 - **선언적 동기화(Declarative Sync)**: Desired State Model을 통해 목표 상태를 선언적으로 정의하고, 현재 상태와 비교하여 필요한 변경만 적용함으로써 동기화 과정을 명확하고 예측 가능하게 만들 수 있으며, 목표 상태를 변경하는 것으로 세부 동기화 정책을 조정할 수 있습니다.
 - **충돌 관리 용이**: 단일 진실 소스를 기반으로 동기화를 수행하므로 충돌 발생 가능성이 낮고 관리가 용이합니다.
-- **자가 치유(Self-Healing)**: 충돌, 오류 및 예외 상황에 대응하여 동기화 상태를 멱등성(Idempotency)을 기반으로 자동으로 복구할 수 있습니다.
+- **자가 치유(Self-Healing)**: 충돌, 오류 및 예외 상황에 대응하여 동기화 상태를 멱등성(Idempotency)을 기반으로 자동으로 복구할 수 있습니다. 오류로 인해 동기화가 중단되더라도, 다음 동기화 시 원하는 상태로 나아갈 수 있습니다.
 
 현재 동기화 구현의 주요 컴포넌트는 다음과 같습니다.
 
-- `ReadableAdapter`: 현재 상태(Current State)를 읽어오는 역할을 하는 어댑터입니다.
-- `WritableAdapter`: `ReadableAdapter`을 확장하며, 상태를 읽어올 뿐만 아니라 변경 사항을 적용하는 역할을 하는 어댑터입니다.
-- `SyncDiffAnalyzer`: 현재 상태(Current State)와 목표 상태(Desired State)의 차이를 계산하는 역할을 하는 컴포넌트입니다.
-- `SyncPlanner`: 동기화 계획(Sync Plan)을 수립하는 역할을 하는 컴포넌트입니다.
-- `SyncPlanOptimizer`: 동기화 계획을 최적화하는 역할을 하는 컴포넌트입니다. 실행 계획을 분석하여 순서 조정, 작업 병합 등 다양한 최적화 작업을 수행합니다.
-- `SyncExecutor`: 동기화 계획을 실제로 실행하는 역할을 하는 컴포넌트입니다.
-- `SyncService`: 전체 동기화 과정을 관리하고 조율하는 역할을 하는 컴포넌트입니다.
+- `ReadableAdapter`: 현재 상태(Current State)를 읽어오는 어댑터
+- `WritableAdapter`: `ReadableAdapter`를 확장하며, 상태를 읽어올 뿐만 아니라 변경 사항을 적용하는 어댑터
+- `SyncDiffAnalyzer`: 현재 상태(Current State)와 목표 상태(Desired State)의 차이를 계산
+- `SyncPlanner`: 동기화 계획(Sync Plan)을 수립
+- `SyncPlanOptimizer`: 실행 계획을 분석하여 순서 조정, 작업 병합 등 다양한 동기화 계획을 최적화
+- `SyncExecutor`: 동기화 계획을 실제로 실행
+- `SyncService`: 전체 동기화 과정을 관리하고 조율
 
-동기화 진행 과정은 `SyncService`에 옵저버 패턴을 적용하여 관리됩니다. `SyncService`는 동기화 상태 변경을 구독자에게 통지하며, 이를 통해 UI 업데이트나 로그 기록 등의 작업을 수행할 수 있습니다.
+동기화 이벤트는 `SyncService`에 옵저버 패턴을 적용하여 관리합니다. `SyncService`는 동기화 상태 변경을 구독자에게 통지하며, 이를 통해 UI 업데이트나 로그 기록 등의 작업을 수행할 수 있습니다.
 
 ## 🐞 트러블슈팅
 
@@ -115,7 +121,7 @@ Chrome 북마크와 Raindrop 북마크 데이터의 차이로 인해 동기화 �
 
 ### 🟰 노드 간 동등성(Equality) 비교
 
-앞서 짧게 언급했듯, Chrome 북마크와 Raindrop 북마크 노드는 서로 다른 데이터 구조를 가지고 있습니다. 따라서 두 시스템 간의 동기화를 위해서는 이러한 구조적 차이를 고려한 동등성 비교가 필요했습니다. 가장 큰 차이점은 Raindrop은 원본 URL을 그대로 저장하지만, Chrome은 URL 리디렉션을 자동으로 처리한다는 점입니다. 같은 URL을 북마크해도 실제 비교 결과가 달라질 수 있습니다. URL 비교 시 이러한 문제를 해결하기 위해 비교 시 반드시 URL 정규화 과정을 거치도록 구현했습니다.
+앞서 짧게 언급했듯, Chrome 북마크와 Raindrop 북마크 노드는 서로 다른 데이터 구조를 가지고 있습니다. 따라서 두 시스템 간의 동기화를 위해서는 이러한 구조적 차이를 고려한 동등성 비교가 필요했습니다. 가장 큰 차이점은 Raindrop은 원본 URL을 그대로 저장하지만, Chrome은 URL 리디렉션을 자동으로 처리한다는 점입니다. 같은 URL을 북마크해도 실제 비교 결과가 달라질 수 있습니다. URL 비교 시 이러한 문제를 해결하기 위해 반드시 URL 정규화 과정을 거치도록 구현했습니다.
 
 ## 🚀 배포 파이프라인
 
