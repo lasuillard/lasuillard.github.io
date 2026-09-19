@@ -3,8 +3,7 @@ title: 개발 컨테이너 구성 검증, GitHub App으로 중앙화하기
 publicationDate: 2026-08-18
 preview: ./preview.png
 summary: >
-  여러 저장소에 흩어진 Dev Container 검증 워크플로를 중앙화하기 위해 Probot과
-  GitHub Actions 기반의 GitHub App을 개발하기
+  여러 저장소에 흩어진 Dev Container 검증 워크플로를 GitHub App으로 중앙화하기
 tags:
   - Dev Container
   - Probot
