@@ -9,6 +9,7 @@ tags:
   - OpenAPI Generator
   - TypeScript
   - Vitest
+series: Raindrop Sync for Chrome
 changelog:
   - date: 2026-08-20
     message: 2026년 7월 도입한 API Drift Detection 자동화 워크플로 도입에 관한 내용을 추가했습니다.
