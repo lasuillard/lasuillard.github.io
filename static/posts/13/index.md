@@ -1,6 +1,6 @@
 ---
 title: 데이터베이스 로테이션 고도화하기
-publicationDate: 2026-09-17
+publicationDate: 2026-09-19
 preview: ./preview.png
 summary: >
   개발 데이터베이스 구축 자동화를 위해 고안한 데이터베이스 로테이션 재현 및 고도화하기
