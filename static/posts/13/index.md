@@ -48,6 +48,7 @@ series: 개발 데이터베이스 구축 자동화
 이러한 문제점을 해결하기 위해서는 각 단계의 멱등성을 보장하고, 실패 시 재시도 및 롤백 메커니즘을 도입하며, 아직 마스킹되지 않은 민감 데이터가 개발 환경에 노출되지 않도록 안전하게 격리하는 등의 조치가 필요했습니다.
 
 [^1]: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html
+
 [^2]: https://aws.amazon.com/ko/blogs/security/use-iam-roles-to-connect-github-actions-to-actions-in-aws/
 
 ## 🏗️ 설계 및 고려 사항
@@ -131,7 +132,7 @@ RDS 마스터 비밀번호를 SFN 워크플로 내에서 변경하고자 할 경
 
   현재 구성은 CodeBuild와 RDS 인스턴스 사이의 연결 및 테스트 쿼리(`SELECT 1`)만 수행합니다. SQL이 실행될 수 있는 구성만 만족하면, 실제 마스킹 쿼리는 언제든지 작성할 수 있으며, 필요에 따라 즉시 적용할 수 있습니다.
 
-    > ❓ 마스킹 SQL 스크립트들은 동일 Git 저장소에서 관리되며, Terraform을 통해 S3 객체 리소스로 배포됩니다. CodeBuild는 해당 S3 객체를 참조하여 마스킹 작업을 수행합니다.
+  > ❓ 마스킹 SQL 스크립트들은 동일 Git 저장소에서 관리되며, Terraform을 통해 S3 객체 리소스로 배포됩니다. CodeBuild는 해당 S3 객체를 참조하여 마스킹 작업을 수행합니다.
 
 - 워크플로 실행 방식 개선
 
