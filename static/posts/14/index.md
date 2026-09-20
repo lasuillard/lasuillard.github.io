@@ -1,6 +1,6 @@
 ---
 title: Chrome 확장 프로그램 개발하기
-publicationDate: 2026-09-17
+publicationDate: 2026-09-23
 preview: ./preview.png
 summary: >
   Raindrop 북마크를 동기화하는 Chrome 확장 프로그램 개발하기
