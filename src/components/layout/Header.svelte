@@ -50,7 +50,7 @@
 					<MenuIcon class="h-6 w-6" />
 				</button>
 				<ul
-					tabindex="0"
+					tabindex="-1"
 					class="menu dropdown-content bg-base-100 rounded-box z-50 mt-3 w-52 p-2 shadow-lg"
 				>
 					{#each links as link (link.name)}
