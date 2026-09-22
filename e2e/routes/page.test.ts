@@ -1,10 +1,25 @@
 import { expect, test } from '@playwright/test';
 
-test('visit page', async ({ page }) => {
-	// Fix clock time to prevent relative date shifts over time
-	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
-	await page.goto('/');
-	await expect(page).toHaveScreenshot({ fullPage: true });
+test.describe('visual regression', () => {
+	test('about me page', async ({ page }) => {
+		// Fix clock time to prevent relative date shifts over time
+		await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
+		await page.goto('/');
+		await expect(page).toHaveScreenshot({ fullPage: true });
+	});
+
+	test('search modal with query results', async ({ page }) => {
+		await page.goto('/');
+		await page.getByRole('button', { name: '검색' }).click();
+		const modal = page.getByTestId('search-modal');
+		await expect(modal).toBeVisible();
+
+		const input = page.getByTestId('search-input');
+		await input.fill('Playwright');
+		await expect(page.getByTestId('search-results')).toBeVisible();
+
+		await expect(modal).toHaveScreenshot('search-modal-results.png');
+	});
 });
 
 test('has a title and meta tags for SEO', async ({ page }) => {
@@ -43,17 +58,43 @@ test('persists theme selection across reloads', async ({ page }) => {
 	expect(reloadedTheme).toBe(newTheme);
 });
 
-test.describe('Visual regression', () => {
-	test('search modal with query results', async ({ page }) => {
+test.describe('header mobile navigation', () => {
+	test('mobile navigation dropdown interaction', async ({ page }, testInfo) => {
+		test.skip(testInfo.project.name !== 'Mobile L', 'Test only runs on Mobile L');
 		await page.goto('/');
-		await page.getByRole('button', { name: '검색' }).click();
-		const modal = page.getByTestId('search-modal');
-		await expect(modal).toBeVisible();
 
-		const input = page.getByTestId('search-input');
-		await input.fill('Playwright');
-		await expect(page.getByTestId('search-results')).toBeVisible();
+		const menuButton = page.getByTestId('drawer-toggle');
+		await expect(menuButton).toBeVisible();
 
-		await expect(modal).toHaveScreenshot('search-modal-results.png');
+		// Open menu
+		await menuButton.click();
+		const drawerInput = page.locator('#header-drawer');
+		await expect(drawerInput).toBeChecked();
+
+		// Follow a link
+		const blogLink = page.locator('.drawer-side ul.menu a').filter({ hasText: 'Blog' });
+		await blogLink.click();
+
+		// Verify navigation happened and menu is dismissed
+		await expect(page).toHaveURL(/\/blog/);
+		await expect(drawerInput).not.toBeChecked();
+	});
+});
+
+test.describe('header desktop features', () => {
+	test('header has QR code dropdown on desktop', async ({ page }, testInfo) => {
+		test.skip(testInfo.project.name !== 'Desktop', 'Test only runs on Desktop');
+		await page.goto('/');
+		const qrDropdown = page.getByTestId('qr-dropdown');
+		await expect(qrDropdown).toBeVisible();
+
+		// Open QR dropdown
+		const summary = qrDropdown.locator('summary');
+		await summary.click();
+
+		await expect(qrDropdown).toHaveAttribute('open', '');
+
+		const qrCodeCanvas = qrDropdown.locator('canvas');
+		await expect(qrCodeCanvas).toBeVisible();
 	});
 });

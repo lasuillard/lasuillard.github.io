@@ -1,6 +1,28 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Blog Pagination', () => {
+test.describe('visual regression', () => {
+	// Captures the full blog index page.
+	// Uses a fixed clock time to prevent test flakiness from relative publication dates changing over time.
+	test('full blog index page', async ({ page }) => {
+		await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
+
+		// Use tag-filtered view to list only posts with the Pulumi tag, which does not change often
+		await page.goto('/blog?tag=Pulumi');
+
+		const postsSection = page.getByTestId('posts');
+		await expect(postsSection).toBeVisible();
+
+		// Ensure the post cards have rendered with images
+		await expect(postsSection.locator('img').first()).toBeVisible();
+
+		// Wait for Svelte fade/flip transitions to settle
+		await page.waitForTimeout(350);
+
+		await expect(page).toHaveScreenshot('blog-index-full.png', { fullPage: true });
+	});
+});
+
+test.describe('blog pagination', () => {
 	test('should display pagination widget at top and bottom', async ({ page }) => {
 		await page.goto('/blog');
 
@@ -56,7 +78,7 @@ test.describe('Blog Pagination', () => {
 	});
 });
 
-test.describe('Blog Tag Filtering', () => {
+test.describe('blog tag filtering', () => {
 	test('visit blog page and filter by tag', async ({ page }) => {
 		await page.goto('/blog');
 
@@ -73,8 +95,11 @@ test.describe('Blog Tag Filtering', () => {
 		const tag = page.locator('aside').locator('a:visible').filter({ hasText: 'SvelteKit' }).first();
 		await expect(tag).toBeVisible();
 
+		// Wait for collapse transition if it was just opened
+		await page.waitForTimeout(400);
+
 		// Click the tag to filter
-		await tag.click();
+		await tag.click({ force: true });
 
 		// Expect the URL to change to include the query parameter
 		await expect(page).toHaveURL(/\/blog\?tag=SvelteKit/);
@@ -113,27 +138,5 @@ test.describe('Blog Tag Filtering', () => {
 		// Ensure the href contains tag=SvelteKit and page=1
 		const href = await page1Links.first().getAttribute('href');
 		expect(href).toMatch(/tag=SvelteKit/);
-	});
-});
-
-test.describe('Visual regression', () => {
-	// Captures the full blog index page.
-	// Uses a fixed clock time to prevent test flakiness from relative publication dates changing over time.
-	test('full blog index page', async ({ page }) => {
-		await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
-
-		// Use tag-filtered view to list only posts with the Pulumi tag, which does not change often
-		await page.goto('/blog?tag=Pulumi');
-
-		const postsSection = page.getByTestId('posts');
-		await expect(postsSection).toBeVisible();
-
-		// Ensure the post cards have rendered with images
-		await expect(postsSection.locator('img').first()).toBeVisible();
-
-		// Wait for Svelte fade/flip transitions to settle
-		await page.waitForTimeout(350);
-
-		await expect(page).toHaveScreenshot('blog-index-full.png', { fullPage: true });
 	});
 });

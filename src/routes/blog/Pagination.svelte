@@ -99,6 +99,7 @@
 						? 'btn-primary text-primary-content scale-105 shadow-md'
 						: 'btn-ghost text-base-content/70 hover:bg-base-200 hover:text-base-content'}"
 					href={getPageUrl(item)}
+					aria-current={currentPage === item ? 'page' : undefined}
 				>
 					{item}
 				</a>

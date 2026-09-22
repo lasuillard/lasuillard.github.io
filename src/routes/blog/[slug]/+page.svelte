@@ -69,7 +69,7 @@
 						<div class="mt-8 flex w-full justify-center">
 							<img
 								src={metadata.preview}
-								alt="Preview"
+								alt={metadata.title}
 								class="max-h-[500px] max-w-full rounded-2xl object-contain drop-shadow-sm"
 							/>
 						</div>

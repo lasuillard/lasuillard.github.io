@@ -63,13 +63,22 @@
 				{#each data.recentPosts as { metadata: { id, slug, title, publicationDate, summary, tags, preview } } (id)}
 					<div class="w-full">
 						<PostCard
-							metadata={{ id, slug, title, publicationDate, summary, tags, preview }}
-							variant="vertical"
+							metadata={{
+								id,
+								slug,
+								title,
+								publicationDate,
+								summary,
+								tags: tags.length > 3 ? [...tags.slice(0, 3), '...'] : tags,
+								preview
+							}}
 						/>
 					</div>
 				{/each}
 			{:else}
-				<div class="text-base-content/70 py-12 text-center text-lg">아직 글을 쓰지 않았습니다.</div>
+				<div class="text-base-content/70 col-span-full py-12 text-center text-lg">
+					아직 글을 쓰지 않았습니다.
+				</div>
 			{/if}
 		</div>
 	</div>

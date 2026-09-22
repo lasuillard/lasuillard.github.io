@@ -80,7 +80,7 @@
 		{#if allTags.length}
 			<li>
 				<a
-					href="/blog"
+					href={route('/blog')}
 					class:active={!selectedTag}
 					class="flex justify-between py-2.5 text-base font-medium"
 				>
@@ -93,7 +93,7 @@
 				{@const isSelected = selectedTag?.toLowerCase() === tag.toLowerCase()}
 				<li>
 					<a
-						href="?tag={tag}"
+						href={route('/blog', { query: { tag } })}
 						class:active={isSelected}
 						class="flex justify-between py-2.5 text-base font-medium transition-colors"
 					>
@@ -160,7 +160,7 @@
 							out:fade={{ duration: 150 }}
 							animate:flip={{ duration: 400 }}
 						>
-							<PostCard {metadata} {selectedTag} variant="vertical" />
+							<PostCard {metadata} {selectedTag} />
 						</div>
 					{/each}
 				{:else if selectedTag}
