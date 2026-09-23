@@ -33,13 +33,13 @@
 
 <svelte:window onclick={handleClickOutside} />
 
-<div class="drawer">
+<div class="drawer sticky top-0 z-50">
 	<input id="header-drawer" type="checkbox" class="drawer-toggle" bind:checked={drawerOpen} />
 
 	<div class="drawer-content flex flex-col">
 		<header
 			data-testid="header-wrapper"
-			class="bg-base-100/80 border-base-200 sticky top-0 z-50 w-full border-b backdrop-blur-md"
+			class="bg-base-100/80 border-base-200 w-full border-b backdrop-blur-md"
 		>
 			<div class="navbar mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" data-testid="header">
 				<!-- Mobile Menu & Brand -->

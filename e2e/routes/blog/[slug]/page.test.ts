@@ -279,6 +279,9 @@ test.describe('section tracking and auto-scroll', () => {
 		// Wait for URL hash tracking to trigger and match
 		const encodedId = encodeURIComponent(decodeURIComponent(id));
 		await expect(page).toHaveURL(new RegExp('.*#' + encodedId));
+
+		await expect(headingLink).toHaveClass(/text-primary/);
+		await expect(headingLink).toHaveClass(/font-bold/);
 	});
 
 	test('automatically scrolls to section and highlights in ToC on visit', async ({ page }) => {
@@ -311,6 +314,8 @@ test.describe('section tracking and auto-scroll', () => {
 			.locator(`a[href="${targetHash}"]`)
 			.first();
 		await expect(activeHeadingLink).toBeVisible();
+		await expect(activeHeadingLink).toHaveClass(/text-primary/);
+		await expect(activeHeadingLink).toHaveClass(/font-bold/);
 
 		// Assert we scrolled past the top (window.scrollY > 0)
 		const scrollY = await page.evaluate(() => window.scrollY);

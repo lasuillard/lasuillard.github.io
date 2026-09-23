@@ -197,7 +197,7 @@ export async function expectToHaveScreenshot(
 		};
 	}
 ): Promise<void> {
-	const { padding = 0, hide, minViewportHeight = 0, ...screenshotOptions } = options ?? {};
+	const { padding = 0, hide, minViewportHeight = 0, screenshotOptions = {} } = options ?? {};
 
 	await withHiddenElements(hide, async () => {
 		// Calculate the initial bounding box encompassing all target locators
