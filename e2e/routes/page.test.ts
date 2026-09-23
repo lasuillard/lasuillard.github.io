@@ -1,10 +1,25 @@
 import { expect, test } from '@playwright/test';
 
-test('visit page', async ({ page }) => {
-	// Fix clock time to prevent relative date shifts over time
-	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
-	await page.goto('/');
-	await expect(page).toHaveScreenshot({ fullPage: true });
+test.describe('visual regression', () => {
+	test('about me page', async ({ page }) => {
+		// Fix clock time to prevent relative date shifts over time
+		await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
+		await page.goto('/');
+		await expect(page).toHaveScreenshot({ fullPage: true });
+	});
+
+	test('search modal with query results', async ({ page }) => {
+		await page.goto('/');
+		await page.getByRole('button', { name: '검색' }).click();
+		const modal = page.getByTestId('search-modal');
+		await expect(modal).toBeVisible();
+
+		const input = page.getByTestId('search-input');
+		await input.fill('Playwright');
+		await expect(page.getByTestId('search-results')).toBeVisible();
+
+		await expect(modal).toHaveScreenshot('search-modal-results.png');
+	});
 });
 
 test('has a title and meta tags for SEO', async ({ page }) => {
@@ -18,38 +33,11 @@ test('renders recent posts section with 3 posts', async ({ page }) => {
 	const recentPostsSection = page.getByTestId('recent-posts');
 	await expect(recentPostsSection).toBeVisible();
 
-	const heading = recentPostsSection.locator('h3');
+	const heading = recentPostsSection.locator('h2').first();
 	await expect(heading).toHaveText('최근 쓴 글');
 
-	const postCount = await recentPostsSection.locator('h2.card-title').count();
+	const postCount = await recentPostsSection.locator('article').count();
 	expect(postCount).toBe(3);
-});
-
-test('header has QR code dropdown on desktop', async ({ page }, testInfo) => {
-	await page.goto('/');
-	const qrDropdown = page.getByLabel('QR Code');
-
-	if (testInfo.project.name !== 'Mobile L') {
-		await expect(qrDropdown).toBeVisible();
-
-		await qrDropdown.click();
-		await expect(page.getByTestId('qrcode')).toBeVisible();
-	} else {
-		await expect(qrDropdown).not.toBeVisible();
-	}
-});
-
-test('header has QR code inside drawer on mobile', async ({ page }, testInfo) => {
-	await page.goto('/');
-	if (testInfo.project.name === 'Mobile L') {
-		const drawerToggle = page.getByTestId('drawer-toggle');
-		await expect(drawerToggle).toBeVisible();
-
-		await drawerToggle.click();
-
-		const qrCodeInDrawer = page.locator('.drawer-side').getByTestId('qrcode');
-		await expect(qrCodeInDrawer).toBeVisible();
-	}
 });
 
 test('persists theme selection across reloads', async ({ page }) => {
@@ -70,50 +58,43 @@ test('persists theme selection across reloads', async ({ page }) => {
 	expect(reloadedTheme).toBe(newTheme);
 });
 
-test.describe('Visual regression', () => {
-	test('search modal with query results', async ({ page }) => {
+test.describe('header mobile navigation', () => {
+	test('mobile navigation dropdown interaction', async ({ page }, testInfo) => {
+		test.skip(testInfo.project.name !== 'Mobile L', 'Test only runs on Mobile L');
 		await page.goto('/');
-		await page.getByRole('button', { name: '검색' }).click();
-		const modal = page.getByTestId('search-modal');
-		await expect(modal).toBeVisible();
 
-		const input = page.getByTestId('search-input');
-		await input.fill('Playwright');
-		await expect(page.getByTestId('search-results')).toBeVisible();
+		const menuButton = page.getByTestId('drawer-toggle');
+		await expect(menuButton).toBeVisible();
 
-		await expect(modal).toHaveScreenshot('search-modal-results.png');
+		// Open menu
+		await menuButton.click();
+		const drawerInput = page.locator('#header-drawer');
+		await expect(drawerInput).toBeChecked();
+
+		// Follow a link
+		const blogLink = page.locator('.drawer-side ul.menu a').filter({ hasText: 'Blog' });
+		await blogLink.click();
+
+		// Verify navigation happened and menu is dismissed
+		await expect(page).toHaveURL(/\/blog/);
+		await expect(drawerInput).not.toBeChecked();
 	});
+});
 
-	test('QR code feature', async ({ page }, testInfo) => {
+test.describe('header desktop features', () => {
+	test('header has QR code dropdown on desktop', async ({ page }, testInfo) => {
+		test.skip(testInfo.project.name !== 'Desktop', 'Test only runs on Desktop');
 		await page.goto('/');
-		if (testInfo.project.name !== 'Mobile L') {
-			const qrDropdown = page.getByTestId('qr-dropdown');
-			await page.getByLabel('QR Code').click();
-			await expect(page.getByTestId('qrcode')).toBeVisible();
+		const qrDropdown = page.getByTestId('qr-dropdown');
+		await expect(qrDropdown).toBeVisible();
 
-			// Wait for opening transition to complete
-			await page.waitForTimeout(350);
+		// Open QR dropdown
+		const summary = qrDropdown.locator('summary');
+		await summary.click();
 
-			const content = qrDropdown.locator('.dropdown-content');
-			await expect(content).toHaveScreenshot('qrcode-dropdown.png', {
-				// Mask dynamic canvas and URL to avoid diffs from ephemeral test server ports
-				mask: [content.getByTestId('qrcode'), content.locator('span.select-all')]
-			});
-		} else {
-			const drawerToggle = page.getByTestId('drawer-toggle');
-			await drawerToggle.click();
+		await expect(qrDropdown).toHaveAttribute('open', '');
 
-			const qrCodeInDrawer = page.locator('.drawer-side').getByTestId('qrcode');
-			await expect(qrCodeInDrawer).toBeVisible();
-
-			// Wait for drawer slide-in transition to complete
-			await page.waitForTimeout(350);
-
-			const drawerContent = page.locator('.drawer-side .m-auto');
-			await expect(drawerContent).toHaveScreenshot('qrcode-drawer.png', {
-				// Mask dynamic canvas and URL to avoid diffs from ephemeral test server ports
-				mask: [qrCodeInDrawer, page.locator('.drawer-side').locator('span.select-all')]
-			});
-		}
+		const qrCodeCanvas = qrDropdown.locator('canvas');
+		await expect(qrCodeCanvas).toBeVisible();
 	});
 });

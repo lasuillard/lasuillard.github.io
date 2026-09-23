@@ -3,7 +3,6 @@ import Pagination from '$routes/blog/Pagination.svelte';
 import { render } from '@testing-library/svelte';
 import { expect, vi } from 'vitest';
 import { it } from '../../_helpers/vitest';
-import { goto } from '$app/navigation';
 
 vi.mock('$app/navigation', () => ({
 	goto: vi.fn()
@@ -31,71 +30,40 @@ it('renders correctly with given current and total pages', () => {
 	}
 });
 
-it('disables previous and first buttons on the first page', () => {
+it('disables previous button on the first page', () => {
 	const { getByLabelText } = render(Pagination, {
 		currentPage: 1,
 		totalPages: 5
 	});
 
-	const firstBtn = getByLabelText('First page');
-	const prevBtn = getByLabelText('Previous page');
-
-	expect(firstBtn.classList.contains('btn-disabled')).toBe(true);
-	expect(prevBtn.classList.contains('btn-disabled')).toBe(true);
+	const prevBtn = getByLabelText('이전 페이지') as HTMLButtonElement;
+	expect(prevBtn.tagName).toBe('BUTTON');
+	expect(prevBtn.disabled).toBe(true);
 });
 
-it('disables next and last buttons on the last page', () => {
+it('disables next button on the last page', () => {
 	const { getByLabelText } = render(Pagination, {
 		currentPage: 5,
 		totalPages: 5
 	});
 
-	const nextBtn = getByLabelText('Next page');
-	const lastBtn = getByLabelText('Last page');
-
-	expect(nextBtn.classList.contains('btn-disabled')).toBe(true);
-	expect(lastBtn.classList.contains('btn-disabled')).toBe(true);
+	const nextBtn = getByLabelText('다음 페이지') as HTMLButtonElement;
+	expect(nextBtn.tagName).toBe('BUTTON');
+	expect(nextBtn.disabled).toBe(true);
 });
 
-it('prompts user and navigates when clicking on ... button with valid input', async ({ user }) => {
-	const promptMock = vi.fn().mockReturnValue('8');
-	const alertMock = vi.fn();
-	vi.stubGlobal('prompt', promptMock);
-	vi.stubGlobal('alert', alertMock);
-
+it('enables previous and next buttons when on middle pages', () => {
 	const { getByLabelText } = render(Pagination, {
-		currentPage: 1,
-		totalPages: 10
+		currentPage: 3,
+		totalPages: 5
 	});
 
-	const ellipsisBtn = getByLabelText('Go to page');
-	expect(ellipsisBtn).toBeTruthy();
+	const prevBtn = getByLabelText('이전 페이지') as HTMLAnchorElement;
+	const nextBtn = getByLabelText('다음 페이지') as HTMLAnchorElement;
 
-	await user.click(ellipsisBtn);
+	expect(prevBtn.tagName).toBe('A');
+	expect(prevBtn.getAttribute('href')).toContain('/blog?page=2');
 
-	expect(promptMock).toHaveBeenCalled();
-	expect(goto).toHaveBeenCalledWith('/blog?page=8');
-
-	vi.unstubAllGlobals();
-});
-
-it('shows alert and does not navigate when prompt input is invalid', async ({ user }) => {
-	const promptMock = vi.fn().mockReturnValue('999'); // invalid page number
-	const alertMock = vi.fn();
-	vi.stubGlobal('prompt', promptMock);
-	vi.stubGlobal('alert', alertMock);
-
-	const { getByLabelText } = render(Pagination, {
-		currentPage: 1,
-		totalPages: 10
-	});
-
-	const ellipsisBtn = getByLabelText('Go to page');
-	await user.click(ellipsisBtn);
-
-	expect(promptMock).toHaveBeenCalled();
-	expect(alertMock).toHaveBeenCalled();
-	expect(goto).not.toHaveBeenCalled();
-
-	vi.unstubAllGlobals();
+	expect(nextBtn.tagName).toBe('A');
+	expect(nextBtn.getAttribute('href')).toContain('/blog?page=4');
 });

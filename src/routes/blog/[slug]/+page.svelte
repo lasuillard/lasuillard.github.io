@@ -42,37 +42,40 @@
 <div>
 	<div class="flex">
 		<div class="mx-auto max-w-none lg:max-w-200">
-			<header data-testid="article-hero">
-				<div data-testid="article-header" class="mt-6 flex flex-col items-center gap-4 sm:gap-6">
-					{#if metadata.preview}
-						<img
-							src={metadata.preview}
-							alt="Preview"
-							class="h-auto w-full shrink-0 rounded-lg object-contain sm:h-48 sm:w-48"
-						/>
-					{/if}
-					<div class="flex w-full flex-1 flex-col items-center">
-						<h1 class="text-center text-2xl font-bold md:text-3xl">{metadata.title}</h1>
-						<p class="mt-4 text-center font-light md:text-base">
-							<CalendarDaysIcon class="mr-1 inline-block h-5 w-5 align-text-bottom text-gray-500" />
-							<time datetime={metadata.publicationDate.toISOString()} role="time">
-								{formatRelativeDate(metadata.publicationDate, today)}
-								({format(metadata.publicationDate, 'yyyy년 M월 d일')})
-							</time>
-						</p>
-						{#if metadata.summary}
-							<p class="mt-2 text-center font-light text-gray-500 md:mt-4 md:text-lg">
-								{metadata.summary}
-							</p>
-						{/if}
-						<div class="mt-8 flex flex-wrap justify-center gap-2">
+			<header data-testid="article-hero" class="mb-10 lg:mb-16">
+				<div data-testid="article-header" class="mt-8 flex flex-col gap-6">
+					<div class="flex flex-col gap-4">
+						<div class="mb-2 flex flex-wrap gap-2">
 							{#each metadata.tags as tag (tag)}
 								<TagBadge {tag} />
 							{/each}
 						</div>
+						<h1 class="text-2xl leading-tight font-extrabold md:text-4xl">{metadata.title}</h1>
+						<div class="text-base-content/60 mt-2 flex items-center gap-2 font-medium">
+							<CalendarDaysIcon class="h-5 w-5" />
+							<time datetime={metadata.publicationDate.toISOString()} role="time">
+								{formatRelativeDate(metadata.publicationDate, today)}
+								({format(metadata.publicationDate, 'yyyy년 M월 d일')})
+							</time>
+						</div>
+						{#if metadata.summary}
+							<p class="text-base-content/70 mt-2 text-xl leading-relaxed font-light">
+								{metadata.summary}
+							</p>
+						{/if}
 					</div>
+
+					{#if metadata.preview}
+						<div class="mt-8 flex w-full justify-center">
+							<img
+								src={metadata.preview}
+								alt={metadata.title}
+								class="max-h-[500px] max-w-full rounded-2xl object-contain drop-shadow-sm"
+							/>
+						</div>
+					{/if}
 				</div>
-				<div class="divider mb-6"></div>
+				<div class="divider my-8"></div>
 				{#if metadata.changelog && metadata.changelog.length > 0}
 					<ChangelogWidget changelogs={metadata.changelog} />
 				{/if}

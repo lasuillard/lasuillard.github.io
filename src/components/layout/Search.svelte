@@ -229,7 +229,7 @@
 		aria-label="검색"
 	>
 		<SearchIcon class="h-5 w-5" />
-		<span class="flex items-center gap-1 opacity-60">
+		<span class="hidden items-center gap-1 opacity-60 md:flex">
 			<kbd class="kbd kbd-sm">Ctrl</kbd>
 			<kbd class="kbd kbd-sm">K</kbd>
 		</span>
@@ -259,8 +259,8 @@
 					data-testid="search-input"
 					class="text-base-content grow bg-transparent text-base outline-none placeholder:font-light"
 				/>
-				<kbd class="kbd kbd-xs shrink-0">Tab</kbd>
-				<kbd class="kbd kbd-xs shrink-0">ESC</kbd>
+				<kbd class="kbd kbd-xs hidden shrink-0 md:inline-flex">Tab</kbd>
+				<kbd class="kbd kbd-xs hidden shrink-0 md:inline-flex">ESC</kbd>
 				<button
 					type="button"
 					aria-label="Close"

@@ -155,6 +155,9 @@ export async function withExpandedViewport<T>(
 			height: requiredHeight
 		});
 
+		// Wait for any CSS transitions (like max-h with vh units) triggered by resize to settle
+		await page.waitForTimeout(500);
+
 		try {
 			return await action();
 		} finally {
@@ -178,6 +181,8 @@ export async function withExpandedViewport<T>(
  * @param options - Optional configuration including padding, hidden elements, and Playwright screenshot options.
  * @param options.padding - Optional padding around the captured region.
  * @param options.hide - Array of locators to temporarily hide during the screenshot.
+ * @param options.minViewportHeight - Minimum viewport height to ensure before taking the screenshot.
+ * @param options.screenshotOptions - Options forwarded to Playwright's toHaveScreenshot.
  */
 export async function expectToHaveScreenshot(
 	page: Page,
@@ -186,17 +191,23 @@ export async function expectToHaveScreenshot(
 	options?: {
 		padding?: number;
 		hide?: Locator[];
+		minViewportHeight?: number;
+		screenshotOptions?: {
+			[key: string]: any; // Allow additional Playwright screenshot options
+		};
 	}
 ): Promise<void> {
-	const { padding = 0, hide, ...screenshotOptions } = options ?? {};
+	const { padding = 0, hide, minViewportHeight = 0, screenshotOptions = {} } = options ?? {};
 
 	await withHiddenElements(hide, async () => {
 		// Calculate the initial bounding box encompassing all target locators
 		const box = await getUnionBoundingBox(locator);
 
 		// Determine required viewport height to avoid vertical truncation from padding
+		// If minViewportHeight is provided, ensure we at least expand to that height
 		const origViewport = page.viewportSize();
-		const requiredHeight = origViewport ? Math.ceil(box.y + box.height + padding + 10) : 0;
+		let requiredHeight = origViewport ? Math.ceil(box.y + box.height + padding + 10) : 0;
+		requiredHeight = Math.max(requiredHeight, minViewportHeight);
 
 		// Temporarily expand the viewport height if the target bounding box extends beyond it
 		await withExpandedViewport(page, requiredHeight, async () => {

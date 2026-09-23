@@ -56,9 +56,9 @@
 <aside
 	data-testid="toc"
 	aria-label="목차"
-	class={'fixed top-1/3 right-4 z-50 transition-all duration-300 select-none ' +
+	class={'fixed top-24 right-4 z-50 transition-all duration-300 select-none lg:top-32 lg:right-8 ' +
 		(isHovered
-			? 'rounded-box border-base-content/10 bg-base-100/95 max-h-[60vh] max-w-[80vw] overflow-y-auto border p-4 shadow-xl backdrop-blur-xs'
+			? 'border-base-200 bg-base-100/90 max-h-[calc(100vh-8rem)] w-fit max-w-[85vw] min-w-[200px] overflow-x-hidden overflow-y-auto rounded-2xl border p-6 shadow-2xl backdrop-blur-md lg:max-w-[450px]'
 			: 'border-transparent bg-transparent p-2 shadow-none')}
 	onmouseenter={() => {
 		isHovered = true;

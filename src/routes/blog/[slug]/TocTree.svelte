@@ -49,17 +49,25 @@
 		<TocTree tree={child} {activeId} {isHovered} />
 	{/each}
 {:else}
-	<div data-testid="toc-tree" class="mb-2 text-left">
-		<p class="mb-2 text-sm font-light text-gray-500">
-			<a class={isActive ? 'link-hover link underline' : 'link-hover link'} href={link}>{heading}</a
-			>
-		</p>
-		<ul class="ml-4">
-			{#each tree.children as child (child.data.textContent)}
-				<li>
-					<TocTree tree={child} {activeId} {isHovered} />
-				</li>
-			{/each}
-		</ul>
+	<div data-testid="toc-tree" class="text-left">
+		<a
+			class="block overflow-hidden py-1.5 text-sm text-ellipsis whitespace-nowrap transition-colors {isActive
+				? 'text-primary font-bold'
+				: 'text-base-content/70 hover:text-base-content'} {tagName === 'h1' || tagName === 'h2'
+				? 'mt-2 text-base font-semibold'
+				: ''}"
+			href={link}
+		>
+			{heading}
+		</a>
+		{#if tree.children.length > 0}
+			<ul class="border-base-200/60 ml-3 border-l-2 pl-3">
+				{#each tree.children as child (child.data.textContent)}
+					<li>
+						<TocTree tree={child} {activeId} {isHovered} />
+					</li>
+				{/each}
+			</ul>
+		{/if}
 	</div>
 {/if}

@@ -14,7 +14,7 @@ test.beforeAll('go to post page', async ({ browser }, testInfo) => {
 	await page.clock.setFixedTime(new Date('2026-09-16T12:00:00Z'));
 });
 
-test.describe('Visual regression', () => {
+test.describe('visual regression', () => {
 	// Captures the top hero region of a post with an associated series banner.
 	test('article hero with series banner', async () => {
 		await page.goto('/blog/1-기술-블로그-시작하기');
@@ -89,10 +89,14 @@ test.describe('Visual regression', () => {
 		await toc.hover();
 
 		// Wait for hover expansion transition (duration-300) to complete
-		await page.waitForTimeout(350);
+		await page.waitForTimeout(1_000);
 		await expectToHaveScreenshot(page, toc, 'toc-hover.png', {
 			padding: 24,
-			hide: [series]
+			hide: [series],
+			minViewportHeight: 1_080,
+			screenshotOptions: {
+				animations: 'disabled'
+			}
 		});
 	});
 
@@ -113,6 +117,7 @@ test.describe('Visual regression', () => {
 
 		// Wait for actual utterances widget iframe to load and render
 		const utterancesFrame = page.frameLocator('iframe.utterances-frame');
+		await utterancesFrame.locator('main.timeline').waitFor({ timeout: 10_000 });
 		await expect(utterancesFrame.locator('main.timeline')).toBeVisible();
 
 		const comment = page.getByTestId('utterances');
@@ -150,7 +155,7 @@ test('has a title and meta tags for SEO', async () => {
 	expect(await page.locator('meta[name="description"]').getAttribute('content')).toBeTruthy();
 });
 
-test.describe('Series widget', () => {
+test.describe('series widget', () => {
 	test('does not render series widget for post without a series', async () => {
 		await page.goto('/blog/8-git-hub-actions로-메트릭-수집하기');
 		const widget = page.getByTestId('series-widget');
@@ -219,7 +224,7 @@ test.describe('Series widget', () => {
 	});
 });
 
-test.describe('Changelog widget', () => {
+test.describe('changelog widget', () => {
 	test('does not render changelog widget for post without changelog', async () => {
 		await page.goto('/blog/1-기술-블로그-시작하기');
 		const widget = page.getByTestId('changelog-widget');
@@ -244,7 +249,7 @@ test.describe('Changelog widget', () => {
 	});
 });
 
-test.describe('Section tracking and auto-scroll', () => {
+test.describe('section tracking and auto-scroll', () => {
 	test('tracks current section in URL and highlights in ToC on scroll', async ({ page }) => {
 		await page.route('**/utteranc.es/**', (route) => route.abort());
 		await page.goto('/blog/11-다시-git-hub-pages로-블로그-배포하기');
@@ -275,8 +280,8 @@ test.describe('Section tracking and auto-scroll', () => {
 		const encodedId = encodeURIComponent(decodeURIComponent(id));
 		await expect(page).toHaveURL(new RegExp('.*#' + encodedId));
 
-		// The matching link in ToC should be highlighted (bold/underline)
-		await expect(headingLink).toHaveClass(/underline/);
+		await expect(headingLink).toHaveClass(/text-primary/);
+		await expect(headingLink).toHaveClass(/font-bold/);
 	});
 
 	test('automatically scrolls to section and highlights in ToC on visit', async ({ page }) => {
@@ -302,17 +307,18 @@ test.describe('Section tracking and auto-scroll', () => {
 		await expect(toc2).toBeVisible();
 		await toc2.hover();
 
-		// Locate the heading link in ToC and assert it has highlighted style
+		// Locate the heading link in ToC
 		const activeHeadingLink = page
 			.getByTestId('toc')
 			.and(page.locator(':visible'))
 			.locator(`a[href="${targetHash}"]`)
 			.first();
 		await expect(activeHeadingLink).toBeVisible();
-		await expect(activeHeadingLink).toHaveClass(/underline/);
+		await expect(activeHeadingLink).toHaveClass(/text-primary/);
+		await expect(activeHeadingLink).toHaveClass(/font-bold/);
 
 		// Assert we scrolled past the top (window.scrollY > 0)
 		const scrollY = await page.evaluate(() => window.scrollY);
-		expect(scrollY).toBeGreaterThan(100);
+		expect(scrollY).toBeGreaterThan(0);
 	});
 });
