@@ -46,7 +46,7 @@ fix:
     npm run lint:fix
     npm run fmt
 
-# Build extension
+# Build website
 build:
     npm run build
 
