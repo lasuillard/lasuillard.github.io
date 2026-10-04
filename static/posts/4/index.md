@@ -347,7 +347,7 @@ AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본
 
 ### ⌛ 시나리오에 따른 배포 소요 시간
 
-최초 구성 후 AMI 이미지 빌드부터 애플리케이션 배포 및 업데이트까지, 각 동작 별 소요 시간은 다음과 같습니다.
+최초 구성 후 AMI 이미지 빌드부터 애플리케이션 배포 및 업데이트까지, 각 동작별 소요 시간은 다음과 같습니다.
 
 | 동작                              | 소요 시간 |
 | --------------------------------- | --------- |
@@ -380,7 +380,7 @@ AWS CLI의 `aws deploy create-deployment` 명령어를 이용하는데, 기본
 
 - **AMI 빌드 개선**
 
-  AMI 빌드 후 Launch Template이 변경된 뒤 자동으로 Instance Refresh가 자동으로 수행되지 않아 수동 개입이 필요합니다. EventBridge 및 Lambda를 이용하여 이를 자동화할 예정입니다. 또한 인스턴스 스케일 아웃 속도를 개선하려고 합니다. [EC2 Fast Launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/win-ami-config-fast-launch.html)와 같은 기능을 활용할 수 있는지 검토해 볼 생각입니다.
+  AMI 빌드 후 Launch Template이 변경된 뒤 Instance Refresh가 자동으로 수행되지 않아 수동 개입이 필요합니다. EventBridge 및 Lambda를 이용하여 이를 자동화할 예정입니다. 또한 인스턴스 스케일 아웃 속도를 개선하려고 합니다. [EC2 Fast Launch](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/win-ami-config-fast-launch.html)와 같은 기능을 활용할 수 있는지 검토해 볼 생각입니다.
 
 - **AutoLogon 설정 개선 또는 대안 모색**
 
