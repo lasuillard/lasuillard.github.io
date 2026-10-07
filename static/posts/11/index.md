@@ -8,7 +8,7 @@ tags:
   - Cloudflare
   - GitHub Pages
   - Railway
-  - SvelteKit
+  - Svelte
 series: 기술 블로그 운영하기
 ---
 
