@@ -5,10 +5,9 @@ preview: ./preview.png
 summary: >
   GitHub Actions 환경에서 Prometheus 메트릭 온디맨드 방식으로 수집하기
 tags:
-  - Docker
+  - Docker Compose
   - GitHub Actions
   - Grafana
-  - Grafana Alloy
   - Prometheus
 ---
 

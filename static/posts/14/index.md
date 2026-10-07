@@ -9,7 +9,6 @@ tags:
   - Raindrop
   - Svelte
   - TypeScript
-  - Web Development
 series: Raindrop Sync for Chrome
 ---
 

@@ -8,7 +8,7 @@ tags:
   - GitHub Actions
   - GitHub Pages
   - Playwright
-  - SvelteKit
+  - Svelte
   - Tailwind CSS
   - TypeScript
 series: 기술 블로그 운영하기
