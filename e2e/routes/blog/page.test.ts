@@ -92,7 +92,7 @@ test.describe('blog tag filtering', () => {
 		}
 
 		// Get the tag link directly by filtering on text content (must be the visible one)
-		const tag = page.locator('aside').locator('a:visible').filter({ hasText: 'SvelteKit' }).first();
+		const tag = page.locator('aside').locator('a:visible').filter({ hasText: 'Svelte' }).first();
 		await expect(tag).toBeVisible();
 
 		// Wait for collapse transition if it was just opened
@@ -102,7 +102,7 @@ test.describe('blog tag filtering', () => {
 		await tag.click({ force: true });
 
 		// Expect the URL to change to include the query parameter
-		await expect(page).toHaveURL(/\/blog\?tag=SvelteKit/);
+		await expect(page).toHaveURL(/\/blog\?tag=Svelte/);
 
 		// Expect title to dynamically change
 		await expect(page).toHaveTitle(/Blog • lasuillard's Blog/);
@@ -126,7 +126,7 @@ test.describe('blog tag filtering', () => {
 	});
 
 	test('should preserve tag filter when navigating pages', async ({ page }) => {
-		await page.goto('/blog?tag=SvelteKit');
+		await page.goto('/blog?tag=Svelte');
 
 		// The pagination widget should be present
 		const paginationWidgets = page.getByTestId('pagination');
@@ -135,8 +135,8 @@ test.describe('blog tag filtering', () => {
 		// Check that the link to page 1 preserves the tag
 		const page1Links = page.getByTestId('pagination').locator('a:has-text("1")');
 
-		// Ensure the href contains tag=SvelteKit and page=1
+		// Ensure the href contains tag=Svelte and page=1
 		const href = await page1Links.first().getAttribute('href');
-		expect(href).toMatch(/tag=SvelteKit/);
+		expect(href).toMatch(/tag=Svelte/);
 	});
 });
