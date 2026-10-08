@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import Pagination from "$routes/blog/Pagination.svelte";
+import Pagination from "#routes/blog/Pagination.svelte";
 import { render } from "@testing-library/svelte";
 import { expect, vi } from "vitest";
 import { it } from "../../_helpers/vitest";
@@ -8,13 +8,8 @@ vi.mock("$app/navigation", () => ({
   goto: vi.fn(),
 }));
 
-vi.mock("$app/stores", () => ({
-  page: {
-    subscribe: (fn: any) => {
-      fn({ url: new URL("http://localhost/blog") });
-      return () => {};
-    },
-  },
+vi.mock("$app/state", () => ({
+  page: { url: new URL("http://localhost/blog") },
 }));
 
 it("renders correctly with given current and total pages", () => {

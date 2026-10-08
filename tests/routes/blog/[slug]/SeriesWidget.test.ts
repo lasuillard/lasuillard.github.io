@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
-import type { Post } from "$lib/post";
-import SeriesWidget from "$routes/blog/[slug]/SeriesWidget.svelte";
+import type { Post } from "#lib/post.js";
+import SeriesWidget from "#routes/blog/[slug]/SeriesWidget.svelte";
 import { render } from "@testing-library/svelte";
 import { describe, expect, it } from "vitest";
 

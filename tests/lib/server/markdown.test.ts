@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
+import { parse } from "#lib/server/markdown.js";
 import { describe, expect, it } from "vitest";
-import { parse } from "~/lib/server/markdown";
 
 describe(parse, () => {
   it("parses given markdown text with front matter", async () => {

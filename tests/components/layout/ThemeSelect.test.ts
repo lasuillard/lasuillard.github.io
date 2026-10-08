@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
-import ThemeSelect from "$components/layout/ThemeSelect.svelte";
-import { Theme, getTheme, initTheme } from "$lib/theme";
+import ThemeSelect from "#components/layout/ThemeSelect.svelte";
+import { Theme, getTheme, initTheme } from "#lib/theme.js";
 import { render } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { beforeEach, expect } from "vitest";

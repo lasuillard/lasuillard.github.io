@@ -1,11 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { page } from "$app/stores";
-  import PostCard from "$components/content/PostCard.svelte";
+  import { page } from "$app/state";
+  import PostCard from "#components/content/PostCard.svelte";
   import Pagination from "./Pagination.svelte";
 
-  import { PAGE_SIZE } from "$lib/constants";
-  import { route } from "$lib/urls";
+  import { PAGE_SIZE } from "#lib/constants.js";
+  import { route } from "#lib/urls.js";
   import { fade, fly } from "svelte/transition";
   import { flip } from "svelte/animate";
 
@@ -27,7 +27,7 @@
     Object.keys(tagCounts).sort((a, b) => a.localeCompare(b)),
   );
 
-  let selectedTag = $derived($page.url.searchParams.get("tag"));
+  let selectedTag = $derived(page.url.searchParams.get("tag"));
 
   let filteredPosts = $derived(
     selectedTag
@@ -44,7 +44,7 @@
   );
 
   let rawPage = $derived.by(() => {
-    const pageParam = $page.url.searchParams.get("page");
+    const pageParam = page.url.searchParams.get("page");
     if (pageParam) {
       const parsed = parseInt(pageParam, 10);
       if (!isNaN(parsed) && parsed > 0) return parsed;

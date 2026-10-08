@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { TreeNode } from "$lib/toc";
+  import type { TreeNode } from "#lib/toc.js";
   import TocTree from "./TocTree.svelte";
 
   interface Props {

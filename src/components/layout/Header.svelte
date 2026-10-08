@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import { browser } from "$app/environment";
-  import MenuIcon from "$components/icon/Menu.svelte";
-  import QRCodeIcon from "$components/icon/QRCode.svelte";
-  import QRCode from "$components/layout/QRCode.svelte";
+  import { page } from "$app/state";
+  import { browser } from "$app/env";
+  import MenuIcon from "#components/icon/Menu.svelte";
+  import QRCodeIcon from "#components/icon/QRCode.svelte";
+  import QRCode from "#components/layout/QRCode.svelte";
   import ThemeSelect from "./ThemeSelect.svelte";
   import Search from "./Search.svelte";
 
@@ -23,7 +23,7 @@
   }: Props = $props();
 
   let currentURL = $derived(
-    browser ? $page?.url?.href || window.location.href : "",
+    browser ? page?.url?.href || window.location.href : "",
   );
   let qrDropdownDetails: HTMLDetailsElement | undefined = $state();
   let isOpen = $state(false);

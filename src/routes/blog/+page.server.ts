@@ -1,4 +1,4 @@
-import { postRepository } from "$lib/server/post";
+import { postRepository } from "#lib/server/post.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {

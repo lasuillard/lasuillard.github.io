@@ -1,9 +1,9 @@
 <script lang="ts">
   import TagBadge from "./TagBadge.svelte";
-  import CalendarDaysIcon from "$components/icon/CalendarDays.svelte";
-  import type { Metadata } from "$lib/post";
-  import { route } from "$lib/urls";
-  import { formatRelativeDate } from "$lib/utils";
+  import CalendarDaysIcon from "#components/icon/CalendarDays.svelte";
+  import type { Metadata } from "#lib/post.js";
+  import { route } from "#lib/urls.js";
+  import { formatRelativeDate } from "#lib/utils.js";
   import { format } from "date-fns";
 
   interface Props {

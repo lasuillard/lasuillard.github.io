@@ -1,4 +1,4 @@
-import { browser } from "$app/environment";
+import { browser } from "$app/env";
 import { persisted } from "svelte-persisted-store";
 import { get, type Writable } from "svelte/store";
 

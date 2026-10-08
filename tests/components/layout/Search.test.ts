@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
-import Search from "$components/layout/Search.svelte";
-import { PostSchema } from "$lib/post";
-import { clearEngine, initEngine } from "$lib/search";
+import Search from "#components/layout/Search.svelte";
+import { PostSchema } from "#lib/post.js";
+import { clearEngine, initEngine } from "#lib/search.js";
 import { render, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { afterEach, expect } from "vitest";

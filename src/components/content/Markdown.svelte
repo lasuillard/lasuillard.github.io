@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, tick, mount, unmount } from "svelte";
-  import CopyIcon from "$components/icon/Copy.svelte";
-  import CheckIcon from "$components/icon/Check.svelte";
+  import CopyIcon from "#components/icon/Copy.svelte";
+  import CheckIcon from "#components/icon/Check.svelte";
 
   const LANG_MAP: Record<string, string> = {
     javascript: "JS",
@@ -37,7 +37,7 @@
       ready = true;
       return;
     }
-    ({ content } = await import("$lib/markdown").then(({ render }) =>
+    ({ content } = await import("#lib/markdown.js").then(({ render }) =>
       render(wrapper?.textContent || ""),
     ));
 

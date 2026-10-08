@@ -1,4 +1,4 @@
-import { makeToc, type TreeSource } from "$lib/toc";
+import { makeToc, type TreeSource } from "#lib/toc.js";
 import { describe, expect, it } from "vitest";
 
 describe(makeToc, () => {

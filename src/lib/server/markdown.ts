@@ -1,4 +1,4 @@
-import type { Metadata } from "$lib/post";
+import type { Metadata } from "#lib/post.js";
 import path from "node:path";
 import { URL } from "node:url";
 import remarkFrontmatter from "remark-frontmatter";
@@ -87,7 +87,7 @@ const baseProcessor = unified()
 
 /**
  * Preprocesses a markdown string by extracting frontmatter and rewriting relative asset URLs.
- * The output content remains as markdown (not HTML); use `$lib/markdown.render` for HTML rendering.
+ * The output content remains as markdown (not HTML); use `#lib/markdown.render` for HTML rendering.
  * @param markdown Raw markdown string.
  * @param options Options for parsing.
  * @param options.filepath File path of the markdown file being parsed, used to resolve relative URLs.
