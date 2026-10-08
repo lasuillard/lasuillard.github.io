@@ -74,7 +74,7 @@ const accessToken = process.env.RAINDROP_API_TOKEN;
 const client = new Raindrop(new Configuration({ accessToken }), rateLimited);
 
 // Make some call
-const response = await client.collection.searchCovers('strawberry');
+const response = await client.collection.searchCovers("strawberry");
 console.log(response.data);
 ```
 
@@ -133,73 +133,79 @@ Polly.js가 요청을 분석해서 그 요청이 기존에 이미 녹화(캐싱)
 다음과 같이 Polly.js를 설정하고 녹화 파일을 관리합니다.
 
 ```typescript
-import NodeHTTPAdapter from '@pollyjs/adapter-node-http';
-import { Polly } from '@pollyjs/core';
-import FSPersister from '@pollyjs/persister-fs';
-import type { Task, Use } from '@vitest/runner';
-import { taskId } from './common';
+import NodeHTTPAdapter from "@pollyjs/adapter-node-http";
+import { Polly } from "@pollyjs/core";
+import FSPersister from "@pollyjs/persister-fs";
+import type { Task, Use } from "@vitest/runner";
+import { taskId } from "./common";
 
 Polly.register(NodeHTTPAdapter);
 Polly.register(FSPersister);
 
 export async function polly({ task }: { task: Task }, use: Use<Polly>) {
-	const _polly = new Polly(taskId(task), {
-		adapters: ['node-http'],
-		persister: 'fs',
-		persisterOptions: {
-			fs: {
-				recordingsDir: 'tests/__recordings__'
-			}
-		},
-		recordFailedRequests: true,
-		matchRequestsBy: {
-			headers: false
-		}
-	});
-	_polly.server.any().on('beforePersist', (_, recording) => {
-		interface Header {
-			name: string;
-			value: string;
-		}
+  const _polly = new Polly(taskId(task), {
+    adapters: ["node-http"],
+    persister: "fs",
+    persisterOptions: {
+      fs: {
+        recordingsDir: "tests/__recordings__",
+      },
+    },
+    recordFailedRequests: true,
+    matchRequestsBy: {
+      headers: false,
+    },
+  });
+  _polly.server.any().on("beforePersist", (_, recording) => {
+    interface Header {
+      name: string;
+      value: string;
+    }
 
-		// Ignore changing values
-		delete recording.startedDateTime;
-		delete recording.time;
-		delete recording.timings;
-		delete recording.request.bodySize;
-		delete recording.request.cookies;
-		delete recording.request.headersSize;
-		delete recording.response.bodySize;
-		delete recording.response.content.size;
-		delete recording.response.cookies;
-		delete recording.response.headersSize;
+    // Ignore changing values
+    delete recording.startedDateTime;
+    delete recording.time;
+    delete recording.timings;
+    delete recording.request.bodySize;
+    delete recording.request.cookies;
+    delete recording.request.headersSize;
+    delete recording.response.bodySize;
+    delete recording.response.content.size;
+    delete recording.response.cookies;
+    delete recording.response.headersSize;
 
-		// Filter request headers
-		const headersToKeep = ['accept', 'content-type', 'accept-encoding', 'host'];
-		recording.request.headers = recording.request.headers.filter((h: Header) =>
-			headersToKeep.includes(h.name.toLowerCase())
-		);
+    // Filter request headers
+    const headersToKeep = ["accept", "content-type", "accept-encoding", "host"];
+    recording.request.headers = recording.request.headers.filter((h: Header) =>
+      headersToKeep.includes(h.name.toLowerCase()),
+    );
 
-		// Suppress request mime type randomness
-		const requestContentTypeHeader = recording.request.headers['content-type'];
-		if (requestContentTypeHeader?.value.startsWith('multipart/form-data; boundary=')) {
-			recording.request.headers['content-type'].value = 'multipart/form-data; boundary=0000000000';
-		}
-		const postData = recording.request.postData;
-		if (postData) {
-			if (postData.mimeType.startsWith('multipart/form-data; boundary=')) {
-				recording.request.postData.mimeType = 'multipart/form-data; boundary=0000000000';
-			}
-		}
+    // Suppress request mime type randomness
+    const requestContentTypeHeader = recording.request.headers["content-type"];
+    if (
+      requestContentTypeHeader?.value.startsWith(
+        "multipart/form-data; boundary=",
+      )
+    ) {
+      recording.request.headers["content-type"].value =
+        "multipart/form-data; boundary=0000000000";
+    }
+    const postData = recording.request.postData;
+    if (postData) {
+      if (postData.mimeType.startsWith("multipart/form-data; boundary=")) {
+        recording.request.postData.mimeType =
+          "multipart/form-data; boundary=0000000000";
+      }
+    }
 
-		// Filter response headers
-		const responseHeadersToKeep = ['content-type', 'content-encoding'];
-		recording.response.headers = recording.response.headers.filter((h: Header) =>
-			responseHeadersToKeep.includes(h.name.toLowerCase())
-		);
-	});
-	await use(_polly);
-	await _polly.stop();
+    // Filter response headers
+    const responseHeadersToKeep = ["content-type", "content-encoding"];
+    recording.response.headers = recording.response.headers.filter(
+      (h: Header) => responseHeadersToKeep.includes(h.name.toLowerCase()),
+    );
+  });
+  await use(_polly);
+  await _polly.stop();
 }
 ```
 
@@ -216,26 +222,30 @@ export async function polly({ task }: { task: Task }, use: Use<Polly>) {
 
 ```typescript
 export async function generateTypeTest(
-	{ task, expect }: { task: Task; expect: ExpectStatic },
-	use: Use<RegisterHook>
+  { task, expect }: { task: Task; expect: ExpectStatic },
+  use: Use<RegisterHook>,
 ) {
-	const hookFn: RegisterHook = (args: RegisterHookArgs) => {
-		// Check test file generation registered only once
-		let ack = false;
+  const hookFn: RegisterHook = (args: RegisterHookArgs) => {
+    // Check test file generation registered only once
+    let ack = false;
 
-		// Add snapshot serializer as an workaround for hook to generate type tests
-		expect.addSnapshotSerializer({
-			serialize(val, config, indentation, depth, refs, printer) {
-				addTest({ testId: taskId(task), type: args.type, value: JSON.stringify(val) });
-				ack = true;
-				return printer(val, config, indentation, depth, refs);
-			},
-			test() {
-				return !ack;
-			}
-		});
-	};
-	await use(hookFn);
+    // Add snapshot serializer as an workaround for hook to generate type tests
+    expect.addSnapshotSerializer({
+      serialize(val, config, indentation, depth, refs, printer) {
+        addTest({
+          testId: taskId(task),
+          type: args.type,
+          value: JSON.stringify(val),
+        });
+        ack = true;
+        return printer(val, config, indentation, depth, refs);
+      },
+      test() {
+        return !ack;
+      },
+    });
+  };
+  await use(hookFn);
 }
 ```
 
@@ -243,8 +253,8 @@ export async function generateTypeTest(
 
 ```typescript
 function generateTest(dir: string, item: CreateTest): string {
-	const filepath = path.join(dir, `${item.testId}.test-d.ts`);
-	const content = `\
+  const filepath = path.join(dir, `${item.testId}.test-d.ts`);
+  const content = `\
 import { assertType, it } from 'vitest';
 import type { ${item.type} } from '~/generated/api'
 
@@ -254,21 +264,21 @@ it('${item.testId}', () => {
  )
 })
 `;
-	console.debug(`Will generate file ${filepath} with content: \n\n ${content}`);
-	fs.writeFileSync(filepath, content);
+  console.debug(`Will generate file ${filepath} with content: \n\n ${content}`);
+  fs.writeFileSync(filepath, content);
 
-	return filepath;
+  return filepath;
 }
 ```
 
 테스트가 실행되고 나면 아래와 같은 테스트 파일이 생성되며 커밋하여 소스 코드의 일부로 관리됩니다.
 
 ```typescript
-it('parseURL', async ({ client, expect, generateTypeTest }) => {
-	const response = await client.import.parseURL('https://example.com');
+it("parseURL", async ({ client, expect, generateTypeTest }) => {
+  const response = await client.import.parseURL("https://example.com");
 
-	generateTypeTest({ type: 'ParseURLResponse' });
-	expect(response.data).toMatchInlineSnapshot(`
+  generateTypeTest({ type: "ParseURLResponse" });
+  expect(response.data).toMatchInlineSnapshot(`
 		{
 		  "item": {
 		    "cover": "<screenshot>",
@@ -301,7 +311,7 @@ name: API Drift Detection
 
 on:
   schedule:
-    - cron: '0 9 * * 1' # Every Monday at 9am
+    - cron: "0 9 * * 1" # Every Monday at 9am
       timezone: Asia/Seoul
   workflow_dispatch: # Allow manual triggering
 
@@ -395,13 +405,13 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
-          TITLE: 'API drift detected'
+          TITLE: "API drift detected"
           WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/blob/${{ github.sha }}/${{ job.workflow_file_path }}
           RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-          LABELS: 'automated,api-drift'
+          LABELS: "automated,api-drift"
 
           # Key in the body of the issue to find the issue created by this workflow
-          FINGERPRINT: 'api-drift-detection:HVqRVovW6tqXX4HfQ8LLI9A71JRvnR79'
+          FINGERPRINT: "api-drift-detection:HVqRVovW6tqXX4HfQ8LLI9A71JRvnR79"
         run: |
           # Check if issue already exists
           existing_issue_number="$(gh issue list --search "is:open in:body ${FINGERPRINT}" --json number --jq '.[0].number // empty')"

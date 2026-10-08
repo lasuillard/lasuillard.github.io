@@ -1,32 +1,32 @@
-import { definer as terraform } from '@taga3s/highlightjs-terraform';
-import type { Element, Root } from 'hast';
-import powershell from 'highlight.js/lib/languages/powershell';
-import { common } from 'lowlight';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeHighlightCodeLines from 'rehype-highlight-code-lines';
-import rehypeMermaid from 'rehype-mermaid';
-import rehypeSlug from 'rehype-slug';
-import rehypeStringify from 'rehype-stringify';
-import remarkGfm from 'remark-gfm';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import remarkStringify from 'remark-stringify';
-import { unified } from 'unified';
-import { SKIP, visit } from 'unist-util-visit';
+import { definer as terraform } from "@taga3s/highlightjs-terraform";
+import type { Element, Root } from "hast";
+import powershell from "highlight.js/lib/languages/powershell";
+import { common } from "lowlight";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeHighlight from "rehype-highlight";
+import rehypeHighlightCodeLines from "rehype-highlight-code-lines";
+import rehypeMermaid from "rehype-mermaid";
+import rehypeSlug from "rehype-slug";
+import rehypeStringify from "rehype-stringify";
+import remarkGfm from "remark-gfm";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import remarkStringify from "remark-stringify";
+import { unified } from "unified";
+import { SKIP, visit } from "unist-util-visit";
 
 // @ts-expect-error - highlightjs-svelte has no types
-import hljsSvelte from 'highlightjs-svelte/dist/index.mjs';
+import hljsSvelte from "highlightjs-svelte/dist/index.mjs";
 
 let svelteLanguage: any;
 try {
-	hljsSvelte({
-		registerLanguage: (name: string, fn: any) => {
-			svelteLanguage = fn;
-		}
-	});
+  hljsSvelte({
+    registerLanguage: (name: string, fn: any) => {
+      svelteLanguage = fn;
+    },
+  });
 } catch (e) {
-	console.error('Failed to register highlightjs-svelte', e);
+  console.error("Failed to register highlightjs-svelte", e);
 }
 
 /**
@@ -35,58 +35,58 @@ try {
  * @returns A rehype plugin
  */
 function rehypeTableScroll() {
-	return (tree: Root) => {
-		visit(tree, 'element', (node, index, parent) => {
-			if (node.tagName === 'table' && index && parent) {
-				// Shallow-copy the original table node
-				const tableNode: Element = {
-					type: 'element',
-					tagName: 'table',
-					properties: node.properties,
-					children: node.children
-				};
+  return (tree: Root) => {
+    visit(tree, "element", (node, index, parent) => {
+      if (node.tagName === "table" && index && parent) {
+        // Shallow-copy the original table node
+        const tableNode: Element = {
+          type: "element",
+          tagName: "table",
+          properties: node.properties,
+          children: node.children,
+        };
 
-				// Patch the current node to be a div and add the table as a child
-				node.tagName = 'div';
-				node.properties = { className: ['overflow-x-auto'] };
-				node.children = [tableNode];
+        // Patch the current node to be a div and add the table as a child
+        node.tagName = "div";
+        node.properties = { className: ["overflow-x-auto"] };
+        node.children = [tableNode];
 
-				// Return SKIP to not visit children of the current node to prevent infinite loop
-				return [SKIP, index + 1];
-			}
-		});
-	};
+        // Return SKIP to not visit children of the current node to prevent infinite loop
+        return [SKIP, index + 1];
+      }
+    });
+  };
 }
 
 const processor = unified()
-	.use(remarkParse)
-	.use(remarkGfm)
-	.use(remarkStringify)
-	.use(remarkRehype, {
-		// Currently there is no user uploaded documents might harmful
-		allowDangerousHtml: true,
-		footnoteLabel: '🔗 각주'
-	})
-	.use(rehypeMermaid, { strategy: 'pre-mermaid' }) // Let client render it
-	.use(rehypeTableScroll)
-	.use(rehypeStringify, {
-		// Currently there is no user uploaded documents might harmful
-		allowDangerousHtml: true
-	})
-	.use(rehypeSlug)
-	.use(rehypeAutolinkHeadings, { behavior: 'wrap' })
-	.use(rehypeHighlight, {
-		detect: true,
-		languages: {
-			...common,
-			powershell,
-			svelte: svelteLanguage,
-			tf: terraform
-		}
-	})
-	.use(rehypeHighlightCodeLines, {
-		showLineNumbers: true
-	});
+  .use(remarkParse)
+  .use(remarkGfm)
+  .use(remarkStringify)
+  .use(remarkRehype, {
+    // Currently there is no user uploaded documents might harmful
+    allowDangerousHtml: true,
+    footnoteLabel: "🔗 각주",
+  })
+  .use(rehypeMermaid, { strategy: "pre-mermaid" }) // Let client render it
+  .use(rehypeTableScroll)
+  .use(rehypeStringify, {
+    // Currently there is no user uploaded documents might harmful
+    allowDangerousHtml: true,
+  })
+  .use(rehypeSlug)
+  .use(rehypeAutolinkHeadings, { behavior: "wrap" })
+  .use(rehypeHighlight, {
+    detect: true,
+    languages: {
+      ...common,
+      powershell,
+      svelte: svelteLanguage,
+      tf: terraform,
+    },
+  })
+  .use(rehypeHighlightCodeLines, {
+    showLineNumbers: true,
+  });
 
 /**
  * Renders a markdown string into HTML with syntax highlighting, mermaid diagrams, and heading anchors.
@@ -94,8 +94,8 @@ const processor = unified()
  * @returns Content converted into HTML.
  */
 export async function render(markdown: string): Promise<{ content: string }> {
-	const result = await processor.process(markdown);
-	return {
-		content: result.toString()
-	};
+  const result = await processor.process(markdown);
+  return {
+    content: result.toString(),
+  };
 }

@@ -1,7 +1,7 @@
-import MiniSearch from 'minisearch';
-import remarkGfm from 'remark-gfm';
-import remarkParse from 'remark-parse';
-import { unified } from 'unified';
+import MiniSearch from "minisearch";
+import remarkGfm from "remark-gfm";
+import remarkParse from "remark-parse";
+import { unified } from "unified";
 
 let miniSearch: MiniSearch | undefined = undefined;
 let enginePromise: Promise<MiniSearch> | undefined = undefined;
@@ -15,31 +15,35 @@ const processor = unified().use(remarkParse).use(remarkGfm);
  * @returns Plain text suitable for indexing.
  */
 export function cleanMarkdown(markdown: string): string {
-	const tree = processor.parse(markdown);
+  const tree = processor.parse(markdown);
 
-	let result = '';
+  let result = "";
 
-	/**
-	 * Visit nodes recursively to extract text.
-	 * @param node AST node
-	 */
-	function visit(node: any) {
-		if (node.type === 'text' || node.type === 'inlineCode' || node.type === 'code') {
-			result += node.value;
-		}
-		if (node.children) {
-			for (const child of node.children) {
-				visit(child);
-			}
-		}
-		if (['paragraph', 'heading', 'listItem', 'tableRow'].includes(node.type)) {
-			result += ' ';
-		}
-	}
+  /**
+   * Visit nodes recursively to extract text.
+   * @param node AST node
+   */
+  function visit(node: any) {
+    if (
+      node.type === "text" ||
+      node.type === "inlineCode" ||
+      node.type === "code"
+    ) {
+      result += node.value;
+    }
+    if (node.children) {
+      for (const child of node.children) {
+        visit(child);
+      }
+    }
+    if (["paragraph", "heading", "listItem", "tableRow"].includes(node.type)) {
+      result += " ";
+    }
+  }
 
-	visit(tree);
+  visit(tree);
 
-	return result.replace(/\s+/g, ' ').trim();
+  return result.replace(/\s+/g, " ").trim();
 }
 
 /**
@@ -48,52 +52,56 @@ export function cleanMarkdown(markdown: string): string {
  * @returns Initialized search engine.
  */
 async function createEngine(posts?: any[]): Promise<MiniSearch> {
-	console.debug('Initializing search engine');
+  console.debug("Initializing search engine");
 
-	const options = {
-		fields: ['metadata.slug', 'metadata.title', 'metadata.tags', 'content'],
-		idField: 'metadata.id',
-		storeFields: [
-			'metadata.title',
-			'metadata.slug',
-			'metadata.publicationDate',
-			'metadata.tags',
-			'rawContent'
-		],
-		extractField: (document: any, fieldName: string) => {
-			return fieldName.split('.').reduce((doc, key) => doc && doc[key], document);
-		}
-	};
+  const options = {
+    fields: ["metadata.slug", "metadata.title", "metadata.tags", "content"],
+    idField: "metadata.id",
+    storeFields: [
+      "metadata.title",
+      "metadata.slug",
+      "metadata.publicationDate",
+      "metadata.tags",
+      "rawContent",
+    ],
+    extractField: (document: any, fieldName: string) => {
+      return fieldName
+        .split(".")
+        .reduce((doc, key) => doc && doc[key], document);
+    },
+  };
 
-	if (!posts) {
-		console.debug('Loading pre-built search index');
-		try {
-			const response = await fetch('/api/search-index');
-			if (!response.ok) {
-				throw new Error(`Failed to fetch search index: ${response.status} ${response.statusText}`);
-			}
-			const data = await response.json();
-			miniSearch = MiniSearch.loadJS(data, options);
-		} catch (error) {
-			console.error('Failed to load pre-built search index:', error);
-			miniSearch = new MiniSearch(options);
-		}
-	} else {
-		console.debug('Indexing documents on the fly');
-		miniSearch = new MiniSearch(options);
-		const cleanedPosts = posts.map((post) => ({
-			...post,
-			metadata: {
-				...post.metadata,
-				publicationDate: new Date(post.metadata.publicationDate).getTime()
-			},
-			content: cleanMarkdown(post.content || ''),
-			rawContent: post.content
-		}));
-		await miniSearch.addAllAsync(cleanedPosts);
-	}
+  if (!posts) {
+    console.debug("Loading pre-built search index");
+    try {
+      const response = await fetch("/api/search-index");
+      if (!response.ok) {
+        throw new Error(
+          `Failed to fetch search index: ${response.status} ${response.statusText}`,
+        );
+      }
+      const data = await response.json();
+      miniSearch = MiniSearch.loadJS(data, options);
+    } catch (error) {
+      console.error("Failed to load pre-built search index:", error);
+      miniSearch = new MiniSearch(options);
+    }
+  } else {
+    console.debug("Indexing documents on the fly");
+    miniSearch = new MiniSearch(options);
+    const cleanedPosts = posts.map((post) => ({
+      ...post,
+      metadata: {
+        ...post.metadata,
+        publicationDate: new Date(post.metadata.publicationDate).getTime(),
+      },
+      content: cleanMarkdown(post.content || ""),
+      rawContent: post.content,
+    }));
+    await miniSearch.addAllAsync(cleanedPosts);
+  }
 
-	return miniSearch;
+  return miniSearch;
 }
 
 /**
@@ -103,15 +111,18 @@ async function createEngine(posts?: any[]): Promise<MiniSearch> {
  * @param options.useCache Whether to cache and reuse the engine promise. Defaults to `true`.
  * @returns Promise resolving to search engine instance.
  */
-export function initEngine(posts?: any[], options?: { useCache?: boolean }): Promise<MiniSearch> {
-	const useCache = options?.useCache ?? true;
-	if (!useCache) {
-		return createEngine(posts);
-	}
-	if (!enginePromise) {
-		enginePromise = createEngine(posts);
-	}
-	return enginePromise;
+export function initEngine(
+  posts?: any[],
+  options?: { useCache?: boolean },
+): Promise<MiniSearch> {
+  const useCache = options?.useCache ?? true;
+  if (!useCache) {
+    return createEngine(posts);
+  }
+  if (!enginePromise) {
+    enginePromise = createEngine(posts);
+  }
+  return enginePromise;
 }
 
 /**
@@ -119,7 +130,7 @@ export function initEngine(posts?: any[], options?: { useCache?: boolean }): Pro
  * @returns Search engine promise. If not initialized returns `undefined`.
  */
 export function getEnginePromise(): Promise<MiniSearch> | undefined {
-	return enginePromise;
+  return enginePromise;
 }
 
 /**
@@ -127,8 +138,8 @@ export function getEnginePromise(): Promise<MiniSearch> | undefined {
  * Used primarily for testing purposes to reset the global state.
  */
 export function clearEngine() {
-	miniSearch = undefined;
-	enginePromise = undefined;
+  miniSearch = undefined;
+  enginePromise = undefined;
 }
 
 /**
@@ -138,20 +149,24 @@ export function clearEngine() {
  * @param limit Maximum number of results to return.
  * @returns Array of search results.
  */
-export function performSearch(query: string, searchEngine: MiniSearch, limit = 5) {
-	const results = searchEngine.search(query, {
-		fuzzy: (term) => (term.length > 3 ? 0.2 : false),
-		combineWith: 'AND'
-	});
+export function performSearch(
+  query: string,
+  searchEngine: MiniSearch,
+  limit = 5,
+) {
+  const results = searchEngine.search(query, {
+    fuzzy: (term) => (term.length > 3 ? 0.2 : false),
+    combineWith: "AND",
+  });
 
-	results.sort(
-		(a: any, b: any) =>
-			b.score - a.score ||
-			b['metadata.publicationDate'] - a['metadata.publicationDate'] ||
-			a['metadata.title'].localeCompare(b['metadata.title'])
-	);
+  results.sort(
+    (a: any, b: any) =>
+      b.score - a.score ||
+      b["metadata.publicationDate"] - a["metadata.publicationDate"] ||
+      a["metadata.title"].localeCompare(b["metadata.title"]),
+  );
 
-	return results.slice(0, limit);
+  return results.slice(0, limit);
 }
 
 /**
@@ -161,30 +176,35 @@ export function performSearch(query: string, searchEngine: MiniSearch, limit = 5
  * @param limit Maximum number of suggestions to return.
  * @returns Array of suggestions.
  */
-export function getSuggestions(query: string, searchEngine: MiniSearch, limit = 5) {
-	const rawSuggestions = searchEngine.autoSuggest(query, {
-		fuzzy: 0.2
-	});
-	rawSuggestions.sort((a, b) => b.score - a.score);
+export function getSuggestions(
+  query: string,
+  searchEngine: MiniSearch,
+  limit = 5,
+) {
+  const rawSuggestions = searchEngine.autoSuggest(query, {
+    fuzzy: 0.2,
+  });
+  rawSuggestions.sort((a, b) => b.score - a.score);
 
-	const finalSuggestions: typeof rawSuggestions = [];
-	for (const s of rawSuggestions) {
-		// Single words only
-		if (s.suggestion.trim().includes(' ')) continue;
+  const finalSuggestions: typeof rawSuggestions = [];
+  for (const s of rawSuggestions) {
+    // Single words only
+    if (s.suggestion.trim().includes(" ")) continue;
 
-		// Prefix-based deduplication to avoid particle spam (e.g. github, github는, github에)
-		const isDuplicate = finalSuggestions.some(
-			(existing) =>
-				s.suggestion.startsWith(existing.suggestion) || existing.suggestion.startsWith(s.suggestion)
-		);
+    // Prefix-based deduplication to avoid particle spam (e.g. github, github는, github에)
+    const isDuplicate = finalSuggestions.some(
+      (existing) =>
+        s.suggestion.startsWith(existing.suggestion) ||
+        existing.suggestion.startsWith(s.suggestion),
+    );
 
-		if (!isDuplicate) {
-			finalSuggestions.push(s);
-		}
-		if (finalSuggestions.length >= limit) break;
-	}
+    if (!isDuplicate) {
+      finalSuggestions.push(s);
+    }
+    if (finalSuggestions.length >= limit) break;
+  }
 
-	return finalSuggestions;
+  return finalSuggestions;
 }
 
 /**
@@ -193,19 +213,24 @@ export function getSuggestions(query: string, searchEngine: MiniSearch, limit = 
  * @param terms Search terms to count.
  * @returns Total match count.
  */
-export function countTermOccurrences(markdown: string, terms: string[]): number {
-	if (!markdown || terms.length === 0) return 0;
+export function countTermOccurrences(
+  markdown: string,
+  terms: string[],
+): number {
+  if (!markdown || terms.length === 0) return 0;
 
-	const text = cleanMarkdown(markdown);
-	const validTerms = terms.map((t) => t.trim()).filter((t) => t.length > 0);
+  const text = cleanMarkdown(markdown);
+  const validTerms = terms.map((t) => t.trim()).filter((t) => t.length > 0);
 
-	if (validTerms.length === 0) return 0;
+  if (validTerms.length === 0) return 0;
 
-	const escapedTerms = validTerms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-	const regex = new RegExp(escapedTerms.join('|'), 'gi');
-	const matches = text.match(regex);
+  const escapedTerms = validTerms.map((t) =>
+    t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+  );
+  const regex = new RegExp(escapedTerms.join("|"), "gi");
+  const matches = text.match(regex);
 
-	return matches ? matches.length : 0;
+  return matches ? matches.length : 0;
 }
 
 /**
@@ -215,57 +240,66 @@ export function countTermOccurrences(markdown: string, terms: string[]): number 
  * @param maxLength Maximum character length of excerpt.
  * @returns HTML string with highlighted matching terms.
  */
-export function getExcerpt(markdown: string, terms: string[], maxLength = 400): string {
-	if (!markdown) return '';
+export function getExcerpt(
+  markdown: string,
+  terms: string[],
+  maxLength = 400,
+): string {
+  if (!markdown) return "";
 
-	// Clean markdown formatting to get plain text
-	const text = cleanMarkdown(markdown);
+  // Clean markdown formatting to get plain text
+  const text = cleanMarkdown(markdown);
 
-	// Filter out empty terms and sort terms by length descending
-	// to match longest terms first
-	const validTerms = terms
-		.map((t) => t.trim())
-		.filter((t) => t.length > 0)
-		.sort((a, b) => b.length - a.length);
+  // Filter out empty terms and sort terms by length descending
+  // to match longest terms first
+  const validTerms = terms
+    .map((t) => t.trim())
+    .filter((t) => t.length > 0)
+    .sort((a, b) => b.length - a.length);
 
-	if (validTerms.length === 0) {
-		const snippet = text.slice(0, maxLength);
-		return escapeHtml(snippet) + (text.length > maxLength ? '...' : '');
-	}
-	const lowerText = text.toLowerCase();
-	let bestIndex = -1;
+  if (validTerms.length === 0) {
+    const snippet = text.slice(0, maxLength);
+    return escapeHtml(snippet) + (text.length > maxLength ? "..." : "");
+  }
+  const lowerText = text.toLowerCase();
+  let bestIndex = -1;
 
-	// Find the earliest occurrence index of any search term in the document text
-	for (const term of validTerms) {
-		const idx = lowerText.indexOf(term.toLowerCase());
-		if (idx !== -1 && (bestIndex === -1 || idx < bestIndex)) {
-			bestIndex = idx;
-		}
-	}
+  // Find the earliest occurrence index of any search term in the document text
+  for (const term of validTerms) {
+    const idx = lowerText.indexOf(term.toLowerCase());
+    if (idx !== -1 && (bestIndex === -1 || idx < bestIndex)) {
+      bestIndex = idx;
+    }
+  }
 
-	// Extract a snippet window centered around the first matching term
-	let snippet: string;
-	if (bestIndex === -1) {
-		snippet = text.slice(0, maxLength) + (text.length > maxLength ? '...' : '');
-	} else {
-		const start = Math.max(0, bestIndex - 40);
-		const end = Math.min(text.length, start + maxLength);
-		const leadingEllipsis = start > 0 ? '...' : '';
-		const trailingEllipsis = end < text.length ? '...' : '';
-		snippet = leadingEllipsis + text.slice(start, end) + trailingEllipsis;
-	}
+  // Extract a snippet window centered around the first matching term
+  let snippet: string;
+  if (bestIndex === -1) {
+    snippet = text.slice(0, maxLength) + (text.length > maxLength ? "..." : "");
+  } else {
+    const start = Math.max(0, bestIndex - 40);
+    const end = Math.min(text.length, start + maxLength);
+    const leadingEllipsis = start > 0 ? "..." : "";
+    const trailingEllipsis = end < text.length ? "..." : "";
+    snippet = leadingEllipsis + text.slice(start, end) + trailingEllipsis;
+  }
 
-	// Escape HTML special characters before injecting highlight mark tags to
-	// prevent XSS
-	const escapedSnippet = escapeHtml(snippet);
+  // Escape HTML special characters before injecting highlight mark tags to
+  // prevent XSS
+  const escapedSnippet = escapeHtml(snippet);
 
-	// Build a regular expression to match all search terms globally
-	// and case-insensitively
-	const escapedTerms = validTerms.map((t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-	const regex = new RegExp(escapedTerms.join('|'), 'gi');
+  // Build a regular expression to match all search terms globally
+  // and case-insensitively
+  const escapedTerms = validTerms.map((t) =>
+    t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+  );
+  const regex = new RegExp(escapedTerms.join("|"), "gi");
 
-	// Wrap matching terms in <mark> tags using the stylesheet class
-	return escapedSnippet.replace(regex, (match) => `<mark class="search-highlight">${match}</mark>`);
+  // Wrap matching terms in <mark> tags using the stylesheet class
+  return escapedSnippet.replace(
+    regex,
+    (match) => `<mark class="search-highlight">${match}</mark>`,
+  );
 }
 
 /**
@@ -274,10 +308,10 @@ export function getExcerpt(markdown: string, terms: string[], maxLength = 400): 
  * @returns HTML-escaped string.
  */
 function escapeHtml(str: string): string {
-	return str
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&#039;');
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

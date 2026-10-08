@@ -1,43 +1,45 @@
 <script lang="ts">
-	import { currentTheme, Theme } from '$lib/theme';
+  import { currentTheme, Theme } from "$lib/theme";
 
-	let theme = $derived($currentTheme == Theme.Light ? 'github-light' : 'github-dark');
+  let theme = $derived(
+    $currentTheme == Theme.Light ? "github-light" : "github-dark",
+  );
 
-	function loadUtterances(node: HTMLDivElement) {
-		const script = document.createElement('script');
-		script.src = 'https://utteranc.es/client.js';
-		script.setAttribute('repo', 'lasuillard/lasuillard.github.io');
-		script.setAttribute('issue-term', 'pathname');
-		script.setAttribute('label', 'comment');
-		script.setAttribute('theme', theme);
-		script.setAttribute('crossorigin', 'anonymous');
-		script.async = true;
-		node.appendChild(script);
+  function loadUtterances(node: HTMLDivElement) {
+    const script = document.createElement("script");
+    script.src = "https://utteranc.es/client.js";
+    script.setAttribute("repo", "lasuillard/lasuillard.github.io");
+    script.setAttribute("issue-term", "pathname");
+    script.setAttribute("label", "comment");
+    script.setAttribute("theme", theme);
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+    node.appendChild(script);
 
-		return {
-			destroy() {
-				node.innerHTML = '';
-			}
-		};
-	}
+    return {
+      destroy() {
+        node.innerHTML = "";
+      },
+    };
+  }
 </script>
 
 {#key theme}
-	<div data-testid="utterances" use:loadUtterances></div>
+  <div data-testid="utterances" use:loadUtterances></div>
 {/key}
 
 <style lang="postcss">
-	@reference "../../../app.css";
+  @reference "../../../app.css";
 
-	/* Fix widget width going beyond the container */
-	:global(.utterances),
-	:global(.utterances-frame) {
-		max-width: 100%;
-	}
+  /* Fix widget width going beyond the container */
+  :global(.utterances),
+  :global(.utterances-frame) {
+    max-width: 100%;
+  }
 
-	:global(.utterances) {
-		margin-left: auto;
-		margin-right: auto;
-		margin-top: 5rem;
-	}
+  :global(.utterances) {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5rem;
+  }
 </style>
