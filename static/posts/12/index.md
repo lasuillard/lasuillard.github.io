@@ -1,5 +1,5 @@
 ---
-title: 개발 컨테이너 구성 검증, GitHub App으로 중앙화하기
+title: GitHub App으로 개발 컨테이너 구성 검증하기
 publicationDate: 2026-08-18
 preview: ./preview.png
 summary: >

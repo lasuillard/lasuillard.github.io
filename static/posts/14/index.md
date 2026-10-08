@@ -7,8 +7,8 @@ summary: >
 tags:
   - Chrome Extension
   - Raindrop
+  - Svelte
   - TypeScript
-  - Web Development
 series: Raindrop Sync for Chrome
 ---
 

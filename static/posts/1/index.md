@@ -8,7 +8,7 @@ tags:
   - GitHub Actions
   - GitHub Pages
   - Playwright
-  - SvelteKit
+  - Svelte
   - Tailwind CSS
   - TypeScript
 series: 기술 블로그 운영하기
@@ -79,26 +79,31 @@ series: 기술 블로그 운영하기
 
   ```html
   <script lang="ts">
-  	let value = '';
-  	$: reply = 'Received:' + value;
+    let value = "";
+    $: reply = "Received:" + value;
   </script>
 
   <div>
-  	<form>
-  		<label for="greet">Greeting</label>
-  		<input id="greet" type="text" placeholder="Type something..." bind:value />
-  	</form>
+    <form>
+      <label for="greet">Greeting</label>
+      <input
+        id="greet"
+        type="text"
+        placeholder="Type something..."
+        bind:value
+      />
+    </form>
 
-  	<p>{reply}</p>
+    <p>{reply}</p>
   </div>
 
   <style lang="postcss">
-  	input {
-  		@apply bg-rose-200;
-  	}
-  	p {
-  		@apply mt-2 font-extrabold;
-  	}
+    input {
+      @apply bg-rose-200;
+    }
+    p {
+      @apply mt-2 font-extrabold;
+    }
   </style>
   ```
 

@@ -1,23 +1,23 @@
 // @vitest-environment happy-dom
-import { describe, expect, it } from 'vitest';
-import { render } from '~/lib/markdown';
+import { describe, expect, it } from "vitest";
+import { render } from "~/lib/markdown";
 
 describe(render, () => {
-	it('renders markdown into HTML', async () => {
-		const result = await render(`# Lorem Ipsum
+  it("renders markdown into HTML", async () => {
+    const result = await render(`# Lorem Ipsum
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
-		expect(result.content).toMatchInlineSnapshot(`
+    expect(result.content).toMatchInlineSnapshot(`
 			"<h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
 			<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"
 		`);
-	});
+  });
 
-	it('renders footnotes with configured footnoteLabel', async () => {
-		const result = await render(`Hello world[^1]
+  it("renders footnotes with configured footnoteLabel", async () => {
+    const result = await render(`Hello world[^1]
 
 [^1]: Footnote content`);
-		expect(result.content).toContain('id="footnote-label"');
-		expect(result.content).toContain('🔗 각주');
-	});
+    expect(result.content).toContain('id="footnote-label"');
+    expect(result.content).toContain("🔗 각주");
+  });
 });

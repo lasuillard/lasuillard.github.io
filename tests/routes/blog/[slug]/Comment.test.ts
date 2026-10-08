@@ -1,9 +1,9 @@
 // @vitest-environment happy-dom
-import Comment from '$routes/blog/[slug]/Comment.svelte';
-import { render } from '@testing-library/svelte';
-import { expect, it } from 'vitest';
+import Comment from "$routes/blog/[slug]/Comment.svelte";
+import { render } from "@testing-library/svelte";
+import { expect, it } from "vitest";
 
-it('has a valid locator', () => {
-	const { getByTestId } = render(Comment);
-	expect(getByTestId('utterances')).toBeTruthy();
+it("has a valid locator", () => {
+  const { getByTestId } = render(Comment);
+  expect(getByTestId("utterances")).toBeTruthy();
 });
