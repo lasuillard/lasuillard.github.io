@@ -6,8 +6,8 @@
       "groupName": "Markdown pipeline",
       "description": "Group for markdown pipeline related packages",
       "matchDatasources": ["npm"],
-      "matchPackagePatterns": ["unified", "^remark-", "^rehype-"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["/unified/", "/^remark-/", "/^rehype-/"]
     },
     {
       "groupName": "Syntax highlighting",
