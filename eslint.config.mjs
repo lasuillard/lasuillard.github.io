@@ -6,7 +6,6 @@ import { includeIgnoreFile } from "eslint/config";
 import globals from "globals";
 import { fileURLToPath } from "node:url";
 import ts from "typescript-eslint";
-import svelteConfig from "./svelte.config.js";
 
 const gitignorePath = fileURLToPath(new URL(".gitignore", import.meta.url));
 
@@ -16,7 +15,8 @@ const browserGlobals = {
   AudioWorkletGlobalScope: false, // this is the default,
 };
 
-delete browserGlobals["AudioWorkletGlobalScope "];
+// @ts-expect-error Ignore for now
+delete browserGlobals["AudioWorkletGlobalScope"];
 
 export default ts.config(
   includeIgnoreFile(gitignorePath, { gitignoreResolution: true }),
@@ -40,7 +40,6 @@ export default ts.config(
         projectService: true,
         extraFileExtensions: [".svelte"],
         parser: ts.parser,
-        svelteConfig,
       },
     },
   },

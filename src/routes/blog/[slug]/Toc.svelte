@@ -1,6 +1,6 @@
 <script lang="ts">
   import TocTree from "./TocTree.svelte";
-  import { makeToc, type TreeNode, type TreeSource } from "$lib/toc";
+  import { makeToc, type TreeNode, type TreeSource } from "#lib/toc.js";
   import { onMount } from "svelte";
 
   interface Props {
@@ -58,7 +58,7 @@
   aria-label="목차"
   class={"fixed top-24 right-4 z-50 transition-all duration-300 select-none lg:top-32 lg:right-8 " +
     (isHovered
-      ? "border-base-200 bg-base-100/90 max-h-[calc(100vh-8rem)] w-fit max-w-[85vw] min-w-[200px] overflow-x-hidden overflow-y-auto rounded-2xl border p-6 shadow-2xl backdrop-blur-md lg:max-w-[450px]"
+      ? "border-base-200 bg-base-100/90 max-h-[calc(100vh-8rem)] w-fit max-w-[85vw] min-w-50 overflow-x-hidden overflow-y-auto rounded-2xl border p-6 shadow-2xl backdrop-blur-md lg:max-w-112.5"
       : "border-transparent bg-transparent p-2 shadow-none")}
   onmouseenter={() => {
     isHovered = true;

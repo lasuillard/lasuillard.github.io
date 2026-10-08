@@ -1,8 +1,8 @@
 <script lang="ts">
-  import GitHubIcon from "$components/icon/GitHub.svelte";
-  import GmailIcon from "$components/icon/Gmail.svelte";
-  import LinkedInIcon from "$components/icon/LinkedIn.svelte";
-  import RSSIcon from "$components/icon/RSS.svelte";
+  import GitHubIcon from "#components/icon/GitHub.svelte";
+  import GmailIcon from "#components/icon/Gmail.svelte";
+  import LinkedInIcon from "#components/icon/LinkedIn.svelte";
+  import RSSIcon from "#components/icon/RSS.svelte";
 </script>
 
 <div

@@ -1,16 +1,16 @@
 // @vitest-environment happy-dom
-import { describe, expect, it, vi, afterEach } from "vitest";
+import { PostSchema } from "#lib/post.js";
 import {
+  cleanMarkdown,
+  clearEngine,
   countTermOccurrences,
   getEnginePromise,
-  initEngine,
-  clearEngine,
-  cleanMarkdown,
-  performSearch,
-  getSuggestions,
   getExcerpt,
-} from "~/lib/search";
-import { PostSchema } from "~/lib/post";
+  getSuggestions,
+  initEngine,
+  performSearch,
+} from "#lib/search.js";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
 describe("countTermOccurrences", () => {
   afterEach(() => {

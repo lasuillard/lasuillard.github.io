@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { page } from "$app/stores";
-  import { route } from "$lib/urls";
-  import ChevronLeftIcon from "$components/icon/ChevronLeft.svelte";
-  import ChevronRightIcon from "$components/icon/ChevronRight.svelte";
+  import { page } from "$app/state";
+  import { route } from "#lib/urls.js";
+  import ChevronLeftIcon from "#components/icon/ChevronLeft.svelte";
+  import ChevronRightIcon from "#components/icon/ChevronRight.svelte";
 
   interface Props {
     currentPage: number;
@@ -11,7 +11,7 @@
 
   let { currentPage, totalPages }: Props = $props();
 
-  let tag = $derived($page.url.searchParams.get("tag"));
+  let tag = $derived(page.url.searchParams.get("tag"));
 
   function getPageUrl(pageNum: number | string) {
     const page = Number(pageNum);

@@ -39,7 +39,6 @@
     }
   },
   "dependencies": {
-    "@sentry/sveltekit": "10.76.0",
     "@taga3s/highlightjs-terraform": "1.0.7",
     "date-fns": "4.4.0",
     "highlight.js": "11.12.0",
@@ -69,8 +68,9 @@
     "@codecov/sveltekit-plugin": "2.0.1",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.63.0",
-    "@sveltejs/adapter-static": "3.0.10",
-    "@sveltejs/kit": "2.70.3",
+    "@sentry/sveltekit": "11.4.0",
+    "@sveltejs/adapter-static": "4.0.0",
+    "@sveltejs/kit": "3.0.1",
     "@sveltejs/vite-plugin-svelte": "7.3.1",
     "@tailwindcss/postcss": "4.3.3",
     "@tailwindcss/typography": "0.5.20",
@@ -104,5 +104,15 @@
   "allowScripts": {
     "esbuild@0.25.12": true,
     "@sentry/cli@2.58.6": true
+  },
+  "overrides": {
+    "@codecov/sveltekit-plugin": {
+      "@sveltejs/kit": "$@sveltejs/kit"
+    }
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*",
+    "#components/*": "./src/components/*",
+    "#routes/*": "./src/routes/*"
   }
 }

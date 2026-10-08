@@ -1,6 +1,6 @@
-import { MetadataSchema, PostSchema, type Post } from "$lib/post";
-import { parse } from "$lib/server/markdown";
-import { kebabCase } from "$lib/utils";
+import { MetadataSchema, PostSchema, type Post } from "#lib/post.js";
+import { parse } from "#lib/server/markdown.js";
+import { kebabCase } from "#lib/utils.js";
 import path from "node:path";
 import { z } from "zod";
 

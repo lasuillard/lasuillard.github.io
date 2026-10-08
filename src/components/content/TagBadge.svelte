@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { route } from "$lib/urls";
+  import { route } from "#lib/urls.js";
   import XMark from "../icon/XMark.svelte";
 
   interface Props {

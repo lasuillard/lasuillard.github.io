@@ -1,6 +1,4 @@
 // @vitest-environment happy-dom
-import { get } from "svelte/store";
-import { describe, expect, it } from "vitest";
 import {
   currentTheme,
   getTheme,
@@ -8,7 +6,9 @@ import {
   isTheme,
   setTheme,
   Theme,
-} from "~/lib/theme";
+} from "#lib/theme.js";
+import { get } from "svelte/store";
+import { describe, expect, it } from "vitest";
 
 describe(initTheme, () => {
   it("store `currentTheme` become available once initialized", () => {

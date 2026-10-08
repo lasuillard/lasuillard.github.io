@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import ChangelogWidget from "$routes/blog/[slug]/ChangelogWidget.svelte";
+import ChangelogWidget from "#routes/blog/[slug]/ChangelogWidget.svelte";
 import { render } from "@testing-library/svelte";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 

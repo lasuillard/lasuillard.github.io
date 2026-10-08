@@ -1,23 +1,23 @@
 <script lang="ts">
   import "highlight.js/styles/atom-one-dark-reasonable.css";
 
-  import { page } from "$app/stores";
-  import Footer from "$components/layout/Footer.svelte";
-  import Header from "$components/layout/Header.svelte";
-  import { titleWithSuffix } from "$lib/meta";
+  import { page } from "$app/state";
+  import Footer from "#components/layout/Footer.svelte";
+  import Header from "#components/layout/Header.svelte";
+  import { titleWithSuffix } from "#lib/meta.js";
   import { fade } from "svelte/transition";
-  import "~/app.css";
+  import "../app.css";
 
   let { data, children } = $props();
 
-  let title = $derived(titleWithSuffix($page.data?.meta?.title));
+  let title = $derived(titleWithSuffix(page.data?.meta?.title));
 </script>
 
 <svelte:head>
   <!-- https://github.com/sveltejs/kit/issues/3305 -->
   <title>{title}</title>
-  {#if $page.data?.meta?.description}
-    <meta name="description" content={$page.data.meta.description} />
+  {#if page.data?.meta?.description}
+    <meta name="description" content={page.data.meta.description} />
   {/if}
 </svelte:head>
 

@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
+import { postRepository } from "#lib/server/post.js";
 import { describe, expect, it } from "vitest";
-import { postRepository } from "$lib/server/post";
 import { GET } from "../../src/routes/rss.xml/+server";
 
 describe("GET /rss.xml", () => {

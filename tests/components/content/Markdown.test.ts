@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
-import Markdown from "$components/content/Markdown.svelte";
-import { render as renderMarkdown } from "$lib/markdown";
+import Markdown from "#components/content/Markdown.svelte";
+import { render as renderMarkdown } from "#lib/markdown.js";
 import { render } from "@testing-library/svelte";
 import { expect, it } from "vitest";
 

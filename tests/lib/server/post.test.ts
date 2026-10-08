@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
+import { PostSchema } from "#lib/post.js";
+import { PostRepository } from "#lib/server/post.js";
 import { describe, expect, it } from "vitest";
-import { PostSchema } from "~/lib/post";
-import { PostRepository } from "~/lib/server/post";
 
 describe("PostRepository.getAllPosts", () => {
   it("loads all posts successfully", async () => {
