@@ -1,10 +1,10 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from "@playwright/test";
 
 export interface BoundingBox {
-	x: number;
-	y: number;
-	width: number;
-	height: number;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
 }
 
 /**
@@ -16,54 +16,56 @@ export interface BoundingBox {
  * @returns The bounding box spanning all provided locators.
  * @throws {Error} if locators array is empty or any locator bounding box is unavailable.
  */
-export async function getUnionBoundingBox(locators: Locator | Locator[]): Promise<BoundingBox> {
-	const locList = Array.isArray(locators) ? locators : [locators];
-	if (locList.length === 0) {
-		throw new Error('getUnionBoundingBox requires at least one Locator.');
-	}
+export async function getUnionBoundingBox(
+  locators: Locator | Locator[],
+): Promise<BoundingBox> {
+  const locList = Array.isArray(locators) ? locators : [locators];
+  if (locList.length === 0) {
+    throw new Error("getUnionBoundingBox requires at least one Locator.");
+  }
 
-	// Gather document-space coordinates for all locators to find the topmost element
-	const docPositions = await Promise.all(
-		locList.map(async (loc) => {
-			return await loc.evaluate((el) => {
-				const rect = el.getBoundingClientRect();
-				return {
-					docY: rect.top + window.scrollY,
-					docX: rect.left + window.scrollX
-				};
-			});
-		})
-	);
+  // Gather document-space coordinates for all locators to find the topmost element
+  const docPositions = await Promise.all(
+    locList.map(async (loc) => {
+      return await loc.evaluate((el) => {
+        const rect = el.getBoundingClientRect();
+        return {
+          docY: rect.top + window.scrollY,
+          docX: rect.left + window.scrollX,
+        };
+      });
+    }),
+  );
 
-	// Align page scroll so the topmost element starts at the top of the viewport
-	const minDocY = Math.min(...docPositions.map((p) => p.docY));
-	const topmostIndex = docPositions.findIndex((p) => p.docY === minDocY);
-	await locList[topmostIndex].evaluate((el) => {
-		el.scrollIntoView({ block: 'start', behavior: 'instant' });
-	});
+  // Align page scroll so the topmost element starts at the top of the viewport
+  const minDocY = Math.min(...docPositions.map((p) => p.docY));
+  const topmostIndex = docPositions.findIndex((p) => p.docY === minDocY);
+  await locList[topmostIndex].evaluate((el) => {
+    el.scrollIntoView({ block: "start", behavior: "instant" });
+  });
 
-	// Read viewport bounding boxes for all locators at the identical, synchronized scroll position
-	const boxes: BoundingBox[] = [];
-	for (const loc of locList) {
-		const box = await loc.boundingBox();
-		if (!box) {
-			throw new Error('Unable to determine bounding box for locator.');
-		}
-		boxes.push(box);
-	}
+  // Read viewport bounding boxes for all locators at the identical, synchronized scroll position
+  const boxes: BoundingBox[] = [];
+  for (const loc of locList) {
+    const box = await loc.boundingBox();
+    if (!box) {
+      throw new Error("Unable to determine bounding box for locator.");
+    }
+    boxes.push(box);
+  }
 
-	// Aggregate coordinates to find the smallest bounding rectangle containing all boxes
-	const minX = Math.min(...boxes.map((b) => b.x));
-	const minY = Math.min(...boxes.map((b) => b.y));
-	const maxX = Math.max(...boxes.map((b) => b.x + b.width));
-	const maxY = Math.max(...boxes.map((b) => b.y + b.height));
+  // Aggregate coordinates to find the smallest bounding rectangle containing all boxes
+  const minX = Math.min(...boxes.map((b) => b.x));
+  const minY = Math.min(...boxes.map((b) => b.y));
+  const maxX = Math.max(...boxes.map((b) => b.x + b.width));
+  const maxY = Math.max(...boxes.map((b) => b.y + b.height));
 
-	return {
-		x: minX,
-		y: minY,
-		width: maxX - minX,
-		height: maxY - minY
-	};
+  return {
+    x: minX,
+    y: minY,
+    width: maxX - minX,
+    height: maxY - minY,
+  };
 }
 
 /**
@@ -75,27 +77,27 @@ export async function getUnionBoundingBox(locators: Locator | Locator[]): Promis
  * @returns The clipped rectangle dimensions clamped to the viewport.
  */
 export function calculateClipRegion(
-	box: BoundingBox,
-	viewport: { width: number; height: number } | null,
-	padding = 0
+  box: BoundingBox,
+  viewport: { width: number; height: number } | null,
+  padding = 0,
 ): BoundingBox {
-	// Clamp origin to non-negative coordinates
-	const x = Math.floor(Math.max(0, box.x - padding));
-	const y = Math.floor(Math.max(0, box.y - padding));
+  // Clamp origin to non-negative coordinates
+  const x = Math.floor(Math.max(0, box.x - padding));
+  const y = Math.floor(Math.max(0, box.y - padding));
 
-	// Expand width and height with padding, clamping to viewport boundaries if available
-	const width = Math.ceil(
-		viewport
-			? Math.min(viewport.width - x, box.width + (box.x - x) + padding)
-			: box.width + padding * 2
-	);
-	const height = Math.ceil(
-		viewport
-			? Math.min(viewport.height - y, box.height + (box.y - y) + padding)
-			: box.height + padding * 2
-	);
+  // Expand width and height with padding, clamping to viewport boundaries if available
+  const width = Math.ceil(
+    viewport
+      ? Math.min(viewport.width - x, box.width + (box.x - x) + padding)
+      : box.width + padding * 2,
+  );
+  const height = Math.ceil(
+    viewport
+      ? Math.min(viewport.height - y, box.height + (box.y - y) + padding)
+      : box.height + padding * 2,
+  );
 
-	return { x, y, width, height };
+  return { x, y, width, height };
 }
 
 /**
@@ -106,32 +108,32 @@ export function calculateClipRegion(
  * @returns The result of the action callback.
  */
 export async function withHiddenElements<T>(
-	locators: Locator[] | undefined,
-	action: () => Promise<T>
+  locators: Locator[] | undefined,
+  action: () => Promise<T>,
 ): Promise<T> {
-	if (!locators || locators.length === 0) {
-		return await action();
-	}
+  if (!locators || locators.length === 0) {
+    return await action();
+  }
 
-	for (const loc of locators) {
-		await loc
-			.evaluate((el) => {
-				el.style.visibility = 'hidden';
-			})
-			.catch(() => {});
-	}
+  for (const loc of locators) {
+    await loc
+      .evaluate((el) => {
+        el.style.visibility = "hidden";
+      })
+      .catch(() => {});
+  }
 
-	try {
-		return await action();
-	} finally {
-		for (const loc of locators) {
-			await loc
-				.evaluate((el) => {
-					el.style.visibility = '';
-				})
-				.catch(() => {});
-		}
-	}
+  try {
+    return await action();
+  } finally {
+    for (const loc of locators) {
+      await loc
+        .evaluate((el) => {
+          el.style.visibility = "";
+        })
+        .catch(() => {});
+    }
+  }
 }
 
 /**
@@ -143,29 +145,29 @@ export async function withHiddenElements<T>(
  * @returns The result of the action callback.
  */
 export async function withExpandedViewport<T>(
-	page: Page,
-	requiredHeight: number,
-	action: () => Promise<T>
+  page: Page,
+  requiredHeight: number,
+  action: () => Promise<T>,
 ): Promise<T> {
-	const origViewport = page.viewportSize();
+  const origViewport = page.viewportSize();
 
-	if (origViewport && requiredHeight > origViewport.height) {
-		await page.setViewportSize({
-			width: origViewport.width,
-			height: requiredHeight
-		});
+  if (origViewport && requiredHeight > origViewport.height) {
+    await page.setViewportSize({
+      width: origViewport.width,
+      height: requiredHeight,
+    });
 
-		// Wait for any CSS transitions (like max-h with vh units) triggered by resize to settle
-		await page.waitForTimeout(500);
+    // Wait for any CSS transitions (like max-h with vh units) triggered by resize to settle
+    await page.waitForTimeout(500);
 
-		try {
-			return await action();
-		} finally {
-			await page.setViewportSize(origViewport);
-		}
-	}
+    try {
+      return await action();
+    } finally {
+      await page.setViewportSize(origViewport);
+    }
+  }
 
-	return await action();
+  return await action();
 }
 
 /**
@@ -185,41 +187,52 @@ export async function withExpandedViewport<T>(
  * @param options.screenshotOptions - Options forwarded to Playwright's toHaveScreenshot.
  */
 export async function expectToHaveScreenshot(
-	page: Page,
-	locator: Locator | Locator[],
-	name: string,
-	options?: {
-		padding?: number;
-		hide?: Locator[];
-		minViewportHeight?: number;
-		screenshotOptions?: {
-			[key: string]: any; // Allow additional Playwright screenshot options
-		};
-	}
+  page: Page,
+  locator: Locator | Locator[],
+  name: string,
+  options?: {
+    padding?: number;
+    hide?: Locator[];
+    minViewportHeight?: number;
+    screenshotOptions?: {
+      [key: string]: any; // Allow additional Playwright screenshot options
+    };
+  },
 ): Promise<void> {
-	const { padding = 0, hide, minViewportHeight = 0, screenshotOptions = {} } = options ?? {};
+  const {
+    padding = 0,
+    hide,
+    minViewportHeight = 0,
+    screenshotOptions = {},
+  } = options ?? {};
 
-	await withHiddenElements(hide, async () => {
-		// Calculate the initial bounding box encompassing all target locators
-		const box = await getUnionBoundingBox(locator);
+  await withHiddenElements(hide, async () => {
+    // Calculate the initial bounding box encompassing all target locators
+    const box = await getUnionBoundingBox(locator);
 
-		// Determine required viewport height to avoid vertical truncation from padding
-		// If minViewportHeight is provided, ensure we at least expand to that height
-		const origViewport = page.viewportSize();
-		let requiredHeight = origViewport ? Math.ceil(box.y + box.height + padding + 10) : 0;
-		requiredHeight = Math.max(requiredHeight, minViewportHeight);
+    // Determine required viewport height to avoid vertical truncation from padding
+    // If minViewportHeight is provided, ensure we at least expand to that height
+    const origViewport = page.viewportSize();
+    let requiredHeight = origViewport
+      ? Math.ceil(box.y + box.height + padding + 10)
+      : 0;
+    requiredHeight = Math.max(requiredHeight, minViewportHeight);
 
-		// Temporarily expand the viewport height if the target bounding box extends beyond it
-		await withExpandedViewport(page, requiredHeight, async () => {
-			// Recalculate bounding box in case viewport expansion shifted layout
-			const updatedBox = await getUnionBoundingBox(locator);
-			const clip = calculateClipRegion(updatedBox, page.viewportSize(), padding);
+    // Temporarily expand the viewport height if the target bounding box extends beyond it
+    await withExpandedViewport(page, requiredHeight, async () => {
+      // Recalculate bounding box in case viewport expansion shifted layout
+      const updatedBox = await getUnionBoundingBox(locator);
+      const clip = calculateClipRegion(
+        updatedBox,
+        page.viewportSize(),
+        padding,
+      );
 
-			// Perform visual regression screenshot assertion with clipped boundaries
-			await expect(page).toHaveScreenshot(name, {
-				clip,
-				...screenshotOptions
-			});
-		});
-	});
+      // Perform visual regression screenshot assertion with clipped boundaries
+      await expect(page).toHaveScreenshot(name, {
+        clip,
+        ...screenshotOptions,
+      });
+    });
+  });
 }

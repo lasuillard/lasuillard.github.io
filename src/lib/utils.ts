@@ -1,5 +1,5 @@
-import { formatDistanceStrict, isSameDay } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { formatDistanceStrict, isSameDay } from "date-fns";
+import { ko } from "date-fns/locale";
 
 /**
  * Returns clone of given object with properties in keys omitted.
@@ -10,7 +10,9 @@ import { ko } from 'date-fns/locale';
  * @returns Object with given keys omitted.
  */
 export function omitKeys(obj: any, keys: string[]): any {
-	return Object.fromEntries(Object.entries(obj).filter(([key]) => !keys.includes(key)));
+  return Object.fromEntries(
+    Object.entries(obj).filter(([key]) => !keys.includes(key)),
+  );
 }
 
 /**
@@ -21,7 +23,7 @@ export function omitKeys(obj: any, keys: string[]): any {
  * @returns Joined text.
  */
 export function quoteJoin(values: unknown[]): string {
-	return values.map((value) => `"${value}"`).join(', ');
+  return values.map((value) => `"${value}"`).join(", ");
 }
 
 /**
@@ -30,14 +32,17 @@ export function quoteJoin(values: unknown[]): string {
  * @param baseDate The base date to compare against (defaults to current time).
  * @returns Relative date string in Korean.
  */
-export function formatRelativeDate(date: Date, baseDate: Date = new Date()): string {
-	if (isSameDay(date, baseDate)) {
-		return '오늘';
-	}
-	return formatDistanceStrict(date, baseDate, {
-		addSuffix: true,
-		locale: ko
-	});
+export function formatRelativeDate(
+  date: Date,
+  baseDate: Date = new Date(),
+): string {
+  if (isSameDay(date, baseDate)) {
+    return "오늘";
+  }
+  return formatDistanceStrict(date, baseDate, {
+    addSuffix: true,
+    locale: ko,
+  });
 }
 
 /**
@@ -48,19 +53,19 @@ export function formatRelativeDate(date: Date, baseDate: Date = new Date()): str
  * @returns kebab-case string.
  */
 export function kebabCase(str: string): string {
-	return (
-		str
-			// Insert separator before uppercase letters in camelCase
-			.replace(/([a-z\d])([A-Z])/g, '$1 $2')
-			// Insert separator between letters and digits
-			.replace(/([a-zA-Z])(\d)/g, '$1 $2')
-			.replace(/(\d)([a-zA-Z])/g, '$1 $2')
-			// Replace non-alphanumeric, non-Unicode-letter characters with spaces
-			.replace(/[^\p{L}\p{M}\p{N}]+/gu, ' ')
-			.trim()
-			.toLowerCase()
-			.split(/\s+/)
-			.filter(Boolean)
-			.join('-')
-	);
+  return (
+    str
+      // Insert separator before uppercase letters in camelCase
+      .replace(/([a-z\d])([A-Z])/g, "$1 $2")
+      // Insert separator between letters and digits
+      .replace(/([a-zA-Z])(\d)/g, "$1 $2")
+      .replace(/(\d)([a-zA-Z])/g, "$1 $2")
+      // Replace non-alphanumeric, non-Unicode-letter characters with spaces
+      .replace(/[^\p{L}\p{M}\p{N}]+/gu, " ")
+      .trim()
+      .toLowerCase()
+      .split(/\s+/)
+      .filter(Boolean)
+      .join("-")
+  );
 }

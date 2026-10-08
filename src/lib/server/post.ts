@@ -1,90 +1,92 @@
-import { MetadataSchema, PostSchema, type Post } from '$lib/post';
-import { parse } from '$lib/server/markdown';
-import { kebabCase } from '$lib/utils';
-import path from 'node:path';
-import { z } from 'zod';
+import { MetadataSchema, PostSchema, type Post } from "$lib/post";
+import { parse } from "$lib/server/markdown";
+import { kebabCase } from "$lib/utils";
+import path from "node:path";
+import { z } from "zod";
 
 export class PostRepository {
-	private posts: Post[];
+  private posts: Post[];
 
-	constructor() {
-		this.posts = [];
-	}
+  constructor() {
+    this.posts = [];
+  }
 
-	/**
-	 * Find and return all posts.
-	 * @returns Array of posts. If none found, will be empty.
-	 */
-	async getAllPosts(): Promise<Post[]> {
-		if (this.posts.length > 0) {
-			return this.posts;
-		}
+  /**
+   * Find and return all posts.
+   * @returns Array of posts. If none found, will be empty.
+   */
+  async getAllPosts(): Promise<Post[]> {
+    if (this.posts.length > 0) {
+      return this.posts;
+    }
 
-		// Retrieve all post files from the filesystem
-		const allPostFiles = import.meta.glob(`/static/posts/*/index.md`, {
-			query: '?raw',
-			import: 'default'
-		});
+    // Retrieve all post files from the filesystem
+    const allPostFiles = import.meta.glob(`/static/posts/*/index.md`, {
+      query: "?raw",
+      import: "default",
+    });
 
-		this.posts = await Promise.all(
-			Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
-				const text = z.string().parse(await resolver());
-				const resolvedPath = path.resolve(
-					__PROJECT_ROOT__,
-					filepath.slice(1) // Remove leading slash to get relative path from project root
-				);
-				const { frontMatter, content } = await parse(text, {
-					// e.g. ../../posts/1/index.md -> /posts/1/index.md
-					filepath: resolvedPath
-				});
+    this.posts = await Promise.all(
+      Object.entries(allPostFiles).map(async ([filepath, resolver]) => {
+        const text = z.string().parse(await resolver());
+        const resolvedPath = path.resolve(
+          __PROJECT_ROOT__,
+          filepath.slice(1), // Remove leading slash to get relative path from project root
+        );
+        const { frontMatter, content } = await parse(text, {
+          // e.g. ../../posts/1/index.md -> /posts/1/index.md
+          filepath: resolvedPath,
+        });
 
-				// Get the ID from the filepath
-				const [, id] = filepath.match(/\/static\/posts\/([^/]+)\/index\.md$/) || [];
+        // Get the ID from the filepath
+        const [, id] =
+          filepath.match(/\/static\/posts\/([^/]+)\/index\.md$/) || [];
 
-				// Parse metadata
-				const metadata = MetadataSchema.parse({
-					...frontMatter,
-					id
-				});
+        // Parse metadata
+        const metadata = MetadataSchema.parse({
+          ...frontMatter,
+          id,
+        });
 
-				// ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.
-				const slug = kebabCase(metadata.title);
+        // ? kebab-case is not strictly a slug, but a kebab-case version of the title would suffice for now.
+        const slug = kebabCase(metadata.title);
 
-				return PostSchema.parse({
-					metadata: {
-						...metadata,
-						slug: metadata.slug || slug
-					},
-					content
-				});
-			})
-		).catch((err) => {
-			if (err) {
-				console.error(`Failed to load all posts: ${err}`);
-			}
-			return [];
-		});
+        return PostSchema.parse({
+          metadata: {
+            ...metadata,
+            slug: metadata.slug || slug,
+          },
+          content,
+        });
+      }),
+    ).catch((err) => {
+      if (err) {
+        console.error(`Failed to load all posts: ${err}`);
+      }
+      return [];
+    });
 
-		this.posts.sort(
-			(a, b) =>
-				// Sort by publicationDate descending, then by id descending
-				b.metadata.publicationDate.getTime() - a.metadata.publicationDate.getTime() ||
-				b.metadata.id.localeCompare(a.metadata.id)
-		);
+    this.posts.sort(
+      (a, b) =>
+        // Sort by publicationDate descending, then by id descending
+        b.metadata.publicationDate.getTime() -
+          a.metadata.publicationDate.getTime() ||
+        b.metadata.id.localeCompare(a.metadata.id),
+    );
 
-		return this.posts;
-	}
+    return this.posts;
+  }
 
-	/**
-	 * Find a post by its ID.
-	 * @param id The ID of the post to find.
-	 * @returns The post if found, otherwise null.
-	 */
-	async findPostById(id: string): Promise<Post | null> {
-		const allPosts = await this.getAllPosts();
-		const post = allPosts.find((post) => post.metadata.id === id);
-		return post ?? null;
-	}
+  /**
+   * Find a post by its ID.
+   * @param id The ID of the post to find.
+   * @returns The post if found, otherwise null.
+   */
+  async findPostById(id: string): Promise<Post | null> {
+    const allPosts = await this.getAllPosts();
+    const post = allPosts.find((post) => post.metadata.id === id);
+    return post ?? null;
+  }
 }
 
 // Export a singleton instance for app-wide use

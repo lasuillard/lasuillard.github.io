@@ -1,25 +1,27 @@
 // @vitest-environment happy-dom
-import Markdown from '$components/content/Markdown.svelte';
-import { render as renderMarkdown } from '$lib/markdown';
-import { render } from '@testing-library/svelte';
-import { expect, it } from 'vitest';
+import Markdown from "$components/content/Markdown.svelte";
+import { render as renderMarkdown } from "$lib/markdown";
+import { render } from "@testing-library/svelte";
+import { expect, it } from "vitest";
 
 // NOTE: It is required not to have any wrapping element (thus no locator) as this component is just an wrapper
 
-it('render with parsed content', async () => {
-	const { content } = await renderMarkdown(`# Lorem Ipsum
+it("render with parsed content", async () => {
+  const { content } = await renderMarkdown(`# Lorem Ipsum
 
 Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
-	const { container } = render(Markdown, { content, children: undefined });
-	expect(container.innerHTML).toMatchInlineSnapshot(`
+  const { container } = render(Markdown, { content, children: undefined });
+  expect(container.innerHTML).toMatchInlineSnapshot(`
 		"<!----><!----><h1 id="lorem-ipsum"><a href="#lorem-ipsum">Lorem Ipsum</a></h1>
 		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>"
 	`);
 });
 
-it('render with nothing', async () => {
-	const { container } = render(Markdown);
-	expect(container.innerHTML).toMatchInlineSnapshot(`"<!----><div class="hidden"><!----></div>"`);
+it("render with nothing", async () => {
+  const { container } = render(Markdown);
+  expect(container.innerHTML).toMatchInlineSnapshot(
+    `"<!----><div class="hidden"><!----></div>"`,
+  );
 });
 
-it.todo('render with raw markdown input slot'); // https://github.com/testing-library/svelte-testing-library/issues/48
+it.todo("render with raw markdown input slot"); // https://github.com/testing-library/svelte-testing-library/issues/48

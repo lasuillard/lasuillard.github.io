@@ -1,14 +1,14 @@
-import { browser } from '$app/environment';
-import { persisted } from 'svelte-persisted-store';
-import { get, type Writable } from 'svelte/store';
+import { browser } from "$app/environment";
+import { persisted } from "svelte-persisted-store";
+import { get, type Writable } from "svelte/store";
 
 // https://daisyui.com/docs/themes/
 /**
  * Available themes for current website. Don't forget to update app.css file as well
  */
 export enum Theme {
-	Light = 'corporate',
-	Dark = 'black'
+  Light = "corporate",
+  Dark = "black",
 }
 
 /**
@@ -22,23 +22,25 @@ export let currentTheme: Writable<Theme> | undefined = undefined;
  * Init theme with default from browser preferences.
  */
 export function initTheme() {
-	const preferDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-	console.debug(`Detected preferred color scheme is "${preferDark ? 'dark' : 'light'}"`);
+  const preferDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  console.debug(
+    `Detected preferred color scheme is "${preferDark ? "dark" : "light"}"`,
+  );
 
-	const themeDefault = preferDark ? Theme.Dark : Theme.Light;
-	console.debug(`Theme "${themeDefault}" will be used as default`);
+  const themeDefault = preferDark ? Theme.Dark : Theme.Light;
+  console.debug(`Theme "${themeDefault}" will be used as default`);
 
-	currentTheme = persisted('theme', themeDefault);
+  currentTheme = persisted("theme", themeDefault);
 
-	// Coerce to light if theme is not valid (if theme changed)
-	if (!isTheme(get(currentTheme))) {
-		currentTheme.set(Theme.Light);
-	}
+  // Coerce to light if theme is not valid (if theme changed)
+  if (!isTheme(get(currentTheme))) {
+    currentTheme.set(Theme.Light);
+  }
 
-	// Bind store to actual theme
-	currentTheme.subscribe((newTheme) => {
-		setTheme(newTheme);
-	});
+  // Bind store to actual theme
+  currentTheme.subscribe((newTheme) => {
+    setTheme(newTheme);
+  });
 }
 
 /**
@@ -47,7 +49,7 @@ export function initTheme() {
  * @returns Whether value is member or not.
  */
 export function isTheme(value: string): value is Theme {
-	return Object.values(Theme).includes(value as Theme);
+  return Object.values(Theme).includes(value as Theme);
 }
 
 /**
@@ -57,13 +59,13 @@ export function isTheme(value: string): value is Theme {
  * @returns Current theme.
  */
 export function getTheme(): Theme {
-	if (browser) {
-		const currentTheme = document.documentElement.getAttribute('data-theme');
-		if (currentTheme && isTheme(currentTheme)) {
-			return currentTheme;
-		}
-	}
-	return Theme.Light;
+  if (browser) {
+    const currentTheme = document.documentElement.getAttribute("data-theme");
+    if (currentTheme && isTheme(currentTheme)) {
+      return currentTheme;
+    }
+  }
+  return Theme.Light;
 }
 
 /**
@@ -73,10 +75,10 @@ export function getTheme(): Theme {
  * @param theme New theme.
  */
 export function setTheme(theme: Theme) {
-	if (!isTheme(theme)) {
-		throw new Error(`Invalid theme: ${theme}`);
-	}
-	if (browser) {
-		document.documentElement.setAttribute('data-theme', theme);
-	}
+  if (!isTheme(theme)) {
+    throw new Error(`Invalid theme: ${theme}`);
+  }
+  if (browser) {
+    document.documentElement.setAttribute("data-theme", theme);
+  }
 }

@@ -82,58 +82,61 @@ Dev Container(이하 개발 컨테이너)는 Docker 등의 컨테이너 기술�
    ```jsonc
    // https://containers.dev/implementors/json_reference
    {
-   	"name": "lasuillard/my-project-template",
-   	// I recommend to use VS Code's default automatic port forwarding instead
-   	// "forwardPorts": [],
-   	"dockerComposeFile": ["../docker-compose.yaml", "./docker-compose.devcontainer.yaml"],
-   	"service": "workspace",
-   	"mounts": [
-   		"source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,consistency=cached"
-   	],
-   	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-   	"shutdownAction": "stopCompose",
-   	"features": {
-   		"ghcr.io/devcontainers/features/docker-in-docker:2": {
-   			"moby": false
-   		} // Isolated Docker environment from the host machine
-   		// TODO(update-this): Add features as you need (see https://containers.dev/features for available features)
-   	},
-   	// This make the workspace container to run indefinitely, otherwise, based on the image you use,
-   	// the container could stop after the command is executed, that must not be a typical behavior
-   	// for a development container.
-   	"overrideCommand": true,
-   	// Below are dev container lifecycle commands, listed in the order they are executed.
-   	// * Be sure to check the executable permissions of the scripts you use.
-   	// ! `initializeCommand` runs on the **host machine** during initialization.
-   	// ! If you are using various OS including Windows, you should be aware of the this configuration's behavior.
-   	// "initializeCommand": "...",
-   	// These commands run in the container, not on the host machine.
-   	"onCreateCommand": "./.devcontainer/onCreateCommand.sh",
-   	"updateContentCommand": "./.devcontainer/updateContentCommand.sh",
-   	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
-   	"postStartCommand": "./.devcontainer/postStartCommand.sh",
-   	"postAttachCommand": "./.devcontainer/postAttachCommand.sh",
-   	"customizations": {
-   		"vscode": {
-   			// List of VS Code extensions to install in the container
-   			// I recommend you to sync this file with your `.vscode/extensions.json`
-   			// ! Extensions listed here WILL BE INSTALLED, unlike `.vscode/extensions.json` only provides recommendations.
-   			// ! So be sure to list only the extensions all the contributors SHOULD use.
-   			// * If you have personal extensions that you want install for all dev containers,
-   			// * edit `dev.containers.defaultExtensions` in your user settings instead.
-   			"extensions": [
-   				"EditorConfig.EditorConfig",
-   				"streetsidesoftware.code-spell-checker",
-   				// TODO(update-this): Below is just an example configuration. Update it as needed.
-   				"astral-sh.ty",
-   				"charliermarsh.ruff",
-   				"ms-python.debugpy",
-   				"ms-python.python",
-   				"ms-python.vscode-pylance",
-   				"ms-toolsai.jupyter"
-   			]
-   		}
-   	}
+     "name": "lasuillard/my-project-template",
+     // I recommend to use VS Code's default automatic port forwarding instead
+     // "forwardPorts": [],
+     "dockerComposeFile": [
+       "../docker-compose.yaml",
+       "./docker-compose.devcontainer.yaml",
+     ],
+     "service": "workspace",
+     "mounts": [
+       "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,consistency=cached",
+     ],
+     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+     "shutdownAction": "stopCompose",
+     "features": {
+       "ghcr.io/devcontainers/features/docker-in-docker:2": {
+         "moby": false,
+       }, // Isolated Docker environment from the host machine
+       // TODO(update-this): Add features as you need (see https://containers.dev/features for available features)
+     },
+     // This make the workspace container to run indefinitely, otherwise, based on the image you use,
+     // the container could stop after the command is executed, that must not be a typical behavior
+     // for a development container.
+     "overrideCommand": true,
+     // Below are dev container lifecycle commands, listed in the order they are executed.
+     // * Be sure to check the executable permissions of the scripts you use.
+     // ! `initializeCommand` runs on the **host machine** during initialization.
+     // ! If you are using various OS including Windows, you should be aware of the this configuration's behavior.
+     // "initializeCommand": "...",
+     // These commands run in the container, not on the host machine.
+     "onCreateCommand": "./.devcontainer/onCreateCommand.sh",
+     "updateContentCommand": "./.devcontainer/updateContentCommand.sh",
+     "postCreateCommand": "./.devcontainer/postCreateCommand.sh",
+     "postStartCommand": "./.devcontainer/postStartCommand.sh",
+     "postAttachCommand": "./.devcontainer/postAttachCommand.sh",
+     "customizations": {
+       "vscode": {
+         // List of VS Code extensions to install in the container
+         // I recommend you to sync this file with your `.vscode/extensions.json`
+         // ! Extensions listed here WILL BE INSTALLED, unlike `.vscode/extensions.json` only provides recommendations.
+         // ! So be sure to list only the extensions all the contributors SHOULD use.
+         // * If you have personal extensions that you want install for all dev containers,
+         // * edit `dev.containers.defaultExtensions` in your user settings instead.
+         "extensions": [
+           "EditorConfig.EditorConfig",
+           "streetsidesoftware.code-spell-checker",
+           // TODO(update-this): Below is just an example configuration. Update it as needed.
+           "astral-sh.ty",
+           "charliermarsh.ruff",
+           "ms-python.debugpy",
+           "ms-python.python",
+           "ms-python.vscode-pylance",
+           "ms-toolsai.jupyter",
+         ],
+       },
+     },
    }
    ```
 
@@ -183,9 +186,9 @@ VS Code 개발 컨테이너 확장 프로그램 및 GitHub Codespaces는 이러�
 
   ```json
   {
-  	"dotfiles.installCommand": "install.sh",
-  	"dotfiles.repository": "lasuillard/dotfiles",
-  	"dotfiles.targetPath": "~/dotfiles"
+    "dotfiles.installCommand": "install.sh",
+    "dotfiles.repository": "lasuillard/dotfiles",
+    "dotfiles.targetPath": "~/dotfiles"
   }
   ```
 

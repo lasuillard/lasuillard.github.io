@@ -1,53 +1,53 @@
-import js from '@eslint/js';
-import prettier from 'eslint-config-prettier/flat';
-import jsdoc from 'eslint-plugin-jsdoc';
-import svelte from 'eslint-plugin-svelte';
-import { includeIgnoreFile } from 'eslint/config';
-import globals from 'globals';
-import { fileURLToPath } from 'node:url';
-import ts from 'typescript-eslint';
-import svelteConfig from './svelte.config.js';
+import js from "@eslint/js";
+import prettier from "eslint-config-prettier/flat";
+import jsdoc from "eslint-plugin-jsdoc";
+import svelte from "eslint-plugin-svelte";
+import { includeIgnoreFile } from "eslint/config";
+import globals from "globals";
+import { fileURLToPath } from "node:url";
+import ts from "typescript-eslint";
+import svelteConfig from "./svelte.config.js";
 
-const gitignorePath = fileURLToPath(new URL('.gitignore', import.meta.url));
+const gitignorePath = fileURLToPath(new URL(".gitignore", import.meta.url));
 
 // https://github.com/sindresorhus/globals/issues/239
 const browserGlobals = {
-	...globals.browser,
-	AudioWorkletGlobalScope: false // this is the default,
+  ...globals.browser,
+  AudioWorkletGlobalScope: false, // this is the default,
 };
 
-delete browserGlobals['AudioWorkletGlobalScope '];
+delete browserGlobals["AudioWorkletGlobalScope "];
 
 export default ts.config(
-	includeIgnoreFile(gitignorePath, { gitignoreResolution: true }),
-	js.configs.recommended,
-	...ts.configs.recommended,
-	prettier,
-	...svelte.configs.recommended,
-	jsdoc.configs['flat/recommended-mixed'],
-	{
-		languageOptions: {
-			globals: {
-				...browserGlobals,
-				...globals.node
-			}
-		}
-	},
-	{
-		files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],
-		languageOptions: {
-			parserOptions: {
-				projectService: true,
-				extraFileExtensions: ['.svelte'],
-				parser: ts.parser,
-				svelteConfig
-			}
-		}
-	},
-	{
-		rules: {
-			'@typescript-eslint/no-explicit-any': 'off',
-			'svelte/no-navigation-without-resolve': 'off'
-		}
-	}
+  includeIgnoreFile(gitignorePath, { gitignoreResolution: true }),
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  prettier,
+  ...svelte.configs.recommended,
+  jsdoc.configs["flat/recommended-mixed"],
+  {
+    languageOptions: {
+      globals: {
+        ...browserGlobals,
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ["**/*.svelte", "**/*.svelte.ts", "**/*.svelte.js"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        extraFileExtensions: [".svelte"],
+        parser: ts.parser,
+        svelteConfig,
+      },
+    },
+  },
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "svelte/no-navigation-without-resolve": "off",
+    },
+  },
 );

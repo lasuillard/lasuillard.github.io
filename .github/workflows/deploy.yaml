@@ -9,7 +9,7 @@ on:
 
   # Scheduled deploy
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
       timezone: Asia/Seoul
 
 concurrency:

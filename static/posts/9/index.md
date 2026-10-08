@@ -211,7 +211,7 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.prepare.outputs.matrix) }}
     environment:
-      name: 'projects/${{ matrix.name }}'
+      name: "projects/${{ matrix.name }}"
       url: https://script.google.com/home/projects/${{ steps.read_clasp.outputs.script_id }}/edit
     # ...
     steps:
@@ -265,10 +265,10 @@ jobs:
 
     ```json
     {
-    	// ...
-    	"executionApi": {
-    		"access": "MYSELF"
-    	}
+      // ...
+      "executionApi": {
+        "access": "MYSELF"
+      }
     }
     ```
 

@@ -1,74 +1,81 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
-	import QRCodeLibrary from 'qrcode';
-	import CheckIcon from '$components/icon/Check.svelte';
-	import CopyIcon from '$components/icon/Copy.svelte';
+  import { browser } from "$app/environment";
+  import QRCodeLibrary from "qrcode";
+  import CheckIcon from "$components/icon/Check.svelte";
+  import CopyIcon from "$components/icon/Copy.svelte";
 
-	interface Props {
-		url: string;
-		width?: number;
-	}
+  interface Props {
+    url: string;
+    width?: number;
+  }
 
-	let { url, width = 213 }: Props = $props();
+  let { url, width = 213 }: Props = $props();
 
-	let qrCodeCanvas: HTMLElement | undefined = $state();
-	let copied = $state(false);
+  let qrCodeCanvas: HTMLElement | undefined = $state();
+  let copied = $state(false);
 
-	$effect(() => {
-		if (!qrCodeCanvas || !url) return;
+  $effect(() => {
+    if (!qrCodeCanvas || !url) return;
 
-		QRCodeLibrary.toCanvas(qrCodeCanvas, url, { width }, (err) => {
-			if (err) console.error(err);
-		});
-	});
+    QRCodeLibrary.toCanvas(qrCodeCanvas, url, { width }, (err) => {
+      if (err) console.error(err);
+    });
+  });
 
-	function handleCopy() {
-		if (browser && url) {
-			navigator.clipboard.writeText(url).then(() => {
-				copied = true;
-				setTimeout(() => {
-					copied = false;
-				}, 2000);
-			});
-		}
-	}
+  function handleCopy() {
+    if (browser && url) {
+      navigator.clipboard.writeText(url).then(() => {
+        copied = true;
+        setTimeout(() => {
+          copied = false;
+        }, 2000);
+      });
+    }
+  }
 </script>
 
 <div class="flex flex-col items-center gap-2">
-	<div class="rounded-xl bg-white p-2 shadow-lg">
-		{#if url}
-			<canvas
-				bind:this={qrCodeCanvas}
-				class="shrink-0 rounded-xl"
-				data-testid="qrcode"
-				title={url}
-				{width}
-				style="width: {width}px; height: {width}px; min-width: {width}px; min-height: {width}px;"
-			></canvas>
-		{:else}
-			<canvas
-				{width}
-				style="width: {width}px; height: {width}px; min-width: {width}px; min-height: {width}px;"
-			></canvas>
-		{/if}
-	</div>
-	{#if url}
-		<div class="mt-1 flex items-center justify-between gap-1" style="width: {width}px;">
-			<div class="flex-1 overflow-hidden text-center">
-				<span
-					class="text-base-content/70 block truncate text-xs font-semibold select-all"
-					title={url}
-				>
-					{url}
-				</span>
-			</div>
-			<button class="btn btn-xs btn-circle btn-ghost" onclick={handleCopy} aria-label="Copy URL">
-				{#if copied}
-					<CheckIcon class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
-				{:else}
-					<CopyIcon class="h-3.5 w-3.5" />
-				{/if}
-			</button>
-		</div>
-	{/if}
+  <div class="rounded-xl bg-white p-2 shadow-lg">
+    {#if url}
+      <canvas
+        bind:this={qrCodeCanvas}
+        class="shrink-0 rounded-xl"
+        data-testid="qrcode"
+        title={url}
+        {width}
+        style="width: {width}px; height: {width}px; min-width: {width}px; min-height: {width}px;"
+      ></canvas>
+    {:else}
+      <canvas
+        {width}
+        style="width: {width}px; height: {width}px; min-width: {width}px; min-height: {width}px;"
+      ></canvas>
+    {/if}
+  </div>
+  {#if url}
+    <div
+      class="mt-1 flex items-center justify-between gap-1"
+      style="width: {width}px;"
+    >
+      <div class="flex-1 overflow-hidden text-center">
+        <span
+          class="text-base-content/70 block truncate text-xs font-semibold select-all"
+          title={url}
+        >
+          {url}
+        </span>
+      </div>
+      <button
+        class="btn btn-xs btn-circle btn-ghost"
+        onclick={handleCopy}
+        aria-label="Copy URL"
+      >
+        {#if copied}
+          <CheckIcon class="h-3.5 w-3.5" stroke="green" stroke-width="2.5" />
+        {:else}
+          <CopyIcon class="h-3.5 w-3.5" />
+        {/if}
+      </button>
+    </div>
+  {/if}
 </div>
