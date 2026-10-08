@@ -55,7 +55,7 @@ export default defineConfig({
 	test: {
 		include: ['tests/**/*.{test,spec}.{js,ts}'],
 		setupFiles: ['tests/setup.ts'],
-		reporters: ['junit', 'default'],
+		reporters: ['junit', 'default', 'html'],
 		outputFile: {
 			junit: './junit.xml'
 		},
@@ -63,9 +63,6 @@ export default defineConfig({
 			include: ['src/components/**', 'src/lib/**'],
 			exclude: ['src/**.d.ts'],
 			reporter: ['text', 'clover', 'html']
-		},
-		api: {
-			host: process.env.CONTAINER ? '0.0.0.0' : '127.0.0.1'
 		}
 	}
 });
