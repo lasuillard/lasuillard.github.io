@@ -123,10 +123,10 @@ Terraform 구성에서 Lambda 함수가 SQS 이벤트를 수신하고 처리할 
 
 ```ts
 const handler = serverlessExpress({
-	app,
-	eventSourceRoutes: {
-		AWS_SQS: '/aws/sqs'
-	}
+  app,
+  eventSourceRoutes: {
+    AWS_SQS: "/aws/sqs",
+  },
 });
 ```
 
@@ -164,16 +164,17 @@ export const test = baseTest.extend<TestFixtures>({{
 
 ```ts
 it.beforeEach(({ localstack }) => {
-	nock.enableNetConnect(
-		(host) => host.includes(localstack.host) || host.includes(localstack.hostname)
-	);
+  nock.enableNetConnect(
+    (host) =>
+      host.includes(localstack.host) || host.includes(localstack.hostname),
+  );
 
-	// Set environment variables for AWS SDK to use LocalStack
-	vi.stubEnv('AWS_ENDPOINT_URL', localstack.href);
-	vi.stubEnv('AWS_REGION', region);
-	vi.stubEnv('AWS_ACCESS_KEY_ID', 'test');
-	vi.stubEnv('AWS_SECRET_ACCESS_KEY', 'test');
-	vi.stubEnv('AWS_S3_USE_PATH_STYLE_ENDPOINT', 'true');
+  // Set environment variables for AWS SDK to use LocalStack
+  vi.stubEnv("AWS_ENDPOINT_URL", localstack.href);
+  vi.stubEnv("AWS_REGION", region);
+  vi.stubEnv("AWS_ACCESS_KEY_ID", "test");
+  vi.stubEnv("AWS_SECRET_ACCESS_KEY", "test");
+  vi.stubEnv("AWS_S3_USE_PATH_STYLE_ENDPOINT", "true");
 });
 ```
 
@@ -187,7 +188,7 @@ it.beforeEach(({ localstack }) => {
 
 대신 AWS CodeBuild를 선택했습니다. Terraform Cloud 환경에서도 소스 코드에 접근할 수 있으므로, 이 소스 코드에서 필요한 파일만 가져와 압축하여 S3에 업로드하고, CodeBuild를 트리거([aws_codebuild_start_build](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/actions/codebuild_start_build) 액션)하여 빌드를 수행합니다. 작업은 동기적으로 수행되고 Terraform은 Lambda 함수를 새 빌드로 업데이트합니다.
 
-> ❓ 프로젝트가 크고 복잡해지면 이 방식은 빠르게 한계를 맞이할 수 있습니다. 이 방식이 한계에 다다르면, 추후에는 CI/CD 파이프라인을 분리할 생각입니다.
+> ❗ 이 방식은 일반적으로 권장되는 방식은 아니며, 설치 및 배포를 단순화하기 위해 선택한 타협안입니다. 추후 프로젝트가 성장하고 요구사항이 변화하면, CI/CD 파이프라인을 분리하거나 다른 방식으로 전환할 계획입니다.
 
 [^2]: https://developer.hashicorp.com/terraform/language/provisioners#local-exec
 
@@ -223,11 +224,21 @@ Lambda를 CloudFront Origin으로 설정하려면 Lambda Function URL을 사용�
 
 unzipper 라이브러리를 이용하도록 변경한 구현에서는 임시 저장 공간에 압축 파일을 저장하고 스트리밍 방식으로 파일을 처리합니다. 아래와 같이 약 50초 동안 394MB 메모리를 사용하여 작업을 완료했습니다. 절반에 가깝게 메모리 사용량이 줄었지만, 대신 스트림을 순차적으로 처리하기 때문에 실행 시간은 다소 늘어났습니다.
 
+> 🤔 실시간 인메모리 스트리밍 처리 대신, 파일을 다운로드한 뒤 처리하는 이유는?
+>
+> 압축 파일 내에 또 다른 압축 파일을 포함하는 경우, 스트리밍 중 "unexpected EOF" 오류가 발생하는 문제가 있었습니다. 이는 내부 압축 파일의 끝과 외부 압축 파일의 끝을 정확히 분간할 수 없기 때문에 발생하는 문제였습니다. 따라서 파일을 다운로드한 뒤 처리하는 방식으로 구현을 변경했습니다.
+
 ![Lambda 로그 - unzipper 적용 후](./assets/lambda-log-after.png)
 
 실행 시간은 늘었지만 메모리 사용량이 크게 줄었습니다. 단순 비교만으로는 성능 향상을 평가하기 어렵지만, 메모리 부족으로 인한 Lambda 함수 실패 문제는 효과적으로 해결되었으며, 비슷한 아티팩트 처리 환경에서 약 16% 비용 절감 효과도 기대할 수 있습니다.
 
 ## 💡 향후 개선 방향
+
+- 보안 취약점 개선
+
+  프로토타입 구현 후, 글을 작성하며 리뷰를 거치던 중 미처 인지하지 못했던 보안 취약점들을 발견했습니다. 정적 비밀 값인 X-Origin-Verify 헤더가 노출될 경우, 이를 악용하여 외부에서 내부 엔드포인트에 직접 접근할 수 있는 가능성이 존재했습니다. 또한 GitHub OAuth Flow는 클라이언트 세션에 대한 검증이 불완전하여 Login CSRF 공격에 취약할 수 있었습니다. 리다이렉트 URL 검증을 통해 Open Redirects 공격은 방어할 수 있었지만, 여전히 개선이 필요한 상태였습니다.
+
+  이 문제들은 바로 프로젝트 이슈 트래커에 등록하여 추후 개선할 계획입니다. Lambda Function URL 대신 API Gateway를 도입하여 CloudFront의 Origin으로 설정하여 CloudFront로 접근을 일원화하고, 내부 백엔드 엔드포인트 노출을 원천 차단할 계획입니다. CSRF 문제는 클라이언트 Nonce 쿠키를 활용하여 OAuth 요청 흐름에 대한 악의적인 개입을 차단하도록 구현할 예정입니다.
 
 - 성능 최적화
 
