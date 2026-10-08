@@ -48,7 +48,7 @@ Prevstat이 해결하고자 하는 문제는 CI 환경에서 생성된 아티팩
 
 ![아키텍처 다이어그램](assets/architecture.png)
 
-GitHub 웹훅을 통해 워크플로가 완료를 고지받습니다. 설정(패턴)에 부합하는 아티팩트가 업로드되면 아티팩트를 다운로드하여 S3에 저장하고, 커밋 상태(Commit Statuses)의 상세(Details) 버튼 클릭 한 번으로 브라우저에서 바로 확인할 수 있습니다. 공개 저장소에 대해서는 접근 제어 없이 바로 확인할 수 있으며, 비공개 저장소에 대해서는 GitHub App을 통해 인증 과정을 거쳐야만 접근할 수 있습니다.
+GitHub 웹훅을 통해 워크플로 완료 이벤트를 수신합니다. 설정(패턴)에 부합하는 아티팩트가 업로드되면 아티팩트를 다운로드하여 S3에 저장하고, 커밋 상태(Commit Statuses)의 상세(Details) 버튼 클릭 한 번으로 브라우저에서 바로 확인할 수 있습니다. 공개 저장소에 대해서는 접근 제어 없이 바로 확인할 수 있으며, 비공개 저장소에 대해서는 GitHub App을 통해 인증 과정을 거쳐야만 접근할 수 있습니다.
 
 - 접근 권한은 무엇으로 판단하나요?
 
@@ -132,65 +132,19 @@ const handler = serverlessExpress({
 
 [@codegenie/serverless-express](https://www.npmjs.com/package/@codegenie/serverless-express) 패키지의 `eventSourceRoutes` 옵션을 통해 동일 서비스 내 API 엔드포인트로 이벤트를 라우팅하도록 설정할 수 있습니다. Express와 Probot으로 구성된 기존 애플리케이션 소스 코드를 크게 변경할 필요 없이, API 엔드포인트처럼 이벤트를 처리할 수 있어 편의성이 높습니다.
 
-하지만 이벤트 핸들러와 백그라운드 작업 처리에 요구되는 런타임 환경(CPU, 메모리, 임시 저장 공간 등)이 다르기 때문에 자원 효율성을 위해 추후 별도 Lambda 함수로 분리할 방침입니다.
-
-### 🧪 통합 테스트
-
-애플리케이션이 배포되기 전, 로컬 환경에서 통합 테스트를 수행하여 문제를 사전에 발견하고 해결하고자 했습니다. 복잡한 성능 문제는 해결할 수 없겠지만, 기본적인 기능과 통합 흐름에서 발생할 수 있는 문제를 미리 점검할 수 있을 테니까요.
-
-테스트 환경 구축에는 [LocalStack](https://www.localstack.cloud/)과 [Testcontainers](https://testcontainers.com/)를 활용했습니다. 외부 네트워크를 차단한 AWS 모의 인프라 환경에서 기본적인 통합 테스트를 수행하도록 자동화했습니다. vitest의 Fixture 기능[^1]을 활용해서 LocalStack 컨테이너의 관리를 모듈화했습니다.
-
-```ts
-export const test = baseTest.extend<TestFixtures>({{
-	// ...
-	localstack: [
-		// eslint-disable-next-line no-empty-pattern
-		async ({}, use) => {
-			// NOTE: LocalStack 4 enforces auth tokens, so we use LocalStack 3.x for testing to avoid authentication issues.
-			const container = await new LocalstackContainer('localstack/localstack:3.8.1').start();
-			const endpoint = new URL(container.getConnectionUri());
-			try {
-				await use(endpoint);
-			} finally {
-				await container.stop();
-			}
-		},
-		{ scope: 'worker' }
-	];
-});
-```
-
-각 테스트는 훅을 통해 LocalStack 환경을 주입받습니다.
-
-```ts
-it.beforeEach(({ localstack }) => {
-  nock.enableNetConnect(
-    (host) =>
-      host.includes(localstack.host) || host.includes(localstack.hostname),
-  );
-
-  // Set environment variables for AWS SDK to use LocalStack
-  vi.stubEnv("AWS_ENDPOINT_URL", localstack.href);
-  vi.stubEnv("AWS_REGION", region);
-  vi.stubEnv("AWS_ACCESS_KEY_ID", "test");
-  vi.stubEnv("AWS_SECRET_ACCESS_KEY", "test");
-  vi.stubEnv("AWS_S3_USE_PATH_STYLE_ENDPOINT", "true");
-});
-```
-
-[^1]: https://vitest.dev/guide/test-context#extend-test-context
+하지만 이벤트 핸들러와 백그라운드 작업 처리에 요구되는 런타임 환경(CPU, 메모리, 임시 저장 공간 등)이 다르기 때문에 자원 효율성을 위해 추후 별도 Lambda 함수로 분리할 방침입니다. 웹훅 이벤트 처리는 비교적 요구 자원이 적음에도, 백그라운드 작업 처리를 위해 많은 자원이 할당된 단일 Lambda 함수에서 처리하게 되면 자원의 낭비가 발생할 수 있기 때문입니다.
 
 ### 🚀 IaC 주도 배포
 
 인프라 구축 및 애플리케이션 배포는 Terraform으로 통합 관리했습니다. 프로젝트를 추후 오픈소스로 공개할 계획이어서 누구나 쉽게 인프라를 구축하고 애플리케이션을 배포할 수 있기를 원했습니다.
 
-다만 로컬 환경과 Terraform Cloud 환경 간의 차이로 인해 몇 가지 문제에 직면했습니다. 로컬 환경에서는 애플리케이션 의존성 설치와 빌드가 자유롭습니다. 하지만 로컬 환경을 기반으로 `local-exec` Provisioner[^2]를 사용하면 Terraform Cloud 환경에서는 동작하지 않을 것입니다. TFC 환경에 모든 필요한 도구를 설치하고 관리하는 것은 재현성 및 유지보수성을 크게 저해할 수 있다고 판단했습니다. 언제든지 개입하여 디버깅할 수 있는 환경이 아니니까요. 그렇다고 Custom Agent를 셀프 호스팅해야 한다면, 누구든지 쉽게 배포할 수 있도록 한다는 초기 목표와 크게 멀어질 수밖에 없습니다.
+다만 로컬 환경과 Terraform Cloud 환경 간의 차이로 인해 몇 가지 문제에 직면했습니다. 로컬 환경에서는 애플리케이션 의존성 설치와 빌드가 자유롭습니다. 하지만 로컬 환경을 기반으로 `local-exec` Provisioner[^1]를 사용하면 Terraform Cloud 환경에서는 동작하지 않을 것입니다. TFC 환경에 모든 필요한 도구를 설치하고 관리하는 것은 재현성 및 유지보수성을 크게 저해할 수 있다고 판단했습니다. 언제든지 개입하여 디버깅할 수 있는 환경이 아니니까요. 그렇다고 Custom Agent를 셀프 호스팅해야 한다면, 누구든지 쉽게 배포할 수 있도록 한다는 초기 목표와 크게 멀어질 수밖에 없습니다.
 
 대신 AWS CodeBuild를 선택했습니다. Terraform Cloud 환경에서도 소스 코드에 접근할 수 있으므로, 이 소스 코드에서 필요한 파일만 가져와 압축하여 S3에 업로드하고, CodeBuild를 트리거([aws_codebuild_start_build](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/actions/codebuild_start_build) 액션)하여 빌드를 수행합니다. 작업은 동기적으로 수행되고 Terraform은 Lambda 함수를 새 빌드로 업데이트합니다.
 
 > ❗ 이 방식은 일반적으로 권장되는 방식은 아니며, 설치 및 배포를 단순화하기 위해 선택한 타협안입니다. 추후 프로젝트가 성장하고 요구사항이 변화하면, CI/CD 파이프라인을 분리하거나 다른 방식으로 전환할 계획입니다.
 
-[^2]: https://developer.hashicorp.com/terraform/language/provisioners#local-exec
+[^1]: https://developer.hashicorp.com/terraform/language/provisioners#local-exec
 
 ## 🔧 문제 해결
 
@@ -206,13 +160,15 @@ GitHub 웹훅은 전송 후 10초 내에 ACK를 반환할 것을 요구합니다
 
 Lambda를 CloudFront Origin으로 설정하려면 Lambda Function URL을 사용해야 합니다. 보안상 `AWS_IAM` 인증 방식이 권장되지만 현재 아키텍처는 `AWS_IAM` 방식을 사용할 수 없다는 제약이 있습니다. 그 이유는,
 
-- Lambda Function URL은 POST/PUT 요청 페이로드에 서명(`x-amz-content-sha` 헤더)을 요구[^3]합니다. 설정된 GitHub Webhook 수신 엔드포인트는 `POST /api/github/webhooks`입니다.
+- Lambda Function URL은 POST/PUT 요청 페이로드에 서명(`x-amz-content-sha` 헤더)을 요구[^2]합니다. 설정된 GitHub Webhook 수신 엔드포인트는 `POST /api/github/webhooks`입니다.
 - CloudFront는 이 요청 페이로드를 서명하지 않고 그대로 Lambda Function URL로 전달(`x-amz-content-sha: UNSIGNED-PAYLOAD`)합니다.
 - Lambda가 요청을 정상적으로 처리하려면 클라이언트가 직접 요청 페이로드를 서명해야 하지만, GitHub Webhook은 이를 지원하지 않으며, 우리가 이를 대신 처리할 수 있는 방법이 없습니다.
 
 따라서 `AWS_IAM` 방식을 사용할 수 없습니다. 대신 노출된 Lambda Function URL을 보호하기 위해 X-Origin-Verify 헤더를 활용하여 요청의 출처(CloudFront)를 검증하도록 구현했습니다. CloudFront Custom Origin Header를 통해 X-Origin-Verify 헤더를 설정하고, Lambda 함수에서 이를 확인하도록 구성했습니다.
 
-[^3]: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html
+> ⚠️ 후술하겠지만, 이 방식은 완벽한 보안 대책이 아닙니다. 여전히 악의적인 클라이언트는 Lambda Function URL을 직접 호출할 수 있습니다. 추후 API Gateway를 도입하여 보다 강력한 인증 및 접근 제어를 적용할 계획입니다.
+
+[^2]: https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/private-content-restricting-access-to-lambda.html
 
 ### 💥 Lambda OOM
 
@@ -228,7 +184,7 @@ unzipper 라이브러리를 이용하도록 변경한 구현에서는 임시 저
 
 > 🤔 실시간 인메모리 스트리밍 처리 대신, 파일을 다운로드한 뒤 처리하는 이유는?
 >
-> 압축 파일 내에 또 다른 압축 파일을 포함하는 경우, 스트리밍 중 "unexpected EOF" 오류가 발생하는 문제가 있었습니다. 이는 내부 압축 파일의 끝과 외부 압축 파일의 끝을 정확히 분간할 수 없기 때문에 발생하는 문제였습니다. 따라서 파일을 다운로드한 뒤 처리하는 방식으로 구현을 변경했습니다.
+> 압축 파일 내에 또 다른 압축 파일을 포함하는 경우, 스트리밍 중 "unexpected EOF" 오류가 발생하는 문제가 있었습니다. 이는 내부 압축 파일의 끝과 외부 압축 파일의 끝을 정확히 분간할 수 없기 때문에 발생하는 문제였습니다. 따라서 파일을 다운로드한 뒤 처리하는 방식으로 변경했습니다. 파일을 다운로드하여 처리하기 때문에, 다시 병렬 처리할 수 있는 여지가 생겼습니다. 향후 병렬 처리를 통해 성능을 더욱 개선할 예정입니다.
 
 ![Lambda 로그 - unzipper 적용 후](./assets/lambda-log-after.png)
 
@@ -262,6 +218,6 @@ unzipper 라이브러리를 이용하도록 변경한 구현에서는 임시 저
 
 ## 💭 마치며
 
-이 프로젝트는 제 숙원 중 하나였다고도 말할 수 있습니다. 매번 테스트 리포트를 확인하는 과정은 번거롭고 귀찮은 일이었습니다. GitHub App을 활용함으로써 크게 줄일 수 있었고, 테스트 리포트를 보다 효율적으로 관리할 수 있게 되었습니다. 새로운 아티팩트를 추가하는 것도 설정 변경만으로 가능해졌습니다. 서버리스 아키텍처를 활용함으로써 인프라 관리 부담도 최소화할 수 있었고, 비용도 최저 수준으로 유지할 수 있었습니다.
+이 프로젝트는 저의 오랜 숙원이기도 했습니다. 매번 테스트 리포트를 확인하는 과정은 번거롭고 귀찮은 일이었습니다. GitHub App을 활용함으로써 크게 줄일 수 있었고, 테스트 리포트를 보다 효율적으로 관리할 수 있게 되었습니다. 새로운 아티팩트를 추가하는 것도 설정 변경만으로 가능해졌습니다. 서버리스 아키텍처를 활용함으로써 인프라 관리 부담도 최소화할 수 있었고, 비용도 최저 수준으로 유지할 수 있었습니다.
 
 하지만 여전히 개선하고 싶은 부분이 많습니다. 단기간에 개발하다보니 일부 구현은 임시방편으로 때운 부분도 있고, 코드 구조나 아키텍처 측면에서 더 나아질 여지가 많이 보입니다. 앞으로는 이러한 부분들을 점진적으로 개선해 나가면서, 더 안정적이고 확장 가능한 아티팩트 처리 플랫폼으로 발전시키고자 합니다.
