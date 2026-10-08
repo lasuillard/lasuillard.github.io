@@ -39,7 +39,7 @@
     }
   },
   "dependencies": {
-    "@sentry/sveltekit": "10.76.0",
+    "@sentry/sveltekit": "11.4.0",
     "@taga3s/highlightjs-terraform": "1.0.7",
     "date-fns": "4.4.0",
     "highlight.js": "11.12.0",
