@@ -119,6 +119,8 @@ sequenceDiagram
 
 상태(`state`)는 JWT 서명 및 검증을 통해 CSRF 보호를 수행합니다. 그리고 요청 및 리디렉션 단계에서 원본 리디렉션 URL은 항상 허용된 도메인 내의 URL인지 검증하여, 허용되지 않은 도메인으로의 리디렉션을 미연에 방지합니다.
 
+다만 현재 구현은 불완전하여 Login CSRF를 효과적으로 방어하지는 못합니다. 이는 검토 중 확인하게 된 보안 취약점 중 하나로, 현재 JWT 상태 토큰이 클라이언트 세션과 바인딩되지 않아 공격자가 악의적으로 조작된 요청을 통해 사용자를 속일 수 있는 가능성이 존재합니다. 이는 추후 개선 예정입니다.
+
 ### 📨 Lambda Event Source Mapping (ESM)
 
 Terraform 구성에서 Lambda 함수가 SQS 이벤트를 수신하고 처리할 수 있도록 ESM을 구성했습니다. 초기 개발 단계에서 구성을 단순하게 가져가기 위해 분리된 Lambda 함수를 만들지 않고, 단일 Lambda 함수로 모든 이벤트를 처리하도록 구현했습니다.
@@ -158,7 +160,7 @@ const handler = serverlessExpress({
 
 ### ⌛ GitHub 웹훅 타임아웃
 
-GitHub 웹훅은 전송 후 10초 내에 ACK를 반환할 것을 요구합니다. 이 시간이 초과되면 GitHub는 웹훅 전송을 실패로 간주하고, 연결을 끊어버립니다. 이벤트 핸들러는 연결이 끊어지면 남은 작업을 모두 실행하지 못한 채 종료되며, 그 결과 아티팩트가 정상적으로 처리되지 못하고 실패하는 상황이 발생했습니다.
+GitHub 웹훅은 전송 후 10초 내에 ACK를 반환할 것을 요구합니다. 이 시간이 초과되면 GitHub는 웹훅 전송을 실패로 간주하고, 연결을 끊어버립니다. 현재 애플리케이션은 연결이 끊어지자마자 종료되는 문제가 있었으며, 그 결과 아티팩트가 정상적으로 처리되지 못하고 실패하는 상황이 발생했습니다.
 
 ![SQS 대시보드](./assets/sqs-dashboard.png)
 
@@ -168,8 +170,8 @@ GitHub 웹훅은 전송 후 10초 내에 ACK를 반환할 것을 요구합니다
 
 Lambda를 CloudFront Origin으로 설정하려면 Lambda Function URL을 사용해야 합니다. 보안상 `AWS_IAM` 인증 방식이 권장되지만 현재 아키텍처는 `AWS_IAM` 방식을 사용할 수 없다는 제약이 있습니다. 그 이유는,
 
-- Lambda Function URL은 POST/PUT 요청 페이로드에 서명(`x-amz-content-sha` 헤더)을 요구[^2]합니다. 설정된 GitHub Webhook 수신 엔드포인트는 `POST /api/github/webhooks`입니다.
-- CloudFront는 이 요청 페이로드를 서명하지 않고 그대로 Lambda Function URL로 전달(`x-amz-content-sha: UNSIGNED-PAYLOAD`)합니다.
+- Lambda Function URL은 POST/PUT 요청 페이로드에 서명(`x-amz-content-sha256` 헤더)을 요구[^2]합니다. 설정된 GitHub Webhook 수신 엔드포인트는 `POST /api/github/webhooks`입니다.
+- CloudFront는 이 요청 페이로드를 서명하지 않고 그대로 Lambda Function URL로 전달(`x-amz-content-sha256: UNSIGNED-PAYLOAD`)합니다.
 - Lambda가 요청을 정상적으로 처리하려면 클라이언트가 직접 요청 페이로드를 서명해야 하지만, GitHub Webhook은 이를 지원하지 않으며, 우리가 이를 대신 처리할 수 있는 방법이 없습니다.
 
 따라서 `AWS_IAM` 방식을 사용할 수 없습니다. 대신 노출된 Lambda Function URL을 보호하기 위해 `X-Origin-Verify` 헤더를 활용하여 요청의 출처(CloudFront)를 검증하도록 구현했습니다. CloudFront Custom Origin Header를 통해 `X-Origin-Verify` 헤더를 설정하고, Lambda 함수에서 이를 확인하도록 구성했습니다.
