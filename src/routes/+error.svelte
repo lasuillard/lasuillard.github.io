@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
 
   interface Props {
     status?: any;
@@ -9,9 +9,9 @@
 
   let {
     // eslint-disable-next-line svelte/valid-prop-names-in-kit-pages
-    status = $page.status,
+    status = page.status,
     // eslint-disable-next-line svelte/valid-prop-names-in-kit-pages
-    message = $page.error?.message || "Unknown Error",
+    message = page.error?.message || "Unknown Error",
   }: Props = $props();
 </script>
 

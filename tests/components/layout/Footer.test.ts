@@ -1,5 +1,5 @@
 // @vitest-environment happy-dom
-import Footer from "$components/layout/Footer.svelte";
+import Footer from "#components/layout/Footer.svelte";
 import { render } from "@testing-library/svelte";
 import { expect, it } from "vitest";
 

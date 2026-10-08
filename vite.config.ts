@@ -1,6 +1,8 @@
 import { codecovSvelteKitPlugin } from "@codecov/sveltekit-plugin";
-import { sentrySvelteKit } from "@sentry/sveltekit";
+import { sentrySvelteKit } from "@sentry/sveltekit/vite";
+import adapter from "@sveltejs/adapter-static";
 import { sveltekit } from "@sveltejs/kit/vite";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import tailwindcss from "@tailwindcss/vite";
 import { svelteTesting } from "@testing-library/svelte/vite";
 import fs from "node:fs";
@@ -18,7 +20,10 @@ export default defineConfig({
       telemetry: false,
     }),
     tailwindcss(),
-    sveltekit(),
+    sveltekit({
+      preprocess: [vitePreprocess()],
+      adapter: adapter(),
+    }),
     {
       name: "exclude-static-files",
       closeBundle() {

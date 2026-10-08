@@ -1,16 +1,16 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import SearchIcon from "$components/icon/Search.svelte";
-  import XMarkIcon from "$components/icon/XMark.svelte";
+  import SearchIcon from "#components/icon/Search.svelte";
+  import XMarkIcon from "#components/icon/XMark.svelte";
   import {
     countTermOccurrences,
     getEnginePromise,
     getExcerpt,
     getSuggestions,
     performSearch,
-  } from "$lib/search";
-  import { route } from "$lib/urls";
-  import { quoteJoin } from "$lib/utils";
+  } from "#lib/search.js";
+  import { route } from "#lib/urls.js";
+  import { quoteJoin } from "#lib/utils.js";
   import type { SearchResult, Suggestion } from "minisearch";
   import type MiniSearch from "minisearch";
   import { untrack } from "svelte";

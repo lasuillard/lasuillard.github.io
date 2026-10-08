@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { currentTheme, Theme } from "$lib/theme";
+  import { currentTheme, Theme } from "#lib/theme.js";
 
   let theme = $derived(
     $currentTheme == Theme.Light ? "github-light" : "github-dark",

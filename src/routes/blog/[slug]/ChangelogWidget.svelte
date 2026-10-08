@@ -1,7 +1,7 @@
 <script lang="ts">
-  import ClockIcon from "$components/icon/Clock.svelte";
-  import type { Metadata } from "$lib/post";
-  import { formatRelativeDate } from "$lib/utils";
+  import ClockIcon from "#components/icon/Clock.svelte";
+  import type { Metadata } from "#lib/post.js";
+  import { formatRelativeDate } from "#lib/utils.js";
   import { format } from "date-fns";
 
   let { changelogs } = $props<{

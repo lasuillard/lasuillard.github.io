@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Markdown from "$components/content/Markdown.svelte";
-  import TagBadge from "$components/content/TagBadge.svelte";
-  import CalendarDaysIcon from "$components/icon/CalendarDays.svelte";
-  import { formatRelativeDate } from "$lib/utils";
+  import Markdown from "#components/content/Markdown.svelte";
+  import TagBadge from "#components/content/TagBadge.svelte";
+  import CalendarDaysIcon from "#components/icon/CalendarDays.svelte";
+  import { formatRelativeDate } from "#lib/utils.js";
   import { format } from "date-fns";
   import Comment from "./Comment.svelte";
   import { ScrollTracker } from "./scroll-tracking.svelte.js";
@@ -79,7 +79,7 @@
               <img
                 src={metadata.preview}
                 alt={metadata.title}
-                class="max-h-[500px] max-w-full rounded-2xl object-contain drop-shadow-sm"
+                class="max-h-125 max-w-full rounded-2xl object-contain drop-shadow-sm"
               />
             </div>
           {/if}

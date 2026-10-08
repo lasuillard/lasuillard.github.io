@@ -1,4 +1,9 @@
-import { formatRelativeDate, kebabCase, omitKeys, quoteJoin } from "$lib/utils";
+import {
+  formatRelativeDate,
+  kebabCase,
+  omitKeys,
+  quoteJoin,
+} from "#lib/utils.js";
 import { describe, expect, it } from "vitest";
 
 describe("omitKeys", () => {

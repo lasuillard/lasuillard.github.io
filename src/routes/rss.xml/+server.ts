@@ -1,5 +1,5 @@
+import { postRepository } from "#lib/server/post.js";
 import type { RequestHandler } from "@sveltejs/kit";
-import { postRepository } from "$lib/server/post";
 import { Feed } from "rivu";
 
 export const prerender = true;

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import MoonIcon from "$components/icon/Moon.svelte";
-  import SunIcon from "$components/icon/Sun.svelte";
-  import { Theme, currentTheme } from "$lib/theme";
+  import MoonIcon from "#components/icon/Moon.svelte";
+  import SunIcon from "#components/icon/Sun.svelte";
+  import { Theme, currentTheme } from "#lib/theme.js";
 
   /** Toggle theme between dark and light. */
   function toggleTheme() {

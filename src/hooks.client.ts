@@ -1,13 +1,13 @@
-import { env } from "$env/dynamic/public";
-import { initEngine } from "$lib/search";
-import { initTheme } from "$lib/theme";
+import { initEngine } from "#lib/search.js";
+import { initTheme } from "#lib/theme.js";
+import { PUBLIC_ENVIRONMENT, PUBLIC_SENTRY_DSN } from "$app/env/public";
 import * as Sentry from "@sentry/sveltekit";
 import { setDefaultOptions } from "date-fns";
 import { ko } from "date-fns/locale";
 import mermaid from "mermaid";
 
-const currentEnv = env.PUBLIC_ENVIRONMENT || "unknown";
-const sentryDsn = env.PUBLIC_SENTRY_DSN || "";
+const currentEnv = PUBLIC_ENVIRONMENT || "unknown";
+const sentryDsn = PUBLIC_SENTRY_DSN || "";
 
 console.info("Current environment is:", currentEnv);
 if (sentryDsn) {
@@ -33,7 +33,6 @@ Sentry.init({
     }),
   ],
   environment: currentEnv,
-  sendDefaultPii: true,
   _experiments: {
     enableLogs: true,
   },

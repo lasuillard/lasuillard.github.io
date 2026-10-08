@@ -1,5 +1,5 @@
-import type { Post } from "$lib/post";
-import { postRepository } from "$lib/server/post";
+import type { Post } from "#lib/post.js";
+import { postRepository } from "#lib/server/post.js";
 import { error } from "@sveltejs/kit";
 import type { EntryGenerator, PageServerLoad } from "./$types";
 

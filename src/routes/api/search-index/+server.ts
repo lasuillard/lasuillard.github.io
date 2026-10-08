@@ -1,5 +1,5 @@
-import { postRepository } from "$lib/server/post";
-import { cleanMarkdown } from "$lib/search";
+import { cleanMarkdown } from "#lib/search.js";
+import { postRepository } from "#lib/server/post.js";
 import { json } from "@sveltejs/kit";
 import MiniSearch from "minisearch";
 

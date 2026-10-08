@@ -1,5 +1,5 @@
+import { titleWithSuffix } from "#lib/meta.js";
 import { describe, expect, it } from "vitest";
-import { titleWithSuffix } from "~/lib/meta";
 
 describe(titleWithSuffix, () => {
   it("returns new title with suffix", () => {

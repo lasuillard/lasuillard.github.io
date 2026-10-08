@@ -1,5 +1,5 @@
-import { RECENT_POSTS_COUNT } from "$lib/constants";
-import { postRepository } from "$lib/server/post";
+import { RECENT_POSTS_COUNT } from "#lib/constants.js";
+import { postRepository } from "#lib/server/post.js";
 import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async () => {

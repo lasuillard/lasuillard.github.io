@@ -1,6 +1,6 @@
 // @vitest-environment happy-dom
+import { render } from "#lib/markdown.js";
 import { describe, expect, it } from "vitest";
-import { render } from "~/lib/markdown";
 
 describe(render, () => {
   it("renders markdown into HTML", async () => {

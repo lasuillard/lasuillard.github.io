@@ -1,7 +1,7 @@
 <script lang="ts">
-  import FolderIcon from "$components/icon/Folder.svelte";
-  import type { Post } from "$lib/post";
-  import { route } from "$lib/urls";
+  import FolderIcon from "#components/icon/Folder.svelte";
+  import type { Post } from "#lib/post.js";
+  import { route } from "#lib/urls.js";
   import { format } from "date-fns";
 
   let { seriesName, seriesPosts, currentPostId } = $props<{

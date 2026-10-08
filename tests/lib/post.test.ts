@@ -1,5 +1,5 @@
+import { PostSchema } from "#lib/post.js";
 import { describe, expect, it } from "vitest";
-import { PostSchema } from "~/lib/post";
 
 describe("PostSchema", () => {
   it("parses given JSON object class", () => {

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { browser } from "$app/environment";
+  import { browser } from "$app/env";
   import QRCodeLibrary from "qrcode";
-  import CheckIcon from "$components/icon/Check.svelte";
-  import CopyIcon from "$components/icon/Copy.svelte";
+  import CheckIcon from "#components/icon/Check.svelte";
+  import CopyIcon from "#components/icon/Copy.svelte";
 
   interface Props {
     url: string;
