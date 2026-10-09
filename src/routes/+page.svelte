@@ -6,7 +6,7 @@
   let profileImage = "/profile.jpg";
 </script>
 
-<div class="mx-auto xl:max-w-[50rem]">
+<div class="mx-auto xl:max-w-200">
   <div class="grid grid-cols-1 items-center gap-y-8">
     <!-- Profile image -->
     <div class="avatar col-span-1 flex justify-center">
@@ -23,26 +23,21 @@
     <!-- Bio -->
     <div class="w-full px-4 text-center">
       <p class="my-4 text-center">…</p>
-      <div class="text-justify leading-8">
+      <div class="text-center leading-8">
         <p>
-          소프트웨어 엔지니어 이유찬입니다. 여러 회사에서 Python과 Django, AWS
-          서비스를 활용하여 웹 서비스를 구축하고 운영해왔습니다.
+          흔한 백엔드 엔지니어입니다. 주로 Python과 Django, Amazon Web Services
+          (AWS)를 활용하여 웹 서비스를 구축하고 운영해왔습니다.
         </p>
         <br />
         <p>
-          평소 언어를 막론하고 여러 사이드 프로젝트를 개발하고 있습니다.
-          라이브러리 패키지, CLI 도구, 컨테이너 이미지, Prometheus Exporter,
-          그리고 크롬 브라우저 확장 프로그램 등을 만들고 공유하고 있습니다.
+          사이드 프로젝트를 통해 평소 쌓아뒀던 아이디어를 구현 및 검증하는 것을
+          즐기는 편입니다. 재사용을 위한 라이브러리 패키지, 개발 편의성을
+          증대시키는 CLI 도구, Prometheus Exporter, GitHub App 그리고 크롬
+          브라우저 확장 프로그램 등 언어와 프레임워크를 막론하고 다양한 것들을
+          만듭니다.
         </p>
         <br />
-        <p>
-          게으른 개발자를 지향합니다. 지루하고 반복적인 작업을 적극적으로
-          자동화하고 그보다 더 가치있는 일에 시간을 할애하는 것을 중요하게
-          생각합니다. 단순히 코드를 작성하기보다 사용자에게 가치 있는 제품과
-          경험을 전달하는 것을 중요하게 여깁니다.
-        </p>
-        <br />
-        <p>취미로는 클라이밍🧗을 즐깁니다.</p>
+        <p>그 외 취미로는 클라이밍🧗을 조금 하고 있습니다.</p>
       </div>
     </div>
   </div>
