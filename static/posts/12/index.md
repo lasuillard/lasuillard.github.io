@@ -20,6 +20,24 @@ changelog:
 
 따라서 개발 컨테이너의 구성이 정확한지, 변경 후에도 정상 동작하는지 지속적으로 검증할 필요가 있습니다. 이번 글에서는 Probot과 GitHub Actions를 활용하여 Dev Container 구성 검증을 중앙화하고 자동화한 경험을 공유합니다.
 
+## ✅ Devcontainer Check
+
+<img src="./assets/devcontainer-check-logo.png" alt="Devcontainer Check 로고" width="300">
+
+완성된 **Devcontainer Check**는 Checks API를 활용하여, 대상 프로젝트 저장소에 별도 워크플로 설정 없이도 코드 변경 시 백그라운드에서 검증을 수행하고 커밋마다 상태를 자동으로 표시합니다.
+
+초기에는 검증 결과 링크로 빠르게 이동할 수 있는 Commit Status API를 고려했으나, 변경된 설정 파일 목록이나 구체적인 검증 요약 등 풍부한 컨텍스트(Markdown Summary 및 Annotations)를 커밋 상세 뷰에 함께 제공하기 위해 Checks API를 채택했습니다.
+
+![커밋 상태](./assets/commit-status.png)
+
+개발자는 PR이나 커밋 목록에서 즉시 검증 진행 상태를 확인할 수 있습니다.
+
+![체크 상세](./assets/check-details.png)
+
+만약 검증 중 오류가 발생하더라도 Checks 탭에서 상세 실패 원인과 전용 Runner의 워크플로 실행 로그로 바로 이동할 수 있는 링크를 제공하므로, 원인을 빠르고 직관적으로 파악하여 디버깅할 수 있습니다.
+
+![워크플로 실행 로그](./assets/check-run-log.png)
+
 ## 🤔 GitHub Actions의 한계
 
 개발 컨테이너의 구성 검증을 자동화하기 위해 다음과 같은 워크플로를 잠시 활용했었습니다. 구성이 변경되면 GitHub Actions 워크플로가 실행되어 컨테이너를 빌드하고, 간단한 명령어를 실행하여 정상 여부를 판단합니다.
@@ -215,24 +233,6 @@ check "app_listen_to_required_events" {
 저장소 커밋 시 배포를 자동 실행하는 Terraform Cloud의 VCS Driven Workflow를 활용하여 인프라 변경 사항을 투명하게 추적하고 자동 배포할 수 있도록 했습니다.
 
 ![Terraform Cloud](./assets/terraform-cloud.png)
-
-## ✅ Devcontainer Check
-
-<img src="./assets/devcontainer-check-logo.png" alt="Devcontainer Check 로고" width="200">
-
-이렇게 완성된 **Devcontainer Check** GitHub App은 Checks API를 활용하여, 대상 프로젝트 저장소에 별도 워크플로 설정 없이도 코드 변경 시 백그라운드에서 검증을 수행하고 커밋마다 상태를 자동으로 표시합니다.
-
-초기에는 검증 결과 링크로 빠르게 이동할 수 있는 Commit Status API를 고려했으나, 변경된 설정 파일 목록이나 구체적인 검증 요약 등 풍부한 컨텍스트(Markdown Summary 및 Annotations)를 커밋 상세 뷰에 함께 제공하기 위해 Checks API를 채택했습니다.
-
-![커밋 상태](./assets/commit-status.png)
-
-개발자는 PR이나 커밋 목록에서 즉시 검증 진행 상태를 확인할 수 있습니다.
-
-![체크 상세](./assets/check-details.png)
-
-만약 검증 중 오류가 발생하더라도 Checks 탭에서 상세 실패 원인과 전용 Runner의 워크플로 실행 로그 링크를 즉시 제공하므로, 원인을 빠르고 직관적으로 파악하여 디버깅할 수 있습니다.
-
-![워크플로 실행 로그](./assets/check-run-log.png)
 
 ## 🛣️ 개선할 점
 
