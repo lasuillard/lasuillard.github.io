@@ -158,7 +158,7 @@ Webhook Handler는 상시 실행되는 대규모 서버가 필요하지 않고, 
 
 개발 초기에는 Vercel CLI와 GitHub 기본 통합만을 이용해 수동으로 배포하려 했습니다. 하지만 Webhook Handler(Vercel) 외에도 Runner 저장소, GitHub App 권한 및 웹훅 구독 등 여러 리소스가 서로 긴밀하게 맞물려 있어, CLI와 수동 스크립트만으로는 리소스를 누락 없이 관리하기 어려웠습니다.
 
-### 🏗️ Terraform과 `check` 블록을 통한 상태 관리
+### 🏗️ Terraform과 `check` 블록을 통한 상태 관리 및 검증
 
 이에 따라 Terraform과 Terraform Cloud를 도입하여 사전 요건 검증부터 Vercel 배포 및 인프라 상태 관리를 일원화했습니다.
 
