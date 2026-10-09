@@ -183,10 +183,29 @@ data "http" "github_app_installation" {
   }
 }
 
-check "app_information_accessible" {
+# ...
+
+check "app_installed_for_runner_repositories" {
   assert {
-    condition     = data.http.github_app.status_code == 200 && data.http.github_app_installation.status_code == 200
-    error_message = "Failed to fetch GitHub app information. Please check if the app configuration is valid."
+    condition = alltrue([
+      for repo in local.runner_repositories :
+      contains(local.installed_repositories, repo)
+    ])
+    error_message = "GitHub app is not installed for the required runner repositories. Please install the app for the following repositories: ${jsonencode(local.runner_repositories)}"
+  }
+}
+
+check "app_has_required_permissions" {
+  assert {
+    condition     = length(local.missing_perms) == 0
+    error_message = "GitHub app permissions do not match the expected configuration. Missing permissions: ${jsonencode(local.missing_perms)}"
+  }
+}
+
+check "app_listen_to_required_events" {
+  assert {
+    condition     = length(local.missing_events) == 0
+    error_message = "GitHub app events do not match the expected configuration. Missing events: ${jsonencode(local.missing_events)}"
   }
 }
 
