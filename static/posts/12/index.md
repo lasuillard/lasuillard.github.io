@@ -11,15 +11,36 @@ tags:
   - Terraform
   - Vercel
 series: 개발 컨테이너 활용하기
+changelog:
+  - date: 2026-10-09
+    message: 프로젝트를 오픈소스로 공개함에 따라 연관된 내용을 갱신하고 일부 내용을 다듬었습니다.
 ---
 
 이전 글에서 개발 컨테이너에 대해 다루었습니다. 개발 컨테이너를 활용하면 재현 가능하고 격리된 개발 환경을 쉽고 빠르게 구성할 수 있습니다. 하지만 의도대로 잘 동작하는 환경을 완성하기까지는 다양한 설정 오류나 예외 상황을 겪게 됩니다. 특히 개발 컨테이너를 구성하는 도구와 기능이 늘어날수록 이러한 문제는 더욱 빈번해집니다.
 
 따라서 개발 컨테이너의 구성이 정확한지, 변경 후에도 정상 동작하는지 지속적으로 검증할 필요가 있습니다. 이번 글에서는 Probot과 GitHub Actions를 활용하여 Dev Container 구성 검증을 중앙화하고 자동화한 경험을 공유합니다.
 
+## ✅ Devcontainer Check
+
+<img src="./assets/devcontainer-check-logo.png" alt="Devcontainer Check 로고" width="300">
+
+완성된 **Devcontainer Check**는 Checks API를 활용하여, 대상 프로젝트 저장소에 별도 워크플로 설정 없이도 코드 변경 시 백그라운드에서 검증을 수행하고 커밋마다 상태를 자동으로 표시합니다.
+
+초기에는 검증 결과 링크로 빠르게 이동할 수 있는 Commit Status API를 고려했으나, 변경된 설정 파일 목록이나 구체적인 검증 요약 등 풍부한 컨텍스트(Markdown Summary 및 Annotations)를 커밋 상세 뷰에 함께 제공하기 위해 Checks API를 채택했습니다.
+
+![커밋 상태](./assets/commit-status.png)
+
+개발자는 PR이나 커밋 목록에서 즉시 검증 진행 상태를 확인할 수 있습니다.
+
+![체크 상세](./assets/check-details.png)
+
+만약 검증 중 오류가 발생하더라도 Checks 탭에서 상세 실패 원인과 전용 Runner의 워크플로 실행 로그로 바로 이동할 수 있는 링크를 제공하므로, 원인을 빠르고 직관적으로 파악하여 디버깅할 수 있습니다.
+
+![워크플로 실행 로그](./assets/check-run-log.png)
+
 ## 🤔 GitHub Actions의 한계
 
-개발 컨테이너의 구성 검증을 자동화하기 위해 다음과 같은 워크플로를 잠시 활용했었습니다. 개발 컨테이너의 구성이 변경되면 GitHub Actions 워크플로가 실행되어 개발 컨테이너를 빌드하고, 간단한 명령어를 실행하여 성공하면 검증이 완료되었다고 판단합니다.
+개발 컨테이너의 구성 검증을 자동화하기 위해 다음과 같은 워크플로를 잠시 활용했었습니다. 구성이 변경되면 GitHub Actions 워크플로가 실행되어 컨테이너를 빌드하고, 간단한 명령어를 실행하여 정상 여부를 판단합니다.
 
 ```yaml
 # This workflow builds and runs the dev container defined in the .devcontainer directory to ensure validity.
@@ -68,9 +89,7 @@ jobs:
 
 [재사용 가능한 워크플로](https://docs.github.com/en/actions/how-tos/reuse-automations/reuse-workflows)나 [커스텀 액션](https://docs.github.com/en/actions/concepts/workflows-and-actions/custom-actions)을 활용하더라도 각 저장소마다 워크플로 정의 파일을 생성하고 관리해야 하는 부담은 여전합니다.
 
-그렇게 모색한 대안은 [GitHub App](https://docs.github.com/en/apps)[^1]을 활용하는 것이었습니다.
-
-[^1]: GitHub App은 특정 프로젝트 저장소에 종속되지 않고 GitHub의 기능을 프로그래밍 방식으로 제어할 수 있는 통합 도구입니다. 조직이나 계정에 앱을 한 번 설치해두면 설정을 통해 대상 저장소를 유연하게 지정할 수 있고, 각 저장소에서 발생하는 이벤트를 중앙의 단일 서비스에서 감지하여 필요한 작업을 일괄 트리거할 수 있습니다.
+그렇게 모색한 대안은 특정 저장소에 종속되지 않는 [GitHub App](https://docs.github.com/en/apps)을 활용하는 것이었습니다.
 
 ## 🐙 GitHub App 개발하기
 
@@ -157,65 +176,16 @@ Webhook Handler는 상시 실행되는 대규모 서버가 필요하지 않고, 
 
 개발 초기에는 Vercel CLI와 GitHub 기본 통합만을 이용해 수동으로 배포하려 했습니다. 하지만 Webhook Handler(Vercel) 외에도 Runner 저장소, GitHub App 권한 및 웹훅 구독 등 여러 리소스가 서로 긴밀하게 맞물려 있어, CLI와 수동 스크립트만으로는 리소스를 누락 없이 관리하기 어려웠습니다.
 
-### 🏗️ Terraform과 `check` 블록을 통한 상태 관리
+### 🏗️ Terraform과 `check` 블록을 통한 상태 관리 및 검증
 
 이에 따라 Terraform과 Terraform Cloud를 도입하여 사전 요건 검증부터 Vercel 배포 및 인프라 상태 관리를 일원화했습니다.
 
 특히 Terraform의 `check` 블록을 활용하여 배포 전 필수적인 사전 요건들을 선언적으로 검증할 수 있도록 구성했습니다. 공식 GitHub Terraform Provider만으로는 GitHub App의 상세 권한이나 웹훅 설정까지 세부적으로 검증하는 데 한계가 있어, GitHub App 토큰을 발급받아 GitHub REST API(`/apps/{slug}`, `/installation/repositories`)를 직접 조회하도록 구성했습니다.
 
-이를 통해 GitHub App이 Runner 저장소에 정상 설치되어 있는지, 필요한 최소 권한(Permissions)이 올바르게 부여되어 있는지, 필수 웹훅 이벤트 구독이 누락되지 않았는지 등을 배포 단계에서 자동으로 점검합니다.
+이를 통해 GitHub App이 Runner 저장소에 정상 설치되어 있는지, 필요한 최소 권한(Permissions)이 올바르게 부여되어 있는지, 필수 웹훅 이벤트 구독이 누락되지 않았는지 등을 배포 단계에서 자동으로 점검합니다. 다음은 해당 검증을 Terraform `check` 블록으로 구현한 예시 일부입니다.
 
 ```hcl
-/*
-Validate GitHub app / repository configuration through GitHub API
-
-Since the official GitHub Terraform provider does not provide enough information
-to validate the GitHub app configuration, we call the GitHub API directly using
-the GitHub App Token and HTTP data sources to fetch the app information.
-*/
-locals {
-  # Expected (from app.yaml)
-  app_manifest        = yamldecode(file("${local.project_root}/app.yaml"))
-  required_perms      = local.app_manifest.default_permissions
-  required_events     = local.app_manifest.default_events
-  runner_repositories = compact([var.runner_repository, var.runner_repository_for_private])
-
-  # Current (from GitHub API)
-  app_info               = jsondecode(data.http.github_app.response_body)
-  installed_repositories = jsondecode(data.http.github_app_installation.response_body).repositories[*].full_name
-  missing_perms          = { for perm, access in local.required_perms : perm => access if !contains(keys(local.app_info.permissions), perm) || local.app_info.permissions[perm] != access }
-  missing_events         = [for event in local.required_events : event if !contains(local.app_info.events, event)]
-}
-
-data "github_app_token" "app_token" {
-  app_id          = var.app_id
-  installation_id = var.app_installation_id
-  pem_file        = var.private_key
-}
-
-/*
-We use `/apps/{slug}` API instead of `/app` or `/app/installations/{installation_id}` API,
-because the latter two APIs do not work with the token returned by `data.github_app_token.app_token.token`.
-
-- https://docs.github.com/en/rest/apps/apps?apiVersion=2026-03-10#get-the-authenticated-app
-- https://docs.github.com/en/rest/apps/apps?apiVersion=2026-03-10#get-an-installation-for-the-authenticated-app
-
-To use the latter APIs, we would need to take additional user API tokens or personal access tokens,
-which would require additional configuration and permissions.
-
-Please feel free to suggest a better approach if you have one.
-*/
-data "http" "github_app" {
-  # https://docs.github.com/en/rest/apps/apps?apiVersion=2026-03-10#get-an-app
-  method = "GET"
-  url    = "${var.github_api_base_url}/apps/${var.app_slug}"
-
-  request_headers = {
-    "Accept"               = "application/vnd.github+json"
-    "Authorization"        = sensitive("Bearer ${data.github_app_token.app_token.token}")
-    "X-GitHub-Api-Version" = "2026-03-10"
-  }
-}
+# ...
 
 # WARNING: We only fetch the first 100 repositories accessible to the app installation (no filtering supported).
 #          If we need to support more than 100 repositories, we would need to implement pagination.
@@ -231,12 +201,7 @@ data "http" "github_app_installation" {
   }
 }
 
-check "app_information_accessible" {
-  assert {
-    condition     = data.http.github_app.status_code == 200 && data.http.github_app_installation.status_code == 200
-    error_message = "Failed to fetch GitHub app information. Please check if the app configuration is valid."
-  }
-}
+# ...
 
 check "app_installed_for_runner_repositories" {
   assert {
@@ -261,29 +226,13 @@ check "app_listen_to_required_events" {
     error_message = "GitHub app events do not match the expected configuration. Missing events: ${jsonencode(local.missing_events)}"
   }
 }
+
+# ...
 ```
 
 저장소 커밋 시 배포를 자동 실행하는 Terraform Cloud의 VCS Driven Workflow를 활용하여 인프라 변경 사항을 투명하게 추적하고 자동 배포할 수 있도록 했습니다.
 
 ![Terraform Cloud](./assets/terraform-cloud.png)
-
-## ✅ Devcontainer Check
-
-<img src="./assets/devcontainer-check-logo.png" alt="Devcontainer Check 로고" width="200">
-
-이렇게 완성된 **Devcontainer Check** GitHub App은 Checks API를 활용하여, 대상 프로젝트 저장소에 별도 워크플로 설정 없이도 코드 변경 시 백그라운드에서 검증을 수행하고 커밋마다 상태를 자동으로 표시합니다.
-
-초기에는 검증 결과 링크로 빠르게 이동할 수 있는 Commit Status API를 고려했으나, 변경된 설정 파일 목록이나 구체적인 검증 요약 등 풍부한 컨텍스트(Markdown Summary 및 Annotations)를 커밋 상세 뷰에 함께 제공하기 위해 Checks API를 채택했습니다.
-
-![커밋 상태](./assets/commit-status.png)
-
-개발자는 PR이나 커밋 목록에서 즉시 검증 진행 상태를 확인할 수 있습니다.
-
-![체크 상세](./assets/check-details.png)
-
-만약 검증 중 오류가 발생하더라도 Checks 탭에서 상세 실패 원인과 전용 Runner의 워크플로 실행 로그 링크를 즉시 제공하므로, 원인을 빠르고 직관적으로 파악하여 디버깅할 수 있습니다.
-
-![워크플로 실행 로그](./assets/check-run-log.png)
 
 ## 🛣️ 개선할 점
 
@@ -297,16 +246,14 @@ check "app_listen_to_required_events" {
 
 ### 🧩 검증 워크플로 모듈화
 
-현재 검증 워크플로는 약 350줄에 달하는 단일 YAML 파일로 작성되어 있습니다. 초기 개발 당시 러너 환경의 외부 종속성이나 추가 바이너리 배포를 최소화하고자 하나의 파일에 모든 인라인 쉘 스크립트를 포함시키다 보니 구조가 비대해졌고, 사소한 셸 스크립트 문법 오류 하나를 디버깅할 때도 매번 CI 전체를 재실행해야 하는 느린 피드백 루프의 비효율이 있었습니다.
+현재 검증 워크플로는 약 500줄에 달하는 단일 YAML 파일로 작성되어 있습니다. 초기 개발 당시 러너 환경의 외부 종속성이나 추가 바이너리 배포를 최소화하고자 하나의 파일에 모든 인라인 쉘 스크립트를 포함시키다 보니 구조가 비대해졌고, 사소한 셸 스크립트 문법 오류 하나를 디버깅할 때도 매번 CI 전체를 재실행해야 하는 느린 피드백 루프의 비효율이 있었습니다.
 
-향후에는 단계별 검증 로직을 재사용 가능한 Composite Action이나 전용 스크립트로 분리하여 워크플로의 가독성과 유지보수성을 높일 계획입니다.
-
-### 🌐 오픈소스 공개
-
-초기에는 이 프로젝트를 바로 오픈소스로 공개하려 했습니다. 개인적으로는 이후 Nix 래퍼로 전환하면서 외부 Dockerfile 변경 감지 문제를 겪지 않게 되었지만, 일반적인 개발 컨테이너 환경(다양한 Dockerfile 및 Compose 의존성)을 사용하는 불특정 사용자에게 공개하기 위해서는 앞서 언급한 의존 파일 전체 해싱 처리와 사용자 인프라 프로비저닝 간소화가 선행되어야 하기에 공개를 잠시 보류했습니다. 향후 누구나 클릭 몇 번만으로 손쉽게 자신의 저장소에 설치해 활용할 수 있도록 설정을 간소화한 뒤 공개할 예정입니다.
+향후에는 단계별 검증 로직을 재사용 가능한 Composite Action이나 배포 가능한 CLI 애플리케이션으로 분리하여 워크플로의 유지보수성을 높이고, 자동화 테스트를 통해 안정성을 확보할 계획입니다.
 
 ## 💭 마치며
 
 최근에는 선언적이고 재현 가능한 환경 관리를 지원하는 Nix Flake와 Home Manager를 중심으로 개발 환경을 구성하고 있습니다. Nix 환경에서는 `flake.nix`를 수정하는 즉시 환경 구성 피드백을 얻을 수 있어 별도의 복잡한 사전 검증이 필요 없고, 개발 컨테이너 또한 개발 도구들을 직접 빌드하는 대신 필요한 최소한의 Nix 도구만 설치하는 얇은 래퍼(Thin Wrapper)로 단순화되었기 때문에 현재는 이 프로젝트의 실질적인 필요성이 다소 줄어들었습니다.
 
 비록 개발 환경의 변화로 다른 방식을 채택하게 되었지만, 여러 저장소 환경에서 반복되는 워크플로를 중앙화하고 서버리스와 GitHub 인프라의 제약을 극복해 낸 과정은 매우 값진 경험이었습니다. 이때 정립한 아키텍처와 검증 패턴은 향후 다른 플랫폼 자동화 시스템을 설계할 때도 큰 도움이 될 것입니다.
+
+프로젝트는 오픈소스로 공개되어 있습니다. [GitHub 저장소](https://github.com/lasuillard-s/devcontainer-check)에서 확인하실 수 있습니다.
