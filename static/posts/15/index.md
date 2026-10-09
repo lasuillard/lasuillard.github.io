@@ -34,6 +34,8 @@ series: 테스트 리포트 빠르게 확인하기
 
 ## 🔍 Prevstat
 
+<img src="./assets/prevstat-logo.png" alt="Prevstat 로고" width="300">
+
 완성된 GitHub App의 이름은 **Prevstat**입니다. **Prev**iew **Stat**ic을 줄여 만든 이름입니다(Presta를 쓰고 싶었지만, 아쉽게도 이미 사용 중인 이름이었습니다).
 
 <video controls src="assets/demo.mp4" title="Prevstat 데모"></video>
