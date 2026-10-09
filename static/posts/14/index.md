@@ -20,6 +20,8 @@ RSFC를 개발하게 된 배경에 대해서는 이전에도 다루었지만, Ra
 
 ## ✨ RSFC 미리보기
 
+<img src="./assets/rsfc-logo.png" alt="RSFC 로고" width="300">
+
 > 💡 RSFC는 Chrome Web Store([링크](https://chromewebstore.google.com/detail/raindrop-sync-for-chrome/iacjnnndmkebkjdcdedfbmccofnmaojf))에 게시되어 있으며, 누구나 설치하여 사용할 수 있습니다.
 
 언제, 어떻게 동기화가 이루어지는지 설정할 수 있습니다.
