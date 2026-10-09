@@ -10,6 +10,7 @@ tags:
   - GitHub Actions
   - Playwright
   - Pulumi
+series: 테스트 리포트 빠르게 확인하기
 ---
 
 여러 작은 사이드 프로젝트를 하다 보면 테스트 환경 구성에 많은 시간을 투자하곤 합니다. TDD(테스트 주도 개발)를 엄격히 따르는 편은 아니지만, 여러 프로젝트를 병렬로 다루다 보니 언제든 다시 작업을 이어갈 수 있는 개발 환경을 갖추는 것이 특히 중요합니다.
@@ -58,34 +59,8 @@ bucket = aws.s3.Bucket(
    bucket_prefix="playwright-reports-",
    force_destroy=True,
 )
-public_access_block = aws.s3.BucketPublicAccessBlock(
-   "playwright-reports",
-   bucket=bucket.id,
-   block_public_acls=True,
-   block_public_policy=True,
-   ignore_public_acls=True,
-   restrict_public_buckets=True,
-)
-ownership_control = aws.s3.BucketOwnershipControls(
-   "playwright-reports",
-   bucket=bucket.id,
-   rule={
-       "object_ownership": "BucketOwnerEnforced",
-   },
-)
-aws.s3.BucketLifecycleConfiguration(
-   "playwright-reports",
-   bucket=bucket.id,
-   rules=[
-       {
-           "id": "Expire reports older than 7 days",
-           "status": "Enabled",
-           "expiration": {
-               "days": 7,
-           },
-       },
-   ],
-)
+
+# ... bucket configuration
 
 _oac = aws.cloudfront.OriginAccessControl(
    "playwright-reports",
@@ -155,20 +130,8 @@ aws.s3.BucketPolicy(
        ],
    ).json,
 )
-aws.s3.BucketCorsConfiguration(
-   "playwright-reports",
-   bucket=bucket.id,
-   cors_rules=[
-       {
-           "id": "AllowAll",
-           "allowed_methods": ["GET"],
-           "allowed_headers": ["*"],
-           "allowed_origins": ["*"],
-           "expose_headers": [],
-           "max_age_seconds": 3_000,
-       },
-   ],
-)
+
+# ...
 ```
 
 이 외에도 GitHub Actions 변수 자원을 관리하는 코드가 있어 GitHub Actions 환경으로 변수 및 비밀값 삽입 또한 Pulumi에서 처리하고 있습니다. AWS 인프라에 인증하기 위한 OIDC 구성 등도 Pulumi에서 관리하고 있습니다.
