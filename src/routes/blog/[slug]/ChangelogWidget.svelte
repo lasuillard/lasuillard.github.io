@@ -4,9 +4,11 @@
   import { formatRelativeDate } from "#lib/utils.js";
   import { format } from "date-fns";
 
-  let { changelogs } = $props<{
+  interface Props {
     changelogs: NonNullable<Metadata["changelog"]>;
-  }>();
+  }
+
+  let { changelogs }: Props = $props();
 
   const today = new Date();
 

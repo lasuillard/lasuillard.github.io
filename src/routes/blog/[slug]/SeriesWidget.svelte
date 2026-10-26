@@ -4,11 +4,13 @@
   import { route } from "#lib/urls.js";
   import { format } from "date-fns";
 
-  let { seriesName, seriesPosts, currentPostId } = $props<{
+  interface Props {
     seriesName: string;
     seriesPosts: Post[];
     currentPostId: string;
-  }>();
+  }
+
+  let { seriesName, seriesPosts, currentPostId }: Props = $props();
 
   const sortedPosts = $derived(
     [...seriesPosts].sort((a, b) => {
