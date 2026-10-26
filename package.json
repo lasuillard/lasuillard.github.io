@@ -43,7 +43,7 @@
     "date-fns": "4.4.0",
     "highlight.js": "11.12.0",
     "highlightjs-svelte": "1.0.6",
-    "mermaid": "12.1.0",
+    "mermaid": "12.2.0",
     "minisearch": "7.2.0",
     "qrcode": "1.5.4",
     "rehype-autolink-headings": "7.1.0",
