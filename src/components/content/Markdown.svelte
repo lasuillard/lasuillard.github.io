@@ -2,6 +2,7 @@
   import { onMount, tick, mount, unmount } from "svelte";
   import CopyIcon from "#components/icon/Copy.svelte";
   import CheckIcon from "#components/icon/Check.svelte";
+  import MermaidViewer from "#components/content/MermaidViewer.svelte";
 
   const LANG_MAP: Record<string, string> = {
     javascript: "JS",
@@ -48,6 +49,8 @@
   // Process code blocks whenever content is loaded or changes (supports SPA page navigation)
   $effect(() => {
     if (!content || !ready) return;
+
+    const mountedMermaids: Record<string, any>[] = [];
 
     tick().then(() => {
       const pres = document.querySelectorAll("article.prose pre");
@@ -142,19 +145,24 @@
       });
 
       // Initialize mermaid diagrams
-      const mermaids = document.querySelectorAll(".mermaid");
-      if (mermaids.length > 0) {
-        import("mermaid").then(({ default: mermaid }) => {
-          console.debug("Mermaid loaded. Running...");
-          mermaid
-            .run({
-              nodes: Array.from(mermaids) as HTMLElement[],
-              suppressErrors: true,
-            })
-            .catch((e) => console.debug("Mermaid failed to run", e));
+      const mermaids = document.querySelectorAll("pre.mermaid");
+      mermaids.forEach((pre) => {
+        const code = pre.textContent || "";
+        const target = document.createElement("div");
+        pre.replaceWith(target);
+        const viewer = mount(MermaidViewer, {
+          target,
+          props: { code },
         });
-      }
+        mountedMermaids.push(viewer);
+      });
     });
+
+    return () => {
+      mountedMermaids.forEach((viewer) => {
+        unmount(viewer);
+      });
+    };
   });
 </script>
 
