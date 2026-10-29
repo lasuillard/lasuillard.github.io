@@ -1,3 +1,4 @@
+import { E2E_TEST } from "$app/env/private";
 import { MetadataSchema, PostSchema, type Post } from "#lib/post.js";
 import { parse } from "#lib/server/markdown.js";
 import { kebabCase } from "#lib/utils.js";
@@ -6,9 +7,11 @@ import { z } from "zod";
 
 export class PostRepository {
   private posts: Post[];
+  private maxPosts?: number;
 
-  constructor() {
+  constructor({ maxPosts }: { maxPosts?: number } = {}) {
     this.posts = [];
+    this.maxPosts = maxPosts;
   }
 
   /**
@@ -74,6 +77,11 @@ export class PostRepository {
         b.metadata.id.localeCompare(a.metadata.id),
     );
 
+    if (this.maxPosts !== undefined) {
+      // Keep only the oldest N posts
+      this.posts = this.posts.slice(-this.maxPosts);
+    }
+
     return this.posts;
   }
 
@@ -90,4 +98,6 @@ export class PostRepository {
 }
 
 // Export a singleton instance for app-wide use
-export const postRepository = new PostRepository();
+export const postRepository = new PostRepository({
+  maxPosts: E2E_TEST ? 15 : undefined,
+});
