@@ -20,4 +20,9 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry.`);
     expect(result.content).toContain('id="footnote-label"');
     expect(result.content).toContain("🔗 각주");
   });
+
+  it("resolves root-relative image asset paths", async () => {
+    const result = await render(`![Preview](/posts/1/preview.png)`);
+    expect(result.content).toContain('src="/posts/1/preview.png"');
+  });
 });

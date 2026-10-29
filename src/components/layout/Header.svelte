@@ -4,12 +4,13 @@
   import MenuIcon from "#components/icon/Menu.svelte";
   import QRCodeIcon from "#components/icon/QRCode.svelte";
   import QRCode from "#components/layout/QRCode.svelte";
+  import { route } from "#lib/urls.js";
   import ThemeSelect from "./ThemeSelect.svelte";
   import Search from "./Search.svelte";
 
   const links = [
-    { name: "About Me", href: "/" },
-    { name: "Blog", href: "/blog" },
+    { name: "About Me", href: route("/") },
+    { name: "Blog", href: route("/blog") },
   ];
 
   interface Props {
