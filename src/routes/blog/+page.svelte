@@ -158,7 +158,7 @@
       class="order-2 w-full xl:order-2 xl:col-span-3"
     >
       <!-- Top Pagination -->
-      <div class="mb-10 flex justify-center xl:justify-end">
+      <div class="mb-20 flex justify-center">
         <Pagination {currentPage} {totalPages} />
       </div>
 
