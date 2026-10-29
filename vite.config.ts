@@ -23,6 +23,9 @@ export default defineConfig({
     sveltekit({
       preprocess: [vitePreprocess()],
       adapter: adapter(),
+      paths: {
+        relative: true,
+      },
     }),
     {
       name: "exclude-static-files",
