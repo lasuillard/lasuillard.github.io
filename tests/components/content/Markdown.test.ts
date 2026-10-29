@@ -1,7 +1,7 @@
 // @vitest-environment happy-dom
 import Markdown from "#components/content/Markdown.svelte";
 import { render as renderMarkdown } from "#lib/markdown.js";
-import { render } from "@testing-library/svelte";
+import { fireEvent, render, waitFor } from "@testing-library/svelte";
 import { expect, it } from "vitest";
 
 // NOTE: It is required not to have any wrapping element (thus no locator) as this component is just an wrapper
@@ -22,6 +22,27 @@ it("render with nothing", async () => {
   expect(container.innerHTML).toMatchInlineSnapshot(
     `"<!----><div class="hidden"><!----></div>"`,
   );
+});
+
+it("shows footnote preview when hovering footnote reference", async () => {
+  const { content } = await renderMarkdown(
+    "Hello world[^1]\n\n[^1]: My footnote text",
+  );
+  const { container } = render(Markdown, { content, children: undefined });
+  await waitFor(() => {
+    expect(container.querySelector("a[data-footnote-ref]")).toBeTruthy();
+  });
+
+  const ref = container.querySelector(
+    "a[data-footnote-ref]",
+  ) as HTMLAnchorElement;
+  await fireEvent.mouseEnter(ref);
+
+  await waitFor(() => {
+    const preview = document.querySelector('[data-testid="footnote-preview"]');
+    expect(preview).toBeTruthy();
+    expect(preview?.textContent).toContain("My footnote text");
+  });
 });
 
 it.todo("render with raw markdown input slot"); // https://github.com/testing-library/svelte-testing-library/issues/48

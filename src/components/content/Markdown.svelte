@@ -2,6 +2,7 @@
   import { onMount, tick, mount, unmount } from "svelte";
   import CopyIcon from "#components/icon/Copy.svelte";
   import CheckIcon from "#components/icon/Check.svelte";
+  import FootnotePreview from "#components/content/FootnotePreview.svelte";
 
   const LANG_MAP: Record<string, string> = {
     javascript: "JS",
@@ -48,6 +49,9 @@
   // Process code blocks whenever content is loaded or changes (supports SPA page navigation)
   $effect(() => {
     if (!content || !ready) return;
+
+    let footnotePreview: Record<string, any> | undefined;
+    let footnoteTarget: HTMLElement | undefined;
 
     tick().then(() => {
       const pres = document.querySelectorAll("article.prose pre");
@@ -154,7 +158,27 @@
             .catch((e) => console.debug("Mermaid failed to run", e));
         });
       }
+
+      // Initialize footnote hover preview
+      const footnoteRefs = document.querySelectorAll<HTMLAnchorElement>(
+        "a[data-footnote-ref]",
+      );
+      if (footnoteRefs.length > 0) {
+        footnoteTarget = document.createElement("div");
+        document.body.appendChild(footnoteTarget);
+        footnotePreview = mount(FootnotePreview, {
+          target: footnoteTarget,
+          props: { refs: Array.from(footnoteRefs) },
+        });
+      }
     });
+
+    return () => {
+      if (footnotePreview) {
+        unmount(footnotePreview);
+      }
+      footnoteTarget?.remove();
+    };
   });
 </script>
 
