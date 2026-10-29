@@ -1,16 +1,21 @@
 <script lang="ts">
-  import "highlight.js/styles/atom-one-dark-reasonable.css";
+  import atomOneDark from "highlight.js/styles/atom-one-dark-reasonable.css?url";
+  import atomOneLight from "highlight.js/styles/atom-one-light.css?url";
 
   import { page } from "$app/state";
   import Footer from "#components/layout/Footer.svelte";
   import Header from "#components/layout/Header.svelte";
   import { titleWithSuffix } from "#lib/meta.js";
+  import { currentTheme, Theme } from "#lib/theme.js";
   import { fade } from "svelte/transition";
   import "../app.css";
 
   let { data, children } = $props();
 
   let title = $derived(titleWithSuffix(page.data?.meta?.title));
+  let highlightStyle = $derived(
+    $currentTheme === Theme.Dark ? atomOneDark : atomOneLight,
+  );
 </script>
 
 <svelte:head>
@@ -19,6 +24,7 @@
   {#if page.data?.meta?.description}
     <meta name="description" content={page.data.meta.description} />
   {/if}
+  <link rel="stylesheet" href={highlightStyle} />
 </svelte:head>
 
 <div data-testid="layout" class="grid min-h-screen auto-rows-min grid-cols-1">
