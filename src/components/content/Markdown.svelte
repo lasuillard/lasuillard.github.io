@@ -84,9 +84,6 @@
   $effect(() => {
     if (!content || !ready) return;
 
-    let footnotePreview: Record<string, any> | undefined;
-    let footnoteTarget: HTMLElement | undefined;
-
     tick().then(() => {
       const pres = document.querySelectorAll("article.prose pre");
       pres.forEach((pre) => {
@@ -179,34 +176,38 @@
         codeBlockWrapper.appendChild(container);
       });
     });
+  });
 
-    // Initialize footnote hover preview
-    $effect(() => {
-      let cancelled = false;
+  // Initialize footnote hover preview
+  $effect(() => {
+    if (!content || !ready) return;
 
-      tick().then(() => {
-        if (cancelled) return;
-        const footnoteRefs = document.querySelectorAll<HTMLAnchorElement>(
-          "a[data-footnote-ref]",
-        );
-        if (footnoteRefs.length > 0) {
-          footnoteTarget = document.createElement("div");
-          document.body.appendChild(footnoteTarget);
-          footnotePreview = mount(FootnotePreview, {
-            target: footnoteTarget,
-            props: { refs: Array.from(footnoteRefs) },
-          });
-        }
-      });
+    let footnotePreview: Record<string, any> | undefined;
+    let footnoteTarget: HTMLElement | undefined;
+    let cancelled = false;
 
-      return () => {
-        cancelled = true;
-        if (footnotePreview) {
-          unmount(footnotePreview);
-        }
-        footnoteTarget?.remove();
-      };
+    tick().then(() => {
+      if (cancelled) return;
+      const footnoteRefs = document.querySelectorAll<HTMLAnchorElement>(
+        "a[data-footnote-ref]",
+      );
+      if (footnoteRefs.length > 0) {
+        footnoteTarget = document.createElement("div");
+        document.body.appendChild(footnoteTarget);
+        footnotePreview = mount(FootnotePreview, {
+          target: footnoteTarget,
+          props: { refs: Array.from(footnoteRefs) },
+        });
+      }
     });
+
+    return () => {
+      cancelled = true;
+      if (footnotePreview) {
+        unmount(footnotePreview);
+      }
+      footnoteTarget?.remove();
+    };
   });
 </script>
 
