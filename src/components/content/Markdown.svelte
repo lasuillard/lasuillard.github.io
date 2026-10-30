@@ -1,7 +1,8 @@
 <script lang="ts">
-  import { onMount, tick, mount, unmount } from "svelte";
-  import CopyIcon from "#components/icon/Copy.svelte";
+  import MermaidViewer from "#components/content/MermaidViewer.svelte";
   import CheckIcon from "#components/icon/Check.svelte";
+  import CopyIcon from "#components/icon/Copy.svelte";
+  import { mount, onMount, tick, unmount } from "svelte";
 
   const LANG_MAP: Record<string, string> = {
     javascript: "JS",
@@ -43,6 +44,39 @@
 
     console.debug("Content is ready to be displayed.");
     ready = true;
+  });
+
+  // Mount Mermaid viewer components
+  $effect(() => {
+    if (!content || !ready) return;
+
+    // Cancellation flag to prevent stale callback mounting components after cleanup
+    let cancelled = false;
+
+    const mountedMermaids: Record<string, any>[] = [];
+
+    // Initialize mermaid diagrams
+    tick().then(() => {
+      if (cancelled) return;
+      const mermaids = document.querySelectorAll("pre.mermaid");
+      mermaids.forEach((pre) => {
+        const code = pre.textContent || "";
+        const target = document.createElement("div");
+        pre.replaceWith(target);
+        const viewer = mount(MermaidViewer, {
+          target,
+          props: { code },
+        });
+        mountedMermaids.push(viewer);
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      mountedMermaids.forEach((viewer) => {
+        unmount(viewer);
+      });
+    };
   });
 
   // Process code blocks whenever content is loaded or changes (supports SPA page navigation)
@@ -140,20 +174,6 @@
         container.appendChild(copyBtn);
         codeBlockWrapper.appendChild(container);
       });
-
-      // Initialize mermaid diagrams
-      const mermaids = document.querySelectorAll(".mermaid");
-      if (mermaids.length > 0) {
-        import("mermaid").then(({ default: mermaid }) => {
-          console.debug("Mermaid loaded. Running...");
-          mermaid
-            .run({
-              nodes: Array.from(mermaids) as HTMLElement[],
-              suppressErrors: true,
-            })
-            .catch((e) => console.debug("Mermaid failed to run", e));
-        });
-      }
     });
   });
 </script>
