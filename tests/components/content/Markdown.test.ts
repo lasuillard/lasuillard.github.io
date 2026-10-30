@@ -1,7 +1,8 @@
 // @vitest-environment happy-dom
 import Markdown from "#components/content/Markdown.svelte";
 import { render as renderMarkdown } from "#lib/markdown.js";
-import { render, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, waitFor } from "@testing-library/svelte";
+import { tick } from "svelte";
 import { expect, it, vi } from "vitest";
 
 vi.mock("mermaid", () => ({
@@ -32,6 +33,41 @@ it("render with nothing", async () => {
   expect(container.innerHTML).toMatchInlineSnapshot(
     `"<!----><div class="hidden"><!----></div>"`,
   );
+});
+
+it("shows footnote preview when hovering footnote reference", async () => {
+  const { content } = await renderMarkdown(
+    "Hello world[^1]\n\n[^1]: My footnote text",
+  );
+  const { container } = render(Markdown, { content, children: undefined });
+  await waitFor(() => {
+    expect(container.querySelector("a[data-footnote-ref]")).toBeTruthy();
+  });
+
+  const ref = container.querySelector(
+    "a[data-footnote-ref]",
+  ) as HTMLAnchorElement;
+  await fireEvent.mouseEnter(ref);
+
+  await waitFor(() => {
+    const preview = document.querySelector('[data-testid="footnote-preview"]');
+    expect(preview).toBeTruthy();
+    expect(preview?.textContent).toContain("My footnote text");
+  });
+});
+
+it("does not initialize footnote previews after unmount", async () => {
+  const { content } = await renderMarkdown(
+    "Hello world[^1]\n\n[^1]: My footnote text",
+  );
+  const { unmount } = render(Markdown, { content, children: undefined });
+  const appendChild = vi.spyOn(document.body, "appendChild");
+
+  unmount();
+  await tick();
+  await Promise.resolve();
+
+  expect(appendChild).not.toHaveBeenCalled();
 });
 
 it("mounts MermaidViewer for mermaid code blocks", async () => {

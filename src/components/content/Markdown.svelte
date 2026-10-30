@@ -1,4 +1,5 @@
 <script lang="ts">
+  import FootnotePreview from "#components/content/FootnotePreview.svelte";
   import MermaidViewer from "#components/content/MermaidViewer.svelte";
   import CheckIcon from "#components/icon/Check.svelte";
   import CopyIcon from "#components/icon/Copy.svelte";
@@ -175,6 +176,38 @@
         codeBlockWrapper.appendChild(container);
       });
     });
+  });
+
+  // Initialize footnote hover preview
+  $effect(() => {
+    if (!content || !ready) return;
+
+    let footnotePreview: Record<string, any> | undefined;
+    let footnoteTarget: HTMLElement | undefined;
+    let cancelled = false;
+
+    tick().then(() => {
+      if (cancelled) return;
+      const footnoteRefs = document.querySelectorAll<HTMLAnchorElement>(
+        "a[data-footnote-ref]",
+      );
+      if (footnoteRefs.length > 0) {
+        footnoteTarget = document.createElement("div");
+        document.body.appendChild(footnoteTarget);
+        footnotePreview = mount(FootnotePreview, {
+          target: footnoteTarget,
+          props: { refs: Array.from(footnoteRefs) },
+        });
+      }
+    });
+
+    return () => {
+      cancelled = true;
+      if (footnotePreview) {
+        unmount(footnotePreview);
+      }
+      footnoteTarget?.remove();
+    };
   });
 </script>
 
