@@ -79,7 +79,7 @@ export class PostRepository {
 
     if (this.maxPosts !== undefined) {
       // Keep only the oldest N posts
-      this.posts = this.posts.slice(-this.maxPosts);
+this.posts = this.maxPosts > 0 ? this.posts.slice(-this.maxPosts) : [];
     }
 
     return this.posts;
