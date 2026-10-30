@@ -94,10 +94,7 @@
     onpointermove={controller.handlePointerMove}
     onpointerup={controller.handlePointerUp}
     onpointercancel={controller.handlePointerUp}
-    onwheel={(e) => {
-      if (!expandable) return;
-      controller.handleWheel(e);
-    }}
+    onwheel={controller.handleWheel}
   >
     <div
       data-testid="mermaid-content"
