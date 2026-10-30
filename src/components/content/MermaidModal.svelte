@@ -44,7 +44,12 @@
     </div>
 
     {#if open}
-      <MermaidViewer {code} wheelModifier={null} class="my-0 h-full border-0" />
+      <MermaidViewer
+        {code}
+        expandable={false}
+        wheelModifier={null}
+        class="my-0 h-full border-0"
+      />
     {/if}
   </div>
   <form method="dialog" class="modal-backdrop">
