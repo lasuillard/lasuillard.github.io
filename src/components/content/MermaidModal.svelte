@@ -23,6 +23,7 @@
 
 <dialog
   bind:this={dialog}
+  aria-label="Mermaid 다이어그램 보기"
   data-testid="mermaid-modal"
   class="modal"
   onclose={() => (open = false)}
