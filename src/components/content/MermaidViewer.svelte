@@ -8,24 +8,41 @@
   import MagnifyingGlassMinusIcon from "#components/icon/MagnifyingGlassMinus.svelte";
   import MagnifyingGlassPlusIcon from "#components/icon/MagnifyingGlassPlus.svelte";
   import { currentTheme, Theme } from "#lib/theme.js";
-  import { MermaidViewportController } from "./mermaid-viewer.svelte.js";
+  import {
+    MermaidViewportController,
+    type WheelModifier,
+  } from "./mermaid-viewer.svelte.js";
   import MermaidModal from "./MermaidModal.svelte";
 
   interface Props {
     code: string;
     expandable?: boolean;
     class?: string;
+    /** Zoom key modifier for the mouse wheel */
+    wheelModifier?: WheelModifier;
   }
 
-  let { code, expandable = true, class: className = "" }: Props = $props();
+  let {
+    code,
+    expandable = true,
+    class: className = "",
+    wheelModifier = "Control",
+  }: Props = $props();
 
   const instanceId = `mermaid-${Math.random().toString(36).slice(2, 11)}`;
 
   let svgHtml = $state("");
   let isModalOpen = $state(false);
 
-  const controller = new MermaidViewportController();
+  // svelte-ignore state_referenced_locally
+  const controller = new MermaidViewportController({ wheelModifier });
 
+  // Update controller's wheel modifier when it changes
+  $effect(() => {
+    controller.wheelModifier = wheelModifier;
+  });
+
+  // Load Mermaid and render the diagram
   let renderCount = 0;
 
   $effect(() => {
@@ -77,7 +94,10 @@
     onpointermove={controller.handlePointerMove}
     onpointerup={controller.handlePointerUp}
     onpointercancel={controller.handlePointerUp}
-    onwheel={!expandable ? controller.handleWheel : undefined}
+    onwheel={(e) => {
+      if (!expandable) return;
+      controller.handleWheel(e);
+    }}
   >
     <div
       data-testid="mermaid-content"

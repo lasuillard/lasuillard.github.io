@@ -3,7 +3,11 @@ export interface MermaidViewportOptions {
   maxScale?: number;
   zoomStep?: number;
   panStep?: number;
+  wheelModifier?: WheelModifier;
 }
+
+// https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/getModifierState
+export type WheelModifier = null | "Control" | "Shift" | "Alt" | "Meta";
 
 /**
  * Controller managing pan and zoom state and pointer/wheel interactions for a Mermaid diagram viewport.
@@ -13,6 +17,7 @@ export class MermaidViewportController {
   public maxScale: number;
   public zoomStep: number;
   public panStep: number;
+  public wheelModifier: WheelModifier;
 
   public scale = $state(1);
   public translateX = $state(0);
@@ -31,6 +36,7 @@ export class MermaidViewportController {
     this.maxScale = options.maxScale ?? 4;
     this.zoomStep = options.zoomStep ?? 0.25;
     this.panStep = options.panStep ?? 50;
+    this.wheelModifier = options.wheelModifier ?? null;
   }
 
   zoomIn = () => {
@@ -98,6 +104,7 @@ export class MermaidViewportController {
   };
 
   handleWheel = (e: WheelEvent) => {
+    if (this.wheelModifier && !e.getModifierState(this.wheelModifier)) return;
     e.preventDefault();
     if (e.deltaY < 0) {
       this.zoomIn();
