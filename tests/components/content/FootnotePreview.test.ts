@@ -70,4 +70,22 @@ describe("FootnotePreview", () => {
       expect(queryByTestId("footnote-preview")).toBeNull();
     });
   });
+
+  it("constrains long footnotes to the available viewport height", async () => {
+    const footnote = host.querySelector("li") as HTMLElement;
+    footnote.innerHTML = `<p>${"Long footnote text ".repeat(100)}</p>`;
+    vi.spyOn(refLink, "getBoundingClientRect").mockReturnValue(
+      new DOMRect(24, 300, 8, 10),
+    );
+
+    const { getByTestId } = render(FootnotePreview, {
+      refs: [refLink],
+    });
+
+    await fireEvent.mouseEnter(refLink);
+
+    const preview = getByTestId("footnote-preview");
+    expect(preview.style.maxHeight).toBe("192px");
+    expect(preview.classList).toContain("overflow-y-auto");
+  });
 });

@@ -2,7 +2,8 @@
 import Markdown from "#components/content/Markdown.svelte";
 import { render as renderMarkdown } from "#lib/markdown.js";
 import { fireEvent, render, waitFor } from "@testing-library/svelte";
-import { expect, it } from "vitest";
+import { tick } from "svelte";
+import { expect, it, vi } from "vitest";
 
 // NOTE: It is required not to have any wrapping element (thus no locator) as this component is just an wrapper
 
@@ -43,6 +44,20 @@ it("shows footnote preview when hovering footnote reference", async () => {
     expect(preview).toBeTruthy();
     expect(preview?.textContent).toContain("My footnote text");
   });
+});
+
+it("does not initialize footnote previews after unmount", async () => {
+  const { content } = await renderMarkdown(
+    "Hello world[^1]\n\n[^1]: My footnote text",
+  );
+  const { unmount } = render(Markdown, { content, children: undefined });
+  const appendChild = vi.spyOn(document.body, "appendChild");
+
+  unmount();
+  await tick();
+  await Promise.resolve();
+
+  expect(appendChild).not.toHaveBeenCalled();
 });
 
 it.todo("render with raw markdown input slot"); // https://github.com/testing-library/svelte-testing-library/issues/48

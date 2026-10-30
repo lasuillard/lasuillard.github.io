@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { onMount, tick, mount, unmount } from "svelte";
-  import CopyIcon from "#components/icon/Copy.svelte";
-  import CheckIcon from "#components/icon/Check.svelte";
   import FootnotePreview from "#components/content/FootnotePreview.svelte";
+  import CheckIcon from "#components/icon/Check.svelte";
+  import CopyIcon from "#components/icon/Copy.svelte";
+  import { mount, onMount, tick, unmount } from "svelte";
 
   const LANG_MAP: Record<string, string> = {
     javascript: "JS",
@@ -52,8 +52,11 @@
 
     let footnotePreview: Record<string, any> | undefined;
     let footnoteTarget: HTMLElement | undefined;
+    let cancelled = false;
 
     tick().then(() => {
+      if (cancelled) return;
+
       const pres = document.querySelectorAll("article.prose pre");
       pres.forEach((pre) => {
         // Avoid processing multiple times
@@ -174,6 +177,7 @@
     });
 
     return () => {
+      cancelled = true;
       if (footnotePreview) {
         unmount(footnotePreview);
       }

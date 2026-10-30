@@ -7,12 +7,15 @@
 
   const HIDE_DELAY_MS = 150;
   const POPOVER_MAX_WIDTH = 384;
+  const POPOVER_MAX_HEIGHT = 192;
+  const POPOVER_OFFSET = 8;
   const VIEWPORT_PADDING = 16;
 
   let visible = $state(false);
   let footnoteHtml = $state("");
   let top = $state(0);
   let left = $state(0);
+  let maxHeight = $state(POPOVER_MAX_HEIGHT);
   let placeAbove = $state(true);
 
   let hideTimeout: ReturnType<typeof setTimeout> | undefined;
@@ -59,10 +62,19 @@
     if (!content) return;
 
     const rect = ref.getBoundingClientRect();
-    const viewportWidth = window.innerWidth || 1024;
+    const viewportWidth = window.innerWidth || 1_024;
+    const viewportHeight = window.innerHeight || 768;
 
-    placeAbove = rect.top > 120;
-    top = placeAbove ? rect.top - 8 : rect.bottom + 8;
+    const spaceAbove = rect.top - VIEWPORT_PADDING - POPOVER_OFFSET;
+    const spaceBelow =
+      viewportHeight - rect.bottom - VIEWPORT_PADDING - POPOVER_OFFSET;
+
+    placeAbove = spaceAbove >= POPOVER_MAX_HEIGHT || spaceAbove >= spaceBelow;
+    top = placeAbove ? rect.top - POPOVER_OFFSET : rect.bottom + POPOVER_OFFSET;
+    maxHeight = Math.max(
+      0,
+      Math.min(POPOVER_MAX_HEIGHT, placeAbove ? spaceAbove : spaceBelow),
+    );
 
     const maxLeft = Math.max(
       VIEWPORT_PADDING,
@@ -112,10 +124,10 @@
     data-testid="footnote-preview"
     role="tooltip"
     class={[
-      "prose prose-sm bg-base-100 text-base-content border-base-300 fixed z-50 max-w-sm rounded-lg border px-4 py-3 wrap-break-word shadow-lg [&_a]:break-all [&_p]:my-0",
+      "prose prose-sm bg-base-100 text-base-content border-base-300 fixed z-50 max-w-sm overflow-y-auto rounded-lg border px-4 py-3 wrap-break-word shadow-lg [&_a]:break-all [&_p]:my-0",
       placeAbove && "-translate-y-full",
     ]}
-    style="top: {top}px; left: {left}px;"
+    style="top: {top}px; left: {left}px; max-height: {maxHeight}px;"
     onmouseenter={clearHideTimer}
     onmouseleave={scheduleHide}
   >
