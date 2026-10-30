@@ -38,7 +38,7 @@ test:
 
 # Run end-to-end tests
 e2e:
-    npm run build
+    E2E_TEST=true npm run build
     PLAYWRIGHT_HTML_OPEN='on-failure' npm run e2e -- --update-snapshots
 
 # Apply autofixes
