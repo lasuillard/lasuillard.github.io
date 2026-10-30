@@ -2,7 +2,7 @@
   import TagBadge from "./TagBadge.svelte";
   import CalendarDaysIcon from "#components/icon/CalendarDays.svelte";
   import type { Metadata } from "#lib/post.js";
-  import { route } from "#lib/urls.js";
+  import { resolveAsset, route } from "#lib/urls.js";
   import { formatRelativeDate } from "#lib/utils.js";
   import { format } from "date-fns";
 
@@ -29,7 +29,7 @@
     class="bg-base-200 border-base-200/50 block w-full overflow-hidden border-b"
   >
     <img
-      src={metadata.preview}
+      src={resolveAsset(metadata.preview)}
       alt={metadata.title}
       class="h-auto w-full object-cover transition-transform duration-500 group-hover:scale-105"
     />

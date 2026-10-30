@@ -1,4 +1,5 @@
-import type { RouteId, RouteParams } from "$app/types";
+import { asset, resolve } from "$app/paths";
+import type { AssetPath, RouteId, RouteParams } from "$app/types";
 
 /**
  * Route mapping for type-safe URL query parameters.
@@ -46,15 +47,7 @@ export function route<Path extends RouteId>(
   ...args: RouteArgs<Path>
 ): string {
   const options = (args as any)[0] || {};
-  let resolvedPath: string = path;
-
-  if ("params" in options && options.params) {
-    for (const [key, value] of Object.entries(
-      options.params as Record<string, string>,
-    )) {
-      resolvedPath = resolvedPath.replace(`[${key}]`, String(value));
-    }
-  }
+  const resolvedPath = resolve(path as any, options.params);
 
   if ("query" in options && options.query) {
     const searchParams = new URLSearchParams();
@@ -73,19 +66,14 @@ export function route<Path extends RouteId>(
 }
 
 /**
- * Unsafe route generator for dynamic runtime paths.
- * Bypasses strict compile-time route checking.
- * @param pathname The dynamic runtime path.
- * @param params The query parameters.
- * @returns The built URL string.
+ * Resolves a root-relative asset URL using SvelteKit's `asset()`,
+ * while leaving external or non-root URLs unchanged.
+ * @param url The asset URL or path to resolve.
+ * @returns The resolved asset URL.
  */
-export function unsafeRoute(
-  pathname: string,
-  params?: Record<string, string | number | boolean | null | undefined>,
-): string {
-  return route(
-    pathname as any,
-    // @ts-expect-error: Dynamic pathnames bypass static typing constraints
-    params && Object.keys(params).length > 0 ? { query: params } : undefined,
-  );
+export function resolveAsset(url: string): string {
+  if (url.startsWith("/")) {
+    return asset(url.slice(1) as AssetPath);
+  }
+  return url;
 }

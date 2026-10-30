@@ -14,7 +14,7 @@
 
 <a
   href={selected || tag === "..."
-    ? "/blog"
+    ? route("/blog")
     : route("/blog", { query: { tag } })}
   aria-label={tag === "..." ? "전체 태그 보기" : undefined}
   class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium transition-all duration-200 {selected
