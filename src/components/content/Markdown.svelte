@@ -1,5 +1,6 @@
 <script lang="ts">
   import FootnotePreview from "#components/content/FootnotePreview.svelte";
+  import MermaidViewer from "#components/content/MermaidViewer.svelte";
   import CheckIcon from "#components/icon/Check.svelte";
   import CopyIcon from "#components/icon/Copy.svelte";
   import { mount, onMount, tick, unmount } from "svelte";
@@ -46,17 +47,47 @@
     ready = true;
   });
 
+  // Mount Mermaid viewer components
+  $effect(() => {
+    if (!content || !ready) return;
+
+    // Cancellation flag to prevent stale callback mounting components after cleanup
+    let cancelled = false;
+
+    const mountedMermaids: Record<string, any>[] = [];
+
+    // Initialize mermaid diagrams
+    tick().then(() => {
+      if (cancelled) return;
+      const mermaids = document.querySelectorAll("pre.mermaid");
+      mermaids.forEach((pre) => {
+        const code = pre.textContent || "";
+        const target = document.createElement("div");
+        pre.replaceWith(target);
+        const viewer = mount(MermaidViewer, {
+          target,
+          props: { code },
+        });
+        mountedMermaids.push(viewer);
+      });
+    });
+
+    return () => {
+      cancelled = true;
+      mountedMermaids.forEach((viewer) => {
+        unmount(viewer);
+      });
+    };
+  });
+
   // Process code blocks whenever content is loaded or changes (supports SPA page navigation)
   $effect(() => {
     if (!content || !ready) return;
 
     let footnotePreview: Record<string, any> | undefined;
     let footnoteTarget: HTMLElement | undefined;
-    let cancelled = false;
 
     tick().then(() => {
-      if (cancelled) return;
-
       const pres = document.querySelectorAll("article.prose pre");
       pres.forEach((pre) => {
         // Avoid processing multiple times
@@ -147,42 +178,35 @@
         container.appendChild(copyBtn);
         codeBlockWrapper.appendChild(container);
       });
-
-      // Initialize mermaid diagrams
-      const mermaids = document.querySelectorAll(".mermaid");
-      if (mermaids.length > 0) {
-        import("mermaid").then(({ default: mermaid }) => {
-          console.debug("Mermaid loaded. Running...");
-          mermaid
-            .run({
-              nodes: Array.from(mermaids) as HTMLElement[],
-              suppressErrors: true,
-            })
-            .catch((e) => console.debug("Mermaid failed to run", e));
-        });
-      }
-
-      // Initialize footnote hover preview
-      const footnoteRefs = document.querySelectorAll<HTMLAnchorElement>(
-        "a[data-footnote-ref]",
-      );
-      if (footnoteRefs.length > 0) {
-        footnoteTarget = document.createElement("div");
-        document.body.appendChild(footnoteTarget);
-        footnotePreview = mount(FootnotePreview, {
-          target: footnoteTarget,
-          props: { refs: Array.from(footnoteRefs) },
-        });
-      }
     });
 
-    return () => {
-      cancelled = true;
-      if (footnotePreview) {
-        unmount(footnotePreview);
-      }
-      footnoteTarget?.remove();
-    };
+    // Initialize footnote hover preview
+    $effect(() => {
+      let cancelled = false;
+
+      tick().then(() => {
+        if (cancelled) return;
+        const footnoteRefs = document.querySelectorAll<HTMLAnchorElement>(
+          "a[data-footnote-ref]",
+        );
+        if (footnoteRefs.length > 0) {
+          footnoteTarget = document.createElement("div");
+          document.body.appendChild(footnoteTarget);
+          footnotePreview = mount(FootnotePreview, {
+            target: footnoteTarget,
+            props: { refs: Array.from(footnoteRefs) },
+          });
+        }
+      });
+
+      return () => {
+        cancelled = true;
+        if (footnotePreview) {
+          unmount(footnotePreview);
+        }
+        footnoteTarget?.remove();
+      };
+    });
   });
 </script>
 

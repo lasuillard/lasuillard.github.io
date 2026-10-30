@@ -5,6 +5,16 @@ import { fireEvent, render, waitFor } from "@testing-library/svelte";
 import { tick } from "svelte";
 import { expect, it, vi } from "vitest";
 
+vi.mock("mermaid", () => ({
+  default: {
+    initialize: vi.fn(),
+    render: vi.fn().mockResolvedValue({
+      svg: '<svg data-testid="mock-mermaid-svg"><g></g></svg>',
+      diagramType: "flowchart",
+    }),
+  },
+}));
+
 // NOTE: It is required not to have any wrapping element (thus no locator) as this component is just an wrapper
 
 it("render with parsed content", async () => {
@@ -58,6 +68,16 @@ it("does not initialize footnote previews after unmount", async () => {
   await Promise.resolve();
 
   expect(appendChild).not.toHaveBeenCalled();
+});
+
+it("mounts MermaidViewer for mermaid code blocks", async () => {
+  const { content } = await renderMarkdown(
+    "```mermaid\ngraph LR\n  A --> B\n```",
+  );
+  const { getByTestId } = render(Markdown, { content, children: undefined });
+  await waitFor(() => {
+    expect(getByTestId("mermaid-viewer")).toBeTruthy();
+  });
 });
 
 it.todo("render with raw markdown input slot"); // https://github.com/testing-library/svelte-testing-library/issues/48
