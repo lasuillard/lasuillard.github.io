@@ -2,6 +2,7 @@
   import Markdown from "#components/content/Markdown.svelte";
   import TagBadge from "#components/content/TagBadge.svelte";
   import CalendarDaysIcon from "#components/icon/CalendarDays.svelte";
+  import { resolveAsset } from "#lib/urls.js";
   import { formatRelativeDate } from "#lib/utils.js";
   import { format } from "date-fns";
   import Comment from "./Comment.svelte";
@@ -77,7 +78,7 @@
           {#if metadata.preview}
             <div class="mt-8 flex w-full justify-center">
               <img
-                src={metadata.preview}
+                src={resolveAsset(metadata.preview)}
                 alt={metadata.title}
                 class="max-h-125 max-w-full rounded-2xl object-contain drop-shadow-sm"
               />
