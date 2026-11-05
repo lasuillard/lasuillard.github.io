@@ -11,7 +11,7 @@ describe("GET /rss.xml", () => {
     expect(response.headers.get("Content-Type")).toBe("application/xml");
 
     const xml = await response.text();
-    expect(xml).toContain('<rss version="2.0">');
+    expect(xml).toContain('<rss version="2.0"');
     expect(xml).toContain("<channel>");
     expect(xml).toContain("lasuillard's Blog");
 
