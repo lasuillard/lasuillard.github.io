@@ -4,14 +4,19 @@
   "packageRules": [
     {
       "groupName": "Markdown pipeline",
-      "description": "Group for markdown pipeline related packages",
+      "description": "Group Markdown processing dependencies",
       "matchDatasources": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": ["/unified/", "/^remark-/", "/^rehype-/"]
+      "matchPackageNames": [
+        "/unified/",
+        "/^remark-/",
+        "/^rehype-/",
+        "unist-util-visit"
+      ]
     },
     {
       "groupName": "Syntax highlighting",
-      "description": "Group for syntax highlighting related packages",
+      "description": "Group syntax highlighting dependencies",
       "matchDatasources": ["npm"],
       "matchPackageNames": [
         "highlight.js",
