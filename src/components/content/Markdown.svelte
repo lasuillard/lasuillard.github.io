@@ -22,7 +22,6 @@
 
   let {
     // Parsed front matter and content
-    // eslint-disable-next-line no-useless-assignment
     frontMatter = $bindable(undefined),
     content = $bindable(""),
     // Whether the content is ready to be displayed
