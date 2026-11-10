@@ -3,21 +3,24 @@
   "extends": ["local>lasuillard/renovate-config"],
   "packageRules": [
     {
+      "groupName": "Node Runtime (non-major)",
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["dependencies"],
+      "matchPackageNames": ["!svelte", "!vite"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
       "groupName": "Markdown pipeline",
-      "description": "Group for markdown pipeline related packages",
+      "description": "Group Markdown processing dependencies",
       "matchDatasources": ["npm"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": ["/unified/", "/^remark-/", "/^rehype-/"]
+      "matchPackageNames": ["/unified/", "/^remark-/", "/^rehype-/", "unist-util-visit"],
+      "matchUpdateTypes": ["minor", "patch"]
     },
     {
       "groupName": "Syntax highlighting",
-      "description": "Group for syntax highlighting related packages",
+      "description": "Group syntax highlighting dependencies",
       "matchDatasources": ["npm"],
-      "matchPackageNames": [
-        "highlight.js",
-        "highlightjs-svelte",
-        "@taga3s/highlightjs-terraform"
-      ],
+      "matchPackageNames": ["highlight.js", "highlightjs-svelte", "@taga3s/highlightjs-terraform"],
       "matchUpdateTypes": ["minor", "patch"]
     }
   ]
