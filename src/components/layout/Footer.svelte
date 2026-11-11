@@ -3,6 +3,7 @@
   import GmailIcon from "#components/icon/Gmail.svelte";
   import LinkedInIcon from "#components/icon/LinkedIn.svelte";
   import RSSIcon from "#components/icon/RSS.svelte";
+  import { route } from "#lib/urls.js";
 </script>
 
 <div
@@ -60,7 +61,7 @@
 
           <!-- RSS -->
           <a
-            href="/rss.xml"
+            href={route("/rss.xml")}
             target="_blank"
             class="btn btn-circle btn-ghost self-center"
             aria-label="RSS feeds"

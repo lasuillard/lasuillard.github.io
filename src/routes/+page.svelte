@@ -1,9 +1,11 @@
 <script lang="ts">
+  import { asset } from "$app/paths";
   import PostCard from "#components/content/PostCard.svelte";
+  import { route } from "#lib/urls.js";
 
   let { data } = $props();
 
-  let profileImage = "/profile.jpg";
+  let profileImage = asset("profile.jpg");
 </script>
 
 <div class="mx-auto xl:max-w-200">
@@ -47,7 +49,7 @@
     <div class="relative mb-10 flex items-center justify-center">
       <h2 class="text-3xl font-extrabold tracking-tight">최근 쓴 글</h2>
       <a
-        href="/blog"
+        href={route("/blog")}
         class="btn btn-ghost btn-sm text-base-content/70 hover:text-base-content absolute right-0"
       >
         전체보기 →

@@ -1,3 +1,4 @@
+import { resolveAsset } from "#lib/urls.js";
 import { definer as terraform } from "@taga3s/highlightjs-terraform";
 import type { Element, Root } from "hast";
 import powershell from "highlight.js/lib/languages/powershell";
@@ -58,6 +59,21 @@ function rehypeTableScroll() {
   };
 }
 
+/**
+ * Custom rehype plugin to resolve root-relative asset paths via SvelteKit's `asset()`.
+ * @returns A rehype plugin
+ */
+function rehypeResolveAssets() {
+  return (tree: Root) => {
+    visit(tree, "element", (node) => {
+      const src = node.properties?.src;
+      if (typeof src === "string") {
+        node.properties.src = resolveAsset(src);
+      }
+    });
+  };
+}
+
 const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
@@ -68,6 +84,7 @@ const processor = unified()
     footnoteLabel: "🔗 각주",
   })
   .use(rehypeMermaid, { strategy: "pre-mermaid" }) // Let client render it
+  .use(rehypeResolveAssets)
   .use(rehypeTableScroll)
   .use(rehypeStringify, {
     // Currently there is no user uploaded documents might harmful

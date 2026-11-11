@@ -1,3 +1,4 @@
+import { route } from "#lib/urls.js";
 import MiniSearch from "minisearch";
 import remarkGfm from "remark-gfm";
 import remarkParse from "remark-parse";
@@ -74,7 +75,7 @@ async function createEngine(posts?: any[]): Promise<MiniSearch> {
   if (!posts) {
     console.debug("Loading pre-built search index");
     try {
-      const response = await fetch("/api/search-index");
+      const response = await fetch(route("/api/search-index"));
       if (!response.ok) {
         throw new Error(
           `Failed to fetch search index: ${response.status} ${response.statusText}`,
