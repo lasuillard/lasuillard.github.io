@@ -1,20 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "local>lasuillard/renovate-config"
-  ],
+  "extends": ["local>lasuillard/renovate-config"],
   "packageRules": [
     {
       "groupName": "Markdown pipeline",
       "groupSlug": "markdown-pipeline",
       "description": "Group Markdown processing dependencies",
-      "matchDatasources": [
-        "npm"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
+      "matchDatasources": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
       "matchPackageNames": [
         "/unified/",
         "/^remark-/",
@@ -26,18 +19,13 @@
       "groupName": "Syntax highlighting",
       "groupSlug": "syntax-highlighting",
       "description": "Group syntax highlighting dependencies",
-      "matchDatasources": [
-        "npm"
-      ],
+      "matchDatasources": ["npm"],
       "matchPackageNames": [
         "highlight.js",
         "highlightjs-svelte",
         "@taga3s/highlightjs-terraform"
       ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ]
+      "matchUpdateTypes": ["minor", "patch"]
     }
   ]
 }
